@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"node app.js && watchify views/index.js -o public/bundle.js",
+    "start": "node app.js && watchify views/index.js -o public/bundle.js",
     "test": "mocha tests",
     "watch": "watchify views/index.js -o public/bundle.js"
   },
@@ -16,8 +16,9 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "httpism": "^2.7.0",
     "express": "^4.14.0",
-    "hyperdom": "^0.5.0"
+    "httpism": "^2.7.0",
+    "hyperdom": "^0.5.0",
+    "hyperdom-router": "^2.18.0"
   }
 }

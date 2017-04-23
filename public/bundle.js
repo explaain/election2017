@@ -128,6 +128,1233 @@ if (typeof document !== 'undefined') {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"min-document":1}],4:[function(require,module,exports){
+(function (global){
+if (typeof window !== "undefined") {
+    module.exports = window;
+} else if (typeof global !== "undefined") {
+    module.exports = global;
+} else if (typeof self !== "undefined"){
+    module.exports = self;
+} else {
+    module.exports = {};
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],5:[function(require,module,exports){
+var httpism = require('./httpism');
+var middleware = require('./browserMiddleware');
+var utils = require('./middlewareUtils');
+
+module.exports = httpism(
+  undefined,
+  {},
+  [
+    middleware.jsonp,
+    utils.exception,
+    middleware.form,
+    middleware.json,
+    middleware.text,
+    utils.querystring,
+    middleware.send
+  ]
+);
+
+},{"./browserMiddleware":6,"./httpism":7,"./middlewareUtils":9}],6:[function(require,module,exports){
+var window = require('global');
+var utils = require('./middlewareUtils');
+var querystringLite = require('./querystring-lite');
+var randomString = require('random-string');
+
+function middleware(name, fn) {
+  exports[name] = fn;
+  fn.middleware = name;
+}
+
+middleware('json', function(request, next) {
+  if (request.body instanceof Object) {
+    request.body = JSON.stringify(request.body);
+    utils.setHeaderTo(request, "content-type", "application/json");
+  }
+
+  utils.setHeaderTo(request, "accept", "application/json");
+
+  return next().then(function(response) {
+    if (utils.shouldParseAs(response, "json", request)) {
+      response.body = JSON.parse(response.body, request.options.jsonReviver);
+    }
+    return response;
+  });
+});
+
+function randomGlobal(value) {
+  var name;
+
+  do {
+    name = '_' + randomString({length: 20});
+  } while(typeof window[name] !== 'undefined');
+
+  window[name] = value;
+
+  return name;
+}
+
+middleware('jsonp', function(request, next) {
+  var jsonp = request.options.jsonp;
+
+  if (jsonp) {
+    request.options.querystring = request.options.querystring || {};
+
+    return new Promise(function (resolve, reject) {
+      var callbackName = randomGlobal(function(v) {
+        delete window[callbackName];
+        document.head.removeChild(script);
+        resolve({
+          statusCode: 200,
+          headers: {},
+          body: v
+        });
+      });
+
+      request.options.querystring[jsonp] = callbackName;
+
+      utils.mergeQueryString(request);
+
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = request.url;
+      script.onerror = function(error) {
+        reject(new Error('could not load script tag for JSONP request: ' + request.url));
+      };
+      document.head.appendChild(script);
+    });
+  }
+
+  return next();
+});
+
+middleware('text', function(request, next) {
+  if (typeof request.body === 'string') {
+    utils.setHeaderTo(request, "content-type", "text/plain;charset=UTF-8");
+  }
+
+  return next();
+});
+
+middleware('form', function(request, next) {
+  if (request.options.form && request.body instanceof Object) {
+    var querystring = request.options.qs || querystringLite;
+    setBodyToString(request, querystring.stringify(request.body));
+    utils.setHeaderTo(request, "content-type", "application/x-www-form-urlencoded");
+  }
+
+  return next().then(function(response) {
+    var querystring = request.options.qs || querystringLite;
+    if (utils.shouldParseAs(response, "form", request)) {
+      response.body = querystring.parse(response.body);
+    }
+    return response;
+  });
+});
+
+function setBodyToString(r, s) {
+  r.body = s;
+}
+
+function parseHeaders(headers) {
+  var object = {};
+  var lines = headers.split('\n');
+
+  for(var n = 0; n < lines.length; n++) {
+    var line = lines[n];
+    var match = /^(.*?):(.*)/.exec(line);
+
+    if (match) {
+      object[match[1].toLowerCase()] = match[2].trim();
+    }
+  }
+
+  return object;
+}
+
+function toUpperCase(x) {
+  return x.toUpperCase();
+}
+
+function formatHeaderName(name) {
+  return name.replace(/^([a-z])/, toUpperCase).replace(/-([a-z])/g, toUpperCase);
+}
+
+function setHeaders(headers, xhr) {
+  var headerNames = Object.keys(headers);
+
+  for (var n = 0; n < headerNames.length; n++) {
+    var key = headerNames[n];
+    var headerName = formatHeaderName(key);
+    xhr.setRequestHeader(headerName, headers[key]);
+  }
+}
+
+function responseUrl(xhr, requestUrl) {
+  var origin = location.origin;
+  var responseUrl = xhr.responseURL;
+  
+  if (responseUrl) {
+    if (responseUrl.substring(0, origin.length) == origin) {
+      return responseUrl.substring(origin.length);
+    } else {
+      return responseUrl;
+    }
+  } else {
+    return requestUrl;
+  }
+}
+
+middleware('send', function(request) {
+  var Xhr = request.options.xhr || window.XMLHttpRequest;
+  var xhr = new Xhr();
+  var reject;
+
+  var promise = new Promise(function (fulfil, _reject) {
+    reject = _reject;
+    xhr.open(request.method, request.url, true);
+    xhr.onload = function () {
+      var statusCode = xhr.status;
+
+      var response = {
+        body: statusCode == 204? undefined: xhr.responseText,
+        headers: parseHeaders(xhr.getAllResponseHeaders()),
+        statusCode: statusCode,
+        url: responseUrl(xhr, request.url),
+        xhr: xhr,
+        statusText: xhr.statusText
+      };
+
+      fulfil(response);
+    };
+
+    xhr.onerror = function () {
+      reject(new Error('failed to connect to ' + request.method + ' ' + request.url));
+    };
+
+    if (!isCrossDomain(request.url) && !request.headers['x-requested-with']) {
+      request.headers['x-requested-with'] = 'XMLHttpRequest'
+    }
+
+    setHeaders(request.headers, xhr);
+    xhr.withCredentials = !!request.options.withCredentials;
+
+    xhr.send(request.body);
+  });
+
+  function abort() {
+    xhr.abort();
+    var error = new Error('aborted connection to ' + request.method + ' ' + request.url);
+    error.aborted = true;
+    reject(error);
+  }
+  addAbortToPromise(promise, abort);
+
+  return promise;
+});
+
+function isCrossDomain(url) {
+  return /^https?:\/\//.test(url);
+}
+
+function addAbortToPromise(promise, abort) {
+  var then = promise.then;
+  promise.then = function () {
+    var p = then.apply(this, arguments);
+    p.abort = abort;
+    addAbortToPromise(p, abort);
+    return p;
+  };
+}
+
+},{"./middlewareUtils":9,"./querystring-lite":11,"global":4,"random-string":37}],7:[function(require,module,exports){
+var merge = require('./merge');
+var resolveUrl = require('./resolveUrl');
+var utils = require('./middlewareUtils');
+
+function client(url, options, middlewares) {
+  return new Httpism(url, options, middlewares);
+}
+
+function Httpism(url, options, middlewares) {
+  this.url = url;
+  this._options = options;
+  this.middlewares = middlewares;
+}
+
+Httpism.prototype.send = function(method, url, body, _options, api) {
+  var options = merge(_options, this._options)
+  var request = {
+    method: method,
+    url: resolveUrl(this.url, url),
+    headers: lowerCaseHeaders(options.headers || {}),
+    body: body,
+    options: options
+  };
+
+  var self = this;
+
+  function sendToMiddleware(index, req) {
+    if (index < self.middlewares.length) {
+      var middleware = self.middlewares[index];
+      return middleware(req, function (nextRequest) { return sendToMiddleware(index + 1, nextRequest || req); }, self);
+    }
+  }
+
+  return sendToMiddleware(0, request).then(function (response) {
+    return makeResponse(self, response);
+  }, function (e) {
+    if (e.redirectResponse) {
+      return e.redirectResponse;
+    } else {
+      throw e;
+    }
+  });
+};
+
+function lowerCaseHeaders(headers) {
+  Object.keys(headers).forEach(function (key) {
+    var lower = key.toLowerCase();
+    if (key.toLowerCase() != key) {
+      headers[lower] = headers[key];
+      delete headers[key];
+    }
+  });
+
+  return headers;
+}
+
+function makeResponse(api, response) {
+  return utils.extend(new Httpism(api.url, api._options, api.middlewares), response);
+}
+
+function findMiddlewareIndexes(names, middlewares) {
+  return names.map(function (name) {
+    for(var n = 0; n < middlewares.length; n++) {
+      if (middlewares[n].middleware == name) {
+        return n;
+      }
+    }
+
+    return -1;
+  }).filter(function (i) {
+    return i >= 0;
+  });
+}
+
+function insertMiddlewareIntoIndex(middlewares, m, index) {
+  middlewares.splice(index, 0, m);
+}
+
+Httpism.prototype.api = function (url, options, middlewares) {
+  var args = parseClientArguments(url, options, middlewares);
+
+  var api = new Httpism(
+    resolveUrl(this.url, args.url),
+    merge(args.options, this._options),
+    this.middlewares.slice()
+  );
+
+  if (args.middlewares) {
+    args.middlewares.forEach(function (m) {
+      api.insertMiddleware(m);
+    });
+  }
+
+  return api;
+};
+
+Httpism.prototype.insertMiddleware = function(m) {
+  if (m.before || m.after) {
+    var position = m.before || m.after;
+    var names = typeof position === 'string'? [position]: position;
+    var indexes = findMiddlewareIndexes(names, this.middlewares);
+    if (indexes.length) {
+      var index = m.before? Math.min.apply(Math, indexes): Math.max.apply(Math, indexes) + 1;
+
+      if (index >= 0) {
+        insertMiddlewareIntoIndex(this.middlewares, m, index);
+        return;
+      }
+    }
+
+    throw new Error('no such middleware: ' + (m.before || m.after));
+  } else {
+    this.middlewares.unshift(m);
+  }
+}
+
+Httpism.prototype.removeMiddleware = function(name) {
+  var indexes = findMiddlewareIndexes([name], this.middlewares);
+  for (var i=indexes.length-1; i>=0; i--) {
+    this.middlewares.splice(indexes[i], 1);
+  }
+}
+
+function addMethod(method) {
+  Httpism.prototype[method] = function (url, options) {
+    return this.send(method, url, undefined, options, this);
+  };
+}
+
+function addMethodWithBody(method) {
+  Httpism.prototype[method] = function (url, body, options) {
+    return this.send(method, url, body, options, this);
+  };
+}
+
+addMethod('get');
+addMethod('delete');
+addMethod('head');
+addMethodWithBody('post');
+addMethodWithBody('put');
+addMethodWithBody('patch');
+addMethodWithBody('options');
+
+function parseClientArguments() {
+  var url, options, middlewares;
+
+  for(var n = 0; n < arguments.length; n++) {
+    var arg = arguments[n];
+
+    if (typeof arg === 'string') {
+      url = arg;
+    } else if (typeof arg === 'function') {
+      middlewares = [arg];
+    } else if (arg instanceof Array) {
+      middlewares = arg;
+    } else if (arg instanceof Object) {
+      options = arg;
+    }
+  }
+
+  return {
+    url: url,
+    options: options,
+    middlewares: middlewares
+  };
+}
+
+module.exports = client;
+
+},{"./merge":8,"./middlewareUtils":9,"./resolveUrl":12}],8:[function(require,module,exports){
+module.exports = function(x, y) {
+  if (x && y) {
+    var r = {};
+
+    Object.keys(y).forEach(function (ykey) {
+      r[ykey] = y[ykey];
+    });
+
+    Object.keys(x).forEach(function (xkey) {
+      r[xkey] = x[xkey];
+    });
+
+    return r;
+  } else if (y) {
+    return y;
+  } else {
+    return x;
+  }
+};
+
+},{}],9:[function(require,module,exports){
+var merge = require("./merge");
+var querystringLite = require('./querystring-lite');
+var obfuscateUrlPassword = require('./obfuscateUrlPassword');
+
+module.exports.setHeaderTo = function (request, header, value) {
+  if (!request.headers[header]) {
+    return request.headers[header] = value;
+  }
+};
+
+var responseBodyTypes = {
+  json: function(response) {
+    return contentTypeIs(response, "application/json");
+  },
+  text: function(response) {
+    return contentTypeIsText(response) || contentTypeIs(response, "application/javascript");
+  },
+  form: function(response) {
+    return contentTypeIs(response, "application/x-www-form-urlencoded");
+  },
+  stream: function() {
+    return false;
+  }
+};
+
+function contentTypeIs(response, expectedContentType) {
+  var re = new RegExp("^\\s*" + expectedContentType + "\\s*($|;)");
+  return re.test(response.headers["content-type"]);
+}
+
+function contentTypeIsText(response) {
+  return contentTypeIs(response, "text/.*");
+}
+
+module.exports.shouldParseAs = function(response, type, request) {
+  if (request.options.responseBody) {
+    return type === request.options.responseBody;
+  } else {
+    var bodyType = responseBodyTypes[type];
+    if (bodyType) {
+      return bodyType(response);
+    }
+  }
+};
+
+function extend(object, extension) {
+  var keys = Object.keys(extension);
+
+  for (var n = 0; n < keys.length; n++) {
+    var key = keys[n];
+    object[key] = extension[key];
+  }
+
+  return object;
+}
+
+exports.extend = extend;
+
+exports.exception = function(request, next) {
+  return next().then(function(response) {
+    var exceptions = request.options.exceptions;
+    var isException = exceptions == false? false: typeof exceptions == 'function'? exceptions(response): response.statusCode >= 400;
+
+    if (isException) {
+      var msg = request.method.toUpperCase() + " " + obfuscateUrlPassword(request.url) + " => " + response.statusCode + " " + response.statusText;
+      var error = extend(new Error(msg), response);
+      throw error;
+    } else {
+      return response;
+    }
+  });
+};
+
+exports.querystring = function(request, next) {
+  if (request.options.querystring instanceof Object) {
+    exports.mergeQueryString(request);
+  }
+
+  return next();
+};
+
+exports.mergeQueryString = function(request) {
+  var qs = request.options.qs || querystringLite;
+
+  var split = request.url.split("?");
+  var path = split[0];
+  var querystring = qs.parse(split[1] || '');
+  var mergedQueryString = merge(request.options.querystring, querystring);
+  request.url = path + "?" + qs.stringify(mergedQueryString);
+};
+
+},{"./merge":8,"./obfuscateUrlPassword":10,"./querystring-lite":11}],10:[function(require,module,exports){
+module.exports = function(url) {
+  return url.replace(/^([-a-z]*:\/\/[^:]*:)[^@]*@/, function(_, first) { return first + '********@'; });
+};
+
+},{}],11:[function(require,module,exports){
+module.exports = {
+  parse: function (string) {
+    var params = {};
+
+    string.split('&').forEach(function (component) {
+      var split = component.split('=')
+      if (split[1]) {
+        params[decodeURIComponent(split[0])] = decodeURIComponent(split[1]);
+      }
+    });
+
+    return params;
+  },
+
+  stringify: function (params) {
+    return Object.keys(params)
+      .filter(function (key) {
+        return typeof(params[key]) !== 'undefined';
+      })
+      .map(function (key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+      })
+      .join('&');
+  }
+};
+
+},{}],12:[function(require,module,exports){
+// from https://gist.github.com/Yaffle/1088850
+
+/*jslint regexp: true, white: true, maxerr: 50, indent: 2 */
+ 
+function parseURI(url) {
+  var m = String(url).replace(/^\s+|\s+$/g, '').match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
+  // authority = '//' + user + ':' + pass '@' + hostname + ':' port
+  return (m ? {
+    href     : m[0] || '',
+    protocol : m[1] || '',
+    authority: m[2] || '',
+    host     : m[3] || '',
+    hostname : m[4] || '',
+    port     : m[5] || '',
+    pathname : m[6] || '',
+    search   : m[7] || '',
+    hash     : m[8] || ''
+  } : null);
+}
+ 
+module.exports = function (base, href) {// RFC 3986
+ 
+  function removeDotSegments(input) {
+    var output = [];
+    input.replace(/^(\.\.?(\/|$))+/, '')
+         .replace(/\/(\.(\/|$))+/g, '/')
+         .replace(/\/\.\.$/, '/../')
+         .replace(/\/?[^\/]*/g, function (p) {
+      if (p === '/..') {
+        output.pop();
+      } else {
+        output.push(p);
+      }
+    });
+    return output.join('').replace(/^\//, input.charAt(0) === '/' ? '/' : '');
+  }
+ 
+  href = parseURI(href || '');
+  base = parseURI(base || '');
+ 
+  return !href || !base ? null : (href.protocol || base.protocol) +
+         (href.protocol || href.authority ? href.authority : base.authority) +
+         removeDotSegments(href.protocol || href.authority || href.pathname.charAt(0) === '/' ? href.pathname : (href.pathname ? ((base.authority && !base.pathname ? '/' : '') + base.pathname.slice(0, base.pathname.lastIndexOf('/') + 1) + href.pathname) : base.pathname)) +
+         (href.protocol || href.authority || href.pathname ? href.search : (href.search || base.search)) +
+         href.hash;
+};
+
+},{}],13:[function(require,module,exports){
+var routism = require('routism');
+var hyperdom = require('hyperdom');
+var h = hyperdom.html;
+var refresh;
+
+function Routes() {
+  this.routes = [];
+  this.routesChanged = false;
+}
+
+Routes.prototype.recognise = function (pathname) {
+  if (this.routesChanged) {
+    this.compiledRoutes = routism.compile(this.routes);
+    this.routesChanged = false;
+  }
+
+  return this.compiledRoutes.recognise(pathname);
+};
+
+Routes.prototype.add = function (pattern) {
+  var route = {pattern: pattern};
+  this.routes.push({pattern: pattern, route: route});
+  this.routesChanged = true;
+  return route;
+};
+
+function Router() {
+  this.routes = new Routes();
+}
+
+Router.prototype.start = function (history) {
+  this.history = history;
+  this.history.start();
+  this.started = true;
+};
+
+Router.prototype.stop = function () {
+  if (this.started) {
+    this.history.stop();
+
+    var keys = Object.keys(this);
+    for (var n = 0; n < keys.length; n++) {
+      if (keys[n] != 'routes') {
+        delete this[keys[n]];
+      }
+    }
+  }
+};
+
+Router.prototype.isNotFound = function () {
+  if (this.currentRoute.isNotFound) {
+    return this.currentRoute;
+  }
+};
+
+Router.prototype.makeCurrentRoute = function () {
+  var location = this.history.location();
+  var href = location.pathname + location.search;
+
+  var routeRecognised = this.routes.recognise(location.pathname);
+
+  if (routeRecognised) {
+    var routeParams  = associativeArrayToObject(routeRecognised.params);
+    var searchParams = exports.querystring.parse((location.search || '').substring(1));
+
+    var params = merge(searchParams, routeParams);
+
+    var expandedUrl = expand(routeRecognised.route.pattern, params);
+    var self = this;
+
+    if (this.currentRoute) {
+      this.currentRoute.depart();
+    }
+
+    this.currentRoute = {
+      route: routeRecognised.route,
+      params: params,
+      href: href,
+      expandedUrl: expandedUrl,
+      ondeparture: undefined,
+
+      depart: function () {
+        if (this.ondeparture) {
+          this.ondeparture();
+          this.ondeparture = undefined;
+        }
+      },
+
+      arrive: function () {
+        if (this.onarrival) {
+          this.onarrival(this.params);
+        }
+      },
+
+      setParams: function (params, pushOrReplace) {
+        var url = expand(this.route.pattern, params);
+        self.pushOrReplace(pushOrReplace, url, {refresh: false});
+        this.params = params;
+        if (this.expandedUrl != url) {
+          this.arrive();
+        }
+        this.expandedUrl = url;
+        this.href = url;
+        self.currentHref = url;
+      },
+
+      push: function (params) {
+        this.setParams(params, 'push');
+      },
+
+      replace: function (params) {
+        this.setParams(params, 'replace');
+      }
+    };
+  } else {
+    this.currentRoute = {
+      isNotFound: true,
+      href: href
+    };
+  }
+};
+
+Router.prototype.setupRender = function () {
+  if (h.currentRender && !h.currentRender.routerEstablished) {
+    h.currentRender.routerEstablished = true;
+
+    this.lastHref = this.currentHref;
+
+    var location = this.history.location();
+    var href = location.pathname + location.search;
+    this.currentHref = href;
+
+    this._isNewHref = this.lastHref != this.currentHref;
+
+    if (this._isNewHref) {
+      this.makeCurrentRoute();
+    }
+  }
+};
+
+Router.prototype.isNewHref = function () {
+  return this._isNewHref;
+};
+
+Router.prototype.isCurrentRoute = function (route) {
+  if (this.currentRoute && this.currentRoute.route === route) {
+    return this.currentRoute;
+  }
+};
+
+Router.prototype.add = function (pattern) {
+  return this.routes.add(pattern);
+};
+
+Router.prototype.pushOrReplace = function (pushReplace, url, options) {
+  var refreshAfter = typeof options == 'object' && options.hasOwnProperty('refresh')? options.refresh: true;
+
+  if ((options && options.force) || !this.currentRoute || this.currentRoute.expandedUrl != url) {
+    this.history[pushReplace](url);
+
+    this.currentRoute.depart();
+
+    if (refresh && refreshAfter) {
+      refresh();
+    }
+  }
+};
+
+Router.prototype.push = function (url, options) {
+  this.pushOrReplace('push', url, options);
+};
+
+Router.prototype.replace = function (url, options) {
+  this.pushOrReplace('replace', url, options);
+};
+
+function createRouter() {
+  return new Router();
+}
+
+function escapeRegex(pattern) {
+  return pattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+var splatVariableRegex = /(\:([a-z\-_]+)\\\*)/ig;
+var variableRegex = /(:([-a-z_]+))/ig;
+
+function compilePattern(pattern) {
+  return escapeRegex(pattern)
+    .replace(splatVariableRegex, "(.+)")
+    .replace(variableRegex, "([^\/]+)");
+}
+
+function preparePattern(pattern) {
+  var match;
+  var variableRegex = new RegExp('(:([-a-z_]+))', 'ig');
+  var variables = [];
+
+  while (match = variableRegex.exec(pattern)) {
+    variables.push(match[2]);
+  }
+
+  var patternRegex = new RegExp('^' + compilePattern(pattern));
+
+  return {
+    regex: patternRegex,
+    variables: variables
+  };
+}
+
+function matchUnder(pattern) {
+  var patternVariables = preparePattern(pattern);
+
+  return function (path) {
+    var match = patternVariables.regex.exec(path);
+
+    if (match) {
+      var params = {};
+
+      for (var n = 1; n < match.length; n++) {
+        params[patternVariables.variables[n - 1]] = match[n];
+      }
+
+      return params;
+    }
+  };
+}
+
+var router = createRouter();
+
+exports.start = function (options) {
+  if (!router) {
+    router = createRouter();
+  }
+  router.start((options && options.history) || exports.historyApi);
+};
+
+exports.stop = function () {
+  router.stop();
+};
+
+exports.clear = function () {
+  router.stop();
+  router = undefined;
+};
+
+exports.querystring = {
+  parse: function(search) {
+    var params = {};
+
+    (search || '').split('&').map(function (param) {
+      var v = param.split('=').map(decodeURIComponent);
+      params[v[0]] = v[1];
+    });
+
+    return params;
+  },
+  stringify: function(paramsObject) {
+    var query = Object.keys(paramsObject).map(function (key) {
+      var param = paramToString(paramsObject[key]);
+
+      if (param != '') {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(param);
+      }
+    }).filter(function (param) {
+      return param;
+    }).join('&');
+
+    return query;
+  }
+};
+
+exports.route = function (pattern) {
+  var route = router.add(pattern);
+
+  function routeFn (paramBindings, render) {
+    if (typeof paramBindings === 'function') {
+      render = paramBindings;
+      paramBindings = undefined;
+    }
+
+    router.setupRender();
+
+    var currentRoute = router.started && router.isCurrentRoute(route);
+
+    if (!render) {
+      var params = paramBindings || {};
+      var url = expand(pattern, params);
+
+
+      return {
+        push: function (ev) {
+          if (ev) {
+            ev.preventDefault();
+          }
+
+          router.push(url);
+        },
+
+        replace: function (ev) {
+          if (ev) {
+            ev.preventDefault();
+          }
+
+          router.replace(url);
+        },
+
+        active: currentRoute && currentRoute.expandedUrl == url,
+
+        href: url,
+
+        a: function () {
+          return this.link.apply(this, arguments);
+        },
+
+        link: function () {
+          var options;
+          var content;
+
+          if (arguments[0] && arguments[0].constructor == Object) {
+            options = arguments[0];
+            content = Array.prototype.slice.call(arguments, 1);
+          } else {
+            options = {};
+            content = Array.prototype.slice.call(arguments, 0);
+          }
+
+          options.href = url;
+          options.onclick = this.push.bind(this);
+
+          return h.apply(h, ['a', options].concat(content));
+        }
+      };
+    } else {
+      if (!router.started) {
+        throw new Error("router not started yet, start with require('hyperdom-router').start([history])");
+      }
+
+      refresh = h.refresh;
+      var isNew = router.isNewHref();
+
+      if (currentRoute) {
+        if (paramBindings) {
+          currentRoute.onarrival = paramBindings.onarrival && h.refreshify(paramBindings.onarrival, {refresh: 'promise'});
+          delete paramBindings.onarrival;
+          currentRoute.ondeparture = paramBindings.ondeparture;
+          delete paramBindings.ondeparture;
+          var pushBindings = pushFromBindings(paramBindings);
+
+          if (isNew) {
+            setParamBindings(currentRoute.params, paramBindings);
+            currentRoute.arrive();
+          } else {
+            applyParamBindings(currentRoute.params, paramBindings, pushBindings);
+          }
+        }
+
+        return render(currentRoute.params);
+      }
+    }
+  }
+
+  var _underRegExp;
+  function underRegExp() {
+    if (!_underRegExp) {
+      _underRegExp = matchUnder(pattern);
+    }
+
+    return _underRegExp;
+  }
+
+  routeFn.under = function (_paramBindings, _fn) {
+    var paramBindings, fn;
+
+    if (typeof _paramBindings === 'function') {
+      fn = _paramBindings;
+    } else {
+      paramBindings = _paramBindings;
+      fn = _fn;
+    }
+
+    var params = underRegExp()(router.history.location().pathname);
+
+    if (params && paramBindings && fn) {
+      router.setupRender();
+
+      var pushBindings = pushFromBindings(paramBindings);
+
+      if (router.isNewHref()) {
+        setParamBindings(params, paramBindings);
+      } else {
+        applyParamBindings(router.currentRoute.params, paramBindings, pushBindings);
+      }
+    }
+
+    if (fn) {
+      if (params) {
+        return fn(params);
+      }
+    } else {
+      return {
+        active: !!params
+      };
+    }
+  };
+
+  routeFn.pattern = pattern;
+  
+  return routeFn;
+};
+
+function pushFromBindings(paramBindings) {
+  var pushBindings = paramBindings.push;
+  delete paramBindings.push;
+  return pushBindings;
+}
+
+function setParamBindings(params, paramBindings) {
+  var paramKeys = Object.keys(paramBindings);
+  for (var n = 0; n < paramKeys.length; n++) {
+    var param = paramKeys[n];
+    var value = params[param];
+
+    var paramBinding = paramBindings[param];
+    var binding = h.binding(paramBinding, {refresh: 'promise'})
+    if (binding.set) {
+      binding.set(value);
+    }
+  }
+}
+
+function applyParamBindings(params, paramBindings, pushBindings) {
+  var bindings = Object.keys(paramBindings).map(function (key) {
+    return {
+      key: key,
+      binding: h.binding(paramBindings[key])
+    };
+  });
+
+  var allBindingsHaveGetters = !bindings.some(function (b) {
+    return !b.binding.get;
+  });
+
+  if (allBindingsHaveGetters) {
+    var newParams = {};
+    var push = false;
+
+    var paramKeys = Object.keys(params);
+    for(var n = 0; n < paramKeys.length; n++) {
+      var param = paramKeys[n];
+      newParams[param] = params[param];
+    }
+
+    for(n = 0; n < bindings.length; n++) {
+      var b = bindings[n];
+      if (b.binding.get) {
+        var value = b.binding.get();
+        newParams[b.key] = value;
+
+        if (pushBindings && value != params[b.key]) {
+          push = push || pushBindings[b.key];
+        }
+      }
+    }
+
+    if (push) {
+      router.currentRoute.push(newParams);
+    } else {
+      router.currentRoute.replace(newParams);
+    }
+  }
+}
+
+exports.notFound = function (render) {
+  var notFoundRoute = router.isNotFound();
+
+  if (notFoundRoute) {
+    return render(notFoundRoute.href);
+  }
+};
+
+function associativeArrayToObject(array) {
+  var o = {};
+
+  for(var n = 0; n < array.length; n++) {
+    var pair = array[n];
+    o[pair[0]] = pair[1];
+  }
+
+  return o;
+}
+
+function merge(obj1, obj2) {
+  var o = clone(obj1);
+
+  Object.keys(obj2).forEach(function(key) {
+    o[key] = obj2[key];
+  });
+
+  return o;
+}
+
+function paramToString(p) {
+  if (p === undefined || p === null) {
+    return '';
+  } else {
+    return p;
+  }
+}
+
+function clone(thing) {
+  return JSON.parse(JSON.stringify(thing));
+}
+
+function expand(pattern, params) {
+  var onlyQueryParams = clone(params);
+
+  var url = pattern.replace(/:([a-z_][a-z0-9_]*)\*/gi, function (_, id) {
+    var param = params[id];
+    delete onlyQueryParams[id];
+    return encodeURI(paramToString(param));
+  });
+
+  url = url.replace(/:([a-z_][a-z0-9_]*)/gi, function (_, id) {
+    var param = params[id];
+    delete onlyQueryParams[id];
+    return encodeURIComponent(paramToString(param));
+  });
+
+  var query = exports.querystring.stringify(onlyQueryParams);
+
+  if (query) {
+    return url + '?' + query;
+  } else {
+    return url;
+  }
+}
+
+exports.historyApi = {
+  start: function () {
+    var self = this;
+    if (!this.listening) {
+      window.addEventListener('popstate', function(ev) {
+        if (self.active) {
+          self.popstate = true;
+          self.popstateState = ev.state;
+          if (refresh) {
+            refresh();
+          }
+        }
+      });
+      this.listening = true;
+    }
+
+    this.active = true;
+  },
+  stop: function () {
+    // I _think_ this is a chrome bug
+    // if we removeEventListener then history.back() doesn't work
+    // Chrome Version 43.0.2357.81 (64-bit), Mac OS X 10.10.3
+    // yeah...
+    this.active = false;
+  },
+  location: function () {
+    return window.location;
+  },
+  push: function (url) {
+    window.history.pushState(undefined, undefined, url);
+  },
+  state: function (state) {
+    window.history.replaceState(state);
+  },
+  replace: function (url) {
+    window.history.replaceState(undefined, undefined, url);
+  }
+};
+
+exports.hash = {
+  start: function () {
+    var self = this;
+    if (!this.listening) {
+      this.hashchangeListener = function() {
+        if (!self.pushed) {
+          if (refresh) {
+            refresh();
+          }
+        } else {
+          self.pushed = false;
+        }
+      }
+      window.addEventListener('hashchange', this.hashchangeListener);
+      this.listening = true;
+    }
+  },
+  stop: function () {
+    this.listening = false;
+    window.removeEventListener('hashchange', this.hashchangeListener);
+  },
+  location: function () {
+    var path = window.location.hash || '#';
+
+    var m = /^#(.*?)(\?.*)?$/.exec(path);
+
+    return {
+      pathname: '/' + m[1],
+      search: m[2] || ''
+    }
+  },
+  push: function (url) {
+    this.pushed = true;
+    window.location.hash = url.replace(/^\//, '');
+  },
+  state: function () {
+  },
+  replace: function (url) {
+    return this.push(url);
+  }
+};
+
+},{"hyperdom":19,"routism":38}],14:[function(require,module,exports){
 var listener = require('./listener');
 var binding = require('./binding')
 
@@ -284,7 +1511,7 @@ function customEvent(name) {
   }
 }
 
-},{"./binding":5,"./listener":11}],5:[function(require,module,exports){
+},{"./binding":15,"./listener":21}],15:[function(require,module,exports){
 var refreshify = require('./refreshify');
 var meta = require('./meta');
 
@@ -325,7 +1552,7 @@ function bindingObject(model, property, setter) {
   };
 }
 
-},{"./meta":12,"./refreshify":18}],6:[function(require,module,exports){
+},{"./meta":22,"./refreshify":28}],16:[function(require,module,exports){
 var domComponent = require('./domComponent');
 var hyperdomMeta = require('./meta');
 var render = require('./render');
@@ -466,7 +1693,7 @@ Component.prototype.destroy = function (element) {
 
 module.exports = Component;
 
-},{"./domComponent":8,"./meta":12,"./render":19}],7:[function(require,module,exports){
+},{"./domComponent":18,"./meta":22,"./render":29}],17:[function(require,module,exports){
 function deprecationWarning() {
   var warningIssued = false;
 
@@ -488,7 +1715,7 @@ module.exports = {
   mapBinding: deprecationWarning()
 };
 
-},{}],8:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var createElement = require('virtual-dom/create-element');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -547,7 +1774,7 @@ function domComponent(options) {
 
 exports.create = domComponent;
 
-},{"./isVdom":10,"./toVdom":23,"virtual-dom/create-element":27,"virtual-dom/diff":28,"virtual-dom/patch":29}],9:[function(require,module,exports){
+},{"./isVdom":20,"./toVdom":33,"virtual-dom/create-element":39,"virtual-dom/diff":40,"virtual-dom/patch":41}],19:[function(require,module,exports){
 var rendering = require('./rendering')
 var refreshify = require('./refreshify')
 var binding = require('./binding')
@@ -574,7 +1801,7 @@ exports.component = function(model) {
 
 exports.currentRender = render.currentRender
 
-},{"./binding":5,"./component":6,"./meta":12,"./refreshEventResult":17,"./refreshify":18,"./render":19,"./rendering":20}],10:[function(require,module,exports){
+},{"./binding":15,"./component":16,"./meta":22,"./refreshEventResult":27,"./refreshify":28,"./render":29,"./rendering":30}],20:[function(require,module,exports){
 var virtualDomVersion = require("virtual-dom/vnode/version")
 
 module.exports = function(x) {
@@ -586,7 +1813,7 @@ module.exports = function(x) {
   }
 };
 
-},{"virtual-dom/vnode/version":45}],11:[function(require,module,exports){
+},{"virtual-dom/vnode/version":57}],21:[function(require,module,exports){
 var refreshify = require('./refreshify');
 
 function ListenerHook(listener) {
@@ -605,7 +1832,7 @@ module.exports = function (listener) {
   return new ListenerHook(listener);
 };
 
-},{"./refreshify":18}],12:[function(require,module,exports){
+},{"./refreshify":28}],22:[function(require,module,exports){
 module.exports = function (model, property) {
   var hyperdomMeta = model._hyperdomMeta;
 
@@ -627,7 +1854,7 @@ module.exports = function (model, property) {
   }
 };
 
-},{}],13:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var hyperdomMeta = require('./meta');
 var runRender = require('./render');
 var Set = require('./set');
@@ -821,7 +2048,7 @@ Mount.prototype.remove = function () {
 
 module.exports = Mount;
 
-},{"./meta":12,"./propertyHook":15,"./refreshEventResult":17,"./render":19,"./set":21,"virtual-dom/vnode/vtext.js":48}],14:[function(require,module,exports){
+},{"./meta":22,"./propertyHook":25,"./refreshEventResult":27,"./render":29,"./set":31,"virtual-dom/vnode/vtext.js":60}],24:[function(require,module,exports){
 var render = require('./render');
 var bindModel = require('./bindModel')
 
@@ -920,7 +2147,7 @@ function generateConditionalClassNames(obj) {
   }).join(' ') || undefined;
 }
 
-},{"./bindModel":4,"./render":19}],15:[function(require,module,exports){
+},{"./bindModel":14,"./render":29}],25:[function(require,module,exports){
 function PropertyHook(value) {
   this.value = value;
 }
@@ -935,7 +2162,7 @@ PropertyHook.prototype.unhook = function (element, property) {
 
 module.exports = PropertyHook;
 
-},{}],16:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var deprecations = require('./deprecations');
 var refreshify = require('./refreshify');
 
@@ -944,7 +2171,7 @@ module.exports = function(promise) {
   refreshify(function() { return promise }, {refresh: 'promise'})()
 }
 
-},{"./deprecations":7,"./refreshify":18}],17:[function(require,module,exports){
+},{"./deprecations":17,"./refreshify":28}],27:[function(require,module,exports){
 var deprecations = require('./deprecations');
 
 module.exports = refreshAfterEvent
@@ -1015,14 +2242,14 @@ function cloneOptions(options) {
   }
 }
 
-},{"./deprecations":7}],18:[function(require,module,exports){
+},{"./deprecations":17}],28:[function(require,module,exports){
 var render = require('./render');
 
 module.exports = function(fn, options) {
   return render.currentRender().mount.refreshify(fn, options)
 }
 
-},{"./render":19}],19:[function(require,module,exports){
+},{"./render":29}],29:[function(require,module,exports){
 var simplePromise = require('./simplePromise');
 
 function runRender(mount, fn) {
@@ -1065,7 +2292,7 @@ var defaultRender = {
   }
 }
 
-},{"./simplePromise":22}],20:[function(require,module,exports){
+},{"./simplePromise":32}],30:[function(require,module,exports){
 var vhtml = require('./vhtml');
 var domComponent = require('./domComponent');
 var bindingMeta = require('./meta');
@@ -1244,7 +2471,7 @@ function rawHtml() {
 
 exports.html.rawHtml = rawHtml;
 
-},{"./binding":5,"./deprecations":7,"./domComponent":8,"./meta":12,"./mount":13,"./prepareAttributes":14,"./refreshAfter":16,"./refreshEventResult":17,"./render":19,"./toVdom":23,"./vhtml":24,"virtual-dom/virtual-hyperscript/parse-tag":38}],21:[function(require,module,exports){
+},{"./binding":15,"./deprecations":17,"./domComponent":18,"./meta":22,"./mount":23,"./prepareAttributes":24,"./refreshAfter":26,"./refreshEventResult":27,"./render":29,"./toVdom":33,"./vhtml":34,"virtual-dom/virtual-hyperscript/parse-tag":50}],31:[function(require,module,exports){
 if (typeof Set === 'function') {
   module.exports = Set;
 } else {
@@ -1272,7 +2499,7 @@ if (typeof Set === 'function') {
   };
 }
 
-},{}],22:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 function SimplePromise () {
   this.listeners = [];
 }
@@ -1299,7 +2526,7 @@ module.exports = function () {
   return new SimplePromise();
 };
 
-},{}],23:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 var vtext = require("virtual-dom/vnode/vtext.js")
 var isVdom = require('./isVdom');
 var Component = require('./component')
@@ -1340,7 +2567,7 @@ module.exports.recursive = function (child) {
   return children;
 };
 
-},{"./component":6,"./isVdom":10,"virtual-dom/vnode/vtext.js":48}],24:[function(require,module,exports){
+},{"./component":16,"./isVdom":20,"virtual-dom/vnode/vtext.js":60}],34:[function(require,module,exports){
 'use strict';
 
 var VNode = require('virtual-dom/vnode/vnode.js');
@@ -1385,7 +2612,7 @@ function h(tagName, props, children) {
   return vnode
 }
 
-},{"./xml":25,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":37,"virtual-dom/vnode/is-vhook":41,"virtual-dom/vnode/vnode.js":46}],25:[function(require,module,exports){
+},{"./xml":35,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":49,"virtual-dom/vnode/is-vhook":53,"virtual-dom/vnode/vnode.js":58}],35:[function(require,module,exports){
 var AttributeHook = require('virtual-dom/virtual-hyperscript/hooks/attribute-hook')
 
 var namespaceRegex = /^([a-z0-9_-]+)(--|:)([a-z0-9_-]+)$/i
@@ -1481,29 +2708,174 @@ function transform(vnode) {
 
 module.exports.transform = transform
 
-},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":36}],26:[function(require,module,exports){
+},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":48}],36:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],27:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
+/*
+ * random-string
+ * https://github.com/valiton/node-random-string
+ *
+ * Copyright (c) 2013 Valiton GmbH, Bastian 'hereandnow' Behrens
+ * Licensed under the MIT license.
+ */
+
+'use strict';
+
+var numbers = '0123456789',
+    letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    specials = '!$%^&*()_+|~-=`{}[]:;<>?,./';
+
+
+function _defaults (opts) {
+  opts || (opts = {});
+  return {
+    length: opts.length || 8,
+    numeric: typeof opts.numeric === 'boolean' ? opts.numeric : true,
+    letters: typeof opts.letters === 'boolean' ? opts.letters : true,
+    special: typeof opts.special === 'boolean' ? opts.special : false
+  };
+}
+
+function _buildChars (opts) {
+  var chars = '';
+  if (opts.numeric) { chars += numbers; }
+  if (opts.letters) { chars += letters; }
+  if (opts.special) { chars += specials; }
+  return chars;
+}
+
+module.exports = function randomString(opts) {
+  opts = _defaults(opts);
+  var i, rn,
+      rnd = '',
+      len = opts.length,
+      randomChars = _buildChars(opts);
+  for (i = 1; i <= len; i++) {
+    rnd += randomChars.substring(rn = Math.floor(Math.random() * randomChars.length), rn + 1);
+  }
+  return rnd;
+};
+
+},{}],38:[function(require,module,exports){
+(function() {
+    var self = this;
+    var variableRegex, splatVariableRegex, escapeRegex, addGroupForTo, addVariablesInTo, compile, recogniseIn, extractParamsForFromAfter;
+    variableRegex = /(\:([a-z\-_]+))/gi;
+    splatVariableRegex = /(\:([a-z\-_]+)\\\*)/gi;
+    escapeRegex = function(pattern) {
+        return pattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+    };
+    exports.table = function() {
+        var self = this;
+        var rows;
+        rows = [];
+        return {
+            add: function(pattern, route) {
+                var self = this;
+                return rows.push({
+                    pattern: pattern,
+                    route: route
+                });
+            },
+            compile: function() {
+                var self = this;
+                return exports.compile(rows);
+            }
+        };
+    };
+    exports.compile = function(routeTable) {
+        var self = this;
+        var groups, regexen, gen1_items, gen2_i, row;
+        groups = [];
+        regexen = [];
+        gen1_items = routeTable;
+        for (gen2_i = 0; gen2_i < gen1_items.length; ++gen2_i) {
+            row = gen1_items[gen2_i];
+            addGroupForTo(row, groups);
+            regexen.push("(" + compile(row.pattern) + ")");
+        }
+        return {
+            regex: new RegExp("^(" + regexen.join("|") + ")$"),
+            groups: groups,
+            recognise: function(input) {
+                var self = this;
+                return recogniseIn(self.regex.exec(input) || [], self.groups);
+            }
+        };
+    };
+    addGroupForTo = function(row, groups) {
+        var group;
+        group = {
+            route: row.route,
+            params: []
+        };
+        groups.push(group);
+        return addVariablesInTo(row.pattern, group);
+    };
+    addVariablesInTo = function(pattern, group) {
+        var match;
+        while (match = variableRegex.exec(pattern)) {
+            group.params.push(match[2]);
+        }
+        return void 0;
+    };
+    compile = function(pattern) {
+        return escapeRegex(pattern).replace(splatVariableRegex, "(.+)").replace(variableRegex, "([^\\/]+)");
+    };
+    exports.compilePattern = function(pattern) {
+        var self = this;
+        return compile(pattern);
+    };
+    recogniseIn = function(match, groups) {
+        var g, i, gen3_forResult;
+        g = 0;
+        for (i = 2; i < match.length; i = i + groups[g - 1].params.length + 1) {
+            gen3_forResult = void 0;
+            if (function(i) {
+                if (typeof match[i] !== "undefined") {
+                    gen3_forResult = {
+                        route: groups[g].route,
+                        params: extractParamsForFromAfter(groups[g], match, i)
+                    };
+                    return true;
+                }
+                g = g + 1;
+            }(i)) {
+                return gen3_forResult;
+            }
+        }
+        return false;
+    };
+    extractParamsForFromAfter = function(group, match, i) {
+        var params, p;
+        params = [];
+        for (p = 0; p < group.params.length; p = p + 1) {
+            params.push([ group.params[p], decodeURIComponent(match[p + i + 1]) ]);
+        }
+        return params;
+    };
+}).call(this);
+},{}],39:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":31}],28:[function(require,module,exports){
+},{"./vdom/create-element.js":43}],40:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":50}],29:[function(require,module,exports){
+},{"./vtree/diff.js":62}],41:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":34}],30:[function(require,module,exports){
+},{"./vdom/patch.js":46}],42:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -1602,7 +2974,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":41,"is-object":26}],31:[function(require,module,exports){
+},{"../vnode/is-vhook.js":53,"is-object":36}],43:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -1650,7 +3022,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":39,"../vnode/is-vnode.js":42,"../vnode/is-vtext.js":43,"../vnode/is-widget.js":44,"./apply-properties":30,"global/document":3}],32:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":51,"../vnode/is-vnode.js":54,"../vnode/is-vtext.js":55,"../vnode/is-widget.js":56,"./apply-properties":42,"global/document":3}],44:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -1737,7 +3109,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],33:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -1890,7 +3262,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":44,"../vnode/vpatch.js":47,"./apply-properties":30,"./update-widget":35}],34:[function(require,module,exports){
+},{"../vnode/is-widget.js":56,"../vnode/vpatch.js":59,"./apply-properties":42,"./update-widget":47}],46:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -1972,7 +3344,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":31,"./dom-index":32,"./patch-op":33,"global/document":3,"x-is-array":51}],35:[function(require,module,exports){
+},{"./create-element":43,"./dom-index":44,"./patch-op":45,"global/document":3,"x-is-array":63}],47:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -1989,7 +3361,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":44}],36:[function(require,module,exports){
+},{"../vnode/is-widget.js":56}],48:[function(require,module,exports){
 'use strict';
 
 module.exports = AttributeHook;
@@ -2026,7 +3398,7 @@ AttributeHook.prototype.unhook = function (node, prop, next) {
 
 AttributeHook.prototype.type = 'AttributeHook';
 
-},{}],37:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 module.exports = SoftSetHook;
@@ -2045,7 +3417,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],38:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 var split = require('browser-split');
@@ -2101,7 +3473,7 @@ function parseTag(tag, props) {
     return props.namespace ? tagName : tagName.toUpperCase();
 }
 
-},{"browser-split":2}],39:[function(require,module,exports){
+},{"browser-split":2}],51:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -2143,14 +3515,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":40,"./is-vnode":42,"./is-vtext":43,"./is-widget":44}],40:[function(require,module,exports){
+},{"./is-thunk":52,"./is-vnode":54,"./is-vtext":55,"./is-widget":56}],52:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],41:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -2159,7 +3531,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],42:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -2168,7 +3540,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":45}],43:[function(require,module,exports){
+},{"./version":57}],55:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -2177,17 +3549,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":45}],44:[function(require,module,exports){
+},{"./version":57}],56:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],45:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 module.exports = "2"
 
-},{}],46:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -2261,7 +3633,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":40,"./is-vhook":41,"./is-vnode":42,"./is-widget":44,"./version":45}],47:[function(require,module,exports){
+},{"./is-thunk":52,"./is-vhook":53,"./is-vnode":54,"./is-widget":56,"./version":57}],59:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -2285,7 +3657,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":45}],48:[function(require,module,exports){
+},{"./version":57}],60:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -2297,7 +3669,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":45}],49:[function(require,module,exports){
+},{"./version":57}],61:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -2357,7 +3729,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":41,"is-object":26}],50:[function(require,module,exports){
+},{"../vnode/is-vhook":53,"is-object":36}],62:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -2786,7 +4158,7 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":39,"../vnode/is-thunk":40,"../vnode/is-vnode":42,"../vnode/is-vtext":43,"../vnode/is-widget":44,"../vnode/vpatch":47,"./diff-props":49,"x-is-array":51}],51:[function(require,module,exports){
+},{"../vnode/handle-thunk":51,"../vnode/is-thunk":52,"../vnode/is-vnode":54,"../vnode/is-vtext":55,"../vnode/is-widget":56,"../vnode/vpatch":59,"./diff-props":61,"x-is-array":63}],63:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -2796,26 +4168,487 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],52:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
+var http = require('httpism')
+
+function APIService() {
+
+}
+
+
+APIService.prototype.getResults = function(postcode, data) {
+
+  return loadPostcodeData(postcode)
+  .then(function(results) {
+    for (var attrname in data) { results[attrname] = data[attrname]; }
+    return resultAlgorithm(results);
+  });
+}
+
+
+APIService.prototype.loadPostcodeData = function(postcode) {
+
+  var totalResults = {};
+
+  console.log(postcode)
+
+  return loadConstituency(postcode)
+  .then(function(results) {
+    totalResults.postcodeResults = results;
+    var refAreaName = results.refArea.name;
+    refAreaName = refAreaName.substring(0, refAreaName.length - 5);
+    return loadEURefResults(refAreaName);
+  })
+  .then(function(results) {
+    totalResults.euRefResults = results;
+    return totalResults;
+  })
+}
+
+APIService.prototype.resultAlgorithm = function(data) {
+  data.finalResult = {party: 'Lib Dems (test)'};
+  return data;
+}
+
+APIService.prototype.loadConstituency = function(postcode) {
+  var url = 'https://mapit.mysociety.org/postcode/' + postcode;
+  return http.get(url)
+  .then(function (res) {
+    var constituency = objectAsArray(res.body.areas).filter(function (data) {
+      return data.type == 'WMC'
+    });
+    var refArea = objectAsArray(res.body.areas).filter(function (data) {
+      return (data.type == 'OLF' || data.type == 'UTA')
+    });
+    return {constituency: constituency[0], refArea: refArea[0], all: res.body.areas}
+  })
+};
+
+APIService.prototype.loadEURefResults = function(areaName) {
+  var url = 'https://sheetsu.com/apis/v1.0/0a046bfab11b/search?AmendedArea=' + areaName;
+  return http.get(url)
+  .then(function (res) {
+    return res.body[0];
+  })
+
+}
+
+function objectAsArray(obj) {
+  return Object.keys(obj).map(function (key) { return obj[key]; });
+}
+
+var loadPostcodeData = APIService.prototype.loadPostcodeData;
+var resultAlgorithm = APIService.prototype.resultAlgorithm;
+var loadConstituency = APIService.prototype.loadConstituency;
+var loadEURefResults = APIService.prototype.loadEURefResults;
+console.log(loadPostcodeData);
+console.log(resultAlgorithm);
+console.log(loadConstituency);
+console.log(loadEURefResults);
+
+module.exports = new APIService();
+
+},{"httpism":5}],65:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
+var router = require('hyperdom-router');
+var api = require('../services/APIService');
 
+var routes = {
+  root: router.route('/'),
+  dashboard: router.route('/dashboards/:name'),
+  step: router.route('/steps/:name')
+};
+
+router.start();
 
 var model = {
-  name:''
+
+  step: -1,
+
+  user: {
+    postcode: '',
+    opinions: {
+      issues: {}
+    },
+    results: []
+  },
+
+  //Dashboards are collections of tasks
+  dashboards: {
+    home: {
+      title: "What do you want to do? 🙋",
+      subtitle: "Choose an option below. You can come back here later to choose another!",
+      tasks: [
+        "brexit",
+        "decide",
+        "leaders",
+        "vote-worth"
+      ]
+    },
+    brexit: {
+      title: "What did you want to do about Brexit?",
+      subtitle: "Select one option to continue.",
+      tasks: [
+        "brexit-stop",
+        "brexit-support",
+        "brexit-commons",
+        "brexit-soft"
+      ]
+    }
+  },
+
+  //Tasks are a series of steps, and are chosen from the dashboard
+  tasks: {
+    brexit: {
+      label: "What can I do about Brexit?",
+      color: "#42c299",
+      goto: {
+        type: 'dashboard',
+        name: 'brexit'
+      }
+    },
+    decide: {
+      label: "Decide who to vote for",
+      color: "#e74289",
+      goto: {
+        type: 'dashboard',
+        name: 'decide'
+      }
+    },
+    leaders: {
+      label: "Learn about the leaders",
+      color: "#c042de",
+      goto: {
+        type: 'dashboard',
+        name: 'leaders'
+      }
+    },
+    "vote-worth": {
+      label: "How much does my vote count?",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'vote-worth'
+      }
+    },
+    "brexit-stop": {
+      label: "Stop it completely",
+      color: "#42c299",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.agreement',
+          value: 0
+        }
+      ]
+    },
+    "brexit-support": {
+      label: "Get on with it",
+      color: "#e74289",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.agreement',
+          value: 5
+        }
+      ]
+    },
+    "brexit-commons": {
+      label: "I want my MP to have a vote on the final deal",
+      color: "#c042de",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.vote',
+          value: true
+        }
+      ]
+    },
+    "brexit-soft": {
+      label: "I want to stop a hard Brexit",
+      color: "#00a2e5",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.agreement',
+          value: 3
+        }
+      ]
+    }
+  },
+
+  // Steps are essentially pages
+  steps: {
+    postcode: {
+
+    },
+    result: {
+
+    }
+  }
+};
+
+class App {
+  constructor() {
+    this.header = new Header();
+  }
+
+  render() {
+
+    return h('div',
+      this.header,
+
+      routes.root(function () {
+        var dashboard = new Dashboard({dashboard: 'home'});
+        return h("div", dashboard)
+      }),
+
+      routes.dashboard(function (params) {
+        var dashboard = new Dashboard({dashboard: params.name});
+        return h("div", dashboard)
+      }),
+
+      routes.step(function (params) {
+        var step = new Step(params);
+        return h('div',
+          step
+        );
+      })
+    )
+  }
 }
 
-function render() {
-  return h("div",
-    h("label", "what's your name?"),
-    h('input', {
-       required: true,
-       placeholder: 'What is your name',
-       binding: [model, 'name']
-    }),
-    h("div", "hi " + model.name))
+
+class Header {
+  render() {
+    return h("header",
+      routes.root().a(
+        h("i.fa.fa-th-large.menu")
+      )
+    )
+  }
 }
 
-hyperdom.append(document.body, render,model);
 
-},{"hyperdom":9}]},{},[52]);
+class Dashboard {
+
+  constructor(params) {
+    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
+  }
+
+  render() {
+
+    var tasksDOM = [h("p.task-category", "🔥Popular")];
+
+    if (!this.dashboard.tasks.length) {
+      tasksDOM.push(h("p", "No tasks to display"))
+    }
+
+    this.dashboard.tasks.forEach(function(name) {
+      var task = model.tasks[name];
+      var taskRoute;
+      switch (task.goto.type) {
+        case 'dashboard':
+          taskRoute = routes.dashboard
+          break;
+
+        case 'step':
+          taskRoute = routes.step
+          break;
+
+        default:
+          taskRoute = -1;
+      }
+      tasksDOM.push(
+        taskRoute({ name: task.goto.name, task: name, next: task.goto.next }).a( { "class": "task", "style":{"background-color": task.color} },
+          h('h5', task.label)
+        )
+      );
+    });
+
+    return h("section.dashboard",
+      h("h1", this.dashboard.title),
+      h("h2", this.dashboard.subtitle),
+      h("section.tasks", tasksDOM)
+    )
+  }
+}
+
+class Step {
+  constructor(params) {
+    if (params.task && model.tasks[params.task].dataUpdates)
+      updateData(model.tasks[params.task].dataUpdates);
+
+    var data = {};
+    switch (params.name) {
+      case 'postcode':
+        data = {
+          type: 'postcode',
+          name: 'Where are you voting from?',
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+        }
+        break;
+
+      case 'result':
+        data = {
+          type: 'result',
+          result: model.user.results[model.user.results.length-1]
+        }
+        break;
+
+      default:
+        data = {
+          name: "Goodness me, you're early! 😳",
+          description: "This feature is coming soon...! 👻"
+        }
+    }
+
+    data.nextStep = params.next;
+    this.card = new Card(data);
+  }
+
+  render() {
+    if (!this.cards || !this.cards.length) {
+      this.card
+    }
+    return h("div", this.card);
+  }
+}
+
+class Card {
+  constructor(data) {
+    this.cardContent = new CardContent(data);
+    this.data = data;
+  }
+
+  render() {
+
+    return h('div.cards',
+      h('div.card',
+        h('div.card-visible',
+          // h('div.close', h("i.fa.fa-times", '')),
+          this.cardContent,
+          h('a.card-icon.external', {'href': 'http://explaain.com'},
+            h('img', {'src': 'http://app.explaain.com/card-logo.png'})
+          )
+        )
+      )
+    )
+  }
+}
+
+class CardContent {
+  constructor(data) {
+    this.data = data;
+  }
+
+  render() {
+    var loading = false;
+    switch (this.data.type) {
+      case 'postcode':
+        var data = this.data;
+        return h('content',
+          h('h2', this.data.name),
+          h('div.body-content',
+            h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
+            h('button.btn.btn-success',
+              {'onclick': function(onclick) {
+                console.log(loading);
+                loading = true;
+                console.log(loading);
+                api.getResults(model.user.postcode)
+                  .then(function(results) {
+                    model.user.results.push(results.finalResult);
+                    routes.step({ name: data.nextStep, type: data.type }).push();
+                  })
+                }
+              }, "Go!"
+            ),
+            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': loading } }), //This doesn't work yet!
+            h('p', this.data.description)
+          )
+        )
+        break;
+
+      case 'result':
+        return h('content',
+          h('h2', this.data.name),
+          h('div.body-content',
+            h('h2', this.data.result.party),
+            // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),
+            // h('button.btn.btn-success',
+            //   {'onclick': function(onclick) {
+            //     api.loadConstituency(model.user.postcode)
+            //       .then(function(results) {
+            //         console.log(this.data.nextStep);
+            //         routes.step({ name: this.data.nextStep, type: this.data.type }).push();
+            //       })
+            //     }
+            //   }, "Go!"
+            // ),
+            h('p', this.data.description)
+          )
+        )
+        break;
+
+      default:
+        return h('content',
+          h('h2', this.data.name),
+          h('div.body-content',
+            h('p', this.data.description)
+          )
+        )
+    }
+    if (this.data.type == 'postcode') {
+
+    } else {
+      return h('content',
+        h('h2', this.data.name),
+        h('div.body-content',
+          h('p', this.data.description)
+        )
+      )
+    }
+  }
+
+}
+
+updateData = function(dataUpdates) {
+  dataUpdates.forEach(function(update) {
+    updateModel(update.data, update.value);
+  });
+}
+
+function updateModel(path, value) {
+    var schema = model;  // a moving reference to internal objects within model
+    var pList = path.split('.');
+    var len = pList.length;
+    for(var i = 0; i < len-1; i++) {
+        var elem = pList[i];
+        if( !schema[elem] ) schema[elem] = {}
+        schema = schema[elem];
+    }
+
+    schema[pList[len-1]] = value;
+}
+
+hyperdom.append(document.body, new App());
+
+},{"../services/APIService":64,"hyperdom":19,"hyperdom-router":13}]},{},[65]);
