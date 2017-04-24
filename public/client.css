@@ -70,7 +70,7 @@ a.task:hover {
 
 /* igor: animation */
 
-.dashboard h1 {
+.dashboard h1, .step h1{
   animation-name: h1pop;
   animation-duration: .4s;
   opacity:0;
@@ -82,7 +82,7 @@ a.task:hover {
   100%  {transform:translateY(0px);opacity:1}
 }
 
-.dashboard h2 {
+.dashboard h2, .step h2 {
   animation-name: h2pop;
   animation-duration: .4s;
   opacity:0;

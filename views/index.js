@@ -147,10 +147,10 @@ var model = {
   // Steps are essentially pages
   steps: {
     postcode: {
-
+      label: "test"
     },
     result: {
-
+      
     }
   }
 };
@@ -243,6 +243,8 @@ class Dashboard {
 
 class Step {
   constructor(params) {
+    this.step = model.steps[params.name];
+    
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
 
@@ -279,13 +281,23 @@ class Step {
       return (new Card(_data));
     })
     
+    this.headers = [];
+    if(this.step.label){
+      this.headers.push(
+        h("h1",this.step.label)
+      );
+    }
+    
   }
 
   render() {
     /*if (!this.cards || !this.cards.length) {
       this.card
     }*/
-    return h.apply(null,["div"].concat(this.cards));
+    // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+    return h.apply(null,
+      ["div.step"].concat(this.headers).concat(this.cards)
+    )
   }
 }
 
@@ -296,7 +308,7 @@ class Card {
   }
 
   render() {
-
+    // igor: todo: not for now, but ".cards" does not actually belong to a single card template
     return h('div.cards',
       h('div.card',
         h('div.card-visible',
