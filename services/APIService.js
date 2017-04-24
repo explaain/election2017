@@ -40,7 +40,9 @@ APIService.prototype.resultAlgorithm = function(data) {
 }
 
 APIService.prototype.loadConstituency = function(postcode) {
-  var url = 'https://mapit.mysociety.org/postcode/' + postcode;
+  // igor: todo: flush it soon!
+  const apiKey = "DHSoK08gLM6tgVlJFleH4bnUiuHPE4DJkKQiSENT";
+  var url = 'https://mapit.mysociety.org/postcode/' + postcode + '?api_key=' + apiKey;
   return http.get(url)
   .then(function (res) {
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
