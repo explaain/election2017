@@ -28,10 +28,14 @@ img.loading.showing {
   display: block;
 }
 
+section h1 {
+  line-height:1em;
+}
+
 section.tasks {
   width: 100%;
   max-width: 500px;
-  margin: auto;
+  margin: 20px auto 0;
 }
 
 p.task-category {
