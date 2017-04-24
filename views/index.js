@@ -338,7 +338,7 @@ class CardContent {
                     model.user.results.push([
                       {
                         header: results.finalResult.party,
-                        content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11)"
+                        content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
                       },
                       {
                         header: results.finalResult.party,
@@ -361,7 +361,7 @@ class CardContent {
         break;
 
       case 'result':
-        const content = this.data.result.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a href='$2'>$1</a>");
+        const content = this.data.result.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
         return h('div.content.text-left',
           h('h2', this.data.result.header),
           h('div.body-content',
@@ -377,7 +377,10 @@ class CardContent {
             //     }
             //   }, "Go!"
             // ),
-          )
+          )/*,
+          h("a.card-icon.external", { href: "http://explaain.com" } ,
+            h("img",{src: "://app.explain.com/card-logo.png"})
+          )*/ // igor: styling doesn't work yet for some reason
         )
         break;
 
