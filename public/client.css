@@ -86,7 +86,7 @@ a.task:hover {
   100%  {transform:translateY(0px);opacity:1}
 }
 
-.dashboard h2, .step h2 {
+.dashboard h2 {
   animation-name: h2pop;
   animation-duration: .4s;
   opacity:0;
