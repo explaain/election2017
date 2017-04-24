@@ -23,6 +23,7 @@ img.loading {
   max-width: 100%;
   text-align: center;
   margin: auto;
+  margin-top:10px;
 }
 img.loading.showing {
   display: block;
@@ -74,6 +75,21 @@ a.task:hover {
 
 .card .content.text-left {
   text-align: left;
+}
+
+/* igor: styling a form in the card */
+
+.card form.postcode-form {
+  margin-top:20px;
+}
+
+.card form.postcode-form input[type="submit"] {
+  margin:-2px 0 0 5px;
+}
+
+.card form.postcode-form input[type="text"] {
+  max-width:140px;
+  display: inline-block;
 }
 
 /* igor: animation */
