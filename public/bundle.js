@@ -4277,7 +4277,7 @@ var model = {
   //Dashboards are collections of tasks
   dashboards: {
     home: {
-      title: "What do you want to do? 🙋",
+      title: "What do you want to do? ",
       subtitle: "Choose an option below. You can come back here later to choose another!",
       tasks: [
         "brexit",
@@ -4450,12 +4450,12 @@ class Header {
 class Dashboard {
 
   constructor(params) {
-    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
+    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! ", subtitle: "This feature is coming soon...! ", tasks: []};
   }
 
   render() {
 
-    var tasksDOM = [h("p.task-category", "🔥Popular")];
+    var tasksDOM = [h("p.task-category", "Popular")];
 
     if (!this.dashboard.tasks.length) {
       tasksDOM.push(h("p", "No tasks to display"))
@@ -4496,39 +4496,46 @@ class Step {
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
 
-    var data = {};
+    var data = {
+      cards: []
+    };
     switch (params.name) {
       case 'postcode':
-        data = {
+        data.cards.push({
           type: 'postcode',
           name: 'Where are you voting from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
-        }
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency '
+        })
         break;
 
       case 'result':
-        data = {
-          type: 'result',
-          result: model.user.results[model.user.results.length-1]
-        }
+        model.user.results[model.user.results.length-1].forEach(function(result){
+          data.cards.push({
+            type: 'result',
+            result: result
+          })
+        })
         break;
 
       default:
-        data = {
-          name: "Goodness me, you're early! 😳",
-          description: "This feature is coming soon...! 👻"
-        }
+        data.cards.push({
+          name: "Goodness me, you're early! ",
+          description: "This feature is coming soon...! "
+        })
     }
-
-    data.nextStep = params.next;
-    this.card = new Card(data);
+    
+    this.cards = data.cards.map(function(_data){
+      _data.nextStep = params.next;
+      return (new Card(_data));
+    })
+    
   }
 
   render() {
-    if (!this.cards || !this.cards.length) {
+    /*if (!this.cards || !this.cards.length) {
       this.card
-    }
-    return h("div", this.card);
+    }*/
+    return h.apply(null,["div"].concat(this.cards));
   }
 }
 
@@ -4544,6 +4551,7 @@ class Card {
       h('div.card',
         h('div.card-visible',
           // h('div.close', h("i.fa.fa-times", '')),
+          h('div.close'),
           this.cardContent,
           h('a.card-icon.external', {'href': 'http://explaain.com'},
             h('img', {'src': 'http://app.explaain.com/card-logo.png'})
@@ -4575,7 +4583,22 @@ class CardContent {
                 console.log(loading);
                 api.getResults(model.user.postcode)
                   .then(function(results) {
-                    model.user.results.push(results.finalResult);
+                    // igor: We have to refactor results a bit to make them reusable in cards
+                    // igor: change this content to create cards based on the data you retrieve
+                    model.user.results.push([
+                      {
+                        header: results.finalResult.party,
+                        content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11)"
+                      },
+                      {
+                        header: results.finalResult.party,
+                        content: results.finalResult.party
+                      },
+                      {
+                        header: results.finalResult.party,
+                        content: results.finalResult.party
+                      }
+                    ]);
                     routes.step({ name: data.nextStep, type: data.type }).push();
                   })
                 }
@@ -4588,10 +4611,11 @@ class CardContent {
         break;
 
       case 'result':
-        return h('content',
-          h('h2', this.data.name),
+        const content = this.data.result.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a href='$2'>$1</a>");
+        return h('div.content.text-left',
+          h('h2', this.data.result.header),
           h('div.body-content',
-            h('h2', this.data.result.party),
+            h.rawHtml('p', content)
             // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),
             // h('button.btn.btn-success',
             //   {'onclick': function(onclick) {
@@ -4603,7 +4627,6 @@ class CardContent {
             //     }
             //   }, "Go!"
             // ),
-            h('p', this.data.description)
           )
         )
         break;

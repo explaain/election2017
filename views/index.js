@@ -300,6 +300,7 @@ class Card {
       h('div.card',
         h('div.card-visible',
           // h('div.close', h("i.fa.fa-times", '')),
+          h('div.close'),
           this.cardContent,
           h('a.card-icon.external', {'href': 'http://explaain.com'},
             h('img', {'src': 'http://app.explaain.com/card-logo.png'})
@@ -336,7 +337,7 @@ class CardContent {
                     model.user.results.push([
                       {
                         header: results.finalResult.party,
-                        content: results.finalResult.party
+                        content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11)"
                       },
                       {
                         header: results.finalResult.party,
@@ -359,10 +360,11 @@ class CardContent {
         break;
 
       case 'result':
-        return h('content',
-          h('h2', this.data.name),
+        const content = this.data.result.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a href='$2'>$1</a>");
+        return h('div.content.text-left',
+          h('h2', this.data.result.header),
           h('div.body-content',
-            h('h2', this.data.result.header),
+            h.rawHtml('p', content)
             // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),
             // h('button.btn.btn-success',
             //   {'onclick': function(onclick) {
@@ -374,7 +376,6 @@ class CardContent {
             //     }
             //   }, "Go!"
             // ),
-            h('p', this.data.description)
           )
         )
         break;

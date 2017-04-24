@@ -60,3 +60,9 @@ a.task h5 {
 a.task:hover {
   opacity: 0.7;
 }
+
+/* igor: on result cards we want text to be alighed left, temporary */
+
+.card .content.text-left {
+  text-align: left;
+}
