@@ -253,7 +253,7 @@ class Step {
         data.cards.push({
           type: 'postcode',
           name: 'Where are you voting from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency '
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency'
         })
         break;
 
@@ -334,6 +334,7 @@ class CardContent {
                   .then(function(results) {
                     // igor: We have to refactor results a bit to make them reusable in cards
                     // igor: change this content to create cards based on the data you retrieve
+                    // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
                     model.user.results.push([
                       {
                         header: results.finalResult.party,
