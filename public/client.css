@@ -70,26 +70,51 @@ a.task:hover {
 
 /* igor: animation */
 
+.dashboard h1 {
+  animation-name: h1pop;
+  animation-duration: .4s;
+  opacity:0;
+  animation-fill-mode: forwards;
+  animation-delay: .0s
+}
+
+@keyframes h1pop {
+  0% {transform:translateY(-20px);opacity:0}
+  100%  {transform:translateY(0px);opacity:1}
+}
+
+.dashboard h2 {
+  animation-name: h2pop;
+  animation-duration: .4s;
+  opacity:0;
+  animation-fill-mode: forwards;
+  animation-delay: .3s
+}
+
+@keyframes h2pop {
+  0% {transform:translateY(-10px);opacity:0}
+  100%  {transform:translateY(0px);opacity:1}
+}
+
 .task {
   animation-name: taskpop;
-  animation-duration: .5s;
+  animation-duration: .2s;
   opacity:0;
   transform: scale(0,0) rotate(-5deg);
   opacity:0;
   animation-fill-mode: forwards; 
 }
 
-.task:nth-of-type(1){animation-delay: .0s}
-.task:nth-of-type(2){animation-delay: .2s}
-.task:nth-of-type(3){animation-delay: .4s}
-.task:nth-of-type(4){animation-delay: .6s}
+.task:nth-of-type(1){animation-delay: .6s}
+.task:nth-of-type(2){animation-delay: .8s}
+.task:nth-of-type(3){animation-delay: 1s}
+.task:nth-of-type(4){animation-delay: 1.2s}
 
 @keyframes taskpop {
-  0% {transform: scale(0,0) rotate(-5deg);opacity:0}
-  80%  {transform: scale(1.1,1.1) rotate(5deg);opacity:1}
-  100%  {transform: scale(1,1) rotate(0deg);opacity:1}
+  0% {transform: scale(0,0); opacity:0}
+  80%  {transform: scale(1.1,1.1);opacity:1}
+  100%  {transform: scale(1,1);opacity:1}
 }
-
 
 /* igor: .task-category hiding, temporary */
 
