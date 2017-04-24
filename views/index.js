@@ -147,7 +147,7 @@ var model = {
   // Steps are essentially pages
   steps: {
     postcode: {
-      label: "test"
+      label: "Please provide your postcode"
     },
     result: {
       
