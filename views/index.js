@@ -26,7 +26,7 @@ var model = {
   //Dashboards are collections of tasks
   dashboards: {
     home: {
-      title: "What do you want to do? ",
+      title: "What do you want to do?",
       subtitle: "Choose an option below. You can come back here later to choose another!",
       tasks: [
         "brexit",
@@ -199,12 +199,12 @@ class Header {
 class Dashboard {
 
   constructor(params) {
-    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! ", subtitle: "This feature is coming soon...! ", tasks: []};
+    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early!", subtitle: "This feature is coming soon...!", tasks: []};
   }
 
   render() {
 
-    var tasksDOM = [h("p.task-category", "Popular")];
+    var tasksDOM = [h("p.task-category", "Popular")];
 
     if (!this.dashboard.tasks.length) {
       tasksDOM.push(h("p", "No tasks to display"))
@@ -268,8 +268,8 @@ class Step {
 
       default:
         data.cards.push({
-          name: "Goodness me, you're early! ",
-          description: "This feature is coming soon...! "
+          name: "Goodness me, you're early!",
+          description: "This feature is coming soon...!"
         })
     }
     
