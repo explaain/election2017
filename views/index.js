@@ -20,7 +20,8 @@ var model = {
     opinions: {
       issues: {}
     },
-    results: []
+    results: [],
+    isWaiting: false 
   },
 
   //Dashboards are collections of tasks
@@ -311,50 +312,60 @@ class Card {
   }
 }
 
+// igor: local "loading" didn't work because after onclick it triggers render() immediately and... redefines loading to "false" :)
+// igor: a better way to go is to have a global user state as "isWaiting", that should make sense!
+
 class CardContent {
   constructor(data) {
     this.data = data;
   }
 
   render() {
-    var loading = false;
     switch (this.data.type) {
       case 'postcode':
         var data = this.data;
         return h('content',
           h('h2', this.data.name),
           h('div.body-content',
-            h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
-            h('button.btn.btn-success',
-              {'onclick': function(onclick) {
-                console.log(loading);
-                loading = true;
-                console.log(loading);
-                api.getResults(model.user.postcode)
-                  .then(function(results) {
-                    // igor: We have to refactor results a bit to make them reusable in cards
-                    // igor: change this content to create cards based on the data you retrieve
-                    // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
-                    model.user.results.push([
-                      {
-                        header: results.finalResult.party,
-                        content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
-                      },
-                      {
-                        header: results.finalResult.party,
-                        content: results.finalResult.party
-                      },
-                      {
-                        header: results.finalResult.party,
-                        content: results.finalResult.party
-                      }
-                    ]);
-                    routes.step({ name: data.nextStep, type: data.type }).push();
-                  })
+            h('form',
+              // igor: function(onclick) is misleading, because it passes the *event*, so function(e) is better
+              // igor: also, it is good to wrap inputs and action buttons in the form, because otherwise "submit-on-enter" just won't work
+              // igor: make sure to stop the propagation and return false to stop the default behaviour of a form
+              {
+                'class': { 'hide': model.user.isWaiting },
+                'onsubmit': function(e) {
+                  e.stopPropagation();
+                  model.user.isWaiting = true;
+                  // igor: todo: move api calls to another place to make the template result agnostic
+                  api.getResults(model.user.postcode)
+                    .then(function(results) {
+                      model.user.isWaiting = false;
+                      // igor: We have to refactor results a bit to make them reusable in cards
+                      // igor: change this content to create cards based on the data you retrieve
+                      // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
+                      model.user.results.push([
+                        {
+                          header: results.finalResult.party,
+                          content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
+                        },
+                        {
+                          header: results.finalResult.party,
+                          content: results.finalResult.party
+                        },
+                        {
+                          header: results.finalResult.party,
+                          content: results.finalResult.party
+                        }
+                      ]);
+                      routes.step({ name: data.nextStep, type: data.type }).push();
+                    })
+                  return false;
                 }
-              }, "Go!"
+              },
+              h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
+              h('input.btn.btn-success', {type: "submit"}, "Go!")
             ),
-            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': loading } }), //This doesn't work yet!
+            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
             h('p', this.data.description)
           )
         )
