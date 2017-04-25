@@ -45,6 +45,16 @@ var model = {
         "brexit-commons",
         "brexit-soft"
       ]
+    },
+    decide: {
+      title: "What matters to you?",
+      subtitle: "Each topic contains 5 questions that divides or unites the parties.",
+      tasks: [
+        "issue-nhs",
+        "issue-immigration",
+        "issue-brexit",
+        "issue-education"
+      ]
     }
   },
 
@@ -153,6 +163,42 @@ var model = {
           value: 3
         }
       ]
+    },
+    "issue-nhs": {
+      icon: 'h-square',
+      label: "NHS",
+      color: "#42c299",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-immigration": {
+      icon: 'id-card-o',
+      label: "Immigration",
+      color: "#e74289",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-brexit": {
+      icon: 'newspaper-o',
+      label: "Brexit",
+      color: "#c042de",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-education": {
+      icon: 'graduation-cap',
+      label: "Education",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
     }
   },
 
