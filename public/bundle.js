@@ -4176,25 +4176,51 @@ function APIService() {
 }
 
 var globalParties = [
-  "conservative",
-  "labour",
-  "lib-dem",
-  "ukip",
-  "snp",
-  "green",
-  "plaid-cymru"
+  {
+    key: "conservative",
+    name: "Conservative Party"
+  },
+  {
+    key: "labour",
+    name: "Labour"
+  },
+  {
+    key: "lib-dem",
+    name: "Liberal Democrats"
+  },
+  {
+    key: "ukip",
+    name: "Ukip"
+  },
+  {
+    key: "snp",
+    name: "SNP"
+  },
+  {
+    key: "green",
+    name: "Green Party"
+  },
+  {
+    key: "plaid-cymru",
+    name: "Plaid Cymru"
+  }
 ];
 
 APIService.prototype.getResults = function(postcode, userData) {
 
   var data = {};
 
-  return loadPostcodeData(postcode)
-  .then(function(results) {
-    data = results;
-    data.user = userData;
-    return resultAlgorithm(results);
-  });
+  return delay(1000).then(function(){
+    return loadPostcodeData(postcode)
+    .then(function(results) {
+      data = results;
+      data.user = userData;
+      return resultAlgorithm(data);
+    }).then(function(results) {
+      console.log(results);
+      return results;
+    })
+  })
 }
 
 
@@ -4218,10 +4244,15 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (!totalResults.results["my-constituency"]["euRef2016"].choices["leave"]) {totalResults.results["my-constituency"]["euRef2016"].choices["leave"] = {}}
     totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
     return totalResults;
+    // return loadGe2015Results(postcodeResults.constituency)
   })
+  // .then(function(results))
+  //   return totalResults;
+  // })
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
+  console.log(data);
   var threshold = 0.5;
   var partyMatches = getPartyMatches(data);
   var partyChances = getPartyChances(data);
@@ -4235,10 +4266,35 @@ APIService.prototype.resultAlgorithm = function(data) {
   partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
     partyScores[partyKey] = partyMatches[partyKey]*partyChances[partyKey];
+    if (!partyScores[partyKey]) { delete partyScores[partyKey]}
+  });
+  // partyScores["conservative"] = 6;
+  // partyScores["labour"] = 3;
+  // partyScores["lib-dem"] = 8;
+  // partyScores["ukip"] = 1;
+  console.log(partyScores);
+  partyKeys = Object.keys(partyScores);
+  var max = 0,
+      winningParty = {};
+  partyKeys.forEach(function(partyKey) {
+    if (partyScores[partyKey] >= max) {
+      max = partyScores[partyKey];
+      winningParty = {key: partyKey};
+    }
   })
-  // return partyScores;
-  data.finalResult = {party: 'Lib Dems (test)'};
-  return data;
+  winningParty = globalParties.filter(function(party) {
+    return party.key == winningParty.key;
+  })[0];
+  if (!winningParty) {
+    winningParty = globalParties[Math.floor(Math.random()*globalParties.length)];
+  }
+  console.log(winningParty);
+  var finalResult = {
+      // party:
+  }
+  var finalResult = {party: 'Lib Dems (test)'};
+  var totalData = {data: data, finalResult: finalResult};
+  return totalData;
 }
 
 APIService.prototype.getPartyMatches = function(data) {
@@ -4246,21 +4302,22 @@ APIService.prototype.getPartyMatches = function(data) {
       partyMatches = {};
   var disagreements = getDisagreements(data);
   globalParties.forEach(function(party) {
-    partyMatchesByIssue[party] = [];
+    var partyKey = party.key;
+    partyMatchesByIssue[partyKey] = [];
     try {
       var issueKeys = Object.keys(disagreements);
       issueKeys.forEach(function(issueKey) {
         var debateKeys = Object.keys(disagreements[issueKey]);
         debateKeys.forEach(function(debateKey) {
-          partyMatchesByIssue[party].push(disagreements[issueKey][debateKey][party])
+          partyMatchesByIssue[partyKey].push(disagreements[issueKey][debateKey][partyKey])
         });
       });
-      partyMatches[party] = 0;
-      partyMatchesByIssue[party].forEach(function(match) {
-        partyMatches[party] += match.value*match.weight;
+      partyMatches[partyKey] = 0;
+      partyMatchesByIssue[partyKey].forEach(function(match) {
+        partyMatches[partyKey] += match.value*match.weight;
       })
-      partyMatches[party] /= partyMatchesByIssue[party].length;
-      partyMatches[party] = 1 - partyMatches[party];
+      partyMatches[partyKey] /= partyMatchesByIssue[partyKey].length;
+      partyMatches[partyKey] = 1 - partyMatches[partyKey];
     } catch(e) {
 
     }
@@ -4305,12 +4362,13 @@ APIService.prototype.getPartyChances = function(data) {
   var partyChances = {};
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
   globalParties.forEach(function(party) {
+    partyKey = party.key;
     try {
-      var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[party].share;
-      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-level"].parties[party].opinion;
+      var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].share;
+      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-level"].parties[partyKey].opinion;
       var chanceFromGe2015MarginPercent = 0.5+Math.sign(ge2015MarginPercent)*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))); // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      partyChances[party] = chanceFromGe2015MarginPercent * (0.5+0.5*chanceFromEuOpinions);
+      partyChances[partyKey] = chanceFromGe2015MarginPercent * (0.5+0.5*chanceFromEuOpinions);
     } catch (e) {
 
     }
@@ -4347,6 +4405,14 @@ APIService.prototype.loadEURefResults = function(areaName) {
   //   return res.body[0];
   // })
 }
+
+// APIService.prototype.loadEURefResults = function(areaName) {
+//   var result = leavePercentages.filter(function (res) {
+//     return res.area == areaName;
+//   });
+//   return result;
+// }
+
 
 function objectAsArray(obj) {
   return Object.keys(obj).map(function (key) { return obj[key]; });
@@ -4452,8 +4518,16 @@ var data = {
   }
 };
 
+// igor: a simulation of delay for http requests :)
 
-loadPostcodeData('SW9 6HP');
+function delay(t) {
+  return new Promise(function(resolve) { 
+    setTimeout(resolve, t)
+  });
+}
+
+
+// getResults('SW9 6HP');
 // console.log(resultAlgorithm(data));
 
 module.exports = new APIService();
@@ -4506,12 +4580,23 @@ var model = {
         "brexit-commons",
         "brexit-soft"
       ]
+    },
+    decide: {
+      title: "What matters to you?",
+      subtitle: "Each topic contains 5 questions that divides or unites the parties.",
+      tasks: [
+        "issue-nhs",
+        "issue-immigration",
+        "issue-brexit",
+        "issue-education"
+      ]
     }
   },
 
   //Tasks are a series of steps, and are chosen from the dashboard
   tasks: {
     brexit: {
+      icon: 'compass',
       label: "What can I do about Brexit?",
       color: "#42c299",
       goto: {
@@ -4520,6 +4605,7 @@ var model = {
       }
     },
     decide: {
+      icon: 'map-o',
       label: "Decide who to vote for",
       color: "#e74289",
       goto: {
@@ -4528,6 +4614,7 @@ var model = {
       }
     },
     leaders: {
+      icon: 'users',
       label: "Learn about the leaders",
       color: "#c042de",
       goto: {
@@ -4536,6 +4623,7 @@ var model = {
       }
     },
     "vote-worth": {
+      icon: 'check-square-o',
       label: "How much does my vote count?",
       color: "#00a2e5",
       goto: {
@@ -4544,6 +4632,7 @@ var model = {
       }
     },
     "brexit-stop": {
+      icon: "hand-paper-o",
       label: "Stop it completely",
       color: "#42c299",
       goto: {
@@ -4559,6 +4648,7 @@ var model = {
       ]
     },
     "brexit-support": {
+      icon: "thumbs-o-up",
       label: "Get on with it",
       color: "#e74289",
       goto: {
@@ -4574,7 +4664,8 @@ var model = {
       ]
     },
     "brexit-commons": {
-      label: "I want my MP to have a vote on the final deal",
+      icon: "handshake-o",
+      label: "Leave but let MPs have a say on the terms",
       color: "#c042de",
       goto: {
         type: 'step',
@@ -4583,12 +4674,17 @@ var model = {
       },
       dataUpdates: [
         {
+          data: 'user.opinions.issues.brexit.argeement',
+          value: 4
+        },
+        {
           data: 'user.opinions.issues.brexit.vote',
           value: true
         }
       ]
     },
     "brexit-soft": {
+      icon: "hand-rock-o",
       label: "I want to stop a hard Brexit",
       color: "#00a2e5",
       goto: {
@@ -4602,6 +4698,42 @@ var model = {
           value: 3
         }
       ]
+    },
+    "issue-nhs": {
+      icon: 'h-square',
+      label: "NHS",
+      color: "#42c299",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-immigration": {
+      icon: 'id-card-o',
+      label: "Immigration",
+      color: "#e74289",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-brexit": {
+      icon: 'newspaper-o',
+      label: "Brexit",
+      color: "#c042de",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-education": {
+      icon: 'graduation-cap',
+      label: "Education",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
     }
   },
 
@@ -4611,7 +4743,7 @@ var model = {
       label: "Please provide your postcode"
     },
     result: {
-
+      label: "Here are your results"
     }
   }
 };
@@ -4624,6 +4756,7 @@ class App {
   render() {
 
     return h('div',
+      h('div.top-strip'),
       this.header,
 
       routes.root(function () {
@@ -4689,6 +4822,7 @@ class Dashboard {
       }
       tasksDOM.push(
         taskRoute({ name: task.goto.name, task: name, next: task.goto.next }).a( { "class": "task", "style":{"background-color": task.color} },
+          h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
           h('h5', task.label)
         )
       );
@@ -4733,7 +4867,7 @@ class Step {
           description: "This feature is coming soon...!"
         }])
     }
-    
+
     this.sliders = data.sliders.map(function(cards){
       cards.nextStep = params.next;
       return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
@@ -4770,7 +4904,7 @@ class CardSlider {
       card.type = self.data.type;
       return (new Card(card));
     })
-    
+
     return h('div.card-carousel.layer',
       h('div',
         h.apply(null,
@@ -4871,6 +5005,10 @@ class CardContent {
 
       case 'result':
         // igor: todo: this is very ugly, so needs to be refactored asap
+        $("h1").addClass("hide");
+        window.setTimeout(function(){
+          $("h1").removeClass("hide");
+        })
         $(".slick-container").addClass("hide")
         window.setTimeout(function(){
           $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
