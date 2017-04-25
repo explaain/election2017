@@ -232,6 +232,7 @@ class Dashboard {
       }
       tasksDOM.push(
         taskRoute({ name: task.goto.name, task: name, next: task.goto.next }).a( { "class": "task", "style":{"background-color": task.color} },
+          h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
           h('h5', task.label)
         )
       );
