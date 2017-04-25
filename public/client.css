@@ -4,6 +4,8 @@ body {
   margin: auto;
   font-size:16px;
   padding-top:10px;
+  background: url('/img/background.jpg');
+  background-size: cover;
 }
 
 header {
@@ -16,6 +18,19 @@ header i.menu {
 }
 header i.menu:hover {
   color: #aaa;
+}
+
+i.fa-check {
+  font-size: 1.4em;
+  display: inline-block;
+  color: #02a702;
+  margin-top: 10px;
+}
+
+img.party-logo {
+  width: 50px;
+  float: left;
+  margin: -6px 13px;
 }
 
 img.loading {
@@ -157,7 +172,7 @@ a.task:hover {
   animation-name: taskpop;
   animation-duration: .2s;
   transform: scale(0,0) rotate(-5deg);
-  animation-fill-mode: forwards; 
+  animation-fill-mode: forwards;
 }
 
 .task:nth-of-type(1){animation-delay: .6s}
@@ -212,4 +227,3 @@ a.task:hover {
     background-size: 100%;
   }
 }
-

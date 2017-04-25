@@ -471,22 +471,19 @@ class CardContent {
                       model.user.results.push([
                         [
                           {
-                            header: results.finalResult.party,
-                            content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
+                            image: '/img/party-logos/conservative.png',
+                            header: "The Conservative Party",
+                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270). </br></br> Read below to see how we reached this conclusion."
                           }
                         ],
                         [
                           {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
+                            header: "",
+                            content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
                           },
                           {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
-                          },
-                          {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
+                            header: "",
+                            content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
                           }
                         ]
                       ]);
@@ -525,6 +522,7 @@ class CardContent {
         },100)
         const content = this.data.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
         return h('div.content.text-left',
+          h('img', {'src': this.data.image, 'class': 'party-logo'}),
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)

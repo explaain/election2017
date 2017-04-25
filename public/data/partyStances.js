@@ -1,4 +1,4 @@
-var partyStances = [
+var partyStances = {
 	opinions: {
       issues: {
         "brexit": {
@@ -48,4 +48,4 @@ var partyStances = [
         }
       }
     }
-]
+}
