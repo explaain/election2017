@@ -296,7 +296,7 @@ class Step {
     }*/
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
     return h.apply(null,
-      ["div.step"].concat(this.headers).concat(this.cards)
+      ["section.step"].concat(this.headers).concat(this.cards)
     )
   }
 }

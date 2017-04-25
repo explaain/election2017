@@ -92,6 +92,12 @@ a.task:hover {
   display: inline-block;
 }
 
+/* igor: ovrriding card a bit to make it look better, temporary */
+
+.card {
+  margin: 30px 0 0 0;
+}
+
 /* igor: animation */
 
 .dashboard h1, .step h1{
