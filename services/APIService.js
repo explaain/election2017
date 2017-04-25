@@ -73,7 +73,11 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (!totalResults.results["my-constituency"]["euRef2016"].choices["leave"]) {totalResults.results["my-constituency"]["euRef2016"].choices["leave"] = {}}
     totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
     return totalResults;
+    // return loadGe2015Results(postcodeResults.constituency)
   })
+  // .then(function(results))
+  //   return totalResults;
+  // })
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
@@ -230,6 +234,14 @@ APIService.prototype.loadEURefResults = function(areaName) {
   //   return res.body[0];
   // })
 }
+
+// APIService.prototype.loadEURefResults = function(areaName) {
+//   var result = leavePercentages.filter(function (res) {
+//     return res.area == areaName;
+//   });
+//   return result;
+// }
+
 
 function objectAsArray(obj) {
   return Object.keys(obj).map(function (key) { return obj[key]; });
