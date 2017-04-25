@@ -167,6 +167,7 @@ class App {
   render() {
 
     return h('div',
+      h('div.top-strip'),
       this.header,
 
       routes.root(function () {
