@@ -4710,36 +4710,33 @@ class Step {
       updateData(model.tasks[params.task].dataUpdates);
 
     var data = {
-      cards: []
+      sliders: []
     };
     switch (params.name) {
       case 'postcode':
-        data.cards.push({
+        data.sliders.push([{
           type: 'postcode',
           name: 'Where are you voting from?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency'
-        })
+        }])
         break;
 
       case 'result':
-        model.user.results[model.user.results.length-1].forEach(function(result){
-          data.cards.push({
-            type: 'result',
-            result: result
-          })
+        model.user.results[model.user.results.length-1].forEach(function(cards){
+          data.sliders.push(cards)
         })
         break;
 
       default:
-        data.cards.push({
+        data.sliders.push([{
           name: "Goodness me, you're early!",
           description: "This feature is coming soon...!"
-        })
+        }])
     }
-
-    this.cards = data.cards.map(function(_data){
-      _data.nextStep = params.next;
-      return (new Card(_data));
+    
+    this.sliders = data.sliders.map(function(cards){
+      cards.nextStep = params.next;
+      return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
     })
 
     this.headers = [];
@@ -4752,12 +4749,34 @@ class Step {
   }
 
   render() {
-    /*if (!this.cards || !this.cards.length) {
-      this.card
-    }*/
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
-    return h.apply(null,
-      ["section.step"].concat(this.headers).concat(this.cards)
+    return h("section.step",
+      h.apply(null,
+        ["div.cards"].concat(this.headers).concat(this.sliders)
+      )
+    )
+  }
+}
+
+class CardSlider {
+  constructor(data) {
+    this.data = data;
+  }
+
+  render() {
+    const self = this;
+    const cards = self.data.cards.map(function(card){
+      card.nextStep = self.data.nextStep;
+      card.type = self.data.type;
+      return (new Card(card));
+    })
+    
+    return h('div.card-carousel.layer',
+      h('div',
+        h.apply(null,
+          ["div.slick-container",{role: "listbox"}].concat(cards)
+        )
+      )
     )
   }
 }
@@ -4770,15 +4789,13 @@ class Card {
 
   render() {
     // igor: todo: not for now, but ".cards" does not actually belong to a single card template
-    return h('div.cards',
-      h('div.card',
-        h('div.card-visible',
-          // h('div.close', h("i.fa.fa-times", '')),
-          h('div.close'),
-          this.cardContent,
-          h('a.card-icon.external', {'href': 'http://explaain.com'},
-            h('img', {'src': 'http://app.explaain.com/card-logo.png'})
-          )
+    return h('div.card',
+      h('div.card-visible',
+        // h('div.close', h("i.fa.fa-times", '')),
+        h('div.close'),
+        this.cardContent,
+        h('a.card-icon.external', {'href': 'http://explaain.com'},
+          h('img', {'src': 'http://app.explaain.com/card-logo.png'})
         )
       )
     )
@@ -4817,18 +4834,26 @@ class CardContent {
                       // igor: change this content to create cards based on the data you retrieve
                       // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
                       model.user.results.push([
-                        {
-                          header: results.finalResult.party,
-                          content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
-                        },
-                        {
-                          header: results.finalResult.party,
-                          content: results.finalResult.party
-                        },
-                        {
-                          header: results.finalResult.party,
-                          content: results.finalResult.party
-                        }
+                        [
+                          {
+                            header: results.finalResult.party,
+                            content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
+                          }
+                        ],
+                        [
+                          {
+                            header: results.finalResult.party,
+                            content: results.finalResult.party
+                          },
+                          {
+                            header: results.finalResult.party,
+                            content: results.finalResult.party
+                          },
+                          {
+                            header: results.finalResult.party,
+                            content: results.finalResult.party
+                          }
+                        ]
                       ]);
                       routes.step({ name: data.nextStep, type: data.type }).push();
                     })
@@ -4845,9 +4870,22 @@ class CardContent {
         break;
 
       case 'result':
-        const content = this.data.result.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
+        // igor: todo: this is very ugly, so needs to be refactored asap
+        $(".slick-container").addClass("hide")
+        window.setTimeout(function(){
+          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+            dots: false,
+            infinite: false,
+            adaptiveHeight: true,
+            centerMode: true,
+            centerPadding: '15px',
+            slidesToShow: 1,
+            arrows: false
+          });
+        },100)
+        const content = this.data.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
         return h('div.content.text-left',
-          h('h2', this.data.result.header),
+          h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
             // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),

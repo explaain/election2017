@@ -151,17 +151,17 @@ a.task:hover {
   100%  {transform: scale(1,1);}
 }
 
-.cards {
+.card {
   animation-name: cardpop;
   animation-duration: .3s;
   opacity:0;
   animation-fill-mode: forwards;
 }
 
-.cards:nth-of-type(1){animation-delay: .2s}
-.cards:nth-of-type(2){animation-delay: .4s}
-.cards:nth-of-type(3){animation-delay: .6s}
-.cards:nth-of-type(4){animation-delay: .8s}
+.card:nth-of-type(1){animation-delay: .2s}
+.card:nth-of-type(2){animation-delay: .4s}
+.card:nth-of-type(3){animation-delay: .6s}
+.card:nth-of-type(4){animation-delay: .8s}
 
 @keyframes cardpop {
   0% {transform: scale(.8,.8); opacity:0}
