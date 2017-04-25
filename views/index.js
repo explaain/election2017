@@ -154,7 +154,7 @@ var model = {
       label: "Please provide your postcode"
     },
     result: {
-
+      label: "Here are your results"
     }
   }
 };
@@ -416,6 +416,10 @@ class CardContent {
 
       case 'result':
         // igor: todo: this is very ugly, so needs to be refactored asap
+        $("h1").addClass("hide");
+        window.setTimeout(function(){
+          $("h1").removeClass("hide");
+        })
         $(".slick-container").addClass("hide")
         window.setTimeout(function(){
           $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({

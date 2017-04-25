@@ -39,14 +39,16 @@ APIService.prototype.getResults = function(postcode, userData) {
 
   var data = {};
 
-  return loadPostcodeData(postcode)
-  .then(function(results) {
-    data = results;
-    data.user = userData;
-    return resultAlgorithm(data);
-  }).then(function(results) {
-    console.log(results);
-    return results;
+  return delay(1000).then(function(){
+    return loadPostcodeData(postcode)
+    .then(function(results) {
+      data = results;
+      data.user = userData;
+      return resultAlgorithm(data);
+    }).then(function(results) {
+      console.log(results);
+      return results;
+    })
   })
 }
 
@@ -332,6 +334,14 @@ var data = {
     }
   }
 };
+
+// igor: a simulation of delay for http requests :)
+
+function delay(t) {
+  return new Promise(function(resolve) { 
+    setTimeout(resolve, t)
+  });
+}
 
 
 // getResults('SW9 6HP');
