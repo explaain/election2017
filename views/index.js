@@ -21,7 +21,7 @@ var model = {
       issues: {}
     },
     results: [],
-    isWaiting: false 
+    isWaiting: false
   },
 
   //Dashboards are collections of tasks
@@ -150,7 +150,7 @@ var model = {
       label: "Please provide your postcode"
     },
     result: {
-      
+
     }
   }
 };
@@ -244,7 +244,7 @@ class Dashboard {
 class Step {
   constructor(params) {
     this.step = model.steps[params.name];
-    
+
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
 
@@ -275,19 +275,19 @@ class Step {
           description: "This feature is coming soon...!"
         })
     }
-    
+
     this.cards = data.cards.map(function(_data){
       _data.nextStep = params.next;
       return (new Card(_data));
     })
-    
+
     this.headers = [];
     if(this.step.label){
       this.headers.push(
         h("h1",this.step.label)
       );
     }
-    
+
   }
 
   render() {
@@ -349,7 +349,7 @@ class CardContent {
                   e.stopPropagation();
                   model.user.isWaiting = true;
                   // igor: todo: move api calls to another place to make the template result agnostic
-                  api.getResults(model.user.postcode)
+                  api.getResults(model.user.postcode, model.user)
                     .then(function(results) {
                       model.user.isWaiting = false;
                       // igor: We have to refactor results a bit to make them reusable in cards
