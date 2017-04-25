@@ -87,6 +87,7 @@ var model = {
       }
     },
     "brexit-stop": {
+      icon: "hand-paper-o",
       label: "Stop it completely",
       color: "#42c299",
       goto: {
@@ -102,6 +103,7 @@ var model = {
       ]
     },
     "brexit-support": {
+      icon: "thumbs-o-up",
       label: "Get on with it",
       color: "#e74289",
       goto: {
@@ -117,7 +119,8 @@ var model = {
       ]
     },
     "brexit-commons": {
-      label: "I want my MP to have a vote on the final deal",
+      icon: "handshake-o",
+      label: "Leave but let MPs have a say on the terms",
       color: "#c042de",
       goto: {
         type: 'step',
@@ -126,12 +129,17 @@ var model = {
       },
       dataUpdates: [
         {
+          data: 'user.opinions.issues.brexit.argeement',
+          value: 4
+        },
+        {
           data: 'user.opinions.issues.brexit.vote',
           value: true
         }
       ]
     },
     "brexit-soft": {
+      icon: "hand-rock-o",
       label: "I want to stop a hard Brexit",
       color: "#00a2e5",
       goto: {
@@ -167,7 +175,6 @@ class App {
   render() {
 
     return h('div',
-      h('div.top-strip'),
       this.header,
 
       routes.root(function () {
