@@ -51,6 +51,7 @@ var model = {
   //Tasks are a series of steps, and are chosen from the dashboard
   tasks: {
     brexit: {
+      icon: 'compass',
       label: "What can I do about Brexit?",
       color: "#42c299",
       goto: {
@@ -59,6 +60,7 @@ var model = {
       }
     },
     decide: {
+      icon: 'map-o',
       label: "Decide who to vote for",
       color: "#e74289",
       goto: {
@@ -67,6 +69,7 @@ var model = {
       }
     },
     leaders: {
+      icon: 'users',
       label: "Learn about the leaders",
       color: "#c042de",
       goto: {
@@ -75,6 +78,7 @@ var model = {
       }
     },
     "vote-worth": {
+      icon: 'check-square-o',
       label: "How much does my vote count?",
       color: "#00a2e5",
       goto: {
@@ -272,7 +276,7 @@ class Step {
           description: "This feature is coming soon...!"
         }])
     }
-    
+
     this.sliders = data.sliders.map(function(cards){
       cards.nextStep = params.next;
       return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
@@ -309,7 +313,7 @@ class CardSlider {
       card.type = self.data.type;
       return (new Card(card));
     })
-    
+
     return h('div.card-carousel.layer',
       h('div',
         h.apply(null,
