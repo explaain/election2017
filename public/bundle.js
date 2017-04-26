@@ -4243,12 +4243,16 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (!totalResults.results["my-constituency"]["euRef2016"].choices) {totalResults.results["my-constituency"]["euRef2016"].choices = {}}
     if (!totalResults.results["my-constituency"]["euRef2016"].choices["leave"]) {totalResults.results["my-constituency"]["euRef2016"].choices["leave"] = {}}
     totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
-    return totalResults;
-    // return loadGe2015Results(postcodeResults.constituency)
+    return loadGe2015Results(postcodeResults.constituency)
   })
-  // .then(function(results))
-  //   return totalResults;
-  // })
+  .then(function(results) {
+    totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
+    return loadPartyStances();
+  }).then(function(results) {
+    totalResults.parties = results;
+    console.log(totalResults);
+    return totalResults;
+  })
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
@@ -4290,9 +4294,11 @@ APIService.prototype.resultAlgorithm = function(data) {
   }
   console.log(winningParty);
   var finalResult = {
-      // party:
+      party: winningParty.name
   }
-  var finalResult = {party: 'Lib Dems (test)'};
+  var finalResult = {
+    party: 'Lib Dems (test)'
+  };
   var totalData = {data: data, finalResult: finalResult};
   return totalData;
 }
@@ -4360,6 +4366,8 @@ APIService.prototype.getDisagreements = function(data) {
 
 APIService.prototype.getPartyChances = function(data) {
   var partyChances = {};
+  console.log('data');
+  console.log(data);
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
   globalParties.forEach(function(party) {
     partyKey = party.key;
@@ -4406,12 +4414,36 @@ APIService.prototype.loadEURefResults = function(areaName) {
   // })
 }
 
-// APIService.prototype.loadEURefResults = function(areaName) {
-//   var result = leavePercentages.filter(function (res) {
-//     return res.area == areaName;
-//   });
-//   return result;
-// }
+APIService.prototype.loadGe2015Results = function(areaName) {
+  // var result = leavePercentages.filter(function (res) {
+  //   return res.area == areaName;
+  // });
+  var result = {
+    "ge2015": {
+      parties: {
+        "labour": {
+          share: 34,
+          votes: 33145,
+          shareMargin: 6,
+          voteMargin: 5492
+        },
+        "conservative": {
+          share: 29,
+          votes: 27653,
+          shareMargin: -6,
+          voteMargin: -5492
+        }
+      }
+    }
+  };
+  return result;
+}
+
+
+APIService.prototype.loadPartyStances = function() {
+  return partyStances;
+}
+
 
 
 function objectAsArray(obj) {
@@ -4420,14 +4452,16 @@ function objectAsArray(obj) {
 
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
-var loadConstituency = APIService.prototype.loadConstituency;
-var loadEURefResults = APIService.prototype.loadEURefResults;
 var getDisagreements = APIService.prototype.getDisagreements;
 var getPartyChances = APIService.prototype.getPartyChances;
 var getPartyMatches = APIService.prototype.getPartyMatches;
+var loadConstituency = APIService.prototype.loadConstituency;
+var loadEURefResults = APIService.prototype.loadEURefResults;
+var loadPartyStances = APIService.prototype.loadPartyStances;
+var loadGe2015Results = APIService.prototype.loadGe2015Results;
 
 
-var data = {
+var dummyData = {
   user: {
     opinions: {
       issues: {
@@ -4521,14 +4555,14 @@ var data = {
 // igor: a simulation of delay for http requests :)
 
 function delay(t) {
-  return new Promise(function(resolve) { 
+  return new Promise(function(resolve) {
     setTimeout(resolve, t)
   });
 }
 
 
 // getResults('SW9 6HP');
-// console.log(resultAlgorithm(data));
+// console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();
 
@@ -5006,22 +5040,19 @@ class CardContent {
                       model.user.results.push([
                         [
                           {
-                            header: results.finalResult.party,
-                            content: "(test) Anything about the best Party. API does not yet return anything. [Theresa May](http://api.explaain.com/Person/58d6bba03df21d00114b8a11) <a href='http://api.explaain.com/Person/58d6bba03df21d00114b8a11' class='internal' tabindex='-1'>Theresa May</a>"
+                            image: '/img/party-logos/conservative.png',
+                            header: "The Conservative Party",
+                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)."
                           }
                         ],
                         [
                           {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
+                            header: "You and your matched party",
+                            content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
                           },
                           {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
-                          },
-                          {
-                            header: results.finalResult.party,
-                            content: results.finalResult.party
+                            header: "You and your area",
+                            content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
                           }
                         ]
                       ]);
@@ -5060,6 +5091,7 @@ class CardContent {
         },100)
         const content = this.data.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
         return h('div.content.text-left',
+          h('img', {'src': this.data.image, 'class': 'party-logo'}),
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
