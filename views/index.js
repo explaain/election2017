@@ -473,16 +473,16 @@ class CardContent {
                           {
                             image: '/img/party-logos/conservative.png',
                             header: "The Conservative Party",
-                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270). </br></br> Read below to see how we reached this conclusion."
+                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)."
                           }
                         ],
                         [
                           {
-                            header: "",
+                            header: "You and your matched party",
                             content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
                           },
                           {
-                            header: "",
+                            header: "You and your area",
                             content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
                           }
                         ]
