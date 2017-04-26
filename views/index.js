@@ -223,7 +223,7 @@ var model = {
     },
     // igor: Those are *answers* to questions. You may utilise any features of tasks here!
     "question-nhs1-1": {
-      label: "Leave quiz now",
+      label: "Go straight to postcode",
       goto: {
         type: 'step',
         name: 'postcode'
@@ -236,11 +236,25 @@ var model = {
         name: 'question'
       }
     },
-    "question-nhs2-1": {
-      label: "Go straight to results",
+    "question-nhs1-3": {
+      label: "Go to question 2",
       goto: {
         type: 'step',
-        name: 'result'
+        name: 'question'
+      }
+    },
+    "question-nhs1-4": {
+      label: "Go to question 2",
+      goto: {
+        type: 'step',
+        name: 'question'
+      }
+    },
+    "question-nhs2-1": {
+      label: "Go to dashboard",
+      goto: {
+        type: 'dashboard',
+        name: 'decide'
       }
     },
     "question-nhs2-2": {
@@ -603,12 +617,12 @@ class CardContent {
           const task = model.tasks[name];
           console.log(self.data)
           tasksDom.push(
-            routes.step({
+            routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
               name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
               task: name,
               nextQuestion: self.data.nextQuestion,
               final: self.data.final
-            }).a( { "class": "taske" },
+            }).a( { "class": "task" },
               h('h5', task.label)
             )
           );
