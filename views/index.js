@@ -424,6 +424,7 @@ class CardContent {
                 'onsubmit': function(e) {
                   e.stopPropagation();
                   model.user.isWaiting = true;
+                  // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
                   // igor: todo: move api calls to another place to make the template result agnostic
                   api.getResults(model.user.postcode, model.user)
                     .then(function(results) {
@@ -468,6 +469,7 @@ class CardContent {
         break;
 
       case 'result':
+        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
         // igor: todo: this is very ugly, so needs to be refactored asap
         $("h1").addClass("hide");
         window.setTimeout(function(){
@@ -490,21 +492,6 @@ class CardContent {
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
-            // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),
-            // h('button.btn.btn-success',
-            //   {'onclick': function(onclick) {
-            //     api.loadConstituency(model.user.postcode)
-            //       .then(function(results) {
-            //         console.log(this.data.nextStep);
-            //         routes.step({ name: this.data.nextStep, type: this.data.type }).push();
-            //       })
-            //     }
-            //   }, "Go!"
-            // ),
-          )/*,
-          h("a.card-icon.external", { href: "http://explaain.com" } ,
-            h("img",{src: "://app.explain.com/card-logo.png"})
-          )*/ // igor: styling doesn't work yet for some reason
         )
         break;
 
