@@ -389,7 +389,6 @@ class Card {
   render() {
     return h('div.card',
       h('div.card-visible',
-        // h('div.close', h("i.fa.fa-times", '')),
         h('div.close'),
         this.cardContent,
         h('a.card-icon.external', {'href': 'http://explaain.com'},
