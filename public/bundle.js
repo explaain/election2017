@@ -4556,6 +4556,7 @@ var model = {
       issues: {}
     },
     results: [],
+    quizFlow: [],
     isWaiting: false
   },
 
@@ -4704,9 +4705,20 @@ var model = {
       label: "NHS",
       color: "#42c299",
       goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
+        type: 'step',
+        name: 'question',
+        // igor: "final" means the step name where you will be redirected after quiz
+        // igor: do not use "next" here, as we do not know what would the next step be (question)
+        // igor: "next" will be updated dynamically based on the next question
+        final: 'postcode'
+      },
+      dataUpdates: [
+        {
+          data: 'user.quizFlow',
+          // igor: at the moment the flow is static, but will be dynamic soon :)
+          value: ["nhs1","nhs2"]
+        }
+      ]
     },
     "issue-immigration": {
       icon: 'id-card-o',
@@ -4734,6 +4746,44 @@ var model = {
         type: 'dashboard',
         name: 'something'
       }
+    },
+    "issue-education": {
+      icon: 'graduation-cap',
+      label: "Education",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    // igor: Those are *answers* to questions. You may utilise any features of tasks here!
+    "question-nhs1-1": {
+      label: "Leave quiz now",
+      goto: {
+        type: 'step',
+        name: 'postcode'
+      }
+    },
+    "question-nhs1-2": {
+      label: "Go to question 2",
+      goto: {
+        type: 'step',
+        name: 'question'
+      }
+    },
+    "question-nhs2-1": {
+      label: "Go straight to results",
+      goto: {
+        type: 'step',
+        name: 'result'
+      }
+    },
+    "question-nhs2-2": {
+      label: "Finish quiz",
+      goto: {
+        type: 'step',
+        name: 'question'
+      }
     }
   },
 
@@ -4754,25 +4804,17 @@ var model = {
   questions: {
     "nhs1": {
       question: "The UK should spend...",
-      options: [
-        {
-          label: "Yes, keep it up!",
-          dataUpdates: [
-            {
-              data: 'user.opinions.issues.decide.nhs1',
-              value: 1
-            }
-          ]
-        },
-        {
-          label: "No, scrap it",
-          dataUpdates: [
-            {
-              data: 'user.opinions.issues.decide.nhs1',
-              value: 2
-            }
-          ]
-        }
+      tasks: [
+        "question-nhs1-1",
+        "question-nhs1-2"
+      ],
+      skip: "I don't care"
+    },
+    "nhs2": {
+      question: "The UK should spend!!!",
+      tasks: [
+        "question-nhs2-1",
+        "question-nhs2-2"
       ],
       skip: "I don't care"
     }
@@ -4898,6 +4940,29 @@ class Step {
         })
         break;
 
+      case 'question':
+        const questionName = params.nextQuestion?params.nextQuestion:model.user.quizFlow[0];
+        const question = model.questions[questionName];
+        var nextQuestion;
+        if(model.user.quizFlow.indexOf(questionName)<model.user.quizFlow.length-1){
+          nextQuestion = model.user.quizFlow[model.user.quizFlow.indexOf(questionName)+1];
+        } else {
+          nextQuestion = null;
+        }
+        var finalStep;
+        if(model.tasks[params.task].goto.final){
+          finalStep = model.tasks[params.task].goto.final;
+        } else {
+          finalStep = params.final;
+        }
+        data.sliders.push([{
+          name: question.question,
+          tasks: question.tasks,
+          nextQuestion: nextQuestion,
+          final: finalStep
+        }])
+        break;
+
       default:
         data.sliders.push([{
           name: "Goodness me, you're early! 😳",
@@ -4980,6 +5045,7 @@ class CardContent {
   }
 
   render() {
+    const self = this;
     switch (this.data.type) {
       case 'postcode':
         var data = this.data;
@@ -5066,6 +5132,30 @@ class CardContent {
           )
         )
         break;
+
+      case 'question':
+        const tasksDom = [];
+        this.data.tasks.forEach(function(name) {
+          const task = model.tasks[name];
+          console.log(self.data)
+          tasksDom.push(
+            routes.step({
+              name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
+              task: name,
+              nextQuestion: self.data.nextQuestion,
+              final: self.data.final
+            }).a( { "class": "taske" },
+              h('h5', task.label)
+            )
+          );
+        });
+        return h('content',
+          h('h2', this.data.name),
+          h('div.body-content',
+            h('p', this.data.description)
+          ),
+          h('section.questions',tasksDom)
+        )
 
       default:
         return h('content',
