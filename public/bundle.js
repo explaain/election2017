@@ -4562,7 +4562,7 @@ var model = {
   //Dashboards are collections of tasks
   dashboards: {
     home: {
-      title: "What do you want to do?",
+      title: "What do you want to do? 🙋",
       subtitle: "Choose an option below. You can come back here later to choose another!",
       tasks: [
         "brexit",
@@ -4744,6 +4744,37 @@ var model = {
     },
     result: {
       label: "Here are your results"
+    },
+    question: {
+
+    }
+  },
+
+  // Questions
+  questions: {
+    "nhs1": {
+      question: "The UK should spend...",
+      options: [
+        {
+          label: "Yes, keep it up!",
+          dataUpdates: [
+            {
+              data: 'user.opinions.issues.decide.nhs1',
+              value: 1
+            }
+          ]
+        },
+        {
+          label: "No, scrap it",
+          dataUpdates: [
+            {
+              data: 'user.opinions.issues.decide.nhs1',
+              value: 2
+            }
+          ]
+        }
+      ],
+      skip: "I don't care"
     }
   }
 };
@@ -4794,12 +4825,12 @@ class Header {
 class Dashboard {
 
   constructor(params) {
-    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early!", subtitle: "This feature is coming soon...!", tasks: []};
+    this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
   }
 
   render() {
 
-    var tasksDOM = [h("p.task-category", "Popular")];
+    var tasksDOM = [h("p.task-category", "🔥Popular")];
 
     if (!this.dashboard.tasks.length) {
       tasksDOM.push(h("p", "No tasks to display"))
@@ -4836,6 +4867,12 @@ class Dashboard {
   }
 }
 
+class Question {
+  constructor(params) {
+
+  }
+}
+
 class Step {
   constructor(params) {
     this.step = model.steps[params.name];
@@ -4851,7 +4888,7 @@ class Step {
         data.sliders.push([{
           type: 'postcode',
           name: 'Where are you voting from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency'
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
 
@@ -4863,8 +4900,8 @@ class Step {
 
       default:
         data.sliders.push([{
-          name: "Goodness me, you're early!",
-          description: "This feature is coming soon...!"
+          name: "Goodness me, you're early! 😳",
+          description: "This feature is coming soon...! 👻"
         }])
     }
 
@@ -4922,10 +4959,8 @@ class Card {
   }
 
   render() {
-    // igor: todo: not for now, but ".cards" does not actually belong to a single card template
     return h('div.card',
       h('div.card-visible',
-        // h('div.close', h("i.fa.fa-times", '')),
         h('div.close'),
         this.cardContent,
         h('a.card-icon.external', {'href': 'http://explaain.com'},
@@ -4960,6 +4995,7 @@ class CardContent {
                 'onsubmit': function(e) {
                   e.stopPropagation();
                   model.user.isWaiting = true;
+                  // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
                   // igor: todo: move api calls to another place to make the template result agnostic
                   api.getResults(model.user.postcode, model.user)
                     .then(function(results) {
@@ -5004,6 +5040,7 @@ class CardContent {
         break;
 
       case 'result':
+        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
         // igor: todo: this is very ugly, so needs to be refactored asap
         $("h1").addClass("hide");
         window.setTimeout(function(){
@@ -5026,21 +5063,7 @@ class CardContent {
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
-            // h('input', { 'name': 'postcode', 'placeholder': 'Postcode', binding: [model, 'postcode'] }),
-            // h('button.btn.btn-success',
-            //   {'onclick': function(onclick) {
-            //     api.loadConstituency(model.user.postcode)
-            //       .then(function(results) {
-            //         console.log(this.data.nextStep);
-            //         routes.step({ name: this.data.nextStep, type: this.data.type }).push();
-            //       })
-            //     }
-            //   }, "Go!"
-            // ),
-          )/*,
-          h("a.card-icon.external", { href: "http://explaain.com" } ,
-            h("img",{src: "://app.explain.com/card-logo.png"})
-          )*/ // igor: styling doesn't work yet for some reason
+          )
         )
         break;
 

@@ -209,6 +209,37 @@ var model = {
     },
     result: {
       label: "Here are your results"
+    },
+    question: {
+
+    }
+  },
+
+  // Questions
+  questions: {
+    "nhs1": {
+      question: "The UK should spend...",
+      options: [
+        {
+          label: "Yes, keep it up!",
+          dataUpdates: [
+            {
+              data: 'user.opinions.issues.decide.nhs1',
+              value: 1
+            }
+          ]
+        },
+        {
+          label: "No, scrap it",
+          dataUpdates: [
+            {
+              data: 'user.opinions.issues.decide.nhs1',
+              value: 2
+            }
+          ]
+        }
+      ],
+      skip: "I don't care"
     }
   }
 };
@@ -298,6 +329,12 @@ class Dashboard {
       h("h2", this.dashboard.subtitle),
       h("section.tasks", tasksDOM)
     )
+  }
+}
+
+class Question {
+  constructor(params) {
+
   }
 }
 
@@ -491,6 +528,7 @@ class CardContent {
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
+          )
         )
         break;
 
