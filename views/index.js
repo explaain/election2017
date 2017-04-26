@@ -387,7 +387,6 @@ class Card {
   }
 
   render() {
-    // igor: todo: not for now, but ".cards" does not actually belong to a single card template
     return h('div.card',
       h('div.card-visible',
         // h('div.close', h("i.fa.fa-times", '')),
