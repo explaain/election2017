@@ -4814,7 +4814,8 @@ var model = {
         type: 'step',
         name: 'postcode',
         next: 'result'
-      }
+      },
+      dataUpdates: []
     },
     "question-nhs1-2": {
       label: "Go to question 2",
@@ -4828,14 +4829,16 @@ var model = {
       goto: {
         type: 'step',
         name: 'question'
-      }
+      },
+      dataUpdates: []
     },
     "question-nhs1-4": {
       label: "Go to question 2",
       goto: {
         type: 'step',
         name: 'question'
-      }
+      },
+      dataUpdates: []
     },
     // igor: the card below (question-nhs2-1) is a simple "interrupting" card!
     "question-nhs2-1": {
@@ -4843,15 +4846,25 @@ var model = {
       goto: {
         type: 'dashboard',
         name: 'decide'
-      }
+      },
+      dataUpdates: []
     },
     "question-nhs2-2": {
       label: "Finish quiz",
       goto: {
         type: 'step',
         name: 'question'
+      },
+      dataUpdates: []
+    },
+    "question-$skip": {
+      subtype: "link",
+      label: "I don't care 🙈 >",
+      goto: {
+        type: 'step',
+        name: 'question'
       }
-    }
+    },
   },
 
   // Steps are essentially pages
@@ -4873,17 +4886,17 @@ var model = {
       question: "Question 1",
       tasks: [
         "question-nhs1-1",
-        "question-nhs1-2"
-      ],
-      skip: "I don't care"
+        "question-nhs1-2",
+        "question-$skip"
+      ]
     },
     "nhs2": {
       question: "Question 2",
       tasks: [
         "question-nhs2-1",
-        "question-nhs2-2"
-      ],
-      skip: "I don't care"
+        "question-nhs2-2",
+        "question-$skip"
+      ]
     }
   }
 };
@@ -5240,7 +5253,7 @@ class CardContent {
               nextQuestion: self.data.nextQuestion,
               final: self.data.final,
               next: self.data.nextStep?self.data.nextStep:task.goto.next
-            }).a( { "class": "task" },
+            }).a( { "class": "task" + (task.subtype?" "+task.subtype:"")  },
               h('h5', task.label)
             )
           );
