@@ -5190,7 +5190,11 @@ class CardContent {
                           {
                             image: '/img/party-logos/conservative.png',
                             header: "The Conservative Party",
-                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)."
+                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270).",
+                            footer:
+                              '<p>Share this to help friends and family #GE2017</p>'+
+                              '<a class="discard-card-style" href="https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button" target="_blank"><button class="btn btn-facebook">Facebook</button></a>'+
+                              '<a class="discard-card-style" href="https://twitter.com/intent/tweet?text='+model.user.postcode+'" target="_blank"><button class="btn btn-twitter">Twitter</button></a>'
                           }
                         ],
                         [
@@ -5243,6 +5247,13 @@ class CardContent {
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
+          ),
+          (this.data.footer?
+            h('div.footer',
+              h.rawHtml('p', this.data.footer)
+            )
+            :
+            undefined
           )
         )
         break;
