@@ -72,6 +72,10 @@ p.task-category {
   text-align: left;
 }
 
+a.task {
+  cursor: pointer;
+}
+
 section.tasks a.task {
   display: inline-block;
   width: 160px;

@@ -54,7 +54,8 @@ var model = {
         "issue-nhs",
         "issue-immigration",
         "issue-brexit",
-        "issue-education"
+        "issue-education",
+        "issue-$apply"
       ]
     }
   },
@@ -169,19 +170,17 @@ var model = {
       icon: 'h-square',
       label: "NHS",
       color: "#42c299",
-      goto: {
-        type: 'step',
-        name: 'question',
-        // igor: "final" means the step name where you will be redirected after quiz
-        // igor: do not use "next" here, as we do not know what would the next step be (question)
-        // igor: "next" will be updated dynamically based on the next question
-        final: 'postcode'
-      },
+      // igor: please note, there is no "goto", because this task ONLY sets
+      // the value and does NOT routes to a next step
+      /*goto: {
+      },*/
       dataUpdates: [
         {
-          data: 'user.quizFlow',
-          // igor: at the moment the flow is static, but will be dynamic soon :)
-          value: ["nhs1","nhs2"]
+          data: 'user.quizFlow.1',
+          value: ["nhs1","nhs2"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
         }
       ]
     },
@@ -212,14 +211,20 @@ var model = {
         name: 'something'
       }
     },
-    "issue-education": {
-      icon: 'graduation-cap',
-      label: "Education",
-      color: "#00a2e5",
+    "issue-$apply": {
+      label: "Submit",
+      color: "#42c299",
       goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
+        type: 'step',
+        name: 'question',
+        // igor: "final" means the step name where you will be redirected after quiz
+        // igor: do not use "next" here, as we do not know what would the next step be (question)
+        // igor: "next" will be updated dynamically based on the next question
+        final: 'postcode'
+      },
+      onIf: [
+        "user.quizFlow.1"
+      ]
     },
     // igor: Those are *answers* to questions. You may utilise any features of tasks here!
     "question-nhs1-1": {
@@ -360,24 +365,48 @@ class Dashboard {
     this.dashboard.tasks.forEach(function(name) {
       var task = model.tasks[name];
       var taskRoute;
-      switch (task.goto.type) {
-        case 'dashboard':
-          taskRoute = routes.dashboard
-          break;
-
-        case 'step':
-          taskRoute = routes.step
-          break;
-
-        default:
-          taskRoute = -1;
+      // igor: now tasks become hidden/shown basing
+      // on tasks conditions and model values
+      var visible = true;
+      if(task.onIf){
+        visible = false;
+        task.onIf.forEach(function(path){
+          if(getModel(path)){
+            visible = true;
+          }
+        })
       }
-      tasksDOM.push(
-        taskRoute({ name: task.goto.name, task: name, next: task.goto.next }).a( { "class": "task", "style":{"background-color": task.color} },
-          h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
-          h('h5', task.label)
-        )
-      );
+      console.log("VISIBLE")
+      console.log(visible)
+      if(task.goto){
+        tasksDOM.push(
+          routes[task.goto.type](
+            { name: task.goto.name, task: name, next: task.goto.next }
+          ).a(
+            {
+              "class": "task"+(visible?"":" hide"),
+              "style":{"background-color": task.color}
+            },
+            h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
+            h('h5', task.label)
+          )
+        );
+      } else {
+        tasksDOM.push(
+          h( "a",
+            {
+              "class": "task"+(visible?"":" hide"),
+              "style":{"background-color": task.color},
+              onclick: function(e){
+                updateData(task.dataUpdates);
+              }
+            },
+            h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
+            h('h5', task.label)
+          )
+        );
+      }
+
     });
 
     return h("section.dashboard",
@@ -420,11 +449,15 @@ class Step {
         break;
 
       case 'question':
-        const questionName = params.nextQuestion?params.nextQuestion:model.user.quizFlow[0];
+        var quizFlow = [];
+        model.user.quizFlow.forEach(function(quiz){
+          quizFlow = quizFlow.concat(quiz);
+        })
+        const questionName = params.nextQuestion?params.nextQuestion:quizFlow[0];
         const question = model.questions[questionName];
         var nextQuestion;
-        if(model.user.quizFlow.indexOf(questionName)<model.user.quizFlow.length-1){
-          nextQuestion = model.user.quizFlow[model.user.quizFlow.indexOf(questionName)+1];
+        if(quizFlow.indexOf(questionName)<quizFlow.length-1){
+          nextQuestion = quizFlow[quizFlow.indexOf(questionName)+1];
         } else {
           nextQuestion = null;
         }
@@ -614,7 +647,6 @@ class CardContent {
         const tasksDom = [];
         this.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
-          console.log(self.data)
           tasksDom.push(
             routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
               name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
@@ -658,11 +690,14 @@ class CardContent {
 
 updateData = function(dataUpdates) {
   dataUpdates.forEach(function(update) {
-    updateModel(update.data, update.value);
+    updateModel(update.data, update.value, update.action);
   });
 }
 
-function updateModel(path, value) {
+// igor: we now need different actions for tasks, the one of them is "toggle"
+// igor: "toggle" works like a checkbox
+// igor: by default it just sets the value
+function updateModel(path, value, action) {
     var schema = model;  // a moving reference to internal objects within model
     var pList = path.split('.');
     var len = pList.length;
@@ -672,7 +707,30 @@ function updateModel(path, value) {
         schema = schema[elem];
     }
 
-    schema[pList[len-1]] = value;
+    switch(action){
+      case "toggle":
+        if(schema[pList[len-1]]){
+          delete schema[pList[len-1]];
+        } else {
+          schema[pList[len-1]] = value;
+        }
+        break;
+      default:
+        schema[pList[len-1]] = value;
+    }
+
+}
+
+function getModel(path){
+  var schema = model;  // a moving reference to internal objects within model
+  var pList = path.split('.');
+  var len = pList.length;
+  for(var i = 0; i < len-1; i++) {
+      var elem = pList[i];
+      if( !schema[elem] ) schema[elem] = {}
+      schema = schema[elem];
+  }
+  return schema[pList[len-1]];
 }
 
 hyperdom.append(document.body, new App());
