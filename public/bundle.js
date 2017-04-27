@@ -4239,15 +4239,15 @@ APIService.prototype.resultAlgorithm = function(data) {
   console.log('Party Chances:', partyChances);
   var partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
-    if (partyMatches[partyKey] < threshold) {
-      delete partyMatches[partyKey];
+    if (partyMatches[partyKey].match < threshold) {
+      delete partyMatches[partyKey].match;
     }
   })
   var partyScores = {};
   finalPartiesList = [];
   partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
-    partyScores[partyKey] = partyMatches[partyKey]*partyChances[partyKey];
+    partyScores[partyKey] = partyMatches[partyKey].match*partyChances[partyKey];
     if (!partyScores[partyKey]) {
       delete partyScores[partyKey];
     } else {
@@ -4268,6 +4268,8 @@ APIService.prototype.resultAlgorithm = function(data) {
   finalPartiesList.sort(compare);
 
   console.log('Final Parties List:', finalPartiesList);
+
+
 
   // partyKeys = Object.keys(partyScores);
   // var max = 0,
@@ -4307,12 +4309,13 @@ APIService.prototype.getPartyMatches = function(data) {
           partyMatchesByIssue[partyKey].push(disagreements[issueKey][debateKey][partyKey])
         });
       });
-      partyMatches[partyKey] = 0;
+      partyMatches[partyKey] = { match: 0};
       partyMatchesByIssue[partyKey].forEach(function(match) {
-        partyMatches[partyKey] += match.value*match.weight;
+        partyMatches[partyKey].match += match.value*match.weight;
       })
-      partyMatches[partyKey] /= partyMatchesByIssue[partyKey].length;
-      partyMatches[partyKey] = 1 - partyMatches[partyKey];
+      partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
+      partyMatches[partyKey].match = 1 - partyMatches[partyKey].match;
+      console.log(partyMatches);
     } catch(e) {
 
     }

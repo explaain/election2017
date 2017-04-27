@@ -6,7 +6,8 @@ var partyStances = {
             "brexit-level": {
               parties: {
                 "conservative": {
-                  opinion: 1
+                  opinion: 1,
+									description: "The Conservative Government is negotiating for a hard Brexit."
                 }, "labour": {
                   opinion: 0.8
                 }, "lib-dem": {
