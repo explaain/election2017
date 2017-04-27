@@ -91,6 +91,26 @@ section.tasks a.task {
   border-radius: 10px;
 }
 
+/* igor: multi choice tasks styles */
+
+section.tasks a.task.multi-choice.conditionsMet {
+  box-shadow: 0 0 20px #00a2e5;
+}
+
+section.tasks a.task.multi-submit {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 40px;
+}
+
+section.tasks a.task.multi-submit.conditionsMet {
+  display: inline-flex;
+}
+
+
+
 @media only screen and (max-width: 500px) {
   section.tasks a.task {
     width: calc(50% - 20px);
