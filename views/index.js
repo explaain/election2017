@@ -78,7 +78,15 @@ var model = {
       goto: {
         type: 'dashboard',
         name: 'decide'
-      }
+      },
+      // igor: we want to be sure that the selection of quizzes
+      // is flushed every time you pick up "decide" option
+      dataUpdates: [
+        {
+          data: 'user.quizFlow',
+          value: []
+        }
+      ]
     },
     leaders: {
       icon: 'users',
@@ -167,6 +175,7 @@ var model = {
       ]
     },
     "issue-nhs": {
+      subtype: "multi-choice",
       icon: 'h-square',
       label: "NHS",
       color: "#42c299",
@@ -182,6 +191,9 @@ var model = {
           // behave like a checkbox
           action: "toggle"
         }
+      ],
+      conditions: [
+        "user.quizFlow.1"
       ]
     },
     "issue-immigration": {
@@ -212,26 +224,33 @@ var model = {
       }
     },
     "issue-$apply": {
-      label: "Submit",
-      color: "#42c299",
+      subtype: "multi-submit",
+      label: "Start quiz!",
+      color: "#00a2e5",
       goto: {
         type: 'step',
         name: 'question',
         // igor: "final" means the step name where you will be redirected after quiz
-        // igor: do not use "next" here, as we do not know what would the next step be (question)
-        // igor: "next" will be updated dynamically based on the next question
-        final: 'postcode'
+        // igor: the "next" here is where you will be redirected *after* the quiz
+        // igor: note: you may interrupt the quiz by injecting any task with any route!
+        final: 'postcode',
+        next: 'result'
       },
-      onIf: [
-        "user.quizFlow.1"
+      conditions: [
+        "user.quizFlow.1",
+        "user.quizFlow.2",
+        "user.quizFlow.3",
+        "user.quizFlow.4"
       ]
     },
     // igor: Those are *answers* to questions. You may utilise any features of tasks here!
+    // igor: the card below (question-nhs1-1) is a simple "interrupting" card!
     "question-nhs1-1": {
       label: "Go straight to postcode",
       goto: {
         type: 'step',
-        name: 'postcode'
+        name: 'postcode',
+        next: 'result'
       }
     },
     "question-nhs1-2": {
@@ -255,6 +274,7 @@ var model = {
         name: 'question'
       }
     },
+    // igor: the card below (question-nhs2-1) is a simple "interrupting" card!
     "question-nhs2-1": {
       label: "Go to dashboard",
       goto: {
@@ -287,7 +307,7 @@ var model = {
   // Questions
   questions: {
     "nhs1": {
-      question: "The UK should spend...",
+      question: "Question 1",
       tasks: [
         "question-nhs1-1",
         "question-nhs1-2"
@@ -295,7 +315,7 @@ var model = {
       skip: "I don't care"
     },
     "nhs2": {
-      question: "The UK should spend!!!",
+      question: "Question 2",
       tasks: [
         "question-nhs2-1",
         "question-nhs2-2"
@@ -364,45 +384,46 @@ class Dashboard {
 
     this.dashboard.tasks.forEach(function(name) {
       var task = model.tasks[name];
-      var taskRoute;
       // igor: now tasks become hidden/shown basing
       // on tasks conditions and model values
-      var visible = true;
-      if(task.onIf){
-        visible = false;
-        task.onIf.forEach(function(path){
+      var conditionsMet = true;
+      if(task.conditions){
+        conditionsMet = false;
+        task.conditions.forEach(function(path){
           if(getModel(path)){
-            visible = true;
+            conditionsMet = true;
           }
         })
       }
-      console.log("VISIBLE")
-      console.log(visible)
+      const taskProps = {
+        "class":
+          "task"+
+          (conditionsMet?" conditionsMet":"")+
+          (task.subtype?" "+task.subtype:"")
+        ,
+        "style":{"background-color": task.color}
+      };
+      const taskContent = [
+        h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
+        h('h5', task.label)
+      ]
       if(task.goto){
         tasksDOM.push(
           routes[task.goto.type](
             { name: task.goto.name, task: name, next: task.goto.next }
           ).a(
-            {
-              "class": "task"+(visible?"":" hide"),
-              "style":{"background-color": task.color}
-            },
-            h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
-            h('h5', task.label)
+            taskProps,
+            taskContent
           )
         );
       } else {
+        taskProps.onclick = function(e){
+          updateData(task.dataUpdates);
+        };
         tasksDOM.push(
           h( "a",
-            {
-              "class": "task"+(visible?"":" hide"),
-              "style":{"background-color": task.color},
-              onclick: function(e){
-                updateData(task.dataUpdates);
-              }
-            },
-            h('i.fa.fa-'+task.icon,{attributes: {"aria-hidden":true}}),
-            h('h5', task.label)
+            taskProps,
+            taskContent
           )
         );
       }
@@ -481,9 +502,10 @@ class Step {
           description: "This feature is coming soon...! 👻"
         }])
     }
-
     this.sliders = data.sliders.map(function(cards){
-      cards.nextStep = params.next;
+      if(!cards.nextStep){
+        cards.nextStep = params.next;
+      }
       return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
     })
 
@@ -653,7 +675,8 @@ class CardContent {
               name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
               task: name,
               nextQuestion: self.data.nextQuestion,
-              final: self.data.final
+              final: self.data.final,
+              next: self.data.nextStep?self.data.nextStep:task.goto.next
             }).a( { "class": "task" },
               h('h5', task.label)
             )
