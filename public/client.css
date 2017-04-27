@@ -153,6 +153,11 @@ section.questions a.task {
   background-color: #00a2e5;
 }
 
+section.questions a.task.link {
+  background-color: transparent;
+  color: black;
+}
+
 section.questions a.task h5 {
   /*font-size: 1.1em;*/
   font-size: 0.9em;
