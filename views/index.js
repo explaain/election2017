@@ -107,7 +107,7 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
           value: 0
         }
       ]
@@ -123,8 +123,8 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
-          value: 5
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 1
         }
       ]
     },
@@ -139,12 +139,12 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.argeement',
-          value: 4
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.8
         },
         {
-          data: 'user.opinions.issues.brexit.vote',
-          value: true
+          data: 'user.opinions.issues.brexit.debates.mp-vote.opinion',
+          value: 1
         }
       ]
     },
@@ -159,8 +159,8 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
-          value: 3
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.6
         }
       ]
     },
@@ -464,6 +464,7 @@ class CardContent {
                   // igor: todo: move api calls to another place to make the template result agnostic
                   api.getResults(model.user.postcode, model.user)
                     .then(function(results) {
+                      console.log(results);
                       model.user.isWaiting = false;
                       // igor: We have to refactor results a bit to make them reusable in cards
                       // igor: change this content to create cards based on the data you retrieve
@@ -471,9 +472,9 @@ class CardContent {
                       model.user.results.push([
                         [
                           {
-                            image: '/img/party-logos/conservative.png',
-                            header: "The Conservative Party",
-                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)."
+                            image: results.parties[0].image || '/img/party-logos/party.jpg',
+                            header: results.parties[0].name,
+                            content: results.parties[0].description || "Description..."
                           }
                         ],
                         [

@@ -4175,49 +4175,18 @@ function APIService() {
 
 }
 
-var globalParties = [
-  {
-    key: "conservative",
-    name: "Conservative Party"
-  },
-  {
-    key: "labour",
-    name: "Labour"
-  },
-  {
-    key: "lib-dem",
-    name: "Liberal Democrats"
-  },
-  {
-    key: "ukip",
-    name: "Ukip"
-  },
-  {
-    key: "snp",
-    name: "SNP"
-  },
-  {
-    key: "green",
-    name: "Green Party"
-  },
-  {
-    key: "plaid-cymru",
-    name: "Plaid Cymru"
-  }
-];
-
 APIService.prototype.getResults = function(postcode, userData) {
 
   var data = {};
 
-  return delay(1000).then(function(){
+  return delay(0).then(function(){
     return loadPostcodeData(postcode)
     .then(function(results) {
       data = results;
       data.user = userData;
       return resultAlgorithm(data);
     }).then(function(results) {
-      console.log(results);
+      console.log(results)
       return results;
     })
   })
@@ -4237,29 +4206,37 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     return loadEURefResults(refAreaName);
   })
   .then(function(results) {
-    if (!totalResults.results) {totalResults.results = {}}
-    if (!totalResults.results["my-constituency"]) {totalResults.results["my-constituency"] = {}}
-    if (!totalResults.results["my-constituency"]["euRef2016"]) {totalResults.results["my-constituency"]["euRef2016"] = {}}
-    if (!totalResults.results["my-constituency"]["euRef2016"].choices) {totalResults.results["my-constituency"]["euRef2016"].choices = {}}
-    if (!totalResults.results["my-constituency"]["euRef2016"].choices["leave"]) {totalResults.results["my-constituency"]["euRef2016"].choices["leave"] = {}}
+    createObjectProps(totalResults, ['results','my-constituency','euRef2016','choices','leave']);
     totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
-    return loadGe2015Results(postcodeResults.constituency)
+    return loadGe2015Results(postcodeResults.constituency.codes.gss)
   })
   .then(function(results) {
     totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
     return loadPartyStances();
   }).then(function(results) {
     totalResults.parties = results;
-    console.log(totalResults);
     return totalResults;
   })
+}
+
+function createObjectProps(globalObject, props) {
+  var tempObject = globalObject;
+  props.forEach(function(prop) {
+    if(!tempObject[prop]) {
+      tempObject[prop] = {}
+    }
+    tempObject = tempObject[prop];
+  })
+  return globalObject;
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
   console.log(data);
   var threshold = 0.5;
   var partyMatches = getPartyMatches(data);
+  console.log('Party Matches:', partyMatches);
   var partyChances = getPartyChances(data);
+  console.log('Party Chances:', partyChances);
   var partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
     if (partyMatches[partyKey] < threshold) {
@@ -4267,39 +4244,51 @@ APIService.prototype.resultAlgorithm = function(data) {
     }
   })
   var partyScores = {};
+  finalPartiesList = [];
   partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
     partyScores[partyKey] = partyMatches[partyKey]*partyChances[partyKey];
-    if (!partyScores[partyKey]) { delete partyScores[partyKey]}
-  });
-  // partyScores["conservative"] = 6;
-  // partyScores["labour"] = 3;
-  // partyScores["lib-dem"] = 8;
-  // partyScores["ukip"] = 1;
-  console.log(partyScores);
-  partyKeys = Object.keys(partyScores);
-  var max = 0,
-      winningParty = {};
-  partyKeys.forEach(function(partyKey) {
-    if (partyScores[partyKey] >= max) {
-      max = partyScores[partyKey];
-      winningParty = {key: partyKey};
+    if (!partyScores[partyKey]) {
+      delete partyScores[partyKey];
+    } else {
+      var party = allParties.filter(function(p) {return p.key == partyKey})[0];
+      party.score = partyScores[partyKey];
+      finalPartiesList.push(party);
     }
-  })
-  winningParty = globalParties.filter(function(party) {
-    return party.key == winningParty.key;
-  })[0];
-  if (!winningParty) {
-    winningParty = globalParties[Math.floor(Math.random()*globalParties.length)];
+  });
+
+  function compare(a,b) {
+    if (a.score > b.score)
+      return -1;
+    if (a.score < b.score)
+      return 1;
+    return 0;
   }
-  console.log(winningParty);
-  var finalResult = {
-      party: winningParty.name
-  }
-  var finalResult = {
-    party: 'Lib Dems (test)'
-  };
-  var totalData = {data: data, finalResult: finalResult};
+
+  finalPartiesList.sort(compare);
+
+  console.log('Final Parties List:', finalPartiesList);
+
+  // partyKeys = Object.keys(partyScores);
+  // var max = 0,
+  //     winningParty = {};
+  // partyKeys.forEach(function(partyKey) {
+  //   if (partyScores[partyKey] >= max) {
+  //     max = partyScores[partyKey];
+  //     winningParty = {key: partyKey};
+  //   }
+  // })
+  //
+  // winningParty = allParties.filter(function(party) {
+  //   return party.key == winningParty.key;
+  // })[0];
+  // if (!winningParty) {
+  //   winningParty = allParties[Math.floor(Math.random()*allParties.length)];
+  // }
+  // var finalResult = {
+  //     party: winningParty.name
+  // }
+  var totalData = {data: data, parties: finalPartiesList};
   return totalData;
 }
 
@@ -4307,7 +4296,7 @@ APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
   var disagreements = getDisagreements(data);
-  globalParties.forEach(function(party) {
+  allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
@@ -4333,6 +4322,7 @@ APIService.prototype.getPartyMatches = function(data) {
 
 APIService.prototype.getDisagreements = function(data) {
   var disagreementMatrix = {};
+
   var issues = data.user.opinions.issues;
   var issueKeys = Object.keys(issues);
   issueKeys.forEach(function(issueKey) {
@@ -4350,7 +4340,7 @@ APIService.prototype.getDisagreements = function(data) {
           partyKeys.forEach(function(partyKey) {
             disagreementMatrix[issueKey][debateKey][partyKey] = {
               value: Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
-              weight: debate.weight
+              weight: debate.weight || 1
             }
           })
         } catch (e) {
@@ -4366,17 +4356,21 @@ APIService.prototype.getDisagreements = function(data) {
 
 APIService.prototype.getPartyChances = function(data) {
   var partyChances = {};
-  console.log('data');
-  console.log(data);
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
-  globalParties.forEach(function(party) {
+  allParties.forEach(function(party) {
     partyKey = party.key;
+    console.log(partyKey);
     try {
-      var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].share;
+      var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
+      console.log('ge2015MarginPercent:', ge2015MarginPercent);
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-level"].parties[partyKey].opinion;
-      var chanceFromGe2015MarginPercent = 0.5+Math.sign(ge2015MarginPercent)*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))); // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
+      console.log('partyBrexitStance:', partyBrexitStance);
+      var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
+      console.log('chanceFromGe2015MarginPercent:', chanceFromGe2015MarginPercent);
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      partyChances[partyKey] = chanceFromGe2015MarginPercent * (0.5+0.5*chanceFromEuOpinions);
+      console.log('chanceFromEuOpinions:', chanceFromEuOpinions);
+      partyChances[partyKey] = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
+      console.log('averageChance:', partyChances[partyKey]);
     } catch (e) {
 
     }
@@ -4406,36 +4400,35 @@ APIService.prototype.loadEURefResults = function(areaName) {
     return res.area == areaName;
   });
   return result;
-
-  // var url = 'https://sheetsu.com/apis/v1.0/0a046bfab11b/search?AmendedArea=' + areaName;
-  // return http.get(url)
-  // .then(function (res) {
-  //   return res.body[0];
-  // })
 }
 
-APIService.prototype.loadGe2015Results = function(areaName) {
-  // var result = leavePercentages.filter(function (res) {
-  //   return res.area == areaName;
-  // });
-  var result = {
-    "ge2015": {
-      parties: {
-        "labour": {
-          share: 34,
-          votes: 33145,
-          shareMargin: 6,
-          voteMargin: 5492
-        },
-        "conservative": {
-          share: 29,
-          votes: 27653,
-          shareMargin: -6,
-          voteMargin: -5492
-        }
-      }
-    }
-  };
+APIService.prototype.loadGe2015Results = function(areaKey) {
+  var result = {"ge2015": {parties:{}}};
+  var resultsTemp = ge2015Results[areaKey];
+  resultsTemp.forEach(function(party) {
+    var partyKey = party.party;
+    result["ge2015"].parties[partyKey] = party;
+  })
+  console.log(resultsTemp);
+  console.log(result);
+  // var result = {
+  //   "ge2015": {
+  //     parties: {
+  //       "labour": {
+  //         share: 34,
+  //         votes: 33145,
+  //         shareMargin: 6,
+  //         voteMargin: 5492
+  //       },
+  //       "conservative": {
+  //         share: 29,
+  //         votes: 27653,
+  //         shareMargin: -6,
+  //         voteMargin: -5492
+  //       }
+  //     }
+  //   }
+  // };
   return result;
 }
 
@@ -4450,6 +4443,7 @@ function objectAsArray(obj) {
   return Object.keys(obj).map(function (key) { return obj[key]; });
 }
 
+var getResults = APIService.prototype.getResults;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
 var getDisagreements = APIService.prototype.getDisagreements;
@@ -4561,7 +4555,7 @@ function delay(t) {
 }
 
 
-// getResults('SW9 6HP');
+getResults('S1 1WB', { opinions: { issues: { brexit: { debates: { "brexit-level": { opinion: 0.6 } } } } } } );
 // console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();
@@ -4676,7 +4670,7 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
           value: 0
         }
       ]
@@ -4692,8 +4686,8 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
-          value: 5
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 1
         }
       ]
     },
@@ -4708,12 +4702,12 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.argeement',
-          value: 4
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.8
         },
         {
-          data: 'user.opinions.issues.brexit.vote',
-          value: true
+          data: 'user.opinions.issues.brexit.debates.mp-vote.opinion',
+          value: 1
         }
       ]
     },
@@ -4728,8 +4722,8 @@ var model = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.agreement',
-          value: 3
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.6
         }
       ]
     },
@@ -5033,6 +5027,7 @@ class CardContent {
                   // igor: todo: move api calls to another place to make the template result agnostic
                   api.getResults(model.user.postcode, model.user)
                     .then(function(results) {
+                      console.log(results);
                       model.user.isWaiting = false;
                       // igor: We have to refactor results a bit to make them reusable in cards
                       // igor: change this content to create cards based on the data you retrieve
@@ -5040,9 +5035,9 @@ class CardContent {
                       model.user.results.push([
                         [
                           {
-                            image: '/img/party-logos/conservative.png',
-                            header: "The Conservative Party",
-                            content: "Have promised to 'get on with the job of Brexit' and have stood on a policy of leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed), [European Court of Justice](http://api.explaain.com/Detail/58ff4aca3de78b0011a3a4ea) and controlling all [immigration](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)."
+                            image: results.parties[0].image || '/img/party-logos/party.jpg',
+                            header: results.parties[0].name,
+                            content: results.parties[0].description || "Description..."
                           }
                         ],
                         [

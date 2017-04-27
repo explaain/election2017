@@ -9,15 +9,15 @@ var partyStances = {
                   opinion: 1
                 }, "labour": {
                   opinion: 0.8
-                }, "Lib Dem": {
+                }, "lib-dem": {
                   opinion: 0.6
-                }, "UKIP": {
+                }, "ukip": {
                   opinion: 1
-                }, "SNP": {
+                }, "snp": {
                   opinion: 0.2
-                }, "Green": {
+                }, "green": {
                   opinion: 0.6
-                }, "Plaid Cymru": {
+                }, "plaid-cymru": {
                   opinion: 0.6
                 }
               }
@@ -30,13 +30,13 @@ var partyStances = {
                   opinion: 0.5
                 }, "conservative": {
                   opinion: 1
-                }, "labour": {
+                }, "ukip": {
                   opinion: 0
-                }, "conservative": {
+                }, "snp": {
                   opinion: 1
-                }, "labour": {
+                }, "green": {
                   opinion: 1
-                }, "labour": {
+                }, "plaid-cymru": {
                   opinion: 0.5
                 }
               }
