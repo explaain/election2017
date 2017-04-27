@@ -54,6 +54,10 @@ img.loading.showing {
   100%  {transform: scale(1,1);opacity:1}
 }
 
+section {
+  padding-bottom: 40px;
+}
+
 section h1 {
   line-height:1em;
 }
@@ -169,6 +173,10 @@ section.questions a.task:hover {
   opacity: 0.8;
 }
 
+.card {
+  margin: 30px 0 0 0;
+}
+
 /* igor: on result cards we want text to be alighed left, temporary */
 
 .card .content.text-left {
@@ -188,12 +196,6 @@ section.questions a.task:hover {
 .card form.postcode-form input[type="text"] {
   max-width:140px;
   display: inline-block;
-}
-
-/* igor: ovrriding card a bit to make it look better, temporary */
-
-.card {
-  margin: 30px 0 0 0;
 }
 
 .card h2 {
@@ -285,4 +287,50 @@ section.questions a.task:hover {
   .top-strip {
     background-size: 100%;
   }
+}
+
+/* igor: card footer */
+
+.card .footer {
+  border-top: solid 1px #ccc;
+  padding: 10px 20px 0 20px;
+  text-align: center;
+}
+
+.card .footer .btn {
+  margin: 0 5px;
+}
+
+/* igor: we want Explaain to ignore some <a> tags in the card and do not style it, temporary */
+
+.card .content a.discard-card-style,
+.card .content a.discard-card-style:hover,
+.card .content a.discard-card-style:active{
+  padding: 0;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* igor: Social buttons */
+
+.btn-facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+.btn-facebook:hover {
+  background-color: #2b4988;
+  color: white;
+}
+
+.btn-twitter {
+  background-color: #00aced;
+  color: white;
+}
+
+.btn-twitter:hover {
+  background-color: #009cdd;
+  color: white;
 }

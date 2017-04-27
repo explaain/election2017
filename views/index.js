@@ -622,7 +622,11 @@ class CardContent {
                           {
                             image: results.parties[0].image || '/img/party-logos/party.jpg',
                             header: results.parties[0].name,
-                            content: results.parties[0].description || "Description..."
+                            content: results.parties[0].description || "Description...",
+                            footer:
+                              '<p>Share this to help friends and family #GE2017</p>'+
+                              '<a class="discard-card-style" href="https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button" target="_blank"><button class="btn btn-facebook">Facebook</button></a>'+
+                              '<a class="discard-card-style" href="https://twitter.com/intent/tweet?text='+model.user.postcode+'" target="_blank"><button class="btn btn-twitter">Twitter</button></a>'
                           }
                         ],
                         [
@@ -675,6 +679,13 @@ class CardContent {
           h('h2', this.data.header),
           h('div.body-content',
             h.rawHtml('p', content)
+          ),
+          (this.data.footer?
+            h('div.footer',
+              h.rawHtml('p', this.data.footer)
+            )
+            :
+            undefined
           )
         )
         break;
