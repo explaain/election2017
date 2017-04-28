@@ -556,6 +556,16 @@ function getResults(){
         // igor: We have to refactor results a bit to make them reusable in cards
         // igor: change this content to create cards based on the data you retrieve
         // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
+        var yourParty = "",
+            yourArea = "";
+        results.parties[0].matches.plus.forEach(function(match) {
+          yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+                      + match.description;
+        })
+        results.parties[0].chances.plus.forEach(function(chance) {
+          yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+                      + chance.description;
+        })
         model.user.results.push([
           [
             {
@@ -570,11 +580,11 @@ function getResults(){
           [
             {
               header: "You and your matched party",
-              content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
+              content: yourParty
             },
             {
               header: "You and your area",
-              content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
+              content: yourArea
             }
           ]
         ]);

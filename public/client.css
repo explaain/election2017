@@ -33,9 +33,9 @@ i.fa-check {
 }
 
 img.party-logo {
-  width: 50px;
+  width: 40px;
   float: left;
-  margin: -6px 13px;
+  margin: -6px 20px;
 }
 
 img.loading {
@@ -304,7 +304,7 @@ section.questions a.task:hover {
 
 .card .footer {
   margin-top:20px;
-  border-top: solid 1px #ccc;
+  border-top: solid 1px #ddd;
   padding: 10px 20px 0 20px;
   text-align: center;
 }
