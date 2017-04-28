@@ -5411,7 +5411,6 @@ function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
-        console.log(results);
         model.user.isWaiting = false;
         // igor: We have to refactor results a bit to make them reusable in cards
         // igor: change this content to create cards based on the data you retrieve
@@ -5464,7 +5463,6 @@ function getResultsCompare(){
           }
         ]
       });
-      console.log(model.user)
       resolve();
     },1000)
   })
