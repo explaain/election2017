@@ -5032,8 +5032,13 @@ class Progress {
     });
     if(quizFlow.length>0){
       progress_total += quizFlow.length;
-      var quiz_passed =
-      progress_current += quizFlow.indexOf(model.question)!==-1?quizFlow.indexOf(model.question)+1:0;
+      var progress_quiz = 0;
+      if(model.landedOnPostcode||model.landedOnResult){
+        progress_quiz=quizFlow.length;
+      } else {
+        progress_quiz=quizFlow.indexOf(model.question)!==-1?quizFlow.indexOf(model.question)+1:0;
+      }
+      progress_current += progress_quiz;
     }
     progress_current+=model.landedOnPostcode;
     progress_current+=model.landedOnResult;
