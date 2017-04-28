@@ -353,6 +353,10 @@ section.questions a.task:hover {
   font-size:12px;
 }
 
+.big {
+  font-size: 20px;
+}
+
 .bold {
   font-weight:600;
 }

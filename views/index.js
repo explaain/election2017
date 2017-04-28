@@ -363,7 +363,7 @@ class CardContent {
             (
               !model.user.resultsCompare.length?
               [
-                h("p","or go straight to register"),
+                h("div.bold","or go straight to register"),
                 h("p",
                   h("a",{href:"http://gov.uk",target:"_blank"},
                     h("button.btn.btn-primary","Register >")
@@ -385,7 +385,7 @@ class CardContent {
                   )
                 ),
                 h(".column50",
-                  h("h3","Go and register!"),
+                  h("div.big.bold","Go and register!"),
                   h("p",
                     h("a",{href:"http://gov.uk",target:"_blank"},
                       h("button.btn.btn-primary","Register >")
