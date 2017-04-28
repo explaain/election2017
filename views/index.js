@@ -332,14 +332,14 @@ class CardContent {
               h('button.btn.btn-success', {type: "submit"}, "Compare")
             ),
             (model.user.resultsCompare.length?
-              h("div",{'class': { 'hide': model.user.isWaiting }},
+              h("div.seats",{'class': { 'hide': model.user.isWaiting }},
                 [
-                  h("div","Looks like you're spoilt for your choice"),
+                  h("div.bold","Looks like you're spoilt for your choice"),
                   h("div","Both are contested seats")
                 ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
                   return h("div.seat",
-                    h("div.location",seat.location),
-                    h("div.versus",seat.parties.join(" vs "))
+                    h("div.location.small",seat.location),
+                    h("div.versus.bold",{style: {border: "solid 1px " + seat.color}},seat.parties.join(" vs "))
                   )
                 }))
               )
@@ -350,7 +350,7 @@ class CardContent {
             h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
           ),
           h('div.footer',
-            h("p","or go straight to register"),
+            h("p",(model.user.resultsCompare.length?"Go and register!":"or go straight to register")),
             h("p",
               h("a",{href:"http://gov.uk",target:"_blank"},
                 h("button.btn.btn-primary","Register >")

@@ -348,5 +348,27 @@ section.questions a.task:hover {
   font-size:12px;
 }
 
+/* igor: bold text */
+
+.bold {
+  font-weight:600;
+}
+
 
 /* Seats in the location-compare form */
+
+.seats {
+  margin-top:10px
+}
+
+.seat {
+  text-align: center;
+  display: inline-block;
+  width:calc(50% - 20px);
+  margin: 10px;
+}
+
+.seat .versus{
+  padding: 20px 10px;
+  line-height:1em;
+}
