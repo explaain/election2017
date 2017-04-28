@@ -506,7 +506,7 @@ function getResults(){
   })
 }
 
-function getResults(){
+function getResultsCompare(){
   return new Promise(function(resolve,reject){
     // igor: todo: change this to real API call instead of set timeout!
     setTimeout(function(){
