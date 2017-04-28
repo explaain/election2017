@@ -6,6 +6,7 @@ body {
   padding-top:10px;
   background: url('/img/background.jpg');
   background-size: cover;
+  background-attachment: fixed;
 }
 
 a {
