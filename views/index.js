@@ -77,8 +77,13 @@ class Progress {
     }
     progress_current+=model.landedOnPostcode;
     progress_current+=model.landedOnResult;
-    return h(".progress",
-      h(".progress-inner",{style: {width: ((progress_current/progress_total)*100)+"%"}})
+    return routes.step({
+      name: 'postcode-compare',
+      type: 'step',
+      next: 'result'}).a(
+      h(".progress",
+        h(".progress-inner",{style: {width: ((progress_current/progress_total)*100)+"%"}})
+      )
     )
   }
 }
@@ -176,7 +181,7 @@ class Step {
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.sliders.push([{
           type: 'postcode',
-          name: 'Where are you voting from?',
+          name: 'Please enter your postcode:',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
@@ -464,6 +469,9 @@ class CardContent {
                   case "ShareButtons":
                     return (new ShareButtons())
                     break;
+                  case "BackToDashboard":
+                    return (new BackToDashboard())
+                    break;
                   default:
                     return undefined;
                 }
@@ -525,11 +533,22 @@ class ShareButtons {
   render() {
     return h("div.share-buttons",
       h("p","Share this to help friends and family #GE2017"),
-      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button"},
+      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
         h("button.btn.btn-facebook","Facebook")
       ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+model.user.postcode},
+      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my #GE2017 vote in #Eastbourne. How are you using your vote? ge2017.com"},
         h("button.btn.btn-twitter","Twitter")
+      )
+    );
+  }
+}
+
+class BackToDashboard {
+  render() {
+    return h("div.share-buttons",
+      h("p","Go back to the dashboard to try again"),
+      routes.root().a({"class":"discard-card-style"},
+        h("button.btn.btn-primary","Back to Dashboard")
       )
     );
   }
@@ -538,6 +557,8 @@ class ShareButtons {
 updateData = function(dataUpdates) {
   dataUpdates.forEach(function(update) {
     updateModel(update.data, update.value, update.action);
+    console.log('model.user');
+    console.log(model.user);
   });
 }
 
@@ -589,27 +610,26 @@ function getResults(){
         // igor: change this content to create cards based on the data you retrieve
         // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
         var yourParty = "",
-            yourArea = "";
-        results.parties[0].matches.plus.forEach(function(match) {
-          yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
-                      + match.description;
-        })
-        results.parties[0].chances.plus.forEach(function(chance) {
-          yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
-                      + chance.description;
-        })
-        model.user.results.push([
-          [
-            {
-              image: results.parties[0] && results.parties[0].image || '/img/party-logos/party.jpg',
-              header: results.parties[0] && results.parties[0].name,
-              content: results.parties[0] && results.parties[0].description || "Description...",
-              footer: [
-                "ShareButtons"
-              ]
-            }
-          ],
-          [
+            yourArea = "",
+            yourFooter = "ShareButtons",
+            extraCards;
+        if (!results.parties.length) {
+          results.parties[0] = {
+            name: "Hold up!",
+            description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
+          }
+          yourFooter = "BackToDashboard";
+          extraCards = [];
+        } else {
+          results.parties[0].matches.plus.forEach(function(match) {
+            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + match.description;
+          })
+          results.parties[0].chances.plus.forEach(function(chance) {
+            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + chance.description;
+          })
+          extraCards = [
             {
               header: "You and your matched party",
               content: yourParty
@@ -618,7 +638,20 @@ function getResults(){
               header: "You and your area",
               content: yourArea
             }
-          ]
+          ];
+        }
+        model.user.results.push([
+          [
+            {
+              image: results.parties[0] && results.parties[0].image || '/img/party-logos/party.jpg',
+              header: results.parties[0] && results.parties[0].name,
+              content: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
+              footer: [
+                yourFooter
+              ]
+            }
+          ],
+          extraCards
         ]);
         resolve();
       }

@@ -8,7 +8,7 @@ APIService.prototype.getResults = function(postcode, userData) {
 
   var data = {};
 
-  return delay(0).then(function(){
+  return delay(500).then(function(){
     return loadPostcodeData(postcode)
     .then(function(results) {
       data = results;

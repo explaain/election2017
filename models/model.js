@@ -25,19 +25,18 @@ module.exports = {
       tasks: [
         "brexit",
         "decide",
-        "leaders",
-        "vote-worth",
-        "!TEST-postcode-compare"
+        "parties",
+        "vote-worth"
       ]
     },
     brexit: {
       title: "What did you want to do about Brexit?",
       subtitle: "Select one option to continue.",
       tasks: [
-        "brexit-stop",
+        "brexit-soft",
         "brexit-support",
         "brexit-commons",
-        "brexit-soft"
+        "brexit-stop"
       ]
     },
     decide: {
@@ -81,13 +80,13 @@ module.exports = {
         }
       ]
     },
-    leaders: {
+    parties: {
       icon: 'users',
-      label: "Learn about the leaders",
+      label: "Learn about the parties",
       color: "#c042de",
       goto: {
         type: 'dashboard',
-        name: 'leaders'
+        name: 'parties'
       }
     },
     "vote-worth": {
@@ -98,22 +97,6 @@ module.exports = {
         type: 'dashboard',
         name: 'vote-worth'
       }
-    },
-    "brexit-stop": {
-      icon: "hand-paper-o",
-      label: "Stop it completely",
-      color: "#42c299",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: [
-        {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 0
-        }
-      ]
     },
     "brexit-support": {
       icon: "thumbs-o-up",
@@ -128,6 +111,22 @@ module.exports = {
         {
           data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
           value: 1
+        }
+      ]
+    },
+    "brexit-soft": {
+      icon: "hand-rock-o",
+      label: "I want to stop a hard Brexit",
+      color: "#00a2e5",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.6
         }
       ]
     },
@@ -151,10 +150,10 @@ module.exports = {
         }
       ]
     },
-    "brexit-soft": {
-      icon: "hand-rock-o",
-      label: "I want to stop a hard Brexit",
-      color: "#00a2e5",
+    "brexit-stop": {
+      icon: "hand-paper-o",
+      label: "Stop it completely",
+      color: "#42c299",
       goto: {
         type: 'step',
         name: 'postcode',
@@ -163,7 +162,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 0.6
+          value: 0
         }
       ]
     },
@@ -190,31 +189,61 @@ module.exports = {
       ]
     },
     "issue-immigration": {
+      subtype: "multi-choice",
       icon: 'id-card-o',
       label: "Immigration",
       color: "#e74289",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.2',
+          value: ["immigration1","immigration2"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      conditions: [
+        "user.quizFlow.2"
+      ]
+
     },
     "issue-brexit": {
+      subtype: "multi-choice",
       icon: 'newspaper-o',
       label: "Brexit",
       color: "#c042de",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.3',
+          value: ["brexit1","brexit2"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      conditions: [
+        "user.quizFlow.3"
+      ]
+
     },
     "issue-education": {
+      subtype: "multi-choice",
       icon: 'graduation-cap',
       label: "Education",
       color: "#00a2e5",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["education1","education2"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      conditions: [
+        "user.quizFlow.4"
+      ]
+
     },
     "issue-$apply": {
       subtype: "multi-submit",
@@ -311,7 +340,7 @@ module.exports = {
   // Steps are essentially pages
   steps: {
     postcode: {
-      label: "Please provide your postcode"
+      label: "Where are you voting from?"
     },
     "postcode-compare": {
 

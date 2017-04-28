@@ -314,11 +314,11 @@ section.questions a.task:hover {
 .card .content a.discard-card-style,
 .card .content a.discard-card-style:hover,
 .card .content a.discard-card-style:active{
-  padding: 0;
-  background: transparent;
-  border: none;
-  text-decoration: none;
-  color: inherit;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
 /* igor: Social buttons */
