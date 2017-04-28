@@ -5174,8 +5174,6 @@ class CardContent {
                 'onsubmit': function(e) {
                   e.stopPropagation();
                   model.user.isWaiting = true;
-                  // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
-                  // igor: todo: move api calls to another place to make the template result agnostic
                   getResults().then(function(){
                     routes.step({ name: data.nextStep, type: data.type }).push();
                   });
