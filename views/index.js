@@ -337,19 +337,20 @@ class CardContent {
                   h("div.bold","Looks like you're spoilt for your choice"),
                   h("div","Both are contested seats")
                 ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
-                  return h("div.seat",
+                  return h("div.seat.column50",
                     h("div.location.small",seat.location),
                     h("div.versus.bold.line1em",{style: {border: "solid 1px " + seat.color}},seat.parties.join(" vs "))
                   )
                 })).concat([
-                  h("p.small.line1em",
+                  /*h("p.small.line1em",
                     h(".small","Not convinced it's worth it? 😱"),
                     h("a.small",{
                       onclick: function(e){
                         // do something
                       }
                     },"Click here for 5 reason it is >")
-                  )
+                  )*/
+                  (new ShareButtons())
                 ])
               )
               :
@@ -359,16 +360,41 @@ class CardContent {
             h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
           ),
           h('div.footer',
-            h("p",(model.user.resultsCompare.length?"Go and register!":"or go straight to register")),
-            h("p",
-              h("a",{href:"http://gov.uk#learnmore",target:"_blank"},
-                h("button.btn.btn-link","Learn more")
-              ),
-              h("a",{href:"http://gov.uk",target:"_blank"},
-                h("button.btn.btn-primary","Register >")
-              )
-            ),
-            h("p.small", "This link will take you to the official gov.uk website")
+            (
+              !model.user.resultsCompare.length?
+              [
+                h("p","or go straight to register"),
+                h("p",
+                  h("a",{href:"http://gov.uk",target:"_blank"},
+                    h("button.btn.btn-primary","Register >")
+                  )
+                ),
+                h("p.small", "This link will take you to the official gov.uk website")
+              ]
+              :
+              [
+                h(".column50",
+                  h("p",
+                    h("a",{href:"http://gov.uk#learnmore",target:"_blank"},
+                      h("button.btn.btn-success","Learn more")
+                    )
+                  ),
+                  h("p.small",
+                    h("br"),
+                    h("br")
+                  )
+                ),
+                h(".column50",
+                  h("h3","Go and register!"),
+                  h("p",
+                    h("a",{href:"http://gov.uk",target:"_blank"},
+                      h("button.btn.btn-primary","Register >")
+                    )
+                  ),
+                  h("p.small", "This link will take you to the official gov.uk website")
+                )
+              ]
+            )
           )
         )
         break;
@@ -401,7 +427,15 @@ class CardContent {
           ),
           (this.data.footer?
             h('div.footer',
-              h.rawHtml('p', this.data.footer)
+              this.data.footer.map(function(elem){
+                switch (elem) {
+                  case "ShareButtons":
+                    return (new ShareButtons())
+                    break;
+                  default:
+                    return undefined;
+                }
+              })
             )
             :
             undefined
@@ -453,6 +487,20 @@ class CardContent {
     }
   }
 
+}
+
+class ShareButtons {
+  render() {
+    return h("div.share-buttons",
+      h("p","Share this to help friends and family #GE2017"),
+      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button"},
+        h("button.btn.btn-facebook","Facebook")
+      ),
+      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+model.user.postcode},
+        h("button.btn.btn-twitter","Twitter")
+      )
+    );
+  }
 }
 
 updateData = function(dataUpdates) {
@@ -511,13 +559,12 @@ function getResults(){
         model.user.results.push([
           [
             {
-              image: results.parties[0].image || '/img/party-logos/party.jpg',
-              header: results.parties[0].name,
-              content: results.parties[0].description || "Description...",
-              footer:
-                '<p>Share this to help friends and family #GE2017</p>'+
-                '<a class="discard-card-style" href="https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button" target="_blank"><button class="btn btn-facebook">Facebook</button></a>'+
-                '<a class="discard-card-style" href="https://twitter.com/intent/tweet?text='+model.user.postcode+'" target="_blank"><button class="btn btn-twitter">Twitter</button></a>'
+              image: results.parties[0] && results.parties[0].image || '/img/party-logos/party.jpg',
+              header: results.parties[0] && results.parties[0].name,
+              content: results.parties[0] && results.parties[0].description || "Description...",
+              footer: [
+                "ShareButtons"
+              ]
             }
           ],
           [

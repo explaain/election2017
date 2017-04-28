@@ -309,10 +309,6 @@ section.questions a.task:hover {
   text-align: center;
 }
 
-.card .footer .btn {
-  margin: 0 5px;
-}
-
 /* igor: we want Explaain to ignore some <a> tags in the card and do not style it, temporary */
 
 .card .content a.discard-card-style,
@@ -326,6 +322,10 @@ section.questions a.task:hover {
 }
 
 /* igor: Social buttons */
+
+.share-buttons .btn {
+  margin: 0 5px;
+}
 
 .btn-facebook {
   background-color: #3b5998;
@@ -347,19 +347,15 @@ section.questions a.task:hover {
   color: white;
 }
 
-/* igor: small text */
+/* igor: text styles */
 
 .small {
   font-size:12px;
 }
 
-/* igor: bold text */
-
 .bold {
   font-weight:600;
 }
-
-/* igor: line-height 1em */
 
 .line1em {
   line-height:1em;
@@ -372,13 +368,15 @@ section.questions a.task:hover {
   margin-top:10px
 }
 
-.seat {
+.seat .versus{
+  padding: 20px 10px;
+}
+
+/* igor: 50% width columns in cards */
+
+.card .column50 {
   text-align: center;
   display: inline-block;
   width:calc(50% - 20px);
   margin: 10px;
-}
-
-.seat .versus{
-  padding: 20px 10px;
 }
