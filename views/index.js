@@ -308,7 +308,7 @@ class CardContent {
       case 'postcode-compare':
         var data = this.data;
         return h('content',
-          h('h2', { 'class': {'hide': model.user.postcode_uni }}, this.data.name),
+          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
             h('form.postcode-form',
               {
@@ -316,18 +316,38 @@ class CardContent {
                 'onsubmit': function(e) {
                   e.stopPropagation();
                   model.user.isWaiting = true;
-                  getResults().then(function(){
-                    routes.step({ name: data.nextStep, type: data.type }).push();
+                  getResultsCompare().then(function(){
+                    routes.step({
+                      name: 'postcode-compare',
+                      type: 'step',
+                      next: data.nextStep,
+                      attempt: model.user.resultsCompare.length
+                    }).replace();
                   });
                   return false;
                 }
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
-              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Gompare")
+              h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
+              h('button.btn.btn-success', {type: "submit"}, "Compare")
+            ),
+            (model.user.resultsCompare.length?
+              h("div",{'class': { 'hide': model.user.isWaiting }},
+                [
+                  h("div","Looks like you're spoilt for your choice"),
+                  h("div","Both are contested seats")
+                ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
+                  return h("div.seat",
+                    h("div.location",seat.location),
+                    h("div.versus",seat.parties.join(" vs "))
+                  )
+                }))
+              )
+              :
+              undefined
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', this.data.description)
+            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
           ),
           h('div.footer',
             h("p","or go straight to register"),
@@ -510,6 +530,7 @@ function getResultsCompare(){
   return new Promise(function(resolve,reject){
     // igor: todo: change this to real API call instead of set timeout!
     setTimeout(function(){
+      model.user.isWaiting = false;
       model.user.resultsCompare.push({
         seats: [
           {
@@ -524,6 +545,7 @@ function getResultsCompare(){
           }
         ]
       });
+      console.log(model.user)
       resolve();
     },1000)
   })
