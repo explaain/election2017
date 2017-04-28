@@ -48,17 +48,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
   })
 }
 
-function createObjectProps(globalObject, props) {
-  var tempObject = globalObject;
-  props.forEach(function(prop) {
-    if(!tempObject[prop]) {
-      tempObject[prop] = {}
-    }
-    tempObject = tempObject[prop];
-  })
-  return globalObject;
-}
-
 APIService.prototype.resultAlgorithm = function(data) {
   console.log(data);
   var threshold = 0.5;
@@ -82,6 +71,7 @@ APIService.prototype.resultAlgorithm = function(data) {
     } else {
       var party = allParties.filter(function(p) {return p.key == partyKey})[0];
       party.score = partyScores[partyKey];
+      party.matches = partyMatches[partyKey].matches;
       finalPartiesList.push(party);
     }
   });
@@ -126,25 +116,25 @@ APIService.prototype.resultAlgorithm = function(data) {
 APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
-  var disagreements = getDisagreements(data);
+  var agreements = getAgreements(data);
+  console.log(agreements);
   allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
-      var issueKeys = Object.keys(disagreements);
+      var issueKeys = Object.keys(agreements[partyKey]);
       issueKeys.forEach(function(issueKey) {
-        var debateKeys = Object.keys(disagreements[issueKey]);
+        var debateKeys = Object.keys(agreements[partyKey][issueKey]);
         debateKeys.forEach(function(debateKey) {
-          partyMatchesByIssue[partyKey].push(disagreements[issueKey][debateKey][partyKey])
+          partyMatchesByIssue[partyKey].push(agreements[partyKey][issueKey][debateKey])
         });
       });
-      partyMatches[partyKey] = { match: 0};
+      partyMatches[partyKey] = { matches: agreements[partyKey] };
       partyMatchesByIssue[partyKey].forEach(function(match) {
-        partyMatches[partyKey].match += match.value*match.weight;
+        partyMatches[partyKey].match = match.value*match.weight;
+        console.log(partyMatches[partyKey].math)
       })
       partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
-      partyMatches[partyKey].match = 1 - partyMatches[partyKey].match;
-      console.log(partyMatches);
     } catch(e) {
 
     }
@@ -152,26 +142,28 @@ APIService.prototype.getPartyMatches = function(data) {
   return partyMatches;
 }
 
-APIService.prototype.getDisagreements = function(data) {
-  var disagreementMatrix = {};
+APIService.prototype.getAgreements = function(data) {
+  var agreementMatrix = {};
 
   var issues = data.user.opinions.issues;
   var issueKeys = Object.keys(issues);
   issueKeys.forEach(function(issueKey) {
-    disagreementMatrix[issueKey] = disagreementMatrix[issueKey] ? disagreementMatrix[issueKey] : {};
     var issue = issues[issueKey];
     try {
       var debates = issue.debates;
       var debateKeys = Object.keys(debates);
       debateKeys.forEach(function(debateKey) {
-        disagreementMatrix[issueKey][debateKey] = disagreementMatrix[issueKey][debateKey] ? disagreementMatrix[issueKey][debateKey] : {};
         var debate = debates[debateKey];
         try {
           var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
           var partyKeys = Object.keys(allPartiesDebate.parties);
           partyKeys.forEach(function(partyKey) {
-            disagreementMatrix[issueKey][debateKey][partyKey] = {
-              value: Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
+            createObjectProps(agreementMatrix, [partyKey, issueKey])
+            // console.log(debate.opinion);
+            // console.log(allPartiesDebate.parties[partyKey].opinion);
+            // console.log(1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion));
+            agreementMatrix[partyKey][issueKey][debateKey] = {
+              value: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
               weight: debate.weight || 1
             }
           })
@@ -183,7 +175,7 @@ APIService.prototype.getDisagreements = function(data) {
 
     }
   })
-  return disagreementMatrix;
+  return agreementMatrix;
 }
 
 APIService.prototype.getPartyChances = function(data) {
@@ -191,18 +183,12 @@ APIService.prototype.getPartyChances = function(data) {
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
   allParties.forEach(function(party) {
     partyKey = party.key;
-    console.log(partyKey);
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
-      console.log('ge2015MarginPercent:', ge2015MarginPercent);
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-level"].parties[partyKey].opinion;
-      console.log('partyBrexitStance:', partyBrexitStance);
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
-      console.log('chanceFromGe2015MarginPercent:', chanceFromGe2015MarginPercent);
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      console.log('chanceFromEuOpinions:', chanceFromEuOpinions);
       partyChances[partyKey] = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
-      console.log('averageChance:', partyChances[partyKey]);
     } catch (e) {
 
     }
@@ -241,7 +227,6 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
     var partyKey = party.party;
     result["ge2015"].parties[partyKey] = party;
   })
-  console.log(resultsTemp);
   console.log(result);
   // var result = {
   //   "ge2015": {
@@ -278,7 +263,7 @@ function objectAsArray(obj) {
 var getResults = APIService.prototype.getResults;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
-var getDisagreements = APIService.prototype.getDisagreements;
+var getAgreements = APIService.prototype.getAgreements;
 var getPartyChances = APIService.prototype.getPartyChances;
 var getPartyMatches = APIService.prototype.getPartyMatches;
 var loadConstituency = APIService.prototype.loadConstituency;
@@ -386,8 +371,19 @@ function delay(t) {
   });
 }
 
+function createObjectProps(globalObject, props) {
+  var tempObject = globalObject;
+  props.forEach(function(prop) {
+    if(!tempObject[prop]) {
+      tempObject[prop] = {}
+    }
+    tempObject = tempObject[prop];
+  })
+  return globalObject;
+}
 
-getResults('S1 1WB', { opinions: { issues: { brexit: { debates: { "brexit-level": { opinion: 0.6 } } } } } } );
+
+getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-level": { opinion: 0.6 } } } } } } );
 // console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();
