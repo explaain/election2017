@@ -5271,6 +5271,9 @@ class CardContent {
           h('div.footer',
             h("p",(model.user.resultsCompare.length?"Go and register!":"or go straight to register")),
             h("p",
+              h("a",{href:"http://gov.uk#learnmore",target:"_blank"},
+                h("button.btn.btn-link","Learn more")
+              ),
               h("a",{href:"http://gov.uk",target:"_blank"},
                 h("button.btn.btn-primary","Register >")
               )
