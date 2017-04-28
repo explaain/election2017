@@ -5249,9 +5249,18 @@ class CardContent {
                 ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
                   return h("div.seat",
                     h("div.location.small",seat.location),
-                    h("div.versus.bold",{style: {border: "solid 1px " + seat.color}},seat.parties.join(" vs "))
+                    h("div.versus.bold.line1em",{style: {border: "solid 1px " + seat.color}},seat.parties.join(" vs "))
                   )
-                }))
+                })).concat([
+                  h("p.small.line1em",
+                    h(".small","Not convinced it's worth it? 😱"),
+                    h("a.small",{
+                      onclick: function(e){
+                        // do something
+                      }
+                    },"Click here for 5 reason it is >")
+                  )
+                ])
               )
               :
               undefined

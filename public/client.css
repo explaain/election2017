@@ -8,6 +8,10 @@ body {
   background-size: cover;
 }
 
+a {
+  cursor: pointer;
+}
+
 header {
   text-align: left;
   padding: 10px;
@@ -354,6 +358,12 @@ section.questions a.task:hover {
   font-weight:600;
 }
 
+/* igor: line-height 1em */
+
+.line1em {
+  line-height:1em;
+}
+
 
 /* Seats in the location-compare form */
 
@@ -370,5 +380,4 @@ section.questions a.task:hover {
 
 .seat .versus{
   padding: 20px 10px;
-  line-height:1em;
 }
