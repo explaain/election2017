@@ -189,14 +189,20 @@ section.questions a.task:hover {
   margin-top:20px;
 }
 
-.card form.postcode-form input[type="submit"] {
-  margin:-2px 0 0 5px;
+.card form.postcode-form button[type="submit"] {
+  margin:-2px 2px 0 2px;
 }
 
 .card form.postcode-form input[type="text"] {
-  max-width:140px;
+  max-width:110px;
   display: inline-block;
+  margin:0 2px 0 2px;
 }
+
+.card form.postcode-form input[type="text"]::-webkit-input-placeholder { font-size:12px }
+.card form.postcode-form input[type="text"]::-moz-placeholder { font-size:12px }
+.card form.postcode-form input[type="text"]:-ms-input-placeholder { font-size:12px }
+.card form.postcode-form input[type="text"]:-moz-placeholder { font-size:12px }
 
 .card h2 {
   font-weight:900;
@@ -333,4 +339,10 @@ section.questions a.task:hover {
 .btn-twitter:hover {
   background-color: #009cdd;
   color: white;
+}
+
+/* igor: small text */
+
+.small {
+  font-size:12px;
 }

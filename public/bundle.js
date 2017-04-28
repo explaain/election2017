@@ -4,10 +4,12 @@ module.exports = {
 
   user: {
     postcode: '',
+    postcode_uni: '',
     opinions: {
       issues: {}
     },
     results: [],
+    resultsCompare: [],
     quizFlow: [],
     isWaiting: false
   },
@@ -21,7 +23,8 @@ module.exports = {
         "brexit",
         "decide",
         "leaders",
-        "vote-worth"
+        "vote-worth",
+        "!TEST-postcode-compare"
       ]
     },
     brexit: {
@@ -233,7 +236,7 @@ module.exports = {
     // igor: Those are *answers* to questions. You may utilise any features of tasks here!
     // igor: the card below (question-nhs1-1) is a simple "interrupting" card!
     "question-nhs1-1": {
-      label: "Go straight to postcode",
+      label: "Jump straight to postcodes",
       goto: {
         type: 'step',
         name: 'postcode',
@@ -289,12 +292,26 @@ module.exports = {
         name: 'question'
       }
     },
+    "!TEST-postcode-compare": {
+      subtype: "multi-submit",
+      color: "#00a2e5",
+      label: "TEST comparing postcodes",
+      goto: {
+        type: 'step',
+        name: 'postcode-compare',
+        next: 'result'
+      },
+      dataUpdates: []
+    },
   },
 
   // Steps are essentially pages
   steps: {
     postcode: {
       label: "Please provide your postcode"
+    },
+    "postcode-compare": {
+
     },
     result: {
       label: "Here are your results"
@@ -5036,10 +5053,19 @@ class Step {
       sliders: []
     };
     switch (params.name) {
+
       case 'postcode':
         data.sliders.push([{
           type: 'postcode',
           name: 'Where are you voting from?',
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+        }])
+        break;
+
+      case 'postcode-compare':
+        data.sliders.push([{
+          type: 'postcode',
+          name: 'Student and not sure where to vote from?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
@@ -5180,10 +5206,47 @@ class CardContent {
                 }
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
-              h('input.btn.btn-success', {type: "submit"}, "Go!")
+              h('button.btn.btn-success', {type: "submit"}, "Go!")
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
             h('p', this.data.description)
+          )
+        )
+        break;
+
+
+      case 'postcode-compare':
+        var data = this.data;
+        return h('content',
+          h('h2', { 'class': {'hide': model.user.postcode_uni }}, this.data.name),
+          h('div.body-content',
+            h('form.postcode-form',
+              {
+                'class': { 'hide': model.user.isWaiting },
+                'onsubmit': function(e) {
+                  e.stopPropagation();
+                  model.user.isWaiting = true;
+                  getResults().then(function(){
+                    routes.step({ name: data.nextStep, type: data.type }).push();
+                  });
+                  return false;
+                }
+              },
+              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
+              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
+              h('button.btn.btn-success', {type: "submit"}, "Gompare")
+            ),
+            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
+            h('p', this.data.description)
+          ),
+          h('div.footer',
+            h("p","or go straight to register"),
+            h("p",
+              h("a",{href:"http://gov.uk",target:"_blank"},
+                h("button.btn.btn-primary","Register >")
+              )
+            ),
+            h("p.small", "This link will take you to the official gov.uk website")
           )
         )
         break;
@@ -5352,6 +5415,29 @@ function getResults(){
     )
   })
 }
+
+function getResults(){
+  return new Promise(function(resolve,reject){
+    // igor: todo: change this to real API call instead of set timeout!
+    setTimeout(function(){
+      model.user.resultsCompare.push({
+        seats: [
+          {
+            location: "Eastborne",
+            parties: ["Conservative","Lib Dem"],
+            color: "#000099"
+          },
+          {
+            location: "Bristol South",
+            parties: ["Labour","Conservative"],
+            color: "#990000"
+          }
+        ]
+      });
+      resolve();
+    },1000)
+  })
+};
 
 hyperdom.append(document.body, new App());
 

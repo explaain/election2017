@@ -3,10 +3,12 @@ module.exports = {
 
   user: {
     postcode: '',
+    postcode_uni: '',
     opinions: {
       issues: {}
     },
     results: [],
+    resultsCompare: [],
     quizFlow: [],
     isWaiting: false
   },
@@ -20,7 +22,8 @@ module.exports = {
         "brexit",
         "decide",
         "leaders",
-        "vote-worth"
+        "vote-worth",
+        "!TEST-postcode-compare"
       ]
     },
     brexit: {
@@ -232,7 +235,7 @@ module.exports = {
     // igor: Those are *answers* to questions. You may utilise any features of tasks here!
     // igor: the card below (question-nhs1-1) is a simple "interrupting" card!
     "question-nhs1-1": {
-      label: "Go straight to postcode",
+      label: "Jump straight to postcodes",
       goto: {
         type: 'step',
         name: 'postcode',
@@ -288,12 +291,26 @@ module.exports = {
         name: 'question'
       }
     },
+    "!TEST-postcode-compare": {
+      subtype: "multi-submit",
+      color: "#00a2e5",
+      label: "TEST comparing postcodes",
+      goto: {
+        type: 'step',
+        name: 'postcode-compare',
+        next: 'result'
+      },
+      dataUpdates: []
+    },
   },
 
   // Steps are essentially pages
   steps: {
     postcode: {
       label: "Please provide your postcode"
+    },
+    "postcode-compare": {
+
     },
     result: {
       label: "Here are your results"
