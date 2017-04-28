@@ -1,5 +1,9 @@
 module.exports = {
   step: -1,
+  // todo: those are temporary here, refactor
+  question: '',
+  landedOnPostcode: 0,
+  landedOnResult: 0,
 
   user: {
     postcode: '',

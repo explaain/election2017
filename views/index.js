@@ -14,7 +14,7 @@ router.start();
 const model = require('../models/model')
 
 class App {
-  constructor() {
+  constructor(data) {
     this.header = new Header();
   }
 
@@ -50,7 +50,30 @@ class Header {
     return h("header",
       routes.root().a(
         h("i.fa.fa-th-large.menu")
-      )
+      ),
+      (new Progress())
+    )
+  }
+}
+
+class Progress {
+  render() {
+    const self = this;
+    var progress_total = 2;
+    var progress_current = 0;
+    var quizFlow = [];
+    model.user.quizFlow.forEach(function(quiz){
+      quizFlow = quizFlow.concat(quiz);
+    });
+    if(quizFlow.length>0){
+      progress_total += quizFlow.length;
+      var quiz_passed =
+      progress_current += quizFlow.indexOf(model.question)!==-1?quizFlow.indexOf(model.question)+1:0;
+    }
+    progress_current+=model.landedOnPostcode;
+    progress_current+=model.landedOnResult;
+    return h(".progress",
+      h(".progress-inner",{style: {width: ((progress_current/progress_total)*100)+"%"}})
     )
   }
 }
@@ -145,6 +168,7 @@ class Step {
     switch (params.name) {
 
       case 'postcode':
+        model.landedOnPostcode = 1; // todo: temporary, refactor
         data.sliders.push([{
           type: 'postcode',
           name: 'Where are you voting from?',
@@ -153,6 +177,7 @@ class Step {
         break;
 
       case 'postcode-compare':
+        model.landedOnPostcode = 1; // todo: temporary, refactor
         data.sliders.push([{
           type: 'postcode',
           name: 'Student and not sure where to vote from?',
@@ -161,6 +186,7 @@ class Step {
         break;
 
       case 'result':
+        model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
           data.sliders.push(cards)
         })
@@ -172,6 +198,7 @@ class Step {
           quizFlow = quizFlow.concat(quiz);
         })
         const questionName = params.nextQuestion?params.nextQuestion:quizFlow[0];
+        model.question = questionName;
         const question = model.questions[questionName];
         var nextQuestion;
         if(quizFlow.indexOf(questionName)<quizFlow.length-1){

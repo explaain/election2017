@@ -384,3 +384,25 @@ section.questions a.task:hover {
   width:calc(50% - 20px);
   margin: 10px;
 }
+
+/* Progress bar */
+
+.progress {
+  height:12px;
+  width:200px;
+  border: solid 1px #ccc;
+  border-radius: 10px;
+  float: right;
+  margin-right: 90px; /* igor: todo: this is not good, to refactor */
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.progress-inner {
+  background-color: #c042de;
+  height:100%;
+  -webkit-transition: width .5s;
+  -moz-transition: width .5s;
+  -ms-transition: width .5s;
+  transition: width .5s;
+}
