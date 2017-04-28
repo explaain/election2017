@@ -1,6 +1,333 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = {
+  step: -1,
+
+  user: {
+    postcode: '',
+    opinions: {
+      issues: {}
+    },
+    results: [],
+    quizFlow: [],
+    isWaiting: false
+  },
+
+  //Dashboards are collections of tasks
+  dashboards: {
+    home: {
+      title: "What do you want to do? 🙋",
+      subtitle: "Choose an option below. You can come back here later to choose another!",
+      tasks: [
+        "brexit",
+        "decide",
+        "leaders",
+        "vote-worth"
+      ]
+    },
+    brexit: {
+      title: "What did you want to do about Brexit?",
+      subtitle: "Select one option to continue.",
+      tasks: [
+        "brexit-stop",
+        "brexit-support",
+        "brexit-commons",
+        "brexit-soft"
+      ]
+    },
+    decide: {
+      title: "What matters to you?",
+      subtitle: "Each topic contains 5 questions that divides or unites the parties.",
+      tasks: [
+        "issue-nhs",
+        "issue-immigration",
+        "issue-brexit",
+        "issue-education",
+        "issue-$apply"
+      ]
+    }
+  },
+
+  //Tasks are a series of steps, and are chosen from the dashboard
+  tasks: {
+    brexit: {
+      icon: 'compass',
+      label: "What can I do about Brexit?",
+      color: "#42c299",
+      goto: {
+        type: 'dashboard',
+        name: 'brexit'
+      }
+    },
+    decide: {
+      icon: 'map-o',
+      label: "Decide who to vote for",
+      color: "#e74289",
+      goto: {
+        type: 'dashboard',
+        name: 'decide'
+      },
+      // igor: we want to be sure that the selection of quizzes
+      // is flushed every time you pick up "decide" option
+      dataUpdates: [
+        {
+          data: 'user.quizFlow',
+          value: []
+        }
+      ]
+    },
+    leaders: {
+      icon: 'users',
+      label: "Learn about the leaders",
+      color: "#c042de",
+      goto: {
+        type: 'dashboard',
+        name: 'leaders'
+      }
+    },
+    "vote-worth": {
+      icon: 'check-square-o',
+      label: "How much does my vote count?",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'vote-worth'
+      }
+    },
+    "brexit-stop": {
+      icon: "hand-paper-o",
+      label: "Stop it completely",
+      color: "#42c299",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0
+        }
+      ]
+    },
+    "brexit-support": {
+      icon: "thumbs-o-up",
+      label: "Get on with it",
+      color: "#e74289",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 1
+        }
+      ]
+    },
+    "brexit-commons": {
+      icon: "handshake-o",
+      label: "Leave but let MPs have a say on the terms",
+      color: "#c042de",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.8
+        },
+        {
+          data: 'user.opinions.issues.brexit.debates.mp-vote.opinion',
+          value: 1
+        }
+      ]
+    },
+    "brexit-soft": {
+      icon: "hand-rock-o",
+      label: "I want to stop a hard Brexit",
+      color: "#00a2e5",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          value: 0.6
+        }
+      ]
+    },
+    "issue-nhs": {
+      subtype: "multi-choice",
+      icon: 'h-square',
+      label: "NHS",
+      color: "#42c299",
+      // igor: please note, there is no "goto", because this task ONLY sets
+      // the value and does NOT routes to a next step
+      /*goto: {
+      },*/
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.1',
+          value: ["nhs1","nhs2"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      conditions: [
+        "user.quizFlow.1"
+      ]
+    },
+    "issue-immigration": {
+      icon: 'id-card-o',
+      label: "Immigration",
+      color: "#e74289",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-brexit": {
+      icon: 'newspaper-o',
+      label: "Brexit",
+      color: "#c042de",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-education": {
+      icon: 'graduation-cap',
+      label: "Education",
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'something'
+      }
+    },
+    "issue-$apply": {
+      subtype: "multi-submit",
+      label: "Start quiz!",
+      color: "#00a2e5",
+      goto: {
+        type: 'step',
+        name: 'question',
+        // igor: "final" means the step name where you will be redirected after quiz
+        // igor: the "next" here is where you will be redirected *after* the quiz
+        // igor: note: you may interrupt the quiz by injecting any task with any route!
+        final: 'postcode',
+        next: 'result'
+      },
+      conditions: [
+        "user.quizFlow.1",
+        "user.quizFlow.2",
+        "user.quizFlow.3",
+        "user.quizFlow.4"
+      ]
+    },
+    // igor: Those are *answers* to questions. You may utilise any features of tasks here!
+    // igor: the card below (question-nhs1-1) is a simple "interrupting" card!
+    "question-nhs1-1": {
+      label: "Go straight to postcode",
+      goto: {
+        type: 'step',
+        name: 'postcode',
+        next: 'result'
+      },
+      dataUpdates: []
+    },
+    "question-nhs1-2": {
+      label: "Go to question 2",
+      goto: {
+        type: 'step',
+        name: 'question'
+      }
+    },
+    "question-nhs1-3": {
+      label: "Go to question 2",
+      goto: {
+        type: 'step',
+        name: 'question'
+      },
+      dataUpdates: []
+    },
+    "question-nhs1-4": {
+      label: "Go to question 2",
+      goto: {
+        type: 'step',
+        name: 'question'
+      },
+      dataUpdates: []
+    },
+    // igor: the card below (question-nhs2-1) is a simple "interrupting" card!
+    "question-nhs2-1": {
+      label: "Go to dashboard",
+      goto: {
+        type: 'dashboard',
+        name: 'decide'
+      },
+      dataUpdates: []
+    },
+    "question-nhs2-2": {
+      label: "Finish quiz",
+      goto: {
+        type: 'step',
+        name: 'question'
+      },
+      dataUpdates: []
+    },
+    "question-$skip": {
+      subtype: "link",
+      label: "I don't care 🙈 >",
+      goto: {
+        type: 'step',
+        name: 'question'
+      }
+    },
+  },
+
+  // Steps are essentially pages
+  steps: {
+    postcode: {
+      label: "Please provide your postcode"
+    },
+    result: {
+      label: "Here are your results"
+    },
+    question: {
+
+    }
+  },
+
+  // Questions
+  questions: {
+    "nhs1": {
+      question: "Question 1",
+      tasks: [
+        "question-nhs1-1",
+        "question-nhs1-2",
+        "question-$skip"
+      ]
+    },
+    "nhs2": {
+      question: "Question 2",
+      tasks: [
+        "question-nhs2-1",
+        "question-nhs2-2",
+        "question-$skip"
+      ]
+    }
+  }
+};
 
 },{}],2:[function(require,module,exports){
+
+},{}],3:[function(require,module,exports){
 /*!
  * Cross-Browser Split 1.1.1
  * Copyright 2007-2012 Steven Levithan <stevenlevithan.com>
@@ -108,7 +435,7 @@ module.exports = (function split(undef) {
   return self;
 })();
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
@@ -127,7 +454,7 @@ if (typeof document !== 'undefined') {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":1}],4:[function(require,module,exports){
+},{"min-document":2}],5:[function(require,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window;
@@ -140,7 +467,7 @@ if (typeof window !== "undefined") {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 var httpism = require('./httpism');
 var middleware = require('./browserMiddleware');
 var utils = require('./middlewareUtils');
@@ -159,7 +486,7 @@ module.exports = httpism(
   ]
 );
 
-},{"./browserMiddleware":6,"./httpism":7,"./middlewareUtils":9}],6:[function(require,module,exports){
+},{"./browserMiddleware":7,"./httpism":8,"./middlewareUtils":10}],7:[function(require,module,exports){
 var window = require('global');
 var utils = require('./middlewareUtils');
 var querystringLite = require('./querystring-lite');
@@ -371,7 +698,7 @@ function addAbortToPromise(promise, abort) {
   };
 }
 
-},{"./middlewareUtils":9,"./querystring-lite":11,"global":4,"random-string":37}],7:[function(require,module,exports){
+},{"./middlewareUtils":10,"./querystring-lite":12,"global":5,"random-string":38}],8:[function(require,module,exports){
 var merge = require('./merge');
 var resolveUrl = require('./resolveUrl');
 var utils = require('./middlewareUtils');
@@ -541,7 +868,7 @@ function parseClientArguments() {
 
 module.exports = client;
 
-},{"./merge":8,"./middlewareUtils":9,"./resolveUrl":12}],8:[function(require,module,exports){
+},{"./merge":9,"./middlewareUtils":10,"./resolveUrl":13}],9:[function(require,module,exports){
 module.exports = function(x, y) {
   if (x && y) {
     var r = {};
@@ -562,7 +889,7 @@ module.exports = function(x, y) {
   }
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var merge = require("./merge");
 var querystringLite = require('./querystring-lite');
 var obfuscateUrlPassword = require('./obfuscateUrlPassword');
@@ -654,12 +981,12 @@ exports.mergeQueryString = function(request) {
   request.url = path + "?" + qs.stringify(mergedQueryString);
 };
 
-},{"./merge":8,"./obfuscateUrlPassword":10,"./querystring-lite":11}],10:[function(require,module,exports){
+},{"./merge":9,"./obfuscateUrlPassword":11,"./querystring-lite":12}],11:[function(require,module,exports){
 module.exports = function(url) {
   return url.replace(/^([-a-z]*:\/\/[^:]*:)[^@]*@/, function(_, first) { return first + '********@'; });
 };
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports = {
   parse: function (string) {
     var params = {};
@@ -686,7 +1013,7 @@ module.exports = {
   }
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 // from https://gist.github.com/Yaffle/1088850
 
 /*jslint regexp: true, white: true, maxerr: 50, indent: 2 */
@@ -734,7 +1061,7 @@ module.exports = function (base, href) {// RFC 3986
          href.hash;
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 var routism = require('routism');
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
@@ -1354,7 +1681,7 @@ exports.hash = {
   }
 };
 
-},{"hyperdom":19,"routism":38}],14:[function(require,module,exports){
+},{"hyperdom":20,"routism":39}],15:[function(require,module,exports){
 var listener = require('./listener');
 var binding = require('./binding')
 
@@ -1511,7 +1838,7 @@ function customEvent(name) {
   }
 }
 
-},{"./binding":15,"./listener":21}],15:[function(require,module,exports){
+},{"./binding":16,"./listener":22}],16:[function(require,module,exports){
 var refreshify = require('./refreshify');
 var meta = require('./meta');
 
@@ -1552,7 +1879,7 @@ function bindingObject(model, property, setter) {
   };
 }
 
-},{"./meta":22,"./refreshify":28}],16:[function(require,module,exports){
+},{"./meta":23,"./refreshify":29}],17:[function(require,module,exports){
 var domComponent = require('./domComponent');
 var hyperdomMeta = require('./meta');
 var render = require('./render');
@@ -1693,7 +2020,7 @@ Component.prototype.destroy = function (element) {
 
 module.exports = Component;
 
-},{"./domComponent":18,"./meta":22,"./render":29}],17:[function(require,module,exports){
+},{"./domComponent":19,"./meta":23,"./render":30}],18:[function(require,module,exports){
 function deprecationWarning() {
   var warningIssued = false;
 
@@ -1715,7 +2042,7 @@ module.exports = {
   mapBinding: deprecationWarning()
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var createElement = require('virtual-dom/create-element');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -1774,7 +2101,7 @@ function domComponent(options) {
 
 exports.create = domComponent;
 
-},{"./isVdom":20,"./toVdom":33,"virtual-dom/create-element":39,"virtual-dom/diff":40,"virtual-dom/patch":41}],19:[function(require,module,exports){
+},{"./isVdom":21,"./toVdom":34,"virtual-dom/create-element":40,"virtual-dom/diff":41,"virtual-dom/patch":42}],20:[function(require,module,exports){
 var rendering = require('./rendering')
 var refreshify = require('./refreshify')
 var binding = require('./binding')
@@ -1801,7 +2128,7 @@ exports.component = function(model) {
 
 exports.currentRender = render.currentRender
 
-},{"./binding":15,"./component":16,"./meta":22,"./refreshEventResult":27,"./refreshify":28,"./render":29,"./rendering":30}],20:[function(require,module,exports){
+},{"./binding":16,"./component":17,"./meta":23,"./refreshEventResult":28,"./refreshify":29,"./render":30,"./rendering":31}],21:[function(require,module,exports){
 var virtualDomVersion = require("virtual-dom/vnode/version")
 
 module.exports = function(x) {
@@ -1813,7 +2140,7 @@ module.exports = function(x) {
   }
 };
 
-},{"virtual-dom/vnode/version":57}],21:[function(require,module,exports){
+},{"virtual-dom/vnode/version":58}],22:[function(require,module,exports){
 var refreshify = require('./refreshify');
 
 function ListenerHook(listener) {
@@ -1832,7 +2159,7 @@ module.exports = function (listener) {
   return new ListenerHook(listener);
 };
 
-},{"./refreshify":28}],22:[function(require,module,exports){
+},{"./refreshify":29}],23:[function(require,module,exports){
 module.exports = function (model, property) {
   var hyperdomMeta = model._hyperdomMeta;
 
@@ -1854,7 +2181,7 @@ module.exports = function (model, property) {
   }
 };
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 var hyperdomMeta = require('./meta');
 var runRender = require('./render');
 var Set = require('./set');
@@ -2048,7 +2375,7 @@ Mount.prototype.remove = function () {
 
 module.exports = Mount;
 
-},{"./meta":22,"./propertyHook":25,"./refreshEventResult":27,"./render":29,"./set":31,"virtual-dom/vnode/vtext.js":60}],24:[function(require,module,exports){
+},{"./meta":23,"./propertyHook":26,"./refreshEventResult":28,"./render":30,"./set":32,"virtual-dom/vnode/vtext.js":61}],25:[function(require,module,exports){
 var render = require('./render');
 var bindModel = require('./bindModel')
 
@@ -2147,7 +2474,7 @@ function generateConditionalClassNames(obj) {
   }).join(' ') || undefined;
 }
 
-},{"./bindModel":14,"./render":29}],25:[function(require,module,exports){
+},{"./bindModel":15,"./render":30}],26:[function(require,module,exports){
 function PropertyHook(value) {
   this.value = value;
 }
@@ -2162,7 +2489,7 @@ PropertyHook.prototype.unhook = function (element, property) {
 
 module.exports = PropertyHook;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var deprecations = require('./deprecations');
 var refreshify = require('./refreshify');
 
@@ -2171,7 +2498,7 @@ module.exports = function(promise) {
   refreshify(function() { return promise }, {refresh: 'promise'})()
 }
 
-},{"./deprecations":17,"./refreshify":28}],27:[function(require,module,exports){
+},{"./deprecations":18,"./refreshify":29}],28:[function(require,module,exports){
 var deprecations = require('./deprecations');
 
 module.exports = refreshAfterEvent
@@ -2242,14 +2569,14 @@ function cloneOptions(options) {
   }
 }
 
-},{"./deprecations":17}],28:[function(require,module,exports){
+},{"./deprecations":18}],29:[function(require,module,exports){
 var render = require('./render');
 
 module.exports = function(fn, options) {
   return render.currentRender().mount.refreshify(fn, options)
 }
 
-},{"./render":29}],29:[function(require,module,exports){
+},{"./render":30}],30:[function(require,module,exports){
 var simplePromise = require('./simplePromise');
 
 function runRender(mount, fn) {
@@ -2292,7 +2619,7 @@ var defaultRender = {
   }
 }
 
-},{"./simplePromise":32}],30:[function(require,module,exports){
+},{"./simplePromise":33}],31:[function(require,module,exports){
 var vhtml = require('./vhtml');
 var domComponent = require('./domComponent');
 var bindingMeta = require('./meta');
@@ -2471,7 +2798,7 @@ function rawHtml() {
 
 exports.html.rawHtml = rawHtml;
 
-},{"./binding":15,"./deprecations":17,"./domComponent":18,"./meta":22,"./mount":23,"./prepareAttributes":24,"./refreshAfter":26,"./refreshEventResult":27,"./render":29,"./toVdom":33,"./vhtml":34,"virtual-dom/virtual-hyperscript/parse-tag":50}],31:[function(require,module,exports){
+},{"./binding":16,"./deprecations":18,"./domComponent":19,"./meta":23,"./mount":24,"./prepareAttributes":25,"./refreshAfter":27,"./refreshEventResult":28,"./render":30,"./toVdom":34,"./vhtml":35,"virtual-dom/virtual-hyperscript/parse-tag":51}],32:[function(require,module,exports){
 if (typeof Set === 'function') {
   module.exports = Set;
 } else {
@@ -2499,7 +2826,7 @@ if (typeof Set === 'function') {
   };
 }
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 function SimplePromise () {
   this.listeners = [];
 }
@@ -2526,7 +2853,7 @@ module.exports = function () {
   return new SimplePromise();
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var vtext = require("virtual-dom/vnode/vtext.js")
 var isVdom = require('./isVdom');
 var Component = require('./component')
@@ -2567,7 +2894,7 @@ module.exports.recursive = function (child) {
   return children;
 };
 
-},{"./component":16,"./isVdom":20,"virtual-dom/vnode/vtext.js":60}],34:[function(require,module,exports){
+},{"./component":17,"./isVdom":21,"virtual-dom/vnode/vtext.js":61}],35:[function(require,module,exports){
 'use strict';
 
 var VNode = require('virtual-dom/vnode/vnode.js');
@@ -2612,7 +2939,7 @@ function h(tagName, props, children) {
   return vnode
 }
 
-},{"./xml":35,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":49,"virtual-dom/vnode/is-vhook":53,"virtual-dom/vnode/vnode.js":58}],35:[function(require,module,exports){
+},{"./xml":36,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":50,"virtual-dom/vnode/is-vhook":54,"virtual-dom/vnode/vnode.js":59}],36:[function(require,module,exports){
 var AttributeHook = require('virtual-dom/virtual-hyperscript/hooks/attribute-hook')
 
 var namespaceRegex = /^([a-z0-9_-]+)(--|:)([a-z0-9_-]+)$/i
@@ -2708,14 +3035,14 @@ function transform(vnode) {
 
 module.exports.transform = transform
 
-},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":48}],36:[function(require,module,exports){
+},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":49}],37:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /*
  * random-string
  * https://github.com/valiton/node-random-string
@@ -2761,7 +3088,7 @@ module.exports = function randomString(opts) {
   return rnd;
 };
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 (function() {
     var self = this;
     var variableRegex, splatVariableRegex, escapeRegex, addGroupForTo, addVariablesInTo, compile, recogniseIn, extractParamsForFromAfter;
@@ -2860,22 +3187,22 @@ module.exports = function randomString(opts) {
         return params;
     };
 }).call(this);
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":43}],40:[function(require,module,exports){
+},{"./vdom/create-element.js":44}],41:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":62}],41:[function(require,module,exports){
+},{"./vtree/diff.js":63}],42:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":46}],42:[function(require,module,exports){
+},{"./vdom/patch.js":47}],43:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -2974,7 +3301,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":53,"is-object":36}],43:[function(require,module,exports){
+},{"../vnode/is-vhook.js":54,"is-object":37}],44:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -3022,7 +3349,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":51,"../vnode/is-vnode.js":54,"../vnode/is-vtext.js":55,"../vnode/is-widget.js":56,"./apply-properties":42,"global/document":3}],44:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":52,"../vnode/is-vnode.js":55,"../vnode/is-vtext.js":56,"../vnode/is-widget.js":57,"./apply-properties":43,"global/document":4}],45:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -3109,7 +3436,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -3262,7 +3589,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":56,"../vnode/vpatch.js":59,"./apply-properties":42,"./update-widget":47}],46:[function(require,module,exports){
+},{"../vnode/is-widget.js":57,"../vnode/vpatch.js":60,"./apply-properties":43,"./update-widget":48}],47:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -3344,7 +3671,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":43,"./dom-index":44,"./patch-op":45,"global/document":3,"x-is-array":63}],47:[function(require,module,exports){
+},{"./create-element":44,"./dom-index":45,"./patch-op":46,"global/document":4,"x-is-array":64}],48:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -3361,7 +3688,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":56}],48:[function(require,module,exports){
+},{"../vnode/is-widget.js":57}],49:[function(require,module,exports){
 'use strict';
 
 module.exports = AttributeHook;
@@ -3398,7 +3725,7 @@ AttributeHook.prototype.unhook = function (node, prop, next) {
 
 AttributeHook.prototype.type = 'AttributeHook';
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = SoftSetHook;
@@ -3417,7 +3744,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 var split = require('browser-split');
@@ -3473,7 +3800,7 @@ function parseTag(tag, props) {
     return props.namespace ? tagName : tagName.toUpperCase();
 }
 
-},{"browser-split":2}],51:[function(require,module,exports){
+},{"browser-split":3}],52:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -3515,14 +3842,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":52,"./is-vnode":54,"./is-vtext":55,"./is-widget":56}],52:[function(require,module,exports){
+},{"./is-thunk":53,"./is-vnode":55,"./is-vtext":56,"./is-widget":57}],53:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -3531,7 +3858,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -3540,7 +3867,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":57}],55:[function(require,module,exports){
+},{"./version":58}],56:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -3549,17 +3876,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":57}],56:[function(require,module,exports){
+},{"./version":58}],57:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 module.exports = "2"
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -3633,7 +3960,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":52,"./is-vhook":53,"./is-vnode":54,"./is-widget":56,"./version":57}],59:[function(require,module,exports){
+},{"./is-thunk":53,"./is-vhook":54,"./is-vnode":55,"./is-widget":57,"./version":58}],60:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -3657,7 +3984,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":57}],60:[function(require,module,exports){
+},{"./version":58}],61:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -3669,7 +3996,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":57}],61:[function(require,module,exports){
+},{"./version":58}],62:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -3729,7 +4056,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":53,"is-object":36}],62:[function(require,module,exports){
+},{"../vnode/is-vhook":54,"is-object":37}],63:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -4158,7 +4485,7 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":51,"../vnode/is-thunk":52,"../vnode/is-vnode":54,"../vnode/is-vtext":55,"../vnode/is-widget":56,"../vnode/vpatch":59,"./diff-props":61,"x-is-array":63}],63:[function(require,module,exports){
+},{"../vnode/handle-thunk":52,"../vnode/is-thunk":53,"../vnode/is-vnode":55,"../vnode/is-vtext":56,"../vnode/is-widget":57,"../vnode/vpatch":60,"./diff-props":62,"x-is-array":64}],64:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -4168,7 +4495,7 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 var http = require('httpism')
 
 function APIService() {
@@ -4563,7 +4890,7 @@ getResults('S1 1WB', { opinions: { issues: { brexit: { debates: { "brexit-level"
 
 module.exports = new APIService();
 
-},{"httpism":5}],65:[function(require,module,exports){
+},{"httpism":6}],66:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 var router = require('hyperdom-router');
@@ -4577,332 +4904,7 @@ var routes = {
 
 router.start();
 
-var model = {
-
-  step: -1,
-
-  user: {
-    postcode: '',
-    opinions: {
-      issues: {}
-    },
-    results: [],
-    quizFlow: [],
-    isWaiting: false
-  },
-
-  //Dashboards are collections of tasks
-  dashboards: {
-    home: {
-      title: "What do you want to do? 🙋",
-      subtitle: "Choose an option below. You can come back here later to choose another!",
-      tasks: [
-        "brexit",
-        "decide",
-        "leaders",
-        "vote-worth"
-      ]
-    },
-    brexit: {
-      title: "What did you want to do about Brexit?",
-      subtitle: "Select one option to continue.",
-      tasks: [
-        "brexit-stop",
-        "brexit-support",
-        "brexit-commons",
-        "brexit-soft"
-      ]
-    },
-    decide: {
-      title: "What matters to you?",
-      subtitle: "Each topic contains 5 questions that divides or unites the parties.",
-      tasks: [
-        "issue-nhs",
-        "issue-immigration",
-        "issue-brexit",
-        "issue-education",
-        "issue-$apply"
-      ]
-    }
-  },
-
-  //Tasks are a series of steps, and are chosen from the dashboard
-  tasks: {
-    brexit: {
-      icon: 'compass',
-      label: "What can I do about Brexit?",
-      color: "#42c299",
-      goto: {
-        type: 'dashboard',
-        name: 'brexit'
-      }
-    },
-    decide: {
-      icon: 'map-o',
-      label: "Decide who to vote for",
-      color: "#e74289",
-      goto: {
-        type: 'dashboard',
-        name: 'decide'
-      },
-      // igor: we want to be sure that the selection of quizzes
-      // is flushed every time you pick up "decide" option
-      dataUpdates: [
-        {
-          data: 'user.quizFlow',
-          value: []
-        }
-      ]
-    },
-    leaders: {
-      icon: 'users',
-      label: "Learn about the leaders",
-      color: "#c042de",
-      goto: {
-        type: 'dashboard',
-        name: 'leaders'
-      }
-    },
-    "vote-worth": {
-      icon: 'check-square-o',
-      label: "How much does my vote count?",
-      color: "#00a2e5",
-      goto: {
-        type: 'dashboard',
-        name: 'vote-worth'
-      }
-    },
-    "brexit-stop": {
-      icon: "hand-paper-o",
-      label: "Stop it completely",
-      color: "#42c299",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: [
-        {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 0
-        }
-      ]
-    },
-    "brexit-support": {
-      icon: "thumbs-o-up",
-      label: "Get on with it",
-      color: "#e74289",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: [
-        {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 1
-        }
-      ]
-    },
-    "brexit-commons": {
-      icon: "handshake-o",
-      label: "Leave but let MPs have a say on the terms",
-      color: "#c042de",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: [
-        {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 0.8
-        },
-        {
-          data: 'user.opinions.issues.brexit.debates.mp-vote.opinion',
-          value: 1
-        }
-      ]
-    },
-    "brexit-soft": {
-      icon: "hand-rock-o",
-      label: "I want to stop a hard Brexit",
-      color: "#00a2e5",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: [
-        {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
-          value: 0.6
-        }
-      ]
-    },
-    "issue-nhs": {
-      subtype: "multi-choice",
-      icon: 'h-square',
-      label: "NHS",
-      color: "#42c299",
-      // igor: please note, there is no "goto", because this task ONLY sets
-      // the value and does NOT routes to a next step
-      /*goto: {
-      },*/
-      dataUpdates: [
-        {
-          data: 'user.quizFlow.1',
-          value: ["nhs1","nhs2"],
-          // igor: see "toggle" usage here: we make this task to
-          // behave like a checkbox
-          action: "toggle"
-        }
-      ],
-      conditions: [
-        "user.quizFlow.1"
-      ]
-    },
-    "issue-immigration": {
-      icon: 'id-card-o',
-      label: "Immigration",
-      color: "#e74289",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
-    },
-    "issue-brexit": {
-      icon: 'newspaper-o',
-      label: "Brexit",
-      color: "#c042de",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
-    },
-    "issue-education": {
-      icon: 'graduation-cap',
-      label: "Education",
-      color: "#00a2e5",
-      goto: {
-        type: 'dashboard',
-        name: 'something'
-      }
-    },
-    "issue-$apply": {
-      subtype: "multi-submit",
-      label: "Start quiz!",
-      color: "#00a2e5",
-      goto: {
-        type: 'step',
-        name: 'question',
-        // igor: "final" means the step name where you will be redirected after quiz
-        // igor: the "next" here is where you will be redirected *after* the quiz
-        // igor: note: you may interrupt the quiz by injecting any task with any route!
-        final: 'postcode',
-        next: 'result'
-      },
-      conditions: [
-        "user.quizFlow.1",
-        "user.quizFlow.2",
-        "user.quizFlow.3",
-        "user.quizFlow.4"
-      ]
-    },
-    // igor: Those are *answers* to questions. You may utilise any features of tasks here!
-    // igor: the card below (question-nhs1-1) is a simple "interrupting" card!
-    "question-nhs1-1": {
-      label: "Go straight to postcode",
-      goto: {
-        type: 'step',
-        name: 'postcode',
-        next: 'result'
-      },
-      dataUpdates: []
-    },
-    "question-nhs1-2": {
-      label: "Go to question 2",
-      goto: {
-        type: 'step',
-        name: 'question'
-      }
-    },
-    "question-nhs1-3": {
-      label: "Go to question 2",
-      goto: {
-        type: 'step',
-        name: 'question'
-      },
-      dataUpdates: []
-    },
-    "question-nhs1-4": {
-      label: "Go to question 2",
-      goto: {
-        type: 'step',
-        name: 'question'
-      },
-      dataUpdates: []
-    },
-    // igor: the card below (question-nhs2-1) is a simple "interrupting" card!
-    "question-nhs2-1": {
-      label: "Go to dashboard",
-      goto: {
-        type: 'dashboard',
-        name: 'decide'
-      },
-      dataUpdates: []
-    },
-    "question-nhs2-2": {
-      label: "Finish quiz",
-      goto: {
-        type: 'step',
-        name: 'question'
-      },
-      dataUpdates: []
-    },
-    "question-$skip": {
-      subtype: "link",
-      label: "I don't care 🙈 >",
-      goto: {
-        type: 'step',
-        name: 'question'
-      }
-    },
-  },
-
-  // Steps are essentially pages
-  steps: {
-    postcode: {
-      label: "Please provide your postcode"
-    },
-    result: {
-      label: "Here are your results"
-    },
-    question: {
-
-    }
-  },
-
-  // Questions
-  questions: {
-    "nhs1": {
-      question: "Question 1",
-      tasks: [
-        "question-nhs1-1",
-        "question-nhs1-2",
-        "question-$skip"
-      ]
-    },
-    "nhs2": {
-      question: "Question 2",
-      tasks: [
-        "question-nhs2-1",
-        "question-nhs2-2",
-        "question-$skip"
-      ]
-    }
-  }
-};
+const model = require('../models/model')
 
 class App {
   constructor() {
@@ -5353,4 +5355,4 @@ function getResults(){
 
 hyperdom.append(document.body, new App());
 
-},{"../services/APIService":64,"hyperdom":19,"hyperdom-router":13}]},{},[65]);
+},{"../models/model":1,"../services/APIService":65,"hyperdom":20,"hyperdom-router":14}]},{},[66]);
