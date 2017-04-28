@@ -610,38 +610,9 @@ class CardContent {
                   model.user.isWaiting = true;
                   // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
                   // igor: todo: move api calls to another place to make the template result agnostic
-                  api.getResults(model.user.postcode, model.user)
-                    .then(function(results) {
-                      console.log(results);
-                      model.user.isWaiting = false;
-                      // igor: We have to refactor results a bit to make them reusable in cards
-                      // igor: change this content to create cards based on the data you retrieve
-                      // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
-                      model.user.results.push([
-                        [
-                          {
-                            image: results.parties[0].image || '/img/party-logos/party.jpg',
-                            header: results.parties[0].name,
-                            content: results.parties[0].description || "Description...",
-                            footer:
-                              '<p>Share this to help friends and family #GE2017</p>'+
-                              '<a class="discard-card-style" href="https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button" target="_blank"><button class="btn btn-facebook">Facebook</button></a>'+
-                              '<a class="discard-card-style" href="https://twitter.com/intent/tweet?text='+model.user.postcode+'" target="_blank"><button class="btn btn-twitter">Twitter</button></a>'
-                          }
-                        ],
-                        [
-                          {
-                            header: "You and your matched party",
-                            content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
-                          },
-                          {
-                            header: "You and your area",
-                            content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
-                          }
-                        ]
-                      ]);
-                      routes.step({ name: data.nextStep, type: data.type }).push();
-                    })
+                  getResults().then(function(){
+                    routes.step({ name: data.nextStep, type: data.type }).push();
+                  });
                   return false;
                 }
               },
@@ -779,6 +750,44 @@ function getModel(path){
       schema = schema[elem];
   }
   return schema[pList[len-1]];
+}
+
+function getResults(){
+  return new Promise(function(resolve,reject){
+    api.getResults(model.user.postcode, model.user)
+      .then(function(results) {
+        console.log(results);
+        model.user.isWaiting = false;
+        // igor: We have to refactor results a bit to make them reusable in cards
+        // igor: change this content to create cards based on the data you retrieve
+        // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
+        model.user.results.push([
+          [
+            {
+              image: results.parties[0].image || '/img/party-logos/party.jpg',
+              header: results.parties[0].name,
+              content: results.parties[0].description || "Description...",
+              footer:
+                '<p>Share this to help friends and family #GE2017</p>'+
+                '<a class="discard-card-style" href="https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=https%3A%2F%2Fdevelopers.facebook.com%2F&display=popup&ref=plugin&src=share_button" target="_blank"><button class="btn btn-facebook">Facebook</button></a>'+
+                '<a class="discard-card-style" href="https://twitter.com/intent/tweet?text='+model.user.postcode+'" target="_blank"><button class="btn btn-twitter">Twitter</button></a>'
+            }
+          ],
+          [
+            {
+              header: "You and your matched party",
+              content: '<i class="fa fa-check" aria-hidden="true"></i> Both you and the Conservatives want Brexit'
+            },
+            {
+              header: "You and your area",
+              content: '<i class="fa fa-check" aria-hidden="true"></i> This is a Conservative seat<br /><i class="fa fa-check" aria-hidden="true"></i> This is a SAFE seat with a majority of 9,671 (26.7% of the vote)'
+            }
+          ]
+        ]);
+        resolve();
+      }
+    )
+  })
 }
 
 hyperdom.append(document.body, new App());
