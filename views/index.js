@@ -600,9 +600,6 @@ class CardContent {
           h('h2', this.data.name),
           h('div.body-content',
             h('form.postcode-form',
-              // igor: function(onclick) is misleading, because it passes the *event*, so function(e) is better
-              // igor: also, it is good to wrap inputs and action buttons in the form, because otherwise "submit-on-enter" just won't work
-              // igor: make sure to stop the propagation and return false to stop the default behaviour of a form
               {
                 'class': { 'hide': model.user.isWaiting },
                 'onsubmit': function(e) {
