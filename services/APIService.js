@@ -22,6 +22,31 @@ APIService.prototype.getResults = function(postcode, userData) {
   })
 }
 
+APIService.prototype.getPostcodeOptions = function(postcode) {
+  var data = { seats: []};
+
+  return delay(500).then(function(){
+    return getContenders(postcode)
+    .then(function(results) {
+      console.log(results)
+      data.seats.push(results);
+      if (data.seats[0].parties.length > 1) {
+        data.text = {
+          heading: "Looks like your vote is worth a lot!",
+          subheading: "You're in a contested seat, so more than one party is in with a chance"
+        }
+      } else {
+        data.text = {
+          heading: "Looks like there's not much choice!",
+          subheading: "You're in a safe seat, so it's unlikely the sitting MP will be booted out."
+        }
+      }
+      console.log(data);
+      return data;
+    });
+  })
+}
+
 APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   var data = { seats: []};
 
@@ -32,12 +57,12 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       return getContenders(postcode2)
     }).then(function(results) {
       data.seats.push(results);
-      if (data.seats[0].length > 1 && data.seats[1].length > 1) {
+      if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
         data.text = {
-          heading: "Looks like you're spoilt for your choice",
+          heading: "Looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
-      } else if (data.seats[0].length == 1 && data.seats[1].length == 1) {
+      } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
         data.text = {
           heading: "Looks like there's not much choice!",
           subheading: "Both are safe seats."

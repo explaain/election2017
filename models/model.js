@@ -13,6 +13,7 @@ module.exports = {
     },
     results: [],
     resultsCompare: [],
+    resultsOptions: [],
     quizFlow: [],
     isWaiting: false
   },
@@ -26,7 +27,7 @@ module.exports = {
         "brexit",
         "decide",
         "parties",
-        "postcode-compare"
+        "vote-worth"
       ]
     },
     brexit: {
@@ -94,7 +95,7 @@ module.exports = {
       label: "How much does my vote count?",
       color: "#00a2e5",
       goto: {
-        type: 'dashboard',
+        type: 'step',
         name: 'vote-worth'
       }
     },
@@ -374,6 +375,9 @@ module.exports = {
   steps: {
     postcode: {
       label: "Where are you voting from?"
+    },
+    "vote-worth": {
+
     },
     "postcode-compare": {
 

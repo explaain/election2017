@@ -151,7 +151,7 @@ class Dashboard {
       }
       const taskProps = {
         "class":
-          "task abcdef"+
+          "task"+
           (conditionsMet?" conditionsMet":"")+
           (task.subtype?" "+task.subtype:"")
         ,
@@ -215,6 +215,15 @@ class Step {
         data.sliders.push([{
           type: 'postcode',
           name: 'Please enter your postcode:',
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+        }])
+        break;
+
+      case 'vote-worth':
+        model.landedOnPostcode = 1; // todo: temporary, refactor
+        data.sliders.push([{
+          type: 'postcode',
+          name: 'Want to see how much your vote is worth?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
@@ -405,6 +414,102 @@ class CardContent {
         )
         break;
 
+
+      case 'vote-worth':
+        var data = this.data;
+        return h('.content',
+          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.name),
+          h('div.body-content',
+            h('form.postcode-form',
+              {
+                'class': { 'hide': model.user.isWaiting },
+                'onsubmit': function(e) {
+                  e.stopPropagation();
+                  model.user.isWaiting = true;
+                  api.getPostcodeOptions(model.user.postcode).then(function(results){
+                    model.user.isWaiting = false;
+                    model.user.resultsOptions.push(results);
+                    routes.step({
+                      name: 'vote-worth',
+                      type: 'step',
+                      next: data.nextStep,
+                      attempt: model.user.resultsOptions.length
+                    }).replace();
+                  });
+                  return false;
+                }
+              },
+              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
+              // h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
+              h('button.btn.btn-success', {type: "submit"}, "Compare")
+            ),
+            (model.user.resultsOptions.length?
+              h("div.seats",{'class': { 'hide': model.user.isWaiting }},
+                [
+                  h("div.bold",model.user.resultsOptions[model.user.resultsOptions.length-1].text.heading),
+                  h("div",model.user.resultsOptions[model.user.resultsOptions.length-1].text.subheading)
+                ].concat(model.user.resultsOptions[model.user.resultsOptions.length-1].seats.map(function(seat){
+                  return h("div.seat.column50",
+                    h("div.location.small",seat.location),
+                    h("div.versus.bold.line1em",{style: {border: "solid 1px " /*+ seat.color*/}},seat.parties.map(function(elem){return elem.name;}).join(" vs "))
+                  )
+                })).concat([
+                  /*h("p.small.line1em",
+                    h(".small","Not convinced it's worth it? 😱"),
+                    h("a.discard-card-style.small",{
+                      onclick: function(e){
+                        // do something
+                      }
+                    },"Click here for 5 reason it is >")
+                  )*/
+                  (new ShareButtons())
+                ])
+              )
+              :
+              undefined
+            ),
+            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
+            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.description)
+          ),
+          h('div.footer',
+            (
+              !model.user.resultsOptions.length?
+              [
+                h("div.bold","or go straight to register"),
+                h("p",
+                  h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
+                    h("button.btn.btn-primary","Register >")
+                  )
+                ),
+                h("p.small", "This link will take you to the official gov.uk website")
+              ]
+              :
+              [
+                h(".column50",
+                  h("p",
+                    routes.root().a({"class":"discard-card-style"},
+                      h("button.btn.btn-success","Learn more")
+                    )
+                  ),
+                  h("p.small",
+                    h("br"),
+                    h("br")
+                  )
+                ),
+                h(".column50",
+                  h("div.big.bold","Go and register!"),
+                  h("p",
+                    h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
+                      h("button.btn.btn-primary","Register >")
+                    )
+                  ),
+                  h("p.small", "This link will take you to the official gov.uk website")
+                )
+              ]
+            )
+          )
+        )
+        break;
 
       case 'postcode-compare':
         var data = this.data;
