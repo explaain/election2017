@@ -22,28 +22,62 @@ APIService.prototype.getResults = function(postcode, userData) {
   })
 }
 
-APIService.prototype.studentCompare = function(postcode1, postcode2) {
-  var data = {};
+APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
+  var data = { seats: []};
 
   return delay(500).then(function(){
-    return loadPostcodeData(postcode1)
+    return getContenders(postcode1)
     .then(function(results) {
-      data = results;
-      var constituency = results.user.constituency
-      data.user = userData || {};
-      data.user.constituency = constituency;
-      data = {
-        seats: [
-          {
-            location: constituency.name,
-            // parties: results.results["my-constituency"]["ge2015"].
-          }
-        ]
+      data.seats.push(results);
+      return getContenders(postcode2)
+    }).then(function(results) {
+      data.seats.push(results);
+      if (data.seats[0].length > 1 && data.seats[1].length > 1) {
+        data.text = {
+          heading: "Looks like you're spoilt for your choice",
+          subheading: "Both are contested seats"
+        }
+      } else if (data.seats[0].length == 1 && data.seats[1].length == 1) {
+        data.text = {
+          heading: "Looks like there's not much choice!",
+          subheading: "Both are safe seats."
+        }
+      } else {
+        data.text = {
+          heading: "Looks like your vote is worth more in one place than the other!",
+          subheading: "Only one of your constituencies is a contested seat."
+        }
       }
+      console.log(data)
       return data;
     })
   })
 }
+
+getContenders = function(postcode) {
+  var user = {};
+  return loadPostcodeData(postcode)
+  .then(function(results) {
+    data = results;
+    user = {constituency: results.user.constituency};
+    return getPartyChances(data);
+  }).then(function(results) {
+    var threshold = 0.2;
+    var partyKeys = Object.keys(results);
+    var topPartyKeys = partyKeys.filter(function(partyKey) {
+      return results[partyKey].chance > threshold;
+    });
+    var topParties = allParties.filter(function(party) {
+      return topPartyKeys.indexOf(party.key) > -1;
+    });
+
+    return {
+      location: user.constituency.name,
+      parties: topParties
+    };
+  });
+}
+
 
 APIService.prototype.loadPostcodeData = function(postcode) {
 
@@ -78,7 +112,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
-  var threshold = 0.5;
+  var threshold = 0.7;
   var partyMatches = getPartyMatches(data);
   console.log('Party Matches:', partyMatches);
   var partyChances = getPartyChances(data);
@@ -329,7 +363,7 @@ function objectAsArray(obj) {
 }
 
 var getResults = APIService.prototype.getResults;
-var studentCompare = APIService.prototype.studentCompare;
+var comparePostcodes = APIService.prototype.comparePostcodes;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
 var getAgreements = APIService.prototype.getAgreements;

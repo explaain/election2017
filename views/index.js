@@ -417,7 +417,9 @@ class CardContent {
                 'onsubmit': function(e) {
                   e.stopPropagation();
                   model.user.isWaiting = true;
-                  getResultsCompare().then(function(){
+                  api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
+                    model.user.isWaiting = false;
+                    model.user.resultsCompare.push(results);
                     routes.step({
                       name: 'postcode-compare',
                       type: 'step',
@@ -435,12 +437,12 @@ class CardContent {
             (model.user.resultsCompare.length?
               h("div.seats",{'class': { 'hide': model.user.isWaiting }},
                 [
-                  h("div.bold","Looks like you're spoilt for your choice"),
-                  h("div","Both are contested seats")
+                  h("div.bold",model.user.resultsCompare[model.user.resultsCompare.length-1].text.heading),
+                  h("div",model.user.resultsCompare[model.user.resultsCompare.length-1].text.subheading)
                 ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
                   return h("div.seat.column50",
                     h("div.location.small",seat.location),
-                    h("div.versus.bold.line1em",{style: {border: "solid 1px " + seat.color}},seat.parties.join(" vs "))
+                    h("div.versus.bold.line1em",{style: {border: "solid 1px " /*+ seat.color*/}},seat.parties.map(function(elem){return elem.name;}).join(" vs "))
                   )
                 })).concat([
                   /*h("p.small.line1em",
@@ -652,7 +654,7 @@ class ShareButtons {
       h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
         h("button.btn.btn-facebook","Facebook")
       ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
+      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote" + (model.user.constituency ? " in %23" + model.user.constituency.name.replace(/\s/g, '') : "") + ". How are you using your vote? ge2017.com"},
         h("button.btn.btn-twitter","Twitter")
       )
     );

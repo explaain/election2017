@@ -411,6 +411,7 @@ section.questions a.task:hover {
 
 .seat .versus{
   padding: 20px 10px;
+  /*min-height: 74px;*/
 }
 
 /* igor: 50% width columns in cards */
