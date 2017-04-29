@@ -5457,21 +5457,12 @@ class CardContent {
               {
                 'class': { 'hide': model.user.isWaiting },
                 'onsubmit': function(e) {
-                  if (results.error) {
-                    console.log("Sorry, we didn't recognise that postcode!")
-                    routes.step({
-                      name: 'postcode',
-                      type: 'step',
-                      error: 'bad-postcode',
-                    }).replace();
-                  } else {
-                    e.stopPropagation();
-                    model.user.isWaiting = true;
-                    getResults().then(function(){
-                      routes.step({ name: data.nextStep, type: data.type }).push();
-                    });
-                    return false;
-                  }
+                  e.stopPropagation();
+                  model.user.isWaiting = true;
+                  getResults().then(function(){
+                    routes.step({ name: data.nextStep, type: data.type }).push();
+                  });
+                  return false;
                 }
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
