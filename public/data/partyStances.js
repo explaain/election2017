@@ -171,7 +171,7 @@ var partyStances = {
 		    description: "NHS",
 				debates: {
 			    "nhs-1": {
-				    question: "The NHS should be owned and ran exclusively by the UK government. [Learn more](http://api.explaain.com/Detail/59032798e04b710011c7af5d)",
+				    question: "The NHS should be owned and run exclusively by the UK government. [Learn more](http://api.explaain.com/Detail/5904afd71c882300111f9d75)",
 				    description: "whether the NHS should be completely run by the government or not.",
 						parties: {
 					    "conservative": {
@@ -198,7 +198,7 @@ var partyStances = {
 						}
 					},
 			    "nhs-2": {
-				    question: "Funding the NHS should be a priority over cutting the debt the UK has. [Learn more](http://api.explaain.com/Detail/59032798e04b710011c7af5d)",
+				    question: "The UK should spend more on funding the NHS rather than paying off its debt. [Learn more](http://api.explaain.com/Detail/5904b0f01c882300111f9d77)",
 				    description: "how the UK prioritises it's expenditure on healthcare.",
 						parties: {
 					    "conservative": {
