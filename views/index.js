@@ -19,10 +19,8 @@ class App {
     this.header = new Header();
 
     var issueKeys = Object.keys(partyStances.opinions.issues);
-    console.log(issueKeys)
     issueKeys.forEach(function(issueKey, i) {
       var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
-      console.log(debateKeys)
       debateKeys.forEach(function(debateKey, j) {
         model.questions[debateKey] = {
           question: partyStances.opinions.issues[issueKey].debates[debateKey].question,
@@ -48,26 +46,28 @@ class App {
 
   render() {
 
-    return h('div',
-      h('div.top-strip'),
-      this.header,
+    return h('div.body', { "style": {"background": model.background} },
+      h('div.main',
+        h('div.top-strip'),
+        this.header,
 
-      routes.root(function () {
-        var dashboard = new Dashboard({dashboard: 'home'});
-        return h("div", dashboard)
-      }),
+        routes.root(function () {
+          var dashboard = new Dashboard({dashboard: 'home'});
+          return h("div", dashboard)
+        }),
 
-      routes.dashboard(function (params) {
-        var dashboard = new Dashboard({dashboard: params.name});
-        return h("div", dashboard)
-      }),
+        routes.dashboard(function (params) {
+          var dashboard = new Dashboard({dashboard: params.name});
+          return h("div", dashboard)
+        }),
 
-      routes.step(function (params) {
-        var step = new Step(params);
-        return h('div',
-          step
-        );
-      })
+        routes.step(function (params) {
+          var step = new Step(params);
+          return h('div',
+            step
+          );
+        })
+      )
     )
   }
 }
@@ -552,6 +552,13 @@ class CardContent {
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: false
+          }).on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+            model.background = allParties.filter(function(party) {
+              console.log(party.key);
+              console.log(partyStories[nextSlide].party);
+              return party.key == partyStories[nextSlide].party;
+            })[0].color;
+            console.log(model.background);
           });
         },100)
         return h('div.content.text-left',
