@@ -5,8 +5,6 @@ module.exports = {
   landedOnPostcode: 0,
   landedOnResult: 0,
 
-  background: 'url("/img/background.jpg")',
-
   user: {
     postcode: '',
     postcode_uni: '',

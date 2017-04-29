@@ -7,13 +7,21 @@ body > div.body {
   text-align: center;
   font-size:16px;
   padding-top:10px;
-  /*background: url('/img/background.jpg');*/
-  background-size: cover !important;
-  -webkit-background-size: cover !important;
-  -moz-background-size: cover !important;
-  -o-background-size: cover !important;
-  background-position: bottom left !important;
-  background-attachment: fixed !important;
+  background-color: none;
+  background-image: url('/img/background.jpg');
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-position: bottom left;
+  background-attachment: fixed;
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
+}
+
+body > div.body.backColor {
+  background-color: #6296ff;
+  background-image: none;
 }
 
 body > div.body > div.main {
@@ -42,8 +50,11 @@ header i.menu {
   font-size: 2em;
   color: #999;
 }
+div.body.backColor header i.menu {
+  color: #ddd;
+}
 header i.menu:hover {
-  color: #aaa;
+  opacity: 0.7;
 }
 
 i.fa-check {

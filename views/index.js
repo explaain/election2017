@@ -46,7 +46,7 @@ class App {
 
   render() {
 
-    return h('div.body', { "style": {"background": model.background} },
+    return h('div.body',
       h('div.main',
         h('div.top-strip'),
         this.header,
@@ -123,6 +123,10 @@ class Dashboard {
   constructor(params) {
     this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
   }
+
+  onload() {
+    $('div.body').removeClass('backColor');
+   }
 
   render() {
 
@@ -302,6 +306,14 @@ class Step {
     }
 
 
+  }
+
+  onload() {
+    if (this.step.label == 'Party stories') {
+      $('div.body').addClass('backColor');
+    } else {
+      $('div.body').removeClass('backColor');
+    }
   }
 
   render() {
@@ -544,7 +556,7 @@ class CardContent {
         })
         $(".slick-container").addClass("hide")
         window.setTimeout(function(){
-          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+          var slickContainer = $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
             dots: false,
             infinite: false,
             adaptiveHeight: true,
@@ -552,13 +564,11 @@ class CardContent {
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: false
-          }).on('beforeChange', function(event, slick, currentSlide, nextSlide) {
-            model.background = allParties.filter(function(party) {
-              console.log(party.key);
-              console.log(partyStories[nextSlide].party);
+          });
+          slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+            $('div.body').addClass('backColor').css('background-color', allParties.filter(function(party) {
               return party.key == partyStories[nextSlide].party;
-            })[0].color;
-            console.log(model.background);
+            })[0].colorLight);
           });
         },100)
         return h('div.content.text-left',
