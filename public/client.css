@@ -33,6 +33,11 @@ a {
   cursor: pointer;
 }
 
+.error {
+  color: red;
+  font-weight: bold;
+}
+
 header {
   text-align: left;
   padding: 10px;

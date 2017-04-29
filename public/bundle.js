@@ -4600,6 +4600,9 @@ APIService.prototype.getResults = function(postcode, userData) {
   return delay(500).then(function(){
     return loadPostcodeData(postcode)
     .then(function(results) {
+      if (results.error) {
+        return results;
+      }
       data = results;
       var constituency = results.user.constituency
       data.user = userData || {};
@@ -4617,21 +4620,25 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
   return delay(500).then(function(){
     return getContenders(postcode)
     .then(function(results) {
-      console.log(results)
-      data.seats.push(results);
-      if (data.seats[0].parties.length > 1) {
-        data.text = {
-          heading: "Looks like your vote is worth a lot!",
-          subheading: "You're in a contested seat, so more than one party is in with a chance"
-        }
+      if (results.error) {
+        return results;
       } else {
-        data.text = {
-          heading: "Looks like there's not much choice!",
-          subheading: "You're in a safe seat, so it's unlikely the sitting MP will be booted out."
+        console.log(results)
+        data.seats.push(results);
+        if (data.seats[0].parties.length > 1) {
+          data.text = {
+            heading: "Looks like your vote is worth a lot!",
+            subheading: "You're in a contested seat, so more than one party is in with a chance"
+          }
+        } else {
+          data.text = {
+            heading: "Looks like there's not much choice!",
+            subheading: "You're in a safe seat, so it's unlikely the sitting MP will be booted out."
+          }
         }
+        console.log(data);
+        return data;
       }
-      console.log(data);
-      return data;
     });
   })
 }
@@ -4642,9 +4649,15 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   return delay(500).then(function(){
     return getContenders(postcode1)
     .then(function(results) {
+      if (results.error) {
+        return results;
+      }
       data.seats.push(results);
       return getContenders(postcode2)
     }).then(function(results) {
+      if (results.error) {
+        return results;
+      }
       data.seats.push(results);
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
         data.text = {
@@ -4672,23 +4685,31 @@ getContenders = function(postcode) {
   var user = {};
   return loadPostcodeData(postcode)
   .then(function(results) {
-    data = results;
-    user = {constituency: results.user.constituency};
-    return getPartyChances(data);
+    if (results.error) {
+      return results;
+    } else {
+      data = results;
+      user = {constituency: results.user.constituency};
+      return getPartyChances(data);
+    }
   }).then(function(results) {
-    var threshold = 0.2;
-    var partyKeys = Object.keys(results);
-    var topPartyKeys = partyKeys.filter(function(partyKey) {
-      return results[partyKey].chance > threshold;
-    });
-    var topParties = allParties.filter(function(party) {
-      return topPartyKeys.indexOf(party.key) > -1;
-    });
+    if (results.error) {
+      return results;
+    } else {
+      var threshold = 0.2;
+      var partyKeys = Object.keys(results);
+      var topPartyKeys = partyKeys.filter(function(partyKey) {
+        return results[partyKey].chance > threshold;
+      });
+      var topParties = allParties.filter(function(party) {
+        return topPartyKeys.indexOf(party.key) > -1;
+      });
 
-    return {
-      location: user.constituency.name,
-      parties: topParties
-    };
+      return {
+        location: user.constituency.name,
+        parties: topParties
+      };
+    }
   });
 }
 
@@ -4700,28 +4721,45 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 
   return loadConstituency(postcode)
   .then(function(results) {
-    totalResults.user = {
-      constituency : {
-        name: results.constituency.name,
-        id: results.constituency.codes.gss
-      }
-    };
-    postcodeResults = results;
-    var refAreaName = results.refArea.name;
-    refAreaName = refAreaName.substring(0, refAreaName.length - 5);
-    return loadEURefResults(refAreaName);
+    console.log(results)
+    if (results.error) {
+      return results;
+    } else {
+      totalResults.user = {
+        constituency : {
+          name: results.constituency.name,
+          id: results.constituency.codes.gss
+        }
+      };
+      postcodeResults = results;
+      var refAreaName = results.refArea.name;
+      refAreaName = refAreaName.substring(0, refAreaName.length - 5);
+      return loadEURefResults(refAreaName);
+    }
   })
   .then(function(results) {
-    createObjectProps(totalResults, ['results','my-constituency','euRef2016','choices','leave']);
-    totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
-    return loadGe2015Results(postcodeResults.constituency.codes.gss)
+    if (results.error) {
+      return results;
+    } else {
+      createObjectProps(totalResults, ['results','my-constituency','euRef2016','choices','leave']);
+      totalResults.results["my-constituency"]["euRef2016"].choices["leave"].share = results[0].pctLeave;
+      return loadGe2015Results(postcodeResults.constituency.codes.gss)
+    }
   })
   .then(function(results) {
-    totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
-    return loadPartyStances();
+    if (results.error) {
+      return results;
+    } else {
+      totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
+      return loadPartyStances();
+    }
   }).then(function(results) {
-    totalResults.parties = results;
-    return totalResults;
+    if (results.error) {
+      return results;
+    } else {
+      totalResults.parties = results;
+      return totalResults;
+    }
   })
 }
 
@@ -4920,6 +4958,7 @@ APIService.prototype.loadConstituency = function(postcode) {
   var url = 'https://mapit.mysociety.org/postcode/' + postcode + '?api_key=' + apiKey;
   return http.get(url)
   .then(function (res) {
+    console.log(res)
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
       return data.type == 'WMC'
     });
@@ -4927,6 +4966,8 @@ APIService.prototype.loadConstituency = function(postcode) {
       return (data.type == 'OLF' || data.type == 'UTA')
     });
     return {constituency: constituency[0], refArea: refArea[0], all: res.body.areas}
+  }, function (error) {
+    return {error: true};
   })
 };
 
@@ -5218,6 +5259,7 @@ class Question {
 class Step {
   constructor(params) {
     this.step = model.steps[params.name];
+    this.error = params.error;
 
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
@@ -5345,6 +5387,7 @@ class Step {
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
     return h("section.step",
+      h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
         ["div.cards"].concat(this.headers).concat(this.sliders)
       )
@@ -5414,12 +5457,21 @@ class CardContent {
               {
                 'class': { 'hide': model.user.isWaiting },
                 'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  getResults().then(function(){
-                    routes.step({ name: data.nextStep, type: data.type }).push();
-                  });
-                  return false;
+                  if (results.error) {
+                    console.log("Sorry, we didn't recognise that postcode!")
+                    routes.step({
+                      name: 'postcode',
+                      type: 'step',
+                      error: 'bad-postcode',
+                    }).replace();
+                  } else {
+                    e.stopPropagation();
+                    model.user.isWaiting = true;
+                    getResults().then(function(){
+                      routes.step({ name: data.nextStep, type: data.type }).push();
+                    });
+                    return false;
+                  }
                 }
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
@@ -5445,13 +5497,23 @@ class CardContent {
                   model.user.isWaiting = true;
                   api.getPostcodeOptions(model.user.postcode).then(function(results){
                     model.user.isWaiting = false;
-                    model.user.resultsOptions.push(results);
-                    routes.step({
-                      name: 'vote-worth',
-                      type: 'step',
-                      next: data.nextStep,
-                      attempt: model.user.resultsOptions.length
-                    }).replace();
+                    console.log(results);
+                    if (results.error) {
+                      console.log("Sorry, we didn't recognise that postcode!")
+                      routes.step({
+                        name: 'vote-worth',
+                        type: 'step',
+                        error: 'bad-postcode',
+                      }).replace();
+                    } else {
+                      model.user.resultsOptions.push(results);
+                      routes.step({
+                        name: 'vote-worth',
+                        type: 'step',
+                        next: data.nextStep,
+                        attempt: model.user.resultsOptions.length
+                      }).replace();
+                    }
                   });
                   return false;
                 }
@@ -5540,14 +5602,23 @@ class CardContent {
                   e.stopPropagation();
                   model.user.isWaiting = true;
                   api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-                    model.user.isWaiting = false;
-                    model.user.resultsCompare.push(results);
-                    routes.step({
-                      name: 'postcode-compare',
-                      type: 'step',
-                      next: data.nextStep,
-                      attempt: model.user.resultsCompare.length
-                    }).replace();
+                    if (results.error) {
+                      console.log("Sorry, we didn't recognise that postcode!")
+                      routes.step({
+                        name: 'postcode-compare',
+                        type: 'step',
+                        error: 'bad-postcode',
+                      }).replace();
+                    } else {
+                      model.user.isWaiting = false;
+                      model.user.resultsCompare.push(results);
+                      routes.step({
+                        name: 'postcode-compare',
+                        type: 'step',
+                        next: data.nextStep,
+                        attempt: model.user.resultsCompare.length
+                      }).replace();
+                    }
                   });
                   return false;
                 }

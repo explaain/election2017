@@ -201,6 +201,7 @@ class Question {
 class Step {
   constructor(params) {
     this.step = model.steps[params.name];
+    this.error = params.error;
 
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
@@ -328,6 +329,7 @@ class Step {
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
     return h("section.step",
+      h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
         ["div.cards"].concat(this.headers).concat(this.sliders)
       )
@@ -397,12 +399,21 @@ class CardContent {
               {
                 'class': { 'hide': model.user.isWaiting },
                 'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  getResults().then(function(){
-                    routes.step({ name: data.nextStep, type: data.type }).push();
-                  });
-                  return false;
+                  if (results.error) {
+                    console.log("Sorry, we didn't recognise that postcode!")
+                    routes.step({
+                      name: 'postcode',
+                      type: 'step',
+                      error: 'bad-postcode',
+                    }).replace();
+                  } else {
+                    e.stopPropagation();
+                    model.user.isWaiting = true;
+                    getResults().then(function(){
+                      routes.step({ name: data.nextStep, type: data.type }).push();
+                    });
+                    return false;
+                  }
                 }
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
@@ -428,13 +439,23 @@ class CardContent {
                   model.user.isWaiting = true;
                   api.getPostcodeOptions(model.user.postcode).then(function(results){
                     model.user.isWaiting = false;
-                    model.user.resultsOptions.push(results);
-                    routes.step({
-                      name: 'vote-worth',
-                      type: 'step',
-                      next: data.nextStep,
-                      attempt: model.user.resultsOptions.length
-                    }).replace();
+                    console.log(results);
+                    if (results.error) {
+                      console.log("Sorry, we didn't recognise that postcode!")
+                      routes.step({
+                        name: 'vote-worth',
+                        type: 'step',
+                        error: 'bad-postcode',
+                      }).replace();
+                    } else {
+                      model.user.resultsOptions.push(results);
+                      routes.step({
+                        name: 'vote-worth',
+                        type: 'step',
+                        next: data.nextStep,
+                        attempt: model.user.resultsOptions.length
+                      }).replace();
+                    }
                   });
                   return false;
                 }
@@ -523,14 +544,23 @@ class CardContent {
                   e.stopPropagation();
                   model.user.isWaiting = true;
                   api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-                    model.user.isWaiting = false;
-                    model.user.resultsCompare.push(results);
-                    routes.step({
-                      name: 'postcode-compare',
-                      type: 'step',
-                      next: data.nextStep,
-                      attempt: model.user.resultsCompare.length
-                    }).replace();
+                    if (results.error) {
+                      console.log("Sorry, we didn't recognise that postcode!")
+                      routes.step({
+                        name: 'postcode-compare',
+                        type: 'step',
+                        error: 'bad-postcode',
+                      }).replace();
+                    } else {
+                      model.user.isWaiting = false;
+                      model.user.resultsCompare.push(results);
+                      routes.step({
+                        name: 'postcode-compare',
+                        type: 'step',
+                        next: data.nextStep,
+                        attempt: model.user.resultsCompare.length
+                      }).replace();
+                    }
                   });
                   return false;
                 }
