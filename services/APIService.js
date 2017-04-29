@@ -149,6 +149,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
+    console.log(results);
     if (results.error) {
       return results;
     } else {
@@ -383,10 +384,12 @@ APIService.prototype.loadConstituency = function(postcode) {
 };
 
 APIService.prototype.loadEURefResults = function(areaName) {
-  var result = leavePercentages.filter(function (res) {
-    return res.area == areaName;
+  var results = leavePercentages.filter(function (res) {
+    console.log(res);
+    console.log(areaName);
+    return res.area == areaName || res.area.indexOf(areaName) > -1 || res.area.indexOf(areaName.split(" ")[0]);
   });
-  return result;
+  return results;
 }
 
 APIService.prototype.loadGe2015Results = function(areaKey) {
