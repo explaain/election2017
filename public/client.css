@@ -6,6 +6,9 @@ body {
   padding-top:10px;
   background: url('/img/background.jpg');
   background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-position: bottom left;
   background-attachment: fixed;
 }
@@ -23,6 +26,9 @@ header img.ge2017-logo {
   height: 60px;
   margin: 0 auto;
   display: block;
+}
+header img.ge2017-logo:hover {
+  opacity: 0.7;
 }
 header i.menu {
   font-size: 2em;
