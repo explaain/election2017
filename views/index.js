@@ -18,7 +18,6 @@ class App {
   constructor(data) {
     this.header = new Header();
 
-    console.log(partyStances.opinions);
     var issueKeys = Object.keys(partyStances.opinions.issues);
     console.log(issueKeys)
     issueKeys.forEach(function(issueKey, i) {
@@ -228,8 +227,22 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
+          console.log('cards');
+          console.log(cards);
           data.sliders.push(cards)
         })
+        break;
+
+      case 'story':
+        // var cards = [];
+        // partyStories.forEach(function(card) {
+        //   card.push({
+        //
+        //   });
+        // })
+        data.sliders.push(partyStories)
+        console.log('partyStories');
+        console.log(partyStories);
         break;
 
       case 'question':
@@ -277,12 +290,12 @@ class Step {
     })
 
     this.headers = [];
-    if(this.step.label){
+    if(this.step&&this.step.label){
       this.headers.push(
         h("h1",this.step.label)
       );
     }
-    if(this.step.sublabel){
+    if(this.step&&this.step.sublabel){
       this.headers.push(
         h("p",this.step.sublabel)
       );
@@ -335,7 +348,7 @@ class Card {
       h('div.card-visible',
         h('div.close'),
         this.cardContent,
-        h('a.card-icon.external', {'href': 'http://explaain.com'},
+        h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
           h('img', {'src': 'http://app.explaain.com/card-logo.png'})
         )
       )
@@ -349,8 +362,6 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
-    console.log('data');
-    console.log(data);
   }
 
   render() {
@@ -524,14 +535,56 @@ class CardContent {
         )
         break;
 
+      case 'story':
+        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
+        // igor: todo: this is very ugly, so needs to be refactored asap
+        $("h1").addClass("hide");
+        window.setTimeout(function(){
+          $("h1").removeClass("hide");
+        })
+        $(".slick-container").addClass("hide")
+        window.setTimeout(function(){
+          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+            dots: false,
+            infinite: false,
+            adaptiveHeight: true,
+            centerMode: true,
+            centerPadding: '15px',
+            slidesToShow: 1,
+            arrows: false
+          });
+        },100)
+        return h('div.content.text-left',
+          h('img', {'src': this.data.image, 'class': 'party-logo'}),
+          h('h2', this.data.header),
+          h('div.body-content',
+            h.rawHtml('p', markdownToHtml(this.data.content))
+          ),
+          (this.data.footer?
+            h('div.footer',
+              this.data.footer.map(function(elem){
+                switch (elem) {
+                  case "ShareButtons":
+                    return (new ShareButtons())
+                    break;
+                  case "BackToDashboard":
+                    return (new BackToDashboard())
+                    break;
+                  default:
+                    return undefined;
+                }
+              })
+            )
+            :
+            undefined
+          )
+        )
+        break;
+
       case 'question':
         const tasksDom = [];
         this.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
-          console.log('self.data');
-          console.log(self.data);
-          console.log(model.user.opinions.issues);
-          console.log(task);
           task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
           tasksDom.push(
             routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
@@ -603,8 +656,6 @@ class BackToDashboard {
 updateData = function(dataUpdates) {
   dataUpdates.forEach(function(update) {
     updateModel(update.data, update.value, update.action);
-    console.log('model.user');
-    console.log(model.user);
   });
 }
 
@@ -651,7 +702,6 @@ function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
-        console.log(results);
         updateObject(model.user, results.data.user);
         model.user.isWaiting = false;
         console.log(model.user)
@@ -671,12 +721,12 @@ function getResults(){
           extraCards = [];
         } else {
           results.parties[0].matches.plus.forEach(function(match) {
-            yourParty += '<br><i class="fa fa-check" aria-hidden="true"></i> '
-            + match.description;
+            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + match.description + '<br>';
           })
           results.parties[0].chances.plus.forEach(function(chance) {
-            yourArea += '<br><i class="fa fa-check" aria-hidden="true"></i> '
-            + chance.description;
+            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + chance.description + '<br>';
           })
           extraCards = [
             {

@@ -15,10 +15,8 @@ APIService.prototype.getResults = function(postcode, userData) {
       var constituency = results.user.constituency
       data.user = userData || {};
       data.user.constituency = constituency;
-      console.log(results);
       return resultAlgorithm(data);
     }).then(function(results) {
-      console.log(results)
       return results;
     })
   })
@@ -53,7 +51,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     return loadPartyStances();
   }).then(function(results) {
     totalResults.parties = results;
-    console.log(totalResults)
     return totalResults;
   })
 }
@@ -61,10 +58,8 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 APIService.prototype.resultAlgorithm = function(data) {
   var threshold = 0.5;
   var partyMatches = getPartyMatches(data);
-  console.log('Party Matches:', JSON.stringify(partyMatches));
   console.log('Party Matches:', partyMatches);
   var partyChances = getPartyChances(data);
-  console.log('Party Chances:', JSON.stringify(partyChances));
   console.log('Party Chances:', partyChances);
   var partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
@@ -142,36 +137,22 @@ APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
   var agreements = getAgreements(data);
-  console.log(agreements);
   allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
-      console.log(1);
       var issueKeys = Object.keys(agreements[partyKey]);
-      console.log(2);
       issueKeys.forEach(function(issueKey) {
         var debateKeys = Object.keys(agreements[partyKey][issueKey]);
-        console.log(3);
         debateKeys.forEach(function(debateKey) {
           partyMatchesByIssue[partyKey].push(agreements[partyKey][issueKey][debateKey])
-          console.log(4);
         });
       });
       partyMatches[partyKey] = { matches: partyMatchesByIssue[partyKey], match: 0 };
-      console.log(5);
       partyMatchesByIssue[partyKey].forEach(function(match) {
-        console.log(666);
-        console.log(match);
         partyMatches[partyKey].match += match.agreement*match.weight;
-        console.log(777);
-        console.log(partyMatches[partyKey].match)
       })
-      console.log('partyMatchesByIssue[partyKey]')
-      console.log(partyMatchesByIssue[partyKey])
       partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
-      console.log('partyMatches[partyKey].match')
-      console.log(partyMatches[partyKey].match)
     } catch(e) {
 
     }
@@ -196,9 +177,6 @@ APIService.prototype.getAgreements = function(data) {
           var partyKeys = Object.keys(allPartiesDebate.parties);
           partyKeys.forEach(function(partyKey) {
             createObjectProps(agreementMatrix, [partyKey, issueKey])
-            // console.log(debate.opinion);
-            // console.log(allPartiesDebate.parties[partyKey].opinion);
-            // console.log(1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion));
             agreementMatrix[partyKey][issueKey][debateKey] = {
               agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
               partyOpinion: allPartiesDebate.parties[partyKey].opinion,
@@ -227,7 +205,6 @@ APIService.prototype.getPartyChances = function(data) {
     var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
     return partyResult ? partyResult.rank == 1 : false;
   })[0];
-  console.log(currentParty);
   currentParty.name = allParties.filter(function(party) {
     return party.key == currentParty.key
   })[0].name;
@@ -236,8 +213,6 @@ APIService.prototype.getPartyChances = function(data) {
     partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
-      console.log('partyChances[partyKey]');
-      console.log(partyChances[partyKey]);
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
@@ -253,7 +228,6 @@ APIService.prototype.getPartyChances = function(data) {
       });
       if (currentParty.key != partyKey) {
         partyRank = data.results["my-constituency"]["ge2015"].parties[partyKey].rank;
-        console.log(partyKey);
         partyChances[partyKey].chances.push({
           description: party.name + " came #" + partyRank + " in the 2015 general election",
           chance: (partyRank <= 3)
@@ -262,8 +236,6 @@ APIService.prototype.getPartyChances = function(data) {
 
 
 
-console.log('partyChances[partyKey]')
-console.log(partyChances[partyKey])
     } catch (e) {
 
     }
@@ -457,7 +429,7 @@ function createObjectProps(globalObject, props) {
 }
 
 
-getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-1": { opinion: 1 } } } } } } );
+// getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-1": { opinion: 1 } } } } } } );
 // console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();

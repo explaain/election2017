@@ -86,8 +86,8 @@ module.exports = {
       label: "Learn about the parties",
       color: "#c042de",
       goto: {
-        type: 'dashboard',
-        name: 'parties'
+        type: 'step',
+        name: 'story'
       }
     },
     "vote-worth": {
@@ -376,6 +376,9 @@ module.exports = {
     },
     question: {
 
+    },
+    story: {
+      label: "Party stories"
     }
   },
 
@@ -4588,10 +4591,8 @@ APIService.prototype.getResults = function(postcode, userData) {
       var constituency = results.user.constituency
       data.user = userData || {};
       data.user.constituency = constituency;
-      console.log(results);
       return resultAlgorithm(data);
     }).then(function(results) {
-      console.log(results)
       return results;
     })
   })
@@ -4626,7 +4627,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     return loadPartyStances();
   }).then(function(results) {
     totalResults.parties = results;
-    console.log(totalResults)
     return totalResults;
   })
 }
@@ -4634,10 +4634,8 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 APIService.prototype.resultAlgorithm = function(data) {
   var threshold = 0.5;
   var partyMatches = getPartyMatches(data);
-  console.log('Party Matches:', JSON.stringify(partyMatches));
   console.log('Party Matches:', partyMatches);
   var partyChances = getPartyChances(data);
-  console.log('Party Chances:', JSON.stringify(partyChances));
   console.log('Party Chances:', partyChances);
   var partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
@@ -4715,36 +4713,22 @@ APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
   var agreements = getAgreements(data);
-  console.log(agreements);
   allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
-      console.log(1);
       var issueKeys = Object.keys(agreements[partyKey]);
-      console.log(2);
       issueKeys.forEach(function(issueKey) {
         var debateKeys = Object.keys(agreements[partyKey][issueKey]);
-        console.log(3);
         debateKeys.forEach(function(debateKey) {
           partyMatchesByIssue[partyKey].push(agreements[partyKey][issueKey][debateKey])
-          console.log(4);
         });
       });
       partyMatches[partyKey] = { matches: partyMatchesByIssue[partyKey], match: 0 };
-      console.log(5);
       partyMatchesByIssue[partyKey].forEach(function(match) {
-        console.log(666);
-        console.log(match);
         partyMatches[partyKey].match += match.agreement*match.weight;
-        console.log(777);
-        console.log(partyMatches[partyKey].match)
       })
-      console.log('partyMatchesByIssue[partyKey]')
-      console.log(partyMatchesByIssue[partyKey])
       partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
-      console.log('partyMatches[partyKey].match')
-      console.log(partyMatches[partyKey].match)
     } catch(e) {
 
     }
@@ -4769,9 +4753,6 @@ APIService.prototype.getAgreements = function(data) {
           var partyKeys = Object.keys(allPartiesDebate.parties);
           partyKeys.forEach(function(partyKey) {
             createObjectProps(agreementMatrix, [partyKey, issueKey])
-            // console.log(debate.opinion);
-            // console.log(allPartiesDebate.parties[partyKey].opinion);
-            // console.log(1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion));
             agreementMatrix[partyKey][issueKey][debateKey] = {
               agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
               partyOpinion: allPartiesDebate.parties[partyKey].opinion,
@@ -4800,7 +4781,6 @@ APIService.prototype.getPartyChances = function(data) {
     var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
     return partyResult ? partyResult.rank == 1 : false;
   })[0];
-  console.log(currentParty);
   currentParty.name = allParties.filter(function(party) {
     return party.key == currentParty.key
   })[0].name;
@@ -4809,8 +4789,6 @@ APIService.prototype.getPartyChances = function(data) {
     partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
-      console.log('partyChances[partyKey]');
-      console.log(partyChances[partyKey]);
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
@@ -4826,7 +4804,6 @@ APIService.prototype.getPartyChances = function(data) {
       });
       if (currentParty.key != partyKey) {
         partyRank = data.results["my-constituency"]["ge2015"].parties[partyKey].rank;
-        console.log(partyKey);
         partyChances[partyKey].chances.push({
           description: party.name + " came #" + partyRank + " in the 2015 general election",
           chance: (partyRank <= 3)
@@ -4835,8 +4812,6 @@ APIService.prototype.getPartyChances = function(data) {
 
 
 
-console.log('partyChances[partyKey]')
-console.log(partyChances[partyKey])
     } catch (e) {
 
     }
@@ -5030,7 +5005,7 @@ function createObjectProps(globalObject, props) {
 }
 
 
-getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-1": { opinion: 1 } } } } } } );
+// getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-1": { opinion: 1 } } } } } } );
 // console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();
@@ -5056,7 +5031,6 @@ class App {
   constructor(data) {
     this.header = new Header();
 
-    console.log(partyStances.opinions);
     var issueKeys = Object.keys(partyStances.opinions.issues);
     console.log(issueKeys)
     issueKeys.forEach(function(issueKey, i) {
@@ -5266,8 +5240,22 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
+          console.log('cards');
+          console.log(cards);
           data.sliders.push(cards)
         })
+        break;
+
+      case 'story':
+        // var cards = [];
+        // partyStories.forEach(function(card) {
+        //   card.push({
+        //
+        //   });
+        // })
+        data.sliders.push(partyStories)
+        console.log('partyStories');
+        console.log(partyStories);
         break;
 
       case 'question':
@@ -5315,12 +5303,12 @@ class Step {
     })
 
     this.headers = [];
-    if(this.step.label){
+    if(this.step&&this.step.label){
       this.headers.push(
         h("h1",this.step.label)
       );
     }
-    if(this.step.sublabel){
+    if(this.step&&this.step.sublabel){
       this.headers.push(
         h("p",this.step.sublabel)
       );
@@ -5373,7 +5361,7 @@ class Card {
       h('div.card-visible',
         h('div.close'),
         this.cardContent,
-        h('a.card-icon.external', {'href': 'http://explaain.com'},
+        h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
           h('img', {'src': 'http://app.explaain.com/card-logo.png'})
         )
       )
@@ -5387,8 +5375,6 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
-    console.log('data');
-    console.log(data);
   }
 
   render() {
@@ -5562,14 +5548,56 @@ class CardContent {
         )
         break;
 
+      case 'story':
+        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
+        // igor: todo: this is very ugly, so needs to be refactored asap
+        $("h1").addClass("hide");
+        window.setTimeout(function(){
+          $("h1").removeClass("hide");
+        })
+        $(".slick-container").addClass("hide")
+        window.setTimeout(function(){
+          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+            dots: false,
+            infinite: false,
+            adaptiveHeight: true,
+            centerMode: true,
+            centerPadding: '15px',
+            slidesToShow: 1,
+            arrows: false
+          });
+        },100)
+        return h('div.content.text-left',
+          h('img', {'src': this.data.image, 'class': 'party-logo'}),
+          h('h2', this.data.header),
+          h('div.body-content',
+            h.rawHtml('p', markdownToHtml(this.data.content))
+          ),
+          (this.data.footer?
+            h('div.footer',
+              this.data.footer.map(function(elem){
+                switch (elem) {
+                  case "ShareButtons":
+                    return (new ShareButtons())
+                    break;
+                  case "BackToDashboard":
+                    return (new BackToDashboard())
+                    break;
+                  default:
+                    return undefined;
+                }
+              })
+            )
+            :
+            undefined
+          )
+        )
+        break;
+
       case 'question':
         const tasksDom = [];
         this.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
-          console.log('self.data');
-          console.log(self.data);
-          console.log(model.user.opinions.issues);
-          console.log(task);
           task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
           tasksDom.push(
             routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
@@ -5641,8 +5669,6 @@ class BackToDashboard {
 updateData = function(dataUpdates) {
   dataUpdates.forEach(function(update) {
     updateModel(update.data, update.value, update.action);
-    console.log('model.user');
-    console.log(model.user);
   });
 }
 
@@ -5689,7 +5715,6 @@ function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
-        console.log(results);
         updateObject(model.user, results.data.user);
         model.user.isWaiting = false;
         console.log(model.user)
@@ -5709,12 +5734,12 @@ function getResults(){
           extraCards = [];
         } else {
           results.parties[0].matches.plus.forEach(function(match) {
-            yourParty += '<br><i class="fa fa-check" aria-hidden="true"></i> '
-            + match.description;
+            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + match.description + '<br>';
           })
           results.parties[0].chances.plus.forEach(function(chance) {
-            yourArea += '<br><i class="fa fa-check" aria-hidden="true"></i> '
-            + chance.description;
+            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+            + chance.description + '<br>';
           })
           extraCards = [
             {

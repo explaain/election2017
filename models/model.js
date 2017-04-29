@@ -85,8 +85,8 @@ module.exports = {
       label: "Learn about the parties",
       color: "#c042de",
       goto: {
-        type: 'dashboard',
-        name: 'parties'
+        type: 'step',
+        name: 'story'
       }
     },
     "vote-worth": {
@@ -375,6 +375,9 @@ module.exports = {
     },
     question: {
 
+    },
+    story: {
+      label: "Party stories"
     }
   },
 
