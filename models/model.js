@@ -109,7 +109,7 @@ module.exports = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
           value: 1
         }
       ]
@@ -125,7 +125,7 @@ module.exports = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
           value: 0.6
         }
       ]
@@ -141,11 +141,11 @@ module.exports = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
           value: 0.8
         },
         {
-          data: 'user.opinions.issues.brexit.debates.mp-vote.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-2.opinion',
           value: 1
         }
       ]
@@ -161,7 +161,7 @@ module.exports = {
       },
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-level.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
           value: 0
         }
       ]
@@ -178,7 +178,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.quizFlow.1',
-          value: ["nhs1","nhs2"],
+          value: ["nhs-1","nhs-2","nhs-3"],
           // igor: see "toggle" usage here: we make this task to
           // behave like a checkbox
           action: "toggle"
@@ -196,7 +196,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.quizFlow.2',
-          value: ["immigration1","immigration2"],
+          value: ["immigration-1","immigration-2","immigration-3"],
           // igor: see "toggle" usage here: we make this task to
           // behave like a checkbox
           action: "toggle"
@@ -215,7 +215,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.quizFlow.3',
-          value: ["brexit1","brexit2"],
+          value: ["brexit-1","brexit-2","brexit-3"],
           // igor: see "toggle" usage here: we make this task to
           // behave like a checkbox
           action: "toggle"
@@ -234,7 +234,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.quizFlow.4',
-          value: ["education1","education2"],
+          value: ["education-1","education-2","education-3"],
           // igor: see "toggle" usage here: we make this task to
           // behave like a checkbox
           action: "toggle"
@@ -316,6 +316,30 @@ module.exports = {
       },
       dataUpdates: []
     },
+    "question-agree": {
+      label: "Agree",
+      goto: {
+        type: 'step',
+        name: 'question',
+        opinion: 1
+      }
+    },
+    "question-neutral": {
+      label: "Neutral",
+      goto: {
+        type: 'step',
+        name: 'question',
+        opinion: 0.5
+      }
+    },
+    "question-disagree": {
+      label: "Disagree",
+      goto: {
+        type: 'step',
+        name: 'question',
+        opinion: 0
+      }
+    },
     "question-$skip": {
       subtype: "link",
       label: "I don't care 🙈 >",
@@ -346,7 +370,8 @@ module.exports = {
 
     },
     result: {
-      label: "Here are your results"
+      label: "Here are your results",
+      sublabel: "Generated from over 68,520 possible combinations..."
     },
     question: {
 
@@ -355,21 +380,21 @@ module.exports = {
 
   // Questions
   questions: {
-    "nhs1": {
-      question: "Question 1",
-      tasks: [
-        "question-nhs1-1",
-        "question-nhs1-2",
-        "question-$skip"
-      ]
-    },
-    "nhs2": {
-      question: "Question 2",
-      tasks: [
-        "question-nhs2-1",
-        "question-nhs2-2",
-        "question-$skip"
-      ]
-    }
+    // "nhs1": {
+    //   question: "Question 1",
+    //   tasks: [
+    //     "question-nhs1-1",
+    //     "question-nhs1-2",
+    //     "question-$skip"
+    //   ]
+    // },
+    // "nhs2": {
+    //   question: "Question 2",
+    //   tasks: [
+    //     "question-nhs2-1",
+    //     "question-nhs2-2",
+    //     "question-$skip"
+    //   ]
+    // }
   }
 };

@@ -12,10 +12,39 @@ var routes = {
 router.start();
 
 const model = require('../models/model')
+Model = model;
 
 class App {
   constructor(data) {
     this.header = new Header();
+
+    console.log(partyStances.opinions);
+    var issueKeys = Object.keys(partyStances.opinions.issues);
+    console.log(issueKeys)
+    issueKeys.forEach(function(issueKey, i) {
+      var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
+      console.log(debateKeys)
+      debateKeys.forEach(function(debateKey, j) {
+        model.questions[debateKey] = {
+          question: partyStances.opinions.issues[issueKey].debates[debateKey].question,
+          issue: {
+            key: issueKey,
+            description: partyStances.opinions.issues[issueKey].description,
+            index: i
+          },
+          debate: {
+            key: debateKey,
+            description: partyStances.opinions.issues[issueKey].debates[debateKey].description,
+            index: j
+          },
+          tasks: [
+            "question-agree",
+            "question-neutral",
+            "question-disagree"
+          ]
+        }
+      })
+    })
   }
 
   render() {
@@ -48,6 +77,7 @@ class App {
 class Header {
   render() {
     return h("header",
+      h("img.ge2017-logo", {"src": "/img/logo.jpg"}),
       routes.root().a(
         h("i.fa.fa-th-large.menu")
       ),
@@ -118,7 +148,7 @@ class Dashboard {
       }
       const taskProps = {
         "class":
-          "task"+
+          "task abcdef"+
           (conditionsMet?" conditionsMet":"")+
           (task.subtype?" "+task.subtype:"")
         ,
@@ -223,10 +253,13 @@ class Step {
           finalStep = params.final;
         }
         data.sliders.push([{
-          name: question.question,
+          name: question.issue.description + " - Question " + (question.debate.index+1),
+          description: question.question,
           tasks: question.tasks,
           nextQuestion: nextQuestion,
-          final: finalStep
+          final: finalStep,
+          issueKey: question.issue.key,
+          debateKey: question.debate.key
         }])
         break;
 
@@ -249,6 +282,12 @@ class Step {
         h("h1",this.step.label)
       );
     }
+    if(this.step.sublabel){
+      this.headers.push(
+        h("p",this.step.sublabel)
+      );
+    }
+
 
   }
 
@@ -310,6 +349,8 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
+    console.log('data');
+    console.log(data);
   }
 
   render() {
@@ -317,7 +358,7 @@ class CardContent {
     switch (this.data.type) {
       case 'postcode':
         var data = this.data;
-        return h('content',
+        return h('.content',
           h('h2', this.data.name),
           h('div.body-content',
             h('form.postcode-form',
@@ -344,7 +385,7 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        return h('content',
+        return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
             h('form.postcode-form',
@@ -455,7 +496,7 @@ class CardContent {
             arrows: false
           });
         },100)
-        const content = this.data.content.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
+        const content = markdownToHtml(this.data.content);
         return h('div.content.text-left',
           h('img', {'src': this.data.image, 'class': 'party-logo'}),
           h('h2', this.data.header),
@@ -487,6 +528,11 @@ class CardContent {
         const tasksDom = [];
         this.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
+          console.log('self.data');
+          console.log(self.data);
+          console.log(model.user.opinions.issues);
+          console.log(task);
+          task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
           tasksDom.push(
             routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
               name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
@@ -494,21 +540,21 @@ class CardContent {
               nextQuestion: self.data.nextQuestion,
               final: self.data.final,
               next: self.data.nextStep?self.data.nextStep:task.goto.next
-            }).a( { "class": "task" + (task.subtype?" "+task.subtype:"")  },
+            }).a( { "class": "task" + (task.subtype?" "+task.subtype:"")},
               h('h5', task.label)
             )
           );
         });
-        return h('content',
+        return h('.content',
           h('h2', this.data.name),
           h('div.body-content',
-            h('p', this.data.description)
+            h.rawHtml('p', markdownToHtml(this.data.description))
           ),
           h('section.questions',tasksDom)
         )
 
       default:
-        return h('content',
+        return h('.content',
           h('h2', this.data.name),
           h('div.body-content',
             h('p', this.data.description)
@@ -518,7 +564,7 @@ class CardContent {
     if (this.data.type == 'postcode') {
 
     } else {
-      return h('content',
+      return h('.content',
         h('h2', this.data.name),
         h('div.body-content',
           h('p', this.data.description)
@@ -536,7 +582,7 @@ class ShareButtons {
       h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
         h("button.btn.btn-facebook","Facebook")
       ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my #GE2017 vote in #Eastbourne. How are you using your vote? ge2017.com"},
+      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
         h("button.btn.btn-twitter","Twitter")
       )
     );
@@ -605,7 +651,10 @@ function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
+        console.log(results);
+        updateObject(model.user, results.data.user);
         model.user.isWaiting = false;
+        console.log(model.user)
         // igor: We have to refactor results a bit to make them reusable in cards
         // igor: change this content to create cards based on the data you retrieve
         // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
@@ -622,11 +671,11 @@ function getResults(){
           extraCards = [];
         } else {
           results.parties[0].matches.plus.forEach(function(match) {
-            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+            yourParty += '<br><i class="fa fa-check" aria-hidden="true"></i> '
             + match.description;
           })
           results.parties[0].chances.plus.forEach(function(chance) {
-            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+            yourArea += '<br><i class="fa fa-check" aria-hidden="true"></i> '
             + chance.description;
           })
           extraCards = [
@@ -643,7 +692,7 @@ function getResults(){
         model.user.results.push([
           [
             {
-              image: results.parties[0] && results.parties[0].image || '/img/party-logos/party.jpg',
+              image: results.parties[0] && results.parties[0].image && ("/img/party-logos/" + results.parties[0].image) || '/img/party-logos/party.jpg',
               header: results.parties[0] && results.parties[0].name,
               content: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
               footer: [
@@ -682,5 +731,17 @@ function getResultsCompare(){
     },1000)
   })
 };
+
+var updateObject = function(obj, objUpdates) {
+  var objKeys = Object.keys(objUpdates);
+  objKeys.forEach(function(key) {
+    obj[key] = objUpdates[key];
+  })
+  return obj;
+}
+
+var markdownToHtml = function(text) {
+  return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
+}
 
 hyperdom.append(document.body, new App());

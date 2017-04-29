@@ -12,7 +12,10 @@ APIService.prototype.getResults = function(postcode, userData) {
     return loadPostcodeData(postcode)
     .then(function(results) {
       data = results;
-      data.user = userData;
+      var constituency = results.user.constituency
+      data.user = userData || {};
+      data.user.constituency = constituency;
+      console.log(results);
       return resultAlgorithm(data);
     }).then(function(results) {
       console.log(results)
@@ -29,6 +32,12 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 
   return loadConstituency(postcode)
   .then(function(results) {
+    totalResults.user = {
+      constituency : {
+        name: results.constituency.name,
+        id: results.constituency.codes.gss
+      }
+    };
     postcodeResults = results;
     var refAreaName = results.refArea.name;
     refAreaName = refAreaName.substring(0, refAreaName.length - 5);
@@ -44,21 +53,23 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     return loadPartyStances();
   }).then(function(results) {
     totalResults.parties = results;
+    console.log(totalResults)
     return totalResults;
   })
 }
 
 APIService.prototype.resultAlgorithm = function(data) {
-  console.log(data);
-  var threshold = 0.8;
+  var threshold = 0.5;
   var partyMatches = getPartyMatches(data);
+  console.log('Party Matches:', JSON.stringify(partyMatches));
   console.log('Party Matches:', partyMatches);
   var partyChances = getPartyChances(data);
+  console.log('Party Chances:', JSON.stringify(partyChances));
   console.log('Party Chances:', partyChances);
   var partyKeys = Object.keys(partyMatches);
   partyKeys.forEach(function(partyKey) {
     if (partyMatches[partyKey].match < threshold) {
-      delete partyMatches[partyKey].match;
+      delete partyMatches[partyKey];
     }
   })
   var partyScores = {};
@@ -131,25 +142,36 @@ APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
   var agreements = getAgreements(data);
-  console.log('agreements');
   console.log(agreements);
   allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
+      console.log(1);
       var issueKeys = Object.keys(agreements[partyKey]);
+      console.log(2);
       issueKeys.forEach(function(issueKey) {
         var debateKeys = Object.keys(agreements[partyKey][issueKey]);
+        console.log(3);
         debateKeys.forEach(function(debateKey) {
           partyMatchesByIssue[partyKey].push(agreements[partyKey][issueKey][debateKey])
+          console.log(4);
         });
       });
-      partyMatches[partyKey] = { matches: partyMatchesByIssue[partyKey] };
+      partyMatches[partyKey] = { matches: partyMatchesByIssue[partyKey], match: 0 };
+      console.log(5);
       partyMatchesByIssue[partyKey].forEach(function(match) {
-        partyMatches[partyKey].match = match.agreement*match.weight;
+        console.log(666);
+        console.log(match);
+        partyMatches[partyKey].match += match.agreement*match.weight;
+        console.log(777);
         console.log(partyMatches[partyKey].match)
       })
+      console.log('partyMatchesByIssue[partyKey]')
+      console.log(partyMatchesByIssue[partyKey])
       partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
+      console.log('partyMatches[partyKey].match')
+      console.log(partyMatches[partyKey].match)
     } catch(e) {
 
     }
@@ -203,10 +225,8 @@ APIService.prototype.getPartyChances = function(data) {
   var currentParty = {}
   currentParty = allParties.filter(function(party) {
     var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
-    console.log(partyResult);
     return partyResult ? partyResult.rank == 1 : false;
   })[0];
-  console.log('currentParty');
   console.log(currentParty);
   currentParty.name = allParties.filter(function(party) {
     return party.key == currentParty.key
@@ -216,7 +236,9 @@ APIService.prototype.getPartyChances = function(data) {
     partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
-      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-level"].parties[partyKey].opinion;
+      console.log('partyChances[partyKey]');
+      console.log(partyChances[partyKey]);
+      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
       var totalChance = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
@@ -231,9 +253,7 @@ APIService.prototype.getPartyChances = function(data) {
       });
       if (currentParty.key != partyKey) {
         partyRank = data.results["my-constituency"]["ge2015"].parties[partyKey].rank;
-        console.log('yo');
         console.log(partyKey);
-        console.log(partyRank);
         partyChances[partyKey].chances.push({
           description: party.name + " came #" + partyRank + " in the 2015 general election",
           chance: (partyRank <= 3)
@@ -282,7 +302,6 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
     var partyKey = party.party;
     result["ge2015"].parties[partyKey] = party;
   })
-  console.log(result);
   // var result = {
   //   "ge2015": {
   //     parties: {
@@ -438,7 +457,7 @@ function createObjectProps(globalObject, props) {
 }
 
 
-getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-level": { opinion: 1 } } } } } } );
+getResults('SW96HP', { opinions: { issues: { brexit: { debates: { "brexit-1": { opinion: 1 } } } } } } );
 // console.log(resultAlgorithm(dummyData));
 
 module.exports = new APIService();
