@@ -156,7 +156,7 @@ module.exports = {
           value: 0.8
         },
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-2.opinion',
+          data: 'user.opinions.issues.brexit.debates.brexit-4.opinion',
           value: 1
         }
       ]
@@ -226,7 +226,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.quizFlow.3',
-          value: ["brexit-1","brexit-2","brexit-3"],
+          value: ["brexit-1","brexit-2","brexit-3", "brexit-4"],
           // igor: see "toggle" usage here: we make this task to
           // behave like a checkbox
           action: "toggle"

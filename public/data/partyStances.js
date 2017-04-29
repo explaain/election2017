@@ -84,7 +84,27 @@ var partyStances = {
 								opinion: 1
 							},
 						}
-					}
+					},"brexit-4": {
+						question: "MPs should be able to have a vote on the terms of Brexit once negotiations are over. [Learn more](http://api.explaain.com/Detail/5904cc4b1c882300111f9d7a)",
+						description: "whether to give MPs a vote on the Brexit terms",
+            parties: {
+              "conservative": {
+                opinion: 0
+              }, "labour": {
+                opinion: 0.5
+              }, "conservative": {
+                opinion: 1
+              }, "ukip": {
+                opinion: 0
+              }, "snp": {
+                opinion: 1
+              }, "green": {
+                opinion: 1
+              }, "plaid-cymru": {
+                opinion: 0.5
+              }
+            }
+          }
 				}
 		  },
 		  "security": {
