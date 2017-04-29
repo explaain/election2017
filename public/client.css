@@ -39,12 +39,16 @@ header {
 }
 header img.ge2017-logo {
   text-align: center;
-  height: 60px;
-  margin: 0 auto;
+  height: 25px;
+  margin: 10px auto;
   display: block;
 }
 header img.ge2017-logo:hover {
   opacity: 0.7;
+}
+div.body.backColor header img.ge2017-logo {
+  -webkit-filter: brightness(100) !important;
+  filter: brightness(100) !important;
 }
 header i.menu {
   font-size: 2em;

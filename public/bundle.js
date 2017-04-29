@@ -5031,7 +5031,7 @@ class Header {
   render() {
     return h("header",
       routes.root().a(
-        h("img.ge2017-logo", {"src": "/img/logo.jpg"}),
+        h("img.ge2017-logo", {"src": "/img/logo.png"}),
         h("i.fa.fa-th-large.menu")
       ),
       (new Progress())
