@@ -5603,12 +5603,12 @@ class ShareButtons {
   render() {
     return h("div.share-buttons",
       h("p","Share this to help friends and family #GE2017"),
-      // h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
-      //   h("button.btn.btn-facebook","Facebook")
-      // ),
-      // h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
-      //   h("button.btn.btn-twitter","Twitter")
-      // )
+      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
+        h("button.btn.btn-facebook","Facebook")
+      ),
+      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
+        h("button.btn.btn-twitter","Twitter")
+      )
     );
   }
 }
