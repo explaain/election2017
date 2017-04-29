@@ -433,7 +433,7 @@ class CardContent {
                 })).concat([
                   /*h("p.small.line1em",
                     h(".small","Not convinced it's worth it? 😱"),
-                    h("a.small",{
+                    h("a.discard-card-style.small",{
                       onclick: function(e){
                         // do something
                       }
@@ -454,7 +454,7 @@ class CardContent {
               [
                 h("div.bold","or go straight to register"),
                 h("p",
-                  h("a",{href:"http://gov.uk",target:"_blank"},
+                  h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
                     h("button.btn.btn-primary","Register >")
                   )
                 ),
@@ -464,7 +464,7 @@ class CardContent {
               [
                 h(".column50",
                   h("p",
-                    h("a",{href:"http://gov.uk#learnmore",target:"_blank"},
+                    routes.root().a({"class":"discard-card-style"},
                       h("button.btn.btn-success","Learn more")
                     )
                   ),
@@ -476,7 +476,7 @@ class CardContent {
                 h(".column50",
                   h("div.big.bold","Go and register!"),
                   h("p",
-                    h("a",{href:"http://gov.uk",target:"_blank"},
+                    h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
                       h("button.btn.btn-primary","Register >")
                     )
                   ),
@@ -639,12 +639,12 @@ class ShareButtons {
   render() {
     return h("div.share-buttons",
       h("p","Share this to help friends and family #GE2017"),
-      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
-        h("button.btn.btn-facebook","Facebook")
-      ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
-        h("button.btn.btn-twitter","Twitter")
-      )
+      // h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
+      //   h("button.btn.btn-facebook","Facebook")
+      // ),
+      // h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote in %23" + model.user.constituency.name.replace(/\s/g, '') + ". How are you using your vote? ge2017.com"},
+      //   h("button.btn.btn-twitter","Twitter")
+      // )
     );
   }
 }

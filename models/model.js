@@ -28,7 +28,7 @@ module.exports = {
         "brexit",
         "decide",
         "parties",
-        "vote-worth"
+        "postcode-compare"
       ]
     },
     brexit: {
@@ -98,6 +98,15 @@ module.exports = {
       goto: {
         type: 'dashboard',
         name: 'vote-worth'
+      }
+    },
+    "postcode-compare": {
+      icon: 'check-square-o',
+      label: "How much does my vote count?",
+      color: "#00a2e5",
+      goto: {
+        type: 'step',
+        name: 'postcode-compare'
       }
     },
     "brexit-support": {
