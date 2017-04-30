@@ -5120,8 +5120,6 @@ class App {
         h('div.top-strip'),
         this.header,
 
-        tempDom,
-
         routes.root(function () {
           var dashboard = new Dashboard({dashboard: 'home'});
           return h("div", dashboard)
@@ -6144,7 +6142,7 @@ CardTemplates["Person"] = [
 ];
 console.log(tempData);
 console.log(CardTemplates.card);
-// var tempDom = getCardDom(tempData, CardTemplates.card);
+var tempDom = getCardDom(tempData, CardTemplates.card);
 console.log(tempDom);
 
 hyperdom.append(document.body, new App());
