@@ -5120,6 +5120,8 @@ class App {
         h('div.top-strip'),
         this.header,
 
+        tempDom,
+
         routes.root(function () {
           var dashboard = new Dashboard({dashboard: 'home'});
           return h("div", dashboard)
@@ -5901,7 +5903,11 @@ function updateModel(path, value, action) {
 }
 
 function getModel(path){
-  var schema = model;  // a moving reference to internal objects within model
+  return getObjectPathProperty(model, path);  // a moving reference to internal objects within model
+}
+
+function getObjectPathProperty(object, path){
+  var schema = object;  // a moving reference to internal objects within the object
   var pList = path.split('.');
   var len = pList.length;
   for(var i = 0; i < len-1; i++) {
@@ -6007,6 +6013,139 @@ var updateObject = function(obj, objUpdates) {
 var markdownToHtml = function(text) {
   return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
 }
+
+
+
+var getCardDom = function(data, template) {
+  data.type = data["@type"].split('/')[data["@type"].split('/').length-1];
+  var dom = [];
+  template.forEach(function(element) {
+    var content,
+        attr = {};
+    if (element.template)
+      content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
+    else if (!element.content)
+      content = '';
+    else if (element.content.constructor === Array)
+      content = getCardDom(data, element.content);
+    else
+      content = element.content.var ? getObjectPathProperty(data, element.content.var) : element.content; //'var' MUST use dot notation, not []
+
+    if (element.attr) {
+      var attrKeys = Object.keys(element.attr);
+      attrKeys.forEach(function(attrKey) {
+        attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+      })
+    }
+    dom.push(h(element.dom, attr, content));
+  });
+  return dom;
+}
+
+var tempData = {
+  name: "Barack Obama",
+  description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
+  "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
+  "@type": "http://localhost:5002/Person"
+};
+var CardTemplates = {};
+CardTemplates.card = [
+  {
+    "dom": "div.card",
+    "attr": {
+      "data-uri": {
+        "var": "@id",
+      },
+      "style": "height: auto"
+    },
+    "content": [
+      {
+        "dom": "div.card-visible",
+        "content": [
+          {
+            "dom": "div.close",
+            "content": [
+              {
+                "dom": "i.fa.fa-times",
+                "attr": {
+                  "data-hidden": "true"
+                }
+              }
+            ]
+          },
+          {
+            "dom": "div.content",
+            "attr": {
+              "class": {
+                "var": "@type"
+              }
+            },
+            "template": {
+              "var": "type"
+            }
+          },
+          {
+            "dom": "a.card-icon",
+            "attr": {
+              "target": "_blank",
+              "tabindex": "-1"
+            },
+            "content": [
+              {
+                "dom": "img",
+                "attr": {
+                  "src": "http://app.explaain.com/card-logo.png"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "button.edit-button",
+        "attr": {
+          "tabindex": "-1"
+        },
+        "content": [
+          {
+            "dom": "i.fa.fa-pencil",
+            "attr": {
+              "aria-hidden": "true"
+            }
+          }
+        ]
+      }
+    ]
+  }
+];
+CardTemplates["Person"] = [
+  {
+    "dom": "h2",
+    "content": {
+      "var": "name"
+    }
+  },
+  {
+    "dom": "div.card-image",
+    "content": [{
+      "dom": "img",
+      "attr": {"src": {
+        "var": "image"
+      }}
+    }]
+  },
+  {
+    "dom": "div.body-content",
+    "content": {
+      "var": "description",
+      "markdown": true
+    }
+  }
+];
+console.log(tempData);
+console.log(CardTemplates.card);
+// var tempDom = getCardDom(tempData, CardTemplates.card);
+console.log(tempDom);
 
 hyperdom.append(document.body, new App());
 
