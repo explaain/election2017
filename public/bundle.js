@@ -5631,6 +5631,42 @@ class CardContent {
           ]
         }
         */
+        data.postcodeSubmit = function(e){
+          e.stopPropagation();
+          model.user.isWaiting = true;
+          api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
+            if (results.error) {
+              console.log("Sorry, we didn't recognise that postcode!")
+              routes.step({
+                name: 'postcode-compare',
+                type: 'step',
+                error: 'bad-postcode',
+              }).replace();
+            } else {
+              model.user.isWaiting = false;
+              model.user.resultsCompare.push(results);
+              routes.step({
+                name: 'postcode-compare',
+                type: 'step',
+                next: data.nextStep,
+                attempt: model.user.resultsCompare.length
+              }).replace();
+            }
+          });
+          return false;
+        }
+        if(model.user.resultsCompare.length){
+          const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
+          data.constituencyResults = {
+            heading: latestResults.text.heading,
+            subheading: latestResults.text.subheading,
+            constituencies: latestResults.seats // todo: fix "type" here
+          }
+        }
+        console.log("WOWOWOW")
+        console.log(data.constituencyResults)
+        data.postcodeBinding = [model.user, 'postcode'];
+        data.postcodeUniBinding = [model.user, 'postcode_uni'];
         return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
