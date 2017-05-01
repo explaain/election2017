@@ -236,7 +236,8 @@ class Step {
         data.sliders.push([{
           type: 'postcode',
           name: 'Student and not sure where to vote from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌',
+          footerContentTemplate: "voteNow"
         }])
         break;
 
@@ -541,7 +542,8 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        //return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        console.log(this.data)
+        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
@@ -1166,12 +1168,29 @@ const _temporaryTemplates = function(){
         }
       ]
     },
+    {
+      "dom": "div",
+      "template": "footer"
+    }
+  ]
 
+  CardTemplates.footer = [
+    {
+      "dom": ".footer",
+      "content": [
+        {
+          "dom": "div",
+          "template": {
+            "var": "footerContentTemplate"
+          }
+        }
+      ]
+    }
   ]
 
   CardTemplates.voteNow = [
     {
-      "dom": ".footer",
+      "dom": "div",
       "content": [
         {
           "dom": ".bold",
