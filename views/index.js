@@ -542,7 +542,24 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        //return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        // temp: this is for testing loops with real constituencyResults data
+        this.data.constituencyResults = {
+          heading: "Header",
+          subheading: "Subheader",
+          constituencies: [
+            {
+              type: "constituency",
+              location: "London",
+              parties: "One vs Two"
+            },
+            {
+              type: "constituency",
+              location: "Yorkshire",
+              parties: "Three vs Four"
+            }
+          ]
+        }
+        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
@@ -1167,6 +1184,10 @@ const _temporaryTemplates = function(){
             "var": "description",
             "markdown": true
           }
+        },
+        {
+          "dom": "div",
+          "template": "constituencyResults"
         }
       ]
     },
@@ -1219,6 +1240,56 @@ const _temporaryTemplates = function(){
         {
           "dom": "p.small",
           "content": "This link will take you to the official gov.uk website"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.constituencyResults = [
+    {
+      "dom": ".seats",
+      "content": [
+        {
+          "dom": "div",
+          "content": {
+            "var": "constituencyResults.heading"
+          }
+        },
+        {
+          "dom": "div",
+          "content": {
+            "var": "constituencyResults.subheading"
+          }
+        },
+        {
+          "dom": ".seat-list",
+          "loop": "constituencyResults.constituencies",
+          "content": [
+            {
+              "dom": "span",
+              "template": "constituency"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.constituency = [
+    {
+      "dom": "div.seat.column50",
+      "content": [
+        {
+          "dom": "div.location.small",
+          "content": {
+            "var": "location"
+          },
+        },
+        {
+          "dom": "div.versus.bold.line1em",
+          "content": {
+            "var": "parties"
+          }
         }
       ]
     }
