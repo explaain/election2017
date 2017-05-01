@@ -48,22 +48,39 @@ header img.ge2017-logo {
   margin: 10px auto;
   display: block;
 }
-header img.ge2017-logo:hover {
+header a:hover img.ge2017-logo {
   opacity: 0.7;
 }
 div.body.backColor header img.ge2017-logo {
   -webkit-filter: brightness(100) !important;
   filter: brightness(100) !important;
 }
-header i.menu {
-  font-size: 2em;
+header a.home {
+  font-size: 1.1em;
   color: #999;
+  position: absolute;
+  margin: 10px 0px;
+  opacity: 1;
+  -webkit-transition: opacity .5s;
+  -moz-transition: opacity .5s;
+  -ms-transition: opacity .5s;
+  transition: opacity .5s;
 }
-div.body.backColor header i.menu {
+header a.home.fade-hidden {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+div.body.backColor header a.home {
   color: #ddd;
 }
-header i.menu:hover {
-  opacity: 0.7;
+header a.home:hover {
+  /*opacity: 0.7;*/
+  text-decoration: none;
+  color: #dd2569;
+}
+header a.home:active, header a.home:focus {
+  text-decoration: none;
 }
 
 i.fa-check {
