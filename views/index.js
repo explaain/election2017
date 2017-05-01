@@ -543,6 +543,7 @@ class CardContent {
       case 'postcode-compare':
         var data = this.data;
         // temp: this is for testing loops with real constituencyResults data
+        /*
         this.data.constituencyResults = {
           heading: "Header",
           subheading: "Subheader",
@@ -559,6 +560,7 @@ class CardContent {
             }
           ]
         }
+        */
         return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
@@ -980,14 +982,14 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  console.log("EEE")
-  console.log(data)
   data.type = data.type || data["@type"].split('/')[data["@type"].split('/').length-1];
-  var dom = [];
-  template.forEach(function(element) {
+  const dom = template.map(function(element) {
     var content,
+        skip,
         attr = {};
-    if (element.template)
+    if(element.condition && !getObjectPathProperty(data, element.condition))
+      return undefined;
+    else if (element.template)
       content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
     else if (!element.content)
       content = '';
@@ -1006,7 +1008,7 @@ var getCardDom = function(data, template) {
         attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
       })
     }
-    dom.push(h(element.dom, attr, content));
+    return h(element.dom, attr, content);
   });
   return dom;
 }
@@ -1187,6 +1189,7 @@ const _temporaryTemplates = function(){
         },
         {
           "dom": "div",
+          "condition": "constituencyResults",
           "template": "constituencyResults"
         }
       ]
