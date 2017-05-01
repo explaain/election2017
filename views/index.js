@@ -206,18 +206,19 @@ class Step {
   constructor(params) {
     this.step = model.steps[params.name];
     this.error = params.error;
+    this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
 
     var data = {
-      sliders: []
+      cardGroups: []
     };
     switch (params.name) {
 
       case 'postcode':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
+        data.cardGroups.push([{
           type: 'postcode',
           name: 'Please enter your postcode:',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
@@ -226,7 +227,7 @@ class Step {
 
       case 'vote-worth':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
+        data.cardGroups.push([{
           type: 'postcode',
           name: 'Want to see how much your vote is worth?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
@@ -235,8 +236,8 @@ class Step {
 
       case 'postcode-compare':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
-          type: 'postcode',
+        data.cardGroups.push([{
+          type: 'postcode-compare',
           name: 'Student and not sure where to vote from?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌',
           footerContentTemplate: "voteNow"
@@ -246,7 +247,7 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          data.sliders.push(cards)
+          data.cardGroups.push(cards)
         })
         break;
 
@@ -257,7 +258,7 @@ class Step {
         //
         //   });
         // })
-        data.sliders.push(partyStories)
+        data.cardGroups.push(partyStories)
         break;
 
       case 'question':
@@ -280,7 +281,7 @@ class Step {
         } else {
           finalStep = params.final;
         }
-        data.sliders.push([{
+        data.cardGroups.push([{
           name: question.issue.description + " - Question " + (question.debate.index+1),
           description: question.question,
           tasks: question.tasks,
@@ -292,16 +293,27 @@ class Step {
         break;
 
       default:
-        data.sliders.push([{
+        data.cardGroups.push([{
           name: "Goodness me, you're early! 😳",
           description: "This feature is coming soon...! 👻"
         }])
     }
-    this.sliders = data.sliders.map(function(cards){
+    this.cardGroups = data.cardGroups.map(function(cards){
       if(!cards.nextStep){
         cards.nextStep = params.next;
       }
-      return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+      cards.forEach(function(card, i) {
+        cards[i].nextStep = cards[i].nextStep || cards.nextStep;
+        // cards[i].type = cards[i].type || cards.type;
+      });
+      console.log('params.name');
+      console.log(params.name);
+      if (cards.constructor !== Array || cards.length == 1) {
+        // return ([new Card(cards[0])]);
+        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+      } else {
+        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+      }
     })
 
     this.headers = [];
@@ -329,10 +341,10 @@ class Step {
 
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
-    return h("section.step",
+    return h("section.step" /*+ (this.params.name=='result' ? ".large" : "")*/,
       h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
-        ["div.cards"].concat(this.headers).concat(this.sliders)
+        ["div.cards"].concat(this.headers).concat(this.cardGroups)
       )
     )
   }
@@ -345,9 +357,8 @@ class CardSlider {
 
   render() {
     const self = this;
+    console.log(self)
     const cards = self.data.cards.map(function(card){
-      card.nextStep = self.data.nextStep;
-      card.type = self.data.type;
       return (new Card(card));
     })
 
@@ -365,6 +376,7 @@ class Card {
   constructor(data) {
     this.cardContent = new CardContent(data);
     this.data = data;
+    console.log(this.data)
   }
 
   render() {
@@ -392,6 +404,8 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
+    console.log('this.data');
+    console.log(this.data);
   }
 
   render() {
@@ -409,8 +423,6 @@ class CardContent {
           });
           return false;
         }
-        console.log(CardTemplates['postcodeInput'])
-        console.log(data)
         return h('div', getCardDom(data, CardTemplates['postcodeInput']));
         // return h('.content',
         //   h('h2', this.data.name),
@@ -719,15 +731,19 @@ class CardContent {
             centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
-            arrows: false
+            arrows: true,
+            // variableWidth: true,
+            // swipeToSlide: true
           });
         },100)
-        const content = markdownToHtml(this.data.content);
+        const description = markdownToHtml(this.data.description);
+        console.log('---description---');
+        console.log(description);
         return h('div.content.text-left',
           h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.header),
+          h('h2', this.data.name),
           h('div.body-content',
-            h.rawHtml('p', content)
+            h.rawHtml('p', description)
           ),
           (this.data.footer?
             h('div.footer',
@@ -766,7 +782,9 @@ class CardContent {
             centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
-            arrows: false
+            arrows: true,
+            // variableWidth: true,
+            // swipeToSlide: true
           });
           slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
             $('div.body').addClass('backColor').css('background-color', allParties.filter(function(party) {
@@ -776,7 +794,7 @@ class CardContent {
         },100)
         return h('div.content.text-left',
           h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.header),
+          h('h2', this.data.name),
           h('div.body-content',
             h.rawHtml('p', markdownToHtml(this.data.content))
           ),
@@ -953,12 +971,12 @@ function getResults(){
           })
           extraCards = [
             {
-              header: "You and your matched party",
-              content: yourParty
+              name: "You and your matched party",
+              description: yourParty
             },
             {
-              header: "You and your area",
-              content: yourArea
+              name: "You and your area",
+              description: yourArea
             }
           ];
         }
@@ -966,8 +984,8 @@ function getResults(){
           [
             {
               image: results.parties[0] && results.parties[0].image && ("/img/party-logos/" + results.parties[0].image) || '/img/party-logos/party.jpg',
-              header: results.parties[0] && results.parties[0].name,
-              content: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
+              name: results.parties[0] && results.parties[0].name,
+              description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
               footer: [
                 yourFooter
               ]
@@ -1020,7 +1038,12 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  data.type = data.type || data["@type"].split('/')[data["@type"].split('/').length-1];
+  // console.log('data');
+  // console.log(data);
+  // console.log('template');
+  // console.log(template);
+  // console.log(template);
+  data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
   const dom = template.map(function(element) {
     var content,
         skip,
@@ -1054,7 +1077,17 @@ var getCardDom = function(data, template) {
         attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
       })
     }
-    return h(element.dom, attr, content);
+    if (element.content && element.content.markdown) {
+      console.log('--MARKDOWN--')
+      console.log(element.content)
+      console.log(content)
+       return h.rawHtml(element.dom, attr, markdownToHtml(content));
+    } else {
+      console.log('--NOT MARKDOWN--')
+      console.log(element.content)
+      console.log(content)
+      return h(element.dom, attr, content);
+    }
   });
   return dom;
 }
