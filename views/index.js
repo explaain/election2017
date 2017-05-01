@@ -405,6 +405,7 @@ class CardContent {
           return false;
         }
         console.log(CardTemplates['postcodeInput'])
+        console.log(data)
         return h('div', getCardDom(data, CardTemplates['postcodeInput']));
         // return h('.content',
         //   h('h2', this.data.name),
@@ -994,112 +995,117 @@ const loadTemplates = function(templateUrl){
   });
 }
 
-var tempData = {
-  name: "Barack Obama",
-  description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
-  "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
-  "@type": "http://localhost:5002/Person"
-};
-
-CardTemplates.card = [
-  {
-    "dom": "div.card",
-    "attr": {
-      "data-uri": {
-        "var": "@id",
-      },
-      "style": "height: auto"
-    },
-    "content": [
-      {
-        "dom": "div.card-visible",
-        "content": [
-          {
-            "dom": "div.close",
-            "content": [
-              {
-                "dom": "i.fa.fa-times",
-                "attr": {
-                  "data-hidden": "true"
-                }
-              }
-            ]
-          },
-          {
-            "dom": "div.content",
-            "attr": {
-              "class": {
-                "var": "@type"
-              }
-            },
-            "template": {
-              "var": "type"
-            }
-          },
-          {
-            "dom": "a.card-icon",
-            "attr": {
-              "target": "_blank",
-              "tabindex": "-1"
-            },
-            "content": [
-              {
-                "dom": "img",
-                "attr": {
-                  "src": "http://app.explaain.com/card-logo.png"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "dom": "button.edit-button",
-        "attr": {
-          "tabindex": "-1"
+const _temporaryTemplates = function(){
+  var tempData = {
+    name: "Barack Obama",
+    description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
+    "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
+    "@type": "http://localhost:5002/Person"
+  };
+  /*CardTemplates.card = [
+    {
+      "dom": "div.card",
+      "attr": {
+        "data-uri": {
+          "var": "@id",
         },
-        "content": [
-          {
-            "dom": "i.fa.fa-pencil",
-            "attr": {
-              "aria-hidden": "true"
+        "style": "height: auto"
+      },
+      "content": [
+        {
+          "dom": "div.card-visible",
+          "content": [
+            {
+              "dom": "div.close",
+              "content": [
+                {
+                  "dom": "i.fa.fa-times",
+                  "attr": {
+                    "data-hidden": "true"
+                  }
+                }
+              ]
+            },
+            {
+              "dom": "div.content",
+              "attr": {
+                "class": {
+                  "var": "@type"
+                }
+              },
+              "template": {
+                "var": "type"
+              }
+            },
+            {
+              "dom": "a.card-icon",
+              "attr": {
+                "target": "_blank",
+                "tabindex": "-1"
+              },
+              "content": [
+                {
+                  "dom": "img",
+                  "attr": {
+                    "src": "http://app.explaain.com/card-logo.png"
+                  }
+                }
+              ]
             }
-          }
-        ]
+          ]
+        },
+        {
+          "dom": "button.edit-button",
+          "attr": {
+            "tabindex": "-1"
+          },
+          "content": [
+            {
+              "dom": "i.fa.fa-pencil",
+              "attr": {
+                "aria-hidden": "true"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  CardTemplates["Person"] = [
+    {
+      "dom": "h2",
+      "content": {
+        "var": "name"
       }
-    ]
-  }
-];
-CardTemplates["Person"] = [
-  {
-    "dom": "h2",
-    "content": {
-      "var": "name"
+    },
+    {
+      "dom": "div.card-image",
+      "content": [{
+        "dom": "img",
+        "attr": {"src": {
+          "var": "image"
+        }}
+      }]
+    },
+    {
+      "dom": "div.body-content",
+      "content": {
+        "var": "description",
+        "markdown": true
+      }
     }
-  },
-  {
-    "dom": "div.card-image",
-    "content": [{
-      "dom": "img",
-      "attr": {"src": {
-        "var": "image"
-      }}
-    }]
-  },
-  {
-    "dom": "div.body-content",
-    "content": {
-      "var": "description",
-      "markdown": true
-    }
-  }
-];
-console.log(tempData);
-console.log(CardTemplates.card);
-var tempDom = getCardDom(tempData, CardTemplates.card);
-console.log(tempDom);
+  ];*/
+  console.log(tempData);
+  console.log(CardTemplates.card);
+  var tempDom = getCardDom(tempData, CardTemplates.card);
+  console.log(tempDom);
+  console.log(CardTemplates)
+}
+
+
 
 loadTemplates('//explaain-api.herokuapp.com/templates').then(function(_templates){
   CardTemplates = _templates;
+  _temporaryTemplates(); // todo: this is needed for development purposes, move templated to backend once tested
   hyperdom.append(document.body, new App());
 });
