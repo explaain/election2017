@@ -78,9 +78,11 @@ class App {
 class Header {
   render() {
     return h("header",
-      routes.root().a(
-        h("img.ge2017-logo", {"src": "/img/logo.png"}),
-        h("i.fa.fa-th-large.menu")
+      routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
+        h("i.fa.fa-arrow-left"),
+        " Home"
+      ), routes.root().a(
+        h("img.ge2017-logo", {"src": "/img/logo.png"})
       ),
       (new Progress())
     )
