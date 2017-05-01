@@ -27,8 +27,7 @@ module.exports = {
         "brexit",
         "decide",
         "parties",
-        "vote-worth",
-        "postcode-compare"
+        "vote-worth"
       ]
     },
     brexit: {

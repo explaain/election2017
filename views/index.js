@@ -541,7 +541,7 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        //return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
@@ -1006,7 +1006,7 @@ const _temporaryTemplates = function(){
     "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
     "@type": "http://localhost:5002/Person"
   };
-  /*CardTemplates.card = [
+  CardTemplates.card = [
     {
       "dom": "div.card",
       "attr": {
@@ -1098,7 +1098,7 @@ const _temporaryTemplates = function(){
         "markdown": true
       }
     }
-  ];*/
+  ];
   CardTemplates.postcodeCompare = [
     {
       "dom": "h2",
@@ -1166,6 +1166,10 @@ const _temporaryTemplates = function(){
         }
       ]
     },
+
+  ]
+
+  CardTemplates.voteNow = [
     {
       "dom": ".footer",
       "content": [
@@ -1196,25 +1200,6 @@ const _temporaryTemplates = function(){
           "content": "This link will take you to the official gov.uk website"
         }
       ]
-    }
-  ]
-
-  /*
-  [
-    h("div.bold",),
-    h("p",
-      h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-        h("button.btn.btn-primary","Register >")
-      )
-    ),
-    h("p.small", "This link will take you to the official gov.uk website")
-  ]
-  */
-
-  CardTemplates.voteNow = [
-    {
-      "dom": "h2",
-      "content": "test"
     }
   ]
 
