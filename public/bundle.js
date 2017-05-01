@@ -5612,8 +5612,7 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        console.log(this.data)
-        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        //return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
           h('div.body-content',
@@ -6034,7 +6033,8 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  console.log(template)
+  console.log("EEE")
+  console.log(data)
   data.type = data.type || data["@type"].split('/')[data["@type"].split('/').length-1];
   var dom = [];
   template.forEach(function(element) {
@@ -6044,6 +6044,8 @@ var getCardDom = function(data, template) {
       content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
     else if (!element.content)
       content = '';
+    else if (element.loop)
+      content = getObjectPathProperty(data, element.loop).map(function(el){return getCardDom(el, element.content)});
     else if (element.content.constructor === Array)
       content = getCardDom(data, element.content);
     else if (element.content.var)
@@ -6287,6 +6289,34 @@ const _temporaryTemplates = function(){
         {
           "dom": "p.small",
           "content": "This link will take you to the official gov.uk website"
+        }
+      ]
+    }
+  ]
+
+  // Usage:
+  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
+  CardTemplates.loopExample = [
+    {
+      "dom": ".people",
+      "loop": "people", // changing the scope of data
+      "content": [
+        {
+          "dom": ".person",
+          "content": [
+            {
+              "dom": "div",
+              "content": {
+                "var": "name"
+              }
+            },
+            {
+              "dom": "div",
+              "content": {
+                "var": "age"
+              }
+            }
+          ]
         }
       ]
     }
