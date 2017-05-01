@@ -28,7 +28,8 @@ module.exports = {
         "brexit",
         "decide",
         "parties",
-        "vote-worth"
+        "vote-worth",
+        "!TEST-postcode-compare"
       ]
     },
     brexit: {
@@ -715,7 +716,7 @@ function setHeaders(headers, xhr) {
 function responseUrl(xhr, requestUrl) {
   var origin = location.origin;
   var responseUrl = xhr.responseURL;
-  
+
   if (responseUrl) {
     if (responseUrl.substring(0, origin.length) == origin) {
       return responseUrl.substring(origin.length);
@@ -1108,7 +1109,7 @@ module.exports = {
 // from https://gist.github.com/Yaffle/1088850
 
 /*jslint regexp: true, white: true, maxerr: 50, indent: 2 */
- 
+
 function parseURI(url) {
   var m = String(url).replace(/^\s+|\s+$/g, '').match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
   // authority = '//' + user + ':' + pass '@' + hostname + ':' port
@@ -1124,9 +1125,9 @@ function parseURI(url) {
     hash     : m[8] || ''
   } : null);
 }
- 
+
 module.exports = function (base, href) {// RFC 3986
- 
+
   function removeDotSegments(input) {
     var output = [];
     input.replace(/^(\.\.?(\/|$))+/, '')
@@ -1141,10 +1142,10 @@ module.exports = function (base, href) {// RFC 3986
     });
     return output.join('').replace(/^\//, input.charAt(0) === '/' ? '/' : '');
   }
- 
+
   href = parseURI(href || '');
   base = parseURI(base || '');
- 
+
   return !href || !base ? null : (href.protocol || base.protocol) +
          (href.protocol || href.authority ? href.authority : base.authority) +
          removeDotSegments(href.protocol || href.authority || href.pathname.charAt(0) === '/' ? href.pathname : (href.pathname ? ((base.authority && !base.pathname ? '/' : '') + base.pathname.slice(0, base.pathname.lastIndexOf('/') + 1) + href.pathname) : base.pathname)) +
@@ -1560,7 +1561,7 @@ exports.route = function (pattern) {
   };
 
   routeFn.pattern = pattern;
-  
+
   return routeFn;
 };
 

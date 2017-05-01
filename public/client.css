@@ -455,6 +455,7 @@ section.questions a.task:hover {
 
 .seat .versus{
   padding: 20px 10px;
+  border: solid 1px black;
   /*min-height: 74px;*/
 }
 
