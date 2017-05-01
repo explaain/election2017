@@ -2,6 +2,7 @@ var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 var router = require('hyperdom-router');
 var api = require('../services/APIService');
+var http = require('httpism');
 
 var routes = {
   root: router.route('/'),
@@ -13,10 +14,17 @@ router.start();
 
 const model = require('../models/model')
 Model = model;
+var CardTemplates = {};
 
 class App {
   constructor(data) {
     this.header = new Header();
+
+    var templateUrl = '//explaain-api.herokuapp.com/templates';
+    http.get(templateUrl)
+    .then(function (res) { //Must make sure this isn't needed before it returns as it's asynchronous!
+      CardTemplates = res.body;
+    });
 
     var issueKeys = Object.keys(partyStances.opinions.issues);
     issueKeys.forEach(function(issueKey, i) {
@@ -241,8 +249,6 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          console.log('cards');
-          console.log(cards);
           data.sliders.push(cards)
         })
         break;
@@ -255,8 +261,6 @@ class Step {
         //   });
         // })
         data.sliders.push(partyStories)
-        console.log('partyStories');
-        console.log(partyStories);
         break;
 
       case 'question':
@@ -367,15 +371,19 @@ class Card {
   }
 
   render() {
-    return h('div.card',
-      h('div.card-visible',
-        h('div.close'),
-        this.cardContent,
-        h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
-          h('img', {'src': 'http://app.explaain.com/card-logo.png'})
-        )
-      )
-    )
+    delete CardTemplates.card[0].content[0].content[1].template;
+    CardTemplates.card[0].content[0].content[1].content = this.cardContent;
+    return getCardDom(this.data, CardTemplates.card)[0];
+
+    // return h('div.card',
+    //   h('div.card-visible',
+    //     h('div.close'),
+    //     this.cardContent,
+    //     h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
+    //       h('img', {'src': 'http://app.explaain.com/card-logo.png'})
+    //     )
+    //   )
+    // )
   }
 }
 
@@ -391,29 +399,40 @@ class CardContent {
     const self = this;
     switch (this.data.type) {
       case 'postcode':
-        var data = this.data;
-        return h('.content',
-          h('h2', this.data.name),
-          h('div.body-content',
-            h('form.postcode-form',
-              {
-                'class': { 'hide': model.user.isWaiting },
-                'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  getResults().then(function(){
-                    routes.step({ name: data.nextStep, type: data.type }).push();
-                  });
-                  return false;
-                }
-              },
-              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Go!")
-            ),
-            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', this.data.description)
-          )
-        )
+        var data = this.data; //Necessary??
+        data.postcodeBinding = [model.user, 'postcode'];
+        data.postcodeSubmit = function(e) {
+          e.stopPropagation();
+          $(e.srcElement).html('<img class="loading showing" src="/img/loading.gif">');
+          model.user.isWaiting = true;
+          getResults().then(function(){
+            routes.step({ name: data.nextStep, type: data.type }).push();
+          });
+          return false;
+        }
+        return h('div', getCardDom(data, CardTemplates['postcodeInput']));
+        // return h('.content',
+        //   h('h2', this.data.name),
+        //   h('div.body-content',
+        //     h('form.postcode-form',
+        //       {
+        //         'class': { 'hide': model.user.isWaiting },
+        //         'onsubmit': function(e) {
+        //           e.stopPropagation();
+        //           model.user.isWaiting = true;
+        //           getResults().then(function(){
+        //             routes.step({ name: data.nextStep, type: data.type }).push();
+        //           });
+        //           return false;
+        //         }
+        //       },
+        //       h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
+        //       h('button.btn.btn-success', {type: "submit"}, "Go!")
+        //     ),
+        //     h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
+        //     h('p', this.data.description)
+        //   )
+        // )
         break;
 
 
@@ -430,7 +449,6 @@ class CardContent {
                   model.user.isWaiting = true;
                   api.getPostcodeOptions(model.user.postcode).then(function(results){
                     model.user.isWaiting = false;
-                    console.log(results);
                     if (results.error) {
                       console.log("Sorry, we didn't recognise that postcode!")
                       routes.step({
@@ -853,7 +871,6 @@ function getResults(){
       .then(function(results) {
         updateObject(model.user, results.data.user);
         model.user.isWaiting = false;
-        console.log(model.user)
         // igor: We have to refactor results a bit to make them reusable in cards
         // igor: change this content to create cards based on the data you retrieve
         // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
@@ -946,7 +963,7 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  data.type = data["@type"].split('/')[data["@type"].split('/').length-1];
+  data.type = data.type || data["@type"].split('/')[data["@type"].split('/').length-1];
   var dom = [];
   template.forEach(function(element) {
     var content,
@@ -957,8 +974,10 @@ var getCardDom = function(data, template) {
       content = '';
     else if (element.content.constructor === Array)
       content = getCardDom(data, element.content);
+    else if (element.content.var)
+      content = getObjectPathProperty(data, element.content.var) || ''; //'var' MUST use dot notation, not []
     else
-      content = element.content.var ? getObjectPathProperty(data, element.content.var) : element.content; //'var' MUST use dot notation, not []
+      content = element.default ? element.default : element.content;
 
     if (element.attr) {
       var attrKeys = Object.keys(element.attr);
@@ -977,7 +996,7 @@ var tempData = {
   "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
   "@type": "http://localhost:5002/Person"
 };
-var CardTemplates = {};
+
 CardTemplates.card = [
   {
     "dom": "div.card",
