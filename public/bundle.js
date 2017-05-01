@@ -6057,7 +6057,15 @@ var getCardDom = function(data, template) {
     var content,
         skip,
         attr = {};
-    if(element.condition && !getObjectPathProperty(data, element.condition))
+    if(
+      element.condition
+      &&
+      (
+        !getObjectPathProperty(data, element.condition) && !element.condition.match(/^!/)
+        ||
+        getObjectPathProperty(data, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
+      )
+    )
       return undefined;
     else if (element.template)
       content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
