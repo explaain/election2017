@@ -20,12 +20,6 @@ class App {
   constructor(data) {
     this.header = new Header();
 
-    var templateUrl = '//explaain-api.herokuapp.com/templates';
-    http.get(templateUrl)
-    .then(function (res) { //Must make sure this isn't needed before it returns as it's asynchronous!
-      CardTemplates = res.body;
-    });
-
     var issueKeys = Object.keys(partyStances.opinions.issues);
     issueKeys.forEach(function(issueKey, i) {
       var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
@@ -410,6 +404,7 @@ class CardContent {
           });
           return false;
         }
+        console.log(CardTemplates['postcodeInput'])
         return h('div', getCardDom(data, CardTemplates['postcodeInput']));
         // return h('.content',
         //   h('h2', this.data.name),
@@ -990,6 +985,15 @@ var getCardDom = function(data, template) {
   return dom;
 }
 
+const loadTemplates = function(templateUrl){
+  return new Promise(function(resolve,reject){
+    http.get(templateUrl)
+    .then(function (res) {
+      resolve(res.body);
+    });
+  });
+}
+
 var tempData = {
   name: "Barack Obama",
   description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
@@ -1095,4 +1099,7 @@ console.log(CardTemplates.card);
 var tempDom = getCardDom(tempData, CardTemplates.card);
 console.log(tempDom);
 
-hyperdom.append(document.body, new App());
+loadTemplates('//explaain-api.herokuapp.com/templates').then(function(_templates){
+  CardTemplates = _templates;
+  hyperdom.append(document.body, new App());
+});
