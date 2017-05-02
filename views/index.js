@@ -19,6 +19,7 @@ router.start();
 const model = require('../models/model');
 const updateModel = require("../includes/updateModel")(model);
 const updateObject = require("../includes/updateObject")();
+const markdownToHtml = require("../includes/markdownToHtml")();
 
 Model = model;
 var CardTemplates = {};
@@ -1024,12 +1025,6 @@ function getResultsCompare(){
     },1000)
   })
 };
-
-var markdownToHtml = function(text) {
-  return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
-}
-
-
 
 const getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml);
 
