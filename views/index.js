@@ -16,12 +16,13 @@ var routes = {
 router.start();
 
 const
-  model = require('../models/model');
-  updateModel = require("../includes/updateModel")(model);
-  updateObject = require("../includes/updateObject")();
-  markdownToHtml = require("../includes/markdownToHtml")();
-  getObjectPathProperty = require("../includes/getObjectPathProperty")();
-  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml)
+  model = require('../models/model'),
+  updateModel = require("../includes/updateModel")(model),
+  updateObject = require("../includes/updateObject")(),
+  markdownToHtml = require("../includes/markdownToHtml")(),
+  getObjectPathProperty = require("../includes/getObjectPathProperty")(),
+  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml),
+  updateData = require('../includes/updateData')(updateModel)
 ;
 
 Model = model;
@@ -917,12 +918,6 @@ class BackToDashboard {
       )
     );
   }
-}
-
-updateData = function(dataUpdates) {
-  dataUpdates.forEach(function(update) {
-    updateModel(update.data, update.value, update.action);
-  });
 }
 
 function getModel(path){
