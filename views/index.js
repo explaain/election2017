@@ -4,8 +4,7 @@ const
   router = require('hyperdom-router'),
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
-  http = require('httpism'),
-  getObjectPathProperty = require("../includes/getObjectPathProperty")()
+  http = require('httpism')
 ;
 
 var routes = {
@@ -16,10 +15,14 @@ var routes = {
 
 router.start();
 
-const model = require('../models/model');
-const updateModel = require("../includes/updateModel")(model);
-const updateObject = require("../includes/updateObject")();
-const markdownToHtml = require("../includes/markdownToHtml")();
+const
+  model = require('../models/model');
+  updateModel = require("../includes/updateModel")(model);
+  updateObject = require("../includes/updateObject")();
+  markdownToHtml = require("../includes/markdownToHtml")();
+  getObjectPathProperty = require("../includes/getObjectPathProperty")();
+  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml)
+;
 
 Model = model;
 var CardTemplates = {};
@@ -1025,8 +1028,6 @@ function getResultsCompare(){
     },1000)
   })
 };
-
-const getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml);
 
 const loadTemplates = function(templateUrl){
   return new Promise(function(resolve,reject){
