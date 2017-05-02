@@ -4,7 +4,8 @@ const
   router = require('hyperdom-router'),
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
-  http = require('httpism')
+  http = require('httpism'),
+  getObjectPathProperty = require("../includes/getObjectPathProperty")()
 ;
 
 var routes = {
@@ -946,18 +947,6 @@ function updateModel(path, value, action) {
 
 function getModel(path){
   return getObjectPathProperty(model, path);  // a moving reference to internal objects within model
-}
-
-function getObjectPathProperty(object, path){
-  var schema = object;  // a moving reference to internal objects within the object
-  var pList = path.split('.');
-  var len = pList.length;
-  for(var i = 0; i < len-1; i++) {
-      var elem = pList[i];
-      if( !schema[elem] ) schema[elem] = {}
-      schema = schema[elem];
-  }
-  return schema[pList[len-1]];
 }
 
 function getResults(){
