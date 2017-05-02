@@ -5606,18 +5606,7 @@ const
   router = require('hyperdom-router'),
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
-  http = require('httpism')
-;
-
-var routes = {
-  root: router.route('/'),
-  dashboard: router.route('/dashboards/:name'),
-  step: router.route('/steps/:name')
-};
-
-router.start();
-
-const
+  http = require('httpism'),
   model = require('../models/model'),
   updateModel = require("../includes/updateModel")(model),
   updateObject = require("../includes/updateObject")(),
@@ -5628,6 +5617,14 @@ const
   getModel = require('../includes/getModel')(getObjectPathProperty,model),
   loadTemplates = require('../includes/loadTemplates')(http)
 ;
+
+const routes = {
+  root: router.route('/'),
+  dashboard: router.route('/dashboards/:name'),
+  step: router.route('/steps/:name')
+};
+
+router.start();
 
 Model = model;
 var CardTemplates = {};
@@ -6628,8 +6625,10 @@ const templatesUrl = '//explaain-api.herokuapp.com/templates';
 loadTemplates(templatesUrl).then(function(_templates){
   CardTemplates = _templates;
   // for development purposes, populates temporary templates for CardTemplates
+  // todo: 1) wait for refactoring to complete
+  //       2) move templates from development/templates.js to server
+  //       3) comment the line below or remove it completely
   require("../development/templates.js")(CardTemplates);
-  console.log(CardTemplates)
   hyperdom.append(document.body, new App());
 });
 
