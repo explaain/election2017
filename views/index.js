@@ -10,7 +10,8 @@ const
   updateObject = require("../includes/updateObject")(),
   markdownToHtml = require("../includes/markdownToHtml")(),
   getObjectPathProperty = require("../includes/getObjectPathProperty")(),
-  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml),
+  CardTemplates = {},
+  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml,CardTemplates),
   updateData = require('../includes/updateData')(updateModel),
   getModel = require('../includes/getModel')(getObjectPathProperty,model),
   loadTemplates = require('../includes/loadTemplates')(http)
@@ -25,7 +26,6 @@ const routes = {
 router.start();
 
 Model = model;
-var CardTemplates = {};
 
 var WideDecide = function() {
   // if (window.innerWidth > 600) {
@@ -632,7 +632,7 @@ class CardContent {
             constituencies: latestResults.seats // todo: fix "type" here
           }
         }
-        console.log("WOWOWOW")
+        console.log("constituency results:")
         console.log(data.constituencyResults)
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
@@ -1020,13 +1020,16 @@ function getResultsCompare(){
 };
 
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
-loadTemplates(templatesUrl).then(function(_templates){
-  CardTemplates = _templates;
+loadTemplates(templatesUrl).then(function(templates){
+  for(var key in templates){
+    CardTemplates[key] = templates[key];
+  };
   // for development purposes, populates temporary templates for CardTemplates
   // todo: 1) wait for refactoring to complete
   //       2) move templates from development/templates.js to server
   //       3) comment the lines below or remove it completely
   require("../development/templates.js")(CardTemplates);
+  console.log(CardTemplates);
   require("../development/model.js")(model);
   hyperdom.append(document.body, new App());
 });

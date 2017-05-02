@@ -1,4 +1,4 @@
-module.exports = function(h,getObjectPathProperty,markdownToHtml){
+module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
   const getCardDom = function(data, template) {
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
     const dom = template.map(function(element) {
