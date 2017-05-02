@@ -1,4 +1,304 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = function(CardTemplates){
+  CardTemplates.card = [
+    {
+      "dom": "div.card",
+      "attr": {
+        "data-uri": {
+          "var": "@id",
+        },
+        "style": "height: auto"
+      },
+      "content": [
+        {
+          "dom": "div.card-visible",
+          "content": [
+            {
+              "dom": "div.close",
+              "content": [
+                {
+                  "dom": "i.fa.fa-times",
+                  "attr": {
+                    "data-hidden": "true"
+                  }
+                }
+              ]
+            },
+            {
+              "dom": "div.content",
+              "attr": {
+                "class": {
+                  "var": "@type"
+                }
+              },
+              "template": {
+                "var": "type"
+              }
+            },
+            {
+              "dom": "a.card-icon",
+              "attr": {
+                "target": "_blank",
+                "tabindex": "-1"
+              },
+              "content": [
+                {
+                  "dom": "img",
+                  "attr": {
+                    "src": "http://app.explaain.com/card-logo.png"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "dom": "button.edit-button",
+          "attr": {
+            "tabindex": "-1"
+          },
+          "content": [
+            {
+              "dom": "i.fa.fa-pencil",
+              "attr": {
+                "aria-hidden": "true"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ];
+  CardTemplates["Person"] = [
+    {
+      "dom": "h2",
+      "content": {
+        "var": "name"
+      }
+    },
+    {
+      "dom": "div.card-image",
+      "content": [{
+        "dom": "img",
+        "attr": {"src": {
+          "var": "image"
+        }}
+      }]
+    },
+    {
+      "dom": "div.body-content",
+      "content": {
+        "var": "description",
+        "markdown": true
+      }
+    }
+  ];
+  CardTemplates.postcodeCompare = [
+    {
+      "dom": "h2",
+      "content": {
+        "var": "name",
+        "default": "Please enter your postcode"
+      }
+    },
+    {
+      "dom": "div.body-content",
+      "content": [
+        {
+          "dom": "form.postcode-form",
+          "attr": {
+            "onsubmit": {
+              "var": "postcodeSubmit"
+            }
+          },
+          "content": [
+            {
+              "dom": "input.form-control",
+              "attr": {
+                "autofocus": "true",
+                "type": "text",
+                "name": "postcode",
+                "placeholder": "Home Postcode",
+                "binding": {
+                  "var": "postcodeBinding"
+                }
+              }
+            },
+            {
+              "dom": "input.form-control",
+              "attr": {
+                "autofocus": "true",
+                "type": "text",
+                "name": "postcode",
+                "placeholder": "Uni Postcode",
+                "binding": {
+                  "var": "postcodeUniBinding"
+                }
+              }
+            },
+            {
+              "dom": "button.btn.btn-success",
+              "attr": {
+                "type": "submit"
+              },
+              "content": "Compare"
+            }
+          ]
+        },
+        {
+          "dom": "h3",
+          "content": {
+            "var": "subheading"
+          }
+        },
+        {
+          "dom": "p",
+          "content": {
+            "var": "description",
+            "markdown": true
+          }
+        },
+        {
+          "dom": "div",
+          "condition": "constituencyResults",
+          "template": "constituencyResults"
+        }
+      ]
+    },
+    {
+      "dom": "div",
+      "template": "footer"
+    }
+  ]
+
+  CardTemplates.footer = [
+    {
+      "dom": ".footer",
+      "content": [
+        {
+          "dom": "div",
+          "template": {
+            "var": "footerContentTemplate"
+          }
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.voteNow = [
+    {
+      "dom": "div",
+      "content": [
+        {
+          "dom": ".bold",
+          "content": "or go straight to register"
+        },
+        {
+          "dom": "p",
+          "content": [
+            {
+              "dom": "a.discard-card-style",
+              "attr": {
+                "href": "https://www.gov.uk/register-to-vote",
+                "target":"_blank",
+              },
+              "content": [
+                {
+                  "dom": "button.btn.btn-primary",
+                  "content": "Register >"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "dom": "p.small",
+          "content": "This link will take you to the official gov.uk website"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.constituencyResults = [
+    {
+      "dom": ".seats",
+      "content": [
+        {
+          "dom": "div",
+          "content": {
+            "var": "constituencyResults.heading"
+          }
+        },
+        {
+          "dom": "div",
+          "content": {
+            "var": "constituencyResults.subheading"
+          }
+        },
+        {
+          "dom": ".seat-list",
+          "loop": "constituencyResults.constituencies",
+          "content": [
+            {
+              "dom": "span",
+              "template": "constituency"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.constituency = [
+    {
+      "dom": "div.seat.column50",
+      "content": [
+        {
+          "dom": "div.location.small",
+          "content": {
+            "var": "location"
+          },
+        },
+        {
+          "dom": "div.versus.bold.line1em",
+          "content": {
+            "var": "parties"
+          }
+        }
+      ]
+    }
+  ]
+
+  // Usage:
+  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
+  CardTemplates.loopExample = [
+    {
+      "dom": ".people",
+      "loop": "people", // changing the scope of data
+      "content": [
+        {
+          "dom": ".person",
+          "content": [
+            {
+              "dom": "div",
+              "content": {
+                "var": "name"
+              }
+            },
+            {
+              "dom": "div",
+              "content": {
+                "var": "age"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+},{}],2:[function(require,module,exports){
 module.exports = {
   step: -1,
   // todo: those are temporary here, refactor
@@ -417,9 +717,9 @@ module.exports = {
   }
 };
 
-},{}],2:[function(require,module,exports){
-
 },{}],3:[function(require,module,exports){
+
+},{}],4:[function(require,module,exports){
 /*!
  * Cross-Browser Split 1.1.1
  * Copyright 2007-2012 Steven Levithan <stevenlevithan.com>
@@ -527,7 +827,7 @@ module.exports = (function split(undef) {
   return self;
 })();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
@@ -546,7 +846,7 @@ if (typeof document !== 'undefined') {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":2}],5:[function(require,module,exports){
+},{"min-document":3}],6:[function(require,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window;
@@ -559,7 +859,7 @@ if (typeof window !== "undefined") {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 var httpism = require('./httpism');
 var middleware = require('./browserMiddleware');
 var utils = require('./middlewareUtils');
@@ -578,7 +878,7 @@ module.exports = httpism(
   ]
 );
 
-},{"./browserMiddleware":7,"./httpism":8,"./middlewareUtils":10}],7:[function(require,module,exports){
+},{"./browserMiddleware":8,"./httpism":9,"./middlewareUtils":11}],8:[function(require,module,exports){
 var window = require('global');
 var utils = require('./middlewareUtils');
 var querystringLite = require('./querystring-lite');
@@ -790,7 +1090,7 @@ function addAbortToPromise(promise, abort) {
   };
 }
 
-},{"./middlewareUtils":10,"./querystring-lite":12,"global":5,"random-string":39}],8:[function(require,module,exports){
+},{"./middlewareUtils":11,"./querystring-lite":13,"global":6,"random-string":40}],9:[function(require,module,exports){
 var merge = require('./merge');
 var resolveUrl = require('./resolveUrl');
 var utils = require('./middlewareUtils');
@@ -960,7 +1260,7 @@ function parseClientArguments() {
 
 module.exports = client;
 
-},{"./merge":9,"./middlewareUtils":10,"./resolveUrl":13}],9:[function(require,module,exports){
+},{"./merge":10,"./middlewareUtils":11,"./resolveUrl":14}],10:[function(require,module,exports){
 module.exports = function(x, y) {
   if (x && y) {
     var r = {};
@@ -981,7 +1281,7 @@ module.exports = function(x, y) {
   }
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 var merge = require("./merge");
 var querystringLite = require('./querystring-lite');
 var obfuscateUrlPassword = require('./obfuscateUrlPassword');
@@ -1073,12 +1373,12 @@ exports.mergeQueryString = function(request) {
   request.url = path + "?" + qs.stringify(mergedQueryString);
 };
 
-},{"./merge":9,"./obfuscateUrlPassword":11,"./querystring-lite":12}],11:[function(require,module,exports){
+},{"./merge":10,"./obfuscateUrlPassword":12,"./querystring-lite":13}],12:[function(require,module,exports){
 module.exports = function(url) {
   return url.replace(/^([-a-z]*:\/\/[^:]*:)[^@]*@/, function(_, first) { return first + '********@'; });
 };
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 module.exports = {
   parse: function (string) {
     var params = {};
@@ -1105,7 +1405,7 @@ module.exports = {
   }
 };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // from https://gist.github.com/Yaffle/1088850
 
 /*jslint regexp: true, white: true, maxerr: 50, indent: 2 */
@@ -1153,7 +1453,7 @@ module.exports = function (base, href) {// RFC 3986
          href.hash;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var routism = require('routism');
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
@@ -1773,7 +2073,7 @@ exports.hash = {
   }
 };
 
-},{"hyperdom":20,"routism":40}],15:[function(require,module,exports){
+},{"hyperdom":21,"routism":41}],16:[function(require,module,exports){
 var listener = require('./listener');
 var binding = require('./binding')
 
@@ -1930,7 +2230,7 @@ function customEvent(name) {
   }
 }
 
-},{"./binding":16,"./listener":22}],16:[function(require,module,exports){
+},{"./binding":17,"./listener":23}],17:[function(require,module,exports){
 var refreshify = require('./refreshify');
 var meta = require('./meta');
 
@@ -1971,7 +2271,7 @@ function bindingObject(model, property, setter) {
   };
 }
 
-},{"./meta":23,"./refreshify":29}],17:[function(require,module,exports){
+},{"./meta":24,"./refreshify":30}],18:[function(require,module,exports){
 var domComponent = require('./domComponent');
 var hyperdomMeta = require('./meta');
 var render = require('./render');
@@ -2112,7 +2412,7 @@ Component.prototype.destroy = function (element) {
 
 module.exports = Component;
 
-},{"./domComponent":19,"./meta":23,"./render":30}],18:[function(require,module,exports){
+},{"./domComponent":20,"./meta":24,"./render":31}],19:[function(require,module,exports){
 function deprecationWarning() {
   var warningIssued = false;
 
@@ -2134,7 +2434,7 @@ module.exports = {
   mapBinding: deprecationWarning()
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 var createElement = require('virtual-dom/create-element');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -2193,7 +2493,7 @@ function domComponent(options) {
 
 exports.create = domComponent;
 
-},{"./isVdom":21,"./toVdom":34,"virtual-dom/create-element":41,"virtual-dom/diff":42,"virtual-dom/patch":43}],20:[function(require,module,exports){
+},{"./isVdom":22,"./toVdom":35,"virtual-dom/create-element":42,"virtual-dom/diff":43,"virtual-dom/patch":44}],21:[function(require,module,exports){
 var rendering = require('./rendering')
 var refreshify = require('./refreshify')
 var binding = require('./binding')
@@ -2220,7 +2520,7 @@ exports.component = function(model) {
 
 exports.currentRender = render.currentRender
 
-},{"./binding":16,"./component":17,"./meta":23,"./refreshEventResult":28,"./refreshify":29,"./render":30,"./rendering":31}],21:[function(require,module,exports){
+},{"./binding":17,"./component":18,"./meta":24,"./refreshEventResult":29,"./refreshify":30,"./render":31,"./rendering":32}],22:[function(require,module,exports){
 var virtualDomVersion = require("virtual-dom/vnode/version")
 
 module.exports = function(x) {
@@ -2232,7 +2532,7 @@ module.exports = function(x) {
   }
 };
 
-},{"virtual-dom/vnode/version":59}],22:[function(require,module,exports){
+},{"virtual-dom/vnode/version":60}],23:[function(require,module,exports){
 var refreshify = require('./refreshify');
 
 function ListenerHook(listener) {
@@ -2251,7 +2551,7 @@ module.exports = function (listener) {
   return new ListenerHook(listener);
 };
 
-},{"./refreshify":29}],23:[function(require,module,exports){
+},{"./refreshify":30}],24:[function(require,module,exports){
 module.exports = function (model, property) {
   var hyperdomMeta = model._hyperdomMeta;
 
@@ -2273,7 +2573,7 @@ module.exports = function (model, property) {
   }
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 var hyperdomMeta = require('./meta');
 var runRender = require('./render');
 var Set = require('./set');
@@ -2467,7 +2767,7 @@ Mount.prototype.remove = function () {
 
 module.exports = Mount;
 
-},{"./meta":23,"./propertyHook":26,"./refreshEventResult":28,"./render":30,"./set":32,"virtual-dom/vnode/vtext.js":62}],25:[function(require,module,exports){
+},{"./meta":24,"./propertyHook":27,"./refreshEventResult":29,"./render":31,"./set":33,"virtual-dom/vnode/vtext.js":63}],26:[function(require,module,exports){
 var render = require('./render');
 var bindModel = require('./bindModel')
 
@@ -2566,7 +2866,7 @@ function generateConditionalClassNames(obj) {
   }).join(' ') || undefined;
 }
 
-},{"./bindModel":15,"./render":30}],26:[function(require,module,exports){
+},{"./bindModel":16,"./render":31}],27:[function(require,module,exports){
 function PropertyHook(value) {
   this.value = value;
 }
@@ -2581,7 +2881,7 @@ PropertyHook.prototype.unhook = function (element, property) {
 
 module.exports = PropertyHook;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var deprecations = require('./deprecations');
 var refreshify = require('./refreshify');
 
@@ -2590,7 +2890,7 @@ module.exports = function(promise) {
   refreshify(function() { return promise }, {refresh: 'promise'})()
 }
 
-},{"./deprecations":18,"./refreshify":29}],28:[function(require,module,exports){
+},{"./deprecations":19,"./refreshify":30}],29:[function(require,module,exports){
 var deprecations = require('./deprecations');
 
 module.exports = refreshAfterEvent
@@ -2661,14 +2961,14 @@ function cloneOptions(options) {
   }
 }
 
-},{"./deprecations":18}],29:[function(require,module,exports){
+},{"./deprecations":19}],30:[function(require,module,exports){
 var render = require('./render');
 
 module.exports = function(fn, options) {
   return render.currentRender().mount.refreshify(fn, options)
 }
 
-},{"./render":30}],30:[function(require,module,exports){
+},{"./render":31}],31:[function(require,module,exports){
 var simplePromise = require('./simplePromise');
 
 function runRender(mount, fn) {
@@ -2711,7 +3011,7 @@ var defaultRender = {
   }
 }
 
-},{"./simplePromise":33}],31:[function(require,module,exports){
+},{"./simplePromise":34}],32:[function(require,module,exports){
 var vhtml = require('./vhtml');
 var domComponent = require('./domComponent');
 var bindingMeta = require('./meta');
@@ -2890,7 +3190,7 @@ function rawHtml() {
 
 exports.html.rawHtml = rawHtml;
 
-},{"./binding":16,"./deprecations":18,"./domComponent":19,"./meta":23,"./mount":24,"./prepareAttributes":25,"./refreshAfter":27,"./refreshEventResult":28,"./render":30,"./toVdom":34,"./vhtml":35,"virtual-dom/virtual-hyperscript/parse-tag":52}],32:[function(require,module,exports){
+},{"./binding":17,"./deprecations":19,"./domComponent":20,"./meta":24,"./mount":25,"./prepareAttributes":26,"./refreshAfter":28,"./refreshEventResult":29,"./render":31,"./toVdom":35,"./vhtml":36,"virtual-dom/virtual-hyperscript/parse-tag":53}],33:[function(require,module,exports){
 if (typeof Set === 'function') {
   module.exports = Set;
 } else {
@@ -2918,7 +3218,7 @@ if (typeof Set === 'function') {
   };
 }
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 function SimplePromise () {
   this.listeners = [];
 }
@@ -2945,7 +3245,7 @@ module.exports = function () {
   return new SimplePromise();
 };
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var vtext = require("virtual-dom/vnode/vtext.js")
 var isVdom = require('./isVdom');
 var Component = require('./component')
@@ -2986,7 +3286,7 @@ module.exports.recursive = function (child) {
   return children;
 };
 
-},{"./component":17,"./isVdom":21,"virtual-dom/vnode/vtext.js":62}],35:[function(require,module,exports){
+},{"./component":18,"./isVdom":22,"virtual-dom/vnode/vtext.js":63}],36:[function(require,module,exports){
 'use strict';
 
 var VNode = require('virtual-dom/vnode/vnode.js');
@@ -3031,7 +3331,7 @@ function h(tagName, props, children) {
   return vnode
 }
 
-},{"./xml":37,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":51,"virtual-dom/vnode/is-vhook":55,"virtual-dom/vnode/vnode.js":60}],36:[function(require,module,exports){
+},{"./xml":38,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":52,"virtual-dom/vnode/is-vhook":56,"virtual-dom/vnode/vnode.js":61}],37:[function(require,module,exports){
 var domComponent = require('./domComponent');
 var rendering = require('./rendering');
 var VText = require("virtual-dom/vnode/vtext.js")
@@ -3111,7 +3411,7 @@ module.exports = function (attributes) {
   return new WindowWidget(attributes);
 };
 
-},{"./domComponent":19,"./rendering":31,"virtual-dom/vnode/vtext.js":62}],37:[function(require,module,exports){
+},{"./domComponent":20,"./rendering":32,"virtual-dom/vnode/vtext.js":63}],38:[function(require,module,exports){
 var AttributeHook = require('virtual-dom/virtual-hyperscript/hooks/attribute-hook')
 
 var namespaceRegex = /^([a-z0-9_-]+)(--|:)([a-z0-9_-]+)$/i
@@ -3207,14 +3507,14 @@ function transform(vnode) {
 
 module.exports.transform = transform
 
-},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":50}],38:[function(require,module,exports){
+},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":51}],39:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /*
  * random-string
  * https://github.com/valiton/node-random-string
@@ -3260,7 +3560,7 @@ module.exports = function randomString(opts) {
   return rnd;
 };
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function() {
     var self = this;
     var variableRegex, splatVariableRegex, escapeRegex, addGroupForTo, addVariablesInTo, compile, recogniseIn, extractParamsForFromAfter;
@@ -3359,22 +3659,22 @@ module.exports = function randomString(opts) {
         return params;
     };
 }).call(this);
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":45}],42:[function(require,module,exports){
+},{"./vdom/create-element.js":46}],43:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":64}],43:[function(require,module,exports){
+},{"./vtree/diff.js":65}],44:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":48}],44:[function(require,module,exports){
+},{"./vdom/patch.js":49}],45:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -3473,7 +3773,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":55,"is-object":38}],45:[function(require,module,exports){
+},{"../vnode/is-vhook.js":56,"is-object":39}],46:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -3521,7 +3821,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":53,"../vnode/is-vnode.js":56,"../vnode/is-vtext.js":57,"../vnode/is-widget.js":58,"./apply-properties":44,"global/document":4}],46:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":54,"../vnode/is-vnode.js":57,"../vnode/is-vtext.js":58,"../vnode/is-widget.js":59,"./apply-properties":45,"global/document":5}],47:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -3608,7 +3908,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -3761,7 +4061,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":58,"../vnode/vpatch.js":61,"./apply-properties":44,"./update-widget":49}],48:[function(require,module,exports){
+},{"../vnode/is-widget.js":59,"../vnode/vpatch.js":62,"./apply-properties":45,"./update-widget":50}],49:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -3843,7 +4143,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":45,"./dom-index":46,"./patch-op":47,"global/document":4,"x-is-array":65}],49:[function(require,module,exports){
+},{"./create-element":46,"./dom-index":47,"./patch-op":48,"global/document":5,"x-is-array":66}],50:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -3860,7 +4160,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":58}],50:[function(require,module,exports){
+},{"../vnode/is-widget.js":59}],51:[function(require,module,exports){
 'use strict';
 
 module.exports = AttributeHook;
@@ -3897,7 +4197,7 @@ AttributeHook.prototype.unhook = function (node, prop, next) {
 
 AttributeHook.prototype.type = 'AttributeHook';
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 module.exports = SoftSetHook;
@@ -3916,7 +4216,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 var split = require('browser-split');
@@ -3972,7 +4272,7 @@ function parseTag(tag, props) {
     return props.namespace ? tagName : tagName.toUpperCase();
 }
 
-},{"browser-split":3}],53:[function(require,module,exports){
+},{"browser-split":4}],54:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -4014,14 +4314,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":54,"./is-vnode":56,"./is-vtext":57,"./is-widget":58}],54:[function(require,module,exports){
+},{"./is-thunk":55,"./is-vnode":57,"./is-vtext":58,"./is-widget":59}],55:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -4030,7 +4330,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -4039,7 +4339,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":59}],57:[function(require,module,exports){
+},{"./version":60}],58:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -4048,17 +4348,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":59}],58:[function(require,module,exports){
+},{"./version":60}],59:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 module.exports = "2"
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -4132,7 +4432,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":54,"./is-vhook":55,"./is-vnode":56,"./is-widget":58,"./version":59}],61:[function(require,module,exports){
+},{"./is-thunk":55,"./is-vhook":56,"./is-vnode":57,"./is-widget":59,"./version":60}],62:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -4156,7 +4456,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":59}],62:[function(require,module,exports){
+},{"./version":60}],63:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -4168,7 +4468,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":59}],63:[function(require,module,exports){
+},{"./version":60}],64:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -4228,7 +4528,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":55,"is-object":38}],64:[function(require,module,exports){
+},{"../vnode/is-vhook":56,"is-object":39}],65:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -4657,7 +4957,7 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":53,"../vnode/is-thunk":54,"../vnode/is-vnode":56,"../vnode/is-vtext":57,"../vnode/is-widget":58,"../vnode/vpatch":61,"./diff-props":63,"x-is-array":65}],65:[function(require,module,exports){
+},{"../vnode/handle-thunk":54,"../vnode/is-thunk":55,"../vnode/is-vnode":57,"../vnode/is-vtext":58,"../vnode/is-widget":59,"../vnode/vpatch":62,"./diff-props":64,"x-is-array":66}],66:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -4667,7 +4967,7 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],66:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 var http = require('httpism')
 
 function APIService() {
@@ -5149,7 +5449,7 @@ function createObjectProps(globalObject, props) {
 
 module.exports = new APIService();
 
-},{"httpism":6}],67:[function(require,module,exports){
+},{"httpism":7}],68:[function(require,module,exports){
 const
   hyperdom = require('hyperdom'),
   h = hyperdom.html,
@@ -6291,311 +6591,13 @@ const loadTemplates = function(templateUrl){
   });
 }
 
-const _temporaryTemplates = function(){
-  CardTemplates.card = [
-    {
-      "dom": "div.card",
-      "attr": {
-        "data-uri": {
-          "var": "@id",
-        },
-        "style": "height: auto"
-      },
-      "content": [
-        {
-          "dom": "div.card-visible",
-          "content": [
-            {
-              "dom": "div.close",
-              "content": [
-                {
-                  "dom": "i.fa.fa-times",
-                  "attr": {
-                    "data-hidden": "true"
-                  }
-                }
-              ]
-            },
-            {
-              "dom": "div.content",
-              "attr": {
-                "class": {
-                  "var": "@type"
-                }
-              },
-              "template": {
-                "var": "type"
-              }
-            },
-            {
-              "dom": "a.card-icon",
-              "attr": {
-                "target": "_blank",
-                "tabindex": "-1"
-              },
-              "content": [
-                {
-                  "dom": "img",
-                  "attr": {
-                    "src": "http://app.explaain.com/card-logo.png"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "button.edit-button",
-          "attr": {
-            "tabindex": "-1"
-          },
-          "content": [
-            {
-              "dom": "i.fa.fa-pencil",
-              "attr": {
-                "aria-hidden": "true"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  CardTemplates["Person"] = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name"
-      }
-    },
-    {
-      "dom": "div.card-image",
-      "content": [{
-        "dom": "img",
-        "attr": {"src": {
-          "var": "image"
-        }}
-      }]
-    },
-    {
-      "dom": "div.body-content",
-      "content": {
-        "var": "description",
-        "markdown": true
-      }
-    }
-  ];
-  CardTemplates.postcodeCompare = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name",
-        "default": "Please enter your postcode"
-      }
-    },
-    {
-      "dom": "div.body-content",
-      "content": [
-        {
-          "dom": "form.postcode-form",
-          "attr": {
-            "onsubmit": {
-              "var": "postcodeSubmit"
-            }
-          },
-          "content": [
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Home Postcode",
-                "binding": {
-                  "var": "postcodeBinding"
-                }
-              }
-            },
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Uni Postcode",
-                "binding": {
-                  "var": "postcodeUniBinding"
-                }
-              }
-            },
-            {
-              "dom": "button.btn.btn-success",
-              "attr": {
-                "type": "submit"
-              },
-              "content": "Compare"
-            }
-          ]
-        },
-        {
-          "dom": "h3",
-          "content": {
-            "var": "subheading"
-          }
-        },
-        {
-          "dom": "p",
-          "content": {
-            "var": "description",
-            "markdown": true
-          }
-        },
-        {
-          "dom": "div",
-          "condition": "constituencyResults",
-          "template": "constituencyResults"
-        }
-      ]
-    },
-    {
-      "dom": "div",
-      "template": "footer"
-    }
-  ]
-
-  CardTemplates.footer = [
-    {
-      "dom": ".footer",
-      "content": [
-        {
-          "dom": "div",
-          "template": {
-            "var": "footerContentTemplate"
-          }
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.voteNow = [
-    {
-      "dom": "div",
-      "content": [
-        {
-          "dom": ".bold",
-          "content": "or go straight to register"
-        },
-        {
-          "dom": "p",
-          "content": [
-            {
-              "dom": "a.discard-card-style",
-              "attr": {
-                "href": "https://www.gov.uk/register-to-vote",
-                "target":"_blank",
-              },
-              "content": [
-                {
-                  "dom": "button.btn.btn-primary",
-                  "content": "Register >"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "p.small",
-          "content": "This link will take you to the official gov.uk website"
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituencyResults = [
-    {
-      "dom": ".seats",
-      "content": [
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.heading"
-          }
-        },
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.subheading"
-          }
-        },
-        {
-          "dom": ".seat-list",
-          "loop": "constituencyResults.constituencies",
-          "content": [
-            {
-              "dom": "span",
-              "template": "constituency"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituency = [
-    {
-      "dom": "div.seat.column50",
-      "content": [
-        {
-          "dom": "div.location.small",
-          "content": {
-            "var": "location"
-          },
-        },
-        {
-          "dom": "div.versus.bold.line1em",
-          "content": {
-            "var": "parties"
-          }
-        }
-      ]
-    }
-  ]
-
-  // Usage:
-  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
-  CardTemplates.loopExample = [
-    {
-      "dom": ".people",
-      "loop": "people", // changing the scope of data
-      "content": [
-        {
-          "dom": ".person",
-          "content": [
-            {
-              "dom": "div",
-              "content": {
-                "var": "name"
-              }
-            },
-            {
-              "dom": "div",
-              "content": {
-                "var": "age"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
-
-
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
 loadTemplates(templatesUrl).then(function(_templates){
   CardTemplates = _templates;
-  _temporaryTemplates(); // todo: this is needed for development purposes, move templated to backend once tested
+  // for development purposes, populates temporary templates for CardTemplates
+  require("../development/templates.js")(CardTemplates);
+  console.log(CardTemplates)
   hyperdom.append(document.body, new App());
 });
 
-},{"../models/model":1,"../services/APIService":66,"httpism":6,"hyperdom":20,"hyperdom-router":14,"hyperdom/windowEvents":36}]},{},[67]);
+},{"../development/templates.js":1,"../models/model":2,"../services/APIService":67,"httpism":7,"hyperdom":21,"hyperdom-router":15,"hyperdom/windowEvents":37}]},{},[68]);
