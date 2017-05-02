@@ -1,8 +1,9 @@
-var hyperdom = require('hyperdom');
-var h = hyperdom.html;
-var router = require('hyperdom-router');
-var api = require('../services/APIService');
-var http = require('httpism');
+var hyperdom = require('hyperdom'),
+    h = hyperdom.html,
+    router = require('hyperdom-router'),
+    windowEvents = require('hyperdom/windowEvents'),
+    api = require('../services/APIService'),
+    http = require('httpism');
 
 var routes = {
   root: router.route('/'),
@@ -19,6 +20,23 @@ var CardTemplates = {};
 class App {
   constructor(data) {
     this.header = new Header();
+
+    window.onresize = function() {
+      if (window.innerWidth > 600) {
+        if (!$('section.step').hasClass('wide')) {
+          $('section.step').addClass('wide');
+        }
+      } else {
+        $('section.step').removeClass('wide');
+      }
+    }
+
+    var templateUrl = '//localhost:5002/templates';
+    http.get(templateUrl)
+    .then(function (res) { //Must make sure this isn't needed before it returns, since it's asynchronous!
+      CardTemplates = res.body;
+      console.log(CardTemplates)
+    });
 
     var issueKeys = Object.keys(partyStances.opinions.issues);
     issueKeys.forEach(function(issueKey, i) {
@@ -37,9 +55,9 @@ class App {
             index: j
           },
           tasks: [
-            "question-agree",
+            "question-disagree",
             "question-neutral",
-            "question-disagree"
+            "question-agree"
           ]
         }
       })
@@ -237,18 +255,19 @@ class Step {
       case 'postcode-compare':
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
-          type: 'postcode-compare',
+          type: 'postcode',
           name: 'Student and not sure where to vote from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌',
-          footerContentTemplate: "voteNow"
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
 
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          data.cardGroups.push(cards)
+          // params.name = 'Organization';
+          data.cardGroups.push(cards);
         })
+        console.log(JSON.stringify(data.cardGroups))
         break;
 
       case 'story':
@@ -299,20 +318,19 @@ class Step {
         }])
     }
     this.cardGroups = data.cardGroups.map(function(cards){
-      if(!cards.nextStep){
-        cards.nextStep = params.next;
-      }
       cards.forEach(function(card, i) {
-        cards[i].nextStep = cards[i].nextStep || cards.nextStep;
-        // cards[i].type = cards[i].type || cards.type;
+        if(!cards[i].nextStep){
+          cards[i].nextStep = params.next;
+        }
+        console.log(cards[i].type)
+        cards[i].type = cards[i].type || params.name;
+        console.log(cards[i].type)
       });
-      console.log('params.name');
-      console.log(params.name);
       if (cards.constructor !== Array || cards.length == 1) {
-        // return ([new Card(cards[0])]);
-        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+        return ([new Card(cards[0])]);
+        // return (new CardSlider({cards:cards,nextStep:params.next}));
       } else {
-        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+        return (new CardSlider({cards:cards,nextStep:params.next}));
       }
     })
 
@@ -341,7 +359,8 @@ class Step {
 
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
-    return h("section.step" /*+ (this.params.name=='result' ? ".large" : "")*/,
+    return h("section.step"
+      + (this.params.name=='result' && window.innerWidth > 600 ? ".wide" : ""),
       h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
         ["div.cards"].concat(this.headers).concat(this.cardGroups)
@@ -357,7 +376,6 @@ class CardSlider {
 
   render() {
     const self = this;
-    console.log(self)
     const cards = self.data.cards.map(function(card){
       return (new Card(card));
     })
@@ -376,12 +394,9 @@ class Card {
   constructor(data) {
     this.cardContent = new CardContent(data);
     this.data = data;
-    console.log(this.data)
   }
 
   render() {
-    // igor: this doesn't seem right as CardTemplates should never be modified
-    // igor: to refactor
     delete CardTemplates.card[0].content[0].content[1].template;
     CardTemplates.card[0].content[0].content[1].content = this.cardContent;
     return getCardDom(this.data, CardTemplates.card)[0];
@@ -410,9 +425,11 @@ class CardContent {
 
   render() {
     const self = this;
-    switch (this.data.type) {
+    console.log('self.data.type');
+    console.log(self.data.type);
+    switch (self.data.type) {
       case 'postcode':
-        var data = this.data; //Necessary??
+        var data = self.data; //Necessary??
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
@@ -425,7 +442,7 @@ class CardContent {
         }
         return h('div', getCardDom(data, CardTemplates['postcodeInput']));
         // return h('.content',
-        //   h('h2', this.data.name),
+        //   h('h2', self.data.name),
         //   h('div.body-content',
         //     h('form.postcode-form',
         //       {
@@ -443,16 +460,16 @@ class CardContent {
         //       h('button.btn.btn-success', {type: "submit"}, "Go!")
         //     ),
         //     h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-        //     h('p', this.data.description)
+        //     h('p', self.data.description)
         //   )
         // )
         break;
 
 
       case 'vote-worth':
-        var data = this.data;
+        var data = self.data;
         return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.name),
+          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.name),
           h('div.body-content',
             h('form.postcode-form',
               {
@@ -512,7 +529,7 @@ class CardContent {
               undefined
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.description)
+            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.description)
           ),
           h('div.footer',
             (
@@ -555,65 +572,9 @@ class CardContent {
         break;
 
       case 'postcode-compare':
-        var data = this.data;
-        // temp: this is for testing loops with real constituencyResults data
-        /*
-        this.data.constituencyResults = {
-          heading: "Header",
-          subheading: "Subheader",
-          constituencies: [
-            {
-              type: "constituency",
-              location: "London",
-              parties: "One vs Two"
-            },
-            {
-              type: "constituency",
-              location: "Yorkshire",
-              parties: "Three vs Four"
-            }
-          ]
-        }
-        */
-        data.postcodeSubmit = function(e){
-          e.stopPropagation();
-          model.user.isWaiting = true;
-          api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-            if (results.error) {
-              console.log("Sorry, we didn't recognise that postcode!")
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                error: 'bad-postcode',
-              }).replace();
-            } else {
-              model.user.isWaiting = false;
-              model.user.resultsCompare.push(results);
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                next: data.nextStep,
-                attempt: model.user.resultsCompare.length
-              }).replace();
-            }
-          });
-          return false;
-        }
-        if(model.user.resultsCompare.length){
-          const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
-          data.constituencyResults = {
-            heading: latestResults.text.heading,
-            subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats // todo: fix "type" here
-          }
-        }
-        console.log("WOWOWOW")
-        console.log(data.constituencyResults)
-        data.postcodeBinding = [model.user, 'postcode'];
-        data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        var data = self.data;
         return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
+          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),
           h('div.body-content',
             h('form.postcode-form',
               {
@@ -673,7 +634,7 @@ class CardContent {
               undefined
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
+            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.description)
           ),
           h('div.footer',
             (
@@ -728,26 +689,26 @@ class CardContent {
             dots: false,
             infinite: false,
             adaptiveHeight: true,
-            centerMode: true,
+            // centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: true,
-            // variableWidth: true,
+            variableWidth: true,
             // swipeToSlide: true
           });
         },100)
-        const description = markdownToHtml(this.data.description);
+        const description = markdownToHtml(self.data.description);
         console.log('---description---');
         console.log(description);
         return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.name),
+          h('img', {'src': self.data.image, 'class': 'party-logo'}),
+          h('h2', self.data.name),
           h('div.body-content',
             h.rawHtml('p', description)
           ),
-          (this.data.footer?
+          (self.data.footer?
             h('div.footer',
-              this.data.footer.map(function(elem){
+              self.data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -779,11 +740,11 @@ class CardContent {
             dots: false,
             infinite: false,
             adaptiveHeight: true,
-            centerMode: true,
+            // centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: true,
-            // variableWidth: true,
+            variableWidth: true,
             // swipeToSlide: true
           });
           slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
@@ -793,14 +754,14 @@ class CardContent {
           });
         },100)
         return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.name),
+          h('img', {'src': self.data.image, 'class': 'party-logo'}),
+          h('h2', self.data.name),
           h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.content))
+            h.rawHtml('p', markdownToHtml(self.data.content))
           ),
-          (this.data.footer?
+          (self.data.footer?
             h('div.footer',
-              this.data.footer.map(function(elem){
+              self.data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -821,7 +782,7 @@ class CardContent {
 
       case 'question':
         const tasksDom = [];
-        this.data.tasks.forEach(function(name) {
+        self.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
           task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
           tasksDom.push(
@@ -837,28 +798,25 @@ class CardContent {
           );
         });
         return h('.content',
-          h('h2', this.data.name),
+          h('h2', self.data.name),
           h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.description))
+            h.rawHtml('p', markdownToHtml(self.data.description))
           ),
           h('section.questions',tasksDom)
         )
 
       default:
-        return h('.content',
-          h('h2', this.data.name),
-          h('div.body-content',
-            h('p', this.data.description)
-          )
-        )
+        console.log('Defaulting');
+        return h('div', getCardDom(self.data, CardTemplates[self.data.type]));
     }
-    if (this.data.type == 'postcode') {
+    //Think this is probably unnecessary?
+    if (self.data.type == 'postcode') {
 
     } else {
       return h('.content',
-        h('h2', this.data.name),
+        h('h2', self.data.name),
         h('div.body-content',
-          h('p', this.data.description)
+          h('p', self.data.description)
         )
       )
     }
@@ -959,16 +917,31 @@ function getResults(){
             description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
           }
           yourFooter = "BackToDashboard";
+          shareButtonCard = [];
           extraCards = [];
         } else {
           results.parties[0].matches.plus.forEach(function(match) {
             yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
             + match.description + '<br>';
-          })
+          });
           results.parties[0].chances.plus.forEach(function(chance) {
             yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
             + chance.description + '<br>';
-          })
+          });
+          shareButtonCard = [
+            {
+              name: "Spread the #GE2017 ❤️",
+              type: "share",
+              button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+              buttonClass1: "btn-facebook",
+              buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+              target1: "_blank",
+              button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+              buttonClass2: "btn-twitter",
+              buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+              target2: "_blank"
+            }
+          ];
           extraCards = [
             {
               name: "You and your matched party",
@@ -983,14 +956,16 @@ function getResults(){
         model.user.results.push([
           [
             {
-              image: results.parties[0] && results.parties[0].image && ("/img/party-logos/" + results.parties[0].image) || '/img/party-logos/party.jpg',
+              image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
               name: results.parties[0] && results.parties[0].name,
               description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
               footer: [
                 yourFooter
-              ]
+              ],
+              type: "Organization" // Temporary
             }
           ],
+          shareButtonCard,
           extraCards
         ]);
         resolve();
@@ -1038,32 +1013,15 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  // console.log('data');
-  // console.log(data);
-  // console.log('template');
-  // console.log(template);
-  // console.log(template);
   data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
-  const dom = template.map(function(element) {
+  var dom = [];
+  template.forEach(function(element) {
     var content,
-        skip,
         attr = {};
-    if(
-      element.condition
-      &&
-      (
-        !getObjectPathProperty(data, element.condition) && !element.condition.match(/^!/)
-        ||
-        getObjectPathProperty(data, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
-      )
-    )
-      return undefined;
-    else if (element.template)
+    if (element.template)
       content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
     else if (!element.content)
       content = '';
-    else if (element.loop)
-      content = getObjectPathProperty(data, element.loop).map(function(el){return getCardDom(el, element.content)});
     else if (element.content.constructor === Array)
       content = getCardDom(data, element.content);
     else if (element.content.var)
@@ -1074,348 +1032,29 @@ var getCardDom = function(data, template) {
     if (element.attr) {
       var attrKeys = Object.keys(element.attr);
       attrKeys.forEach(function(attrKey) {
-        attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        if (attrKey == "style" && typeof(element.attr.style) == "object") {
+          var styleKeys = Object.keys(element.attr.style);
+          var styles = {}
+          styleKeys.forEach(function(styleKey) {
+            var style = element.attr.style[styleKey];
+            styles[styleKey] = style.var ? getObjectPathProperty(data, style.var) : style; //'var' MUST use dot notation, not []
+            if (styleKey == "background-image" && style.var) {
+              styles[styleKey] = 'url("' + styles[styleKey] + '")'
+            }
+          });
+          attr[attrKey] = styles;
+        } else {
+          attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        }
       })
     }
     if (element.content && element.content.markdown) {
-      console.log('--MARKDOWN--')
-      console.log(element.content)
-      console.log(content)
-       return h.rawHtml(element.dom, attr, markdownToHtml(content));
+      dom.push(h.rawHtml(element.dom, attr, markdownToHtml(content)));
     } else {
-      console.log('--NOT MARKDOWN--')
-      console.log(element.content)
-      console.log(content)
-      return h(element.dom, attr, content);
+      dom.push(h(element.dom, attr, content));
     }
   });
   return dom;
 }
 
-const loadTemplates = function(templateUrl){
-  return new Promise(function(resolve,reject){
-    http.get(templateUrl)
-    .then(function (res) {
-      resolve(res.body);
-    });
-  });
-}
-
-const _temporaryTemplates = function(){
-  var tempData = {
-    name: "Barack Obama",
-    description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
-    "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
-    "@type": "http://localhost:5002/Person"
-  };
-  CardTemplates.card = [
-    {
-      "dom": "div.card",
-      "attr": {
-        "data-uri": {
-          "var": "@id",
-        },
-        "style": "height: auto"
-      },
-      "content": [
-        {
-          "dom": "div.card-visible",
-          "content": [
-            {
-              "dom": "div.close",
-              "content": [
-                {
-                  "dom": "i.fa.fa-times",
-                  "attr": {
-                    "data-hidden": "true"
-                  }
-                }
-              ]
-            },
-            {
-              "dom": "div.content",
-              "attr": {
-                "class": {
-                  "var": "@type"
-                }
-              },
-              "template": {
-                "var": "type"
-              }
-            },
-            {
-              "dom": "a.card-icon",
-              "attr": {
-                "target": "_blank",
-                "tabindex": "-1"
-              },
-              "content": [
-                {
-                  "dom": "img",
-                  "attr": {
-                    "src": "http://app.explaain.com/card-logo.png"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "button.edit-button",
-          "attr": {
-            "tabindex": "-1"
-          },
-          "content": [
-            {
-              "dom": "i.fa.fa-pencil",
-              "attr": {
-                "aria-hidden": "true"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  CardTemplates["Person"] = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name"
-      }
-    },
-    {
-      "dom": "div.card-image",
-      "content": [{
-        "dom": "img",
-        "attr": {"src": {
-          "var": "image"
-        }}
-      }]
-    },
-    {
-      "dom": "div.body-content",
-      "content": {
-        "var": "description",
-        "markdown": true
-      }
-    }
-  ];
-  CardTemplates.postcodeCompare = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name",
-        "default": "Please enter your postcode"
-      }
-    },
-    {
-      "dom": "div.body-content",
-      "content": [
-        {
-          "dom": "form.postcode-form",
-          "attr": {
-            "onsubmit": {
-              "var": "postcodeSubmit"
-            }
-          },
-          "content": [
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Home Postcode",
-                "binding": {
-                  "var": "postcodeBinding"
-                }
-              }
-            },
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Uni Postcode",
-                "binding": {
-                  "var": "postcodeUniBinding"
-                }
-              }
-            },
-            {
-              "dom": "button.btn.btn-success",
-              "attr": {
-                "type": "submit"
-              },
-              "content": "Compare"
-            }
-          ]
-        },
-        {
-          "dom": "h3",
-          "content": {
-            "var": "subheading"
-          }
-        },
-        {
-          "dom": "p",
-          "content": {
-            "var": "description",
-            "markdown": true
-          }
-        },
-        {
-          "dom": "div",
-          "condition": "constituencyResults",
-          "template": "constituencyResults"
-        }
-      ]
-    },
-    {
-      "dom": "div",
-      "template": "footer"
-    }
-  ]
-
-  CardTemplates.footer = [
-    {
-      "dom": ".footer",
-      "content": [
-        {
-          "dom": "div",
-          "template": {
-            "var": "footerContentTemplate"
-          }
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.voteNow = [
-    {
-      "dom": "div",
-      "content": [
-        {
-          "dom": ".bold",
-          "content": "or go straight to register"
-        },
-        {
-          "dom": "p",
-          "content": [
-            {
-              "dom": "a.discard-card-style",
-              "attr": {
-                "href": "https://www.gov.uk/register-to-vote",
-                "target":"_blank",
-              },
-              "content": [
-                {
-                  "dom": "button.btn.btn-primary",
-                  "content": "Register >"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "p.small",
-          "content": "This link will take you to the official gov.uk website"
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituencyResults = [
-    {
-      "dom": ".seats",
-      "content": [
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.heading"
-          }
-        },
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.subheading"
-          }
-        },
-        {
-          "dom": ".seat-list",
-          "loop": "constituencyResults.constituencies",
-          "content": [
-            {
-              "dom": "span",
-              "template": "constituency"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituency = [
-    {
-      "dom": "div.seat.column50",
-      "content": [
-        {
-          "dom": "div.location.small",
-          "content": {
-            "var": "location"
-          },
-        },
-        {
-          "dom": "div.versus.bold.line1em",
-          "content": {
-            "var": "parties"
-          }
-        }
-      ]
-    }
-  ]
-
-  // Usage:
-  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
-  CardTemplates.loopExample = [
-    {
-      "dom": ".people",
-      "loop": "people", // changing the scope of data
-      "content": [
-        {
-          "dom": ".person",
-          "content": [
-            {
-              "dom": "div",
-              "content": {
-                "var": "name"
-              }
-            },
-            {
-              "dom": "div",
-              "content": {
-                "var": "age"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  console.log(tempData);
-  console.log(CardTemplates.card);
-  var tempDom = getCardDom(tempData, CardTemplates.card);
-  console.log(tempDom);
-  console.log(CardTemplates)
-}
-
-
-
-loadTemplates('//explaain-api.herokuapp.com/templates').then(function(_templates){
-  CardTemplates = _templates;
-  _temporaryTemplates(); // todo: this is needed for development purposes, move templated to backend once tested
-  hyperdom.append(document.body, new App());
-});
+hyperdom.append(document.body, new App());

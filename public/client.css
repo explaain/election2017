@@ -28,14 +28,18 @@ a {
   cursor: pointer;
 }
 
+button.btn i.fa {
+  margin-right: 5px;
+}
+
 .error {
   color: red;
   font-weight: bold;
 }
 
 body > div.body > div.main {
-  max-width: 800px;
-  margin: auto;
+  /*max-width: 800px;*/
+  margin: 0 10px;
 }
 
 header {
@@ -122,7 +126,7 @@ section {
   max-width: 400px;
   margin: auto;
 }
-section.large {
+section.wide {
   max-width: 600px;
 }
 section.xl {
@@ -254,12 +258,59 @@ section.questions a.task:hover {
 }
 
 .card {
-  min-width: 380px;
-  max-width: 400px;
   margin: 30px 0 0 0;
+  text-align: left;
+}
+.slick-container .card {
+  width: 380px;
+}
+.card.postcode, .card.share {
+  text-align: center;
 }
 .card.expandable {
   max-width: 600px;
+}
+
+.card .card-visible {
+  padding: 0;
+}
+
+.card section {
+  padding: 0;
+  max-width: none;
+}
+section .card section {
+  padding-bottom: 1em;
+}
+section.wide .card section.expandable {
+  display: table-cell;
+}
+section .card section.card-media {
+  background-position: center;
+  background-size: cover;
+}
+section.wide .card section.card-media {
+  width: 45%;
+}
+section:not(.wide) .card section.card-media {
+  min-height: 250px;
+}
+
+.card .content, .card .content > div, .card .content section, .card .content h2, .card .content .body-content  {
+  overflow: hidden;
+}
+.card .content {
+  margin: 0;
+}
+.card .content h2 {
+  margin: 1em 0;
+}
+.card .content .card-image {
+  overflow: hidden;
+  margin: 0;
+}
+.card .content .card-image img {
+    transform: inherit;
 }
 
 /* igor: on result cards we want text to be alighed left, temporary */
@@ -455,7 +506,6 @@ section.questions a.task:hover {
 
 .seat .versus{
   padding: 20px 10px;
-  border: solid 1px black;
   /*min-height: 74px;*/
 }
 

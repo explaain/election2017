@@ -790,7 +790,7 @@ function addAbortToPromise(promise, abort) {
   };
 }
 
-},{"./middlewareUtils":10,"./querystring-lite":12,"global":5,"random-string":38}],8:[function(require,module,exports){
+},{"./middlewareUtils":10,"./querystring-lite":12,"global":5,"random-string":39}],8:[function(require,module,exports){
 var merge = require('./merge');
 var resolveUrl = require('./resolveUrl');
 var utils = require('./middlewareUtils');
@@ -1773,7 +1773,7 @@ exports.hash = {
   }
 };
 
-},{"hyperdom":20,"routism":39}],15:[function(require,module,exports){
+},{"hyperdom":20,"routism":40}],15:[function(require,module,exports){
 var listener = require('./listener');
 var binding = require('./binding')
 
@@ -2193,7 +2193,7 @@ function domComponent(options) {
 
 exports.create = domComponent;
 
-},{"./isVdom":21,"./toVdom":34,"virtual-dom/create-element":40,"virtual-dom/diff":41,"virtual-dom/patch":42}],20:[function(require,module,exports){
+},{"./isVdom":21,"./toVdom":34,"virtual-dom/create-element":41,"virtual-dom/diff":42,"virtual-dom/patch":43}],20:[function(require,module,exports){
 var rendering = require('./rendering')
 var refreshify = require('./refreshify')
 var binding = require('./binding')
@@ -2232,7 +2232,7 @@ module.exports = function(x) {
   }
 };
 
-},{"virtual-dom/vnode/version":58}],22:[function(require,module,exports){
+},{"virtual-dom/vnode/version":59}],22:[function(require,module,exports){
 var refreshify = require('./refreshify');
 
 function ListenerHook(listener) {
@@ -2467,7 +2467,7 @@ Mount.prototype.remove = function () {
 
 module.exports = Mount;
 
-},{"./meta":23,"./propertyHook":26,"./refreshEventResult":28,"./render":30,"./set":32,"virtual-dom/vnode/vtext.js":61}],25:[function(require,module,exports){
+},{"./meta":23,"./propertyHook":26,"./refreshEventResult":28,"./render":30,"./set":32,"virtual-dom/vnode/vtext.js":62}],25:[function(require,module,exports){
 var render = require('./render');
 var bindModel = require('./bindModel')
 
@@ -2890,7 +2890,7 @@ function rawHtml() {
 
 exports.html.rawHtml = rawHtml;
 
-},{"./binding":16,"./deprecations":18,"./domComponent":19,"./meta":23,"./mount":24,"./prepareAttributes":25,"./refreshAfter":27,"./refreshEventResult":28,"./render":30,"./toVdom":34,"./vhtml":35,"virtual-dom/virtual-hyperscript/parse-tag":51}],32:[function(require,module,exports){
+},{"./binding":16,"./deprecations":18,"./domComponent":19,"./meta":23,"./mount":24,"./prepareAttributes":25,"./refreshAfter":27,"./refreshEventResult":28,"./render":30,"./toVdom":34,"./vhtml":35,"virtual-dom/virtual-hyperscript/parse-tag":52}],32:[function(require,module,exports){
 if (typeof Set === 'function') {
   module.exports = Set;
 } else {
@@ -2986,7 +2986,7 @@ module.exports.recursive = function (child) {
   return children;
 };
 
-},{"./component":17,"./isVdom":21,"virtual-dom/vnode/vtext.js":61}],35:[function(require,module,exports){
+},{"./component":17,"./isVdom":21,"virtual-dom/vnode/vtext.js":62}],35:[function(require,module,exports){
 'use strict';
 
 var VNode = require('virtual-dom/vnode/vnode.js');
@@ -3031,7 +3031,87 @@ function h(tagName, props, children) {
   return vnode
 }
 
-},{"./xml":36,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":50,"virtual-dom/vnode/is-vhook":54,"virtual-dom/vnode/vnode.js":59}],36:[function(require,module,exports){
+},{"./xml":37,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":51,"virtual-dom/vnode/is-vhook":55,"virtual-dom/vnode/vnode.js":60}],36:[function(require,module,exports){
+var domComponent = require('./domComponent');
+var rendering = require('./rendering');
+var VText = require("virtual-dom/vnode/vtext.js")
+
+function WindowWidget(attributes) {
+  this.attributes = attributes;
+  this.vdom = new VText('');
+  this.component = domComponent.create();
+
+  var self = this;
+  this.cache = {};
+  Object.keys(this.attributes).forEach(function (key) {
+    self.cache[key] = rendering.html.refreshify(self.attributes[key]);
+  });
+}
+
+WindowWidget.prototype.type = 'Widget';
+
+WindowWidget.prototype.init = function () {
+  applyPropertyDiffs(window, {}, this.attributes, {}, this.cache);
+  return this.element = document.createTextNode('');
+};
+
+function uniq(array) {
+  var sortedArray = array.slice();
+  sortedArray.sort();
+
+  var last;
+
+  for(var n = 0; n < sortedArray.length;) {
+    var current = sortedArray[n];
+
+    if (last === current) {
+      sortedArray.splice(n, 1);
+    } else {
+      n++;
+    }
+    last = current;
+  }
+
+  return sortedArray;
+}
+
+function applyPropertyDiffs(element, previous, current, previousCache, currentCache) {
+  uniq(Object.keys(previous).concat(Object.keys(current))).forEach(function (key) {
+    if (/^on/.test(key)) {
+      var event = key.slice(2);
+
+      var prev = previous[key];
+      var curr = current[key];
+      var refreshPrev = previousCache[key];
+      var refreshCurr = currentCache[key];
+
+      if (prev !== undefined && curr === undefined) {
+        element.removeEventListener(event, refreshPrev);
+      } else if (prev !== undefined && curr !== undefined && prev !== curr) {
+        element.removeEventListener(event, refreshPrev);
+        element.addEventListener(event, refreshCurr);
+      } else if (prev === undefined && curr !== undefined) {
+        element.addEventListener(event, refreshCurr);
+      }
+    }
+  });
+}
+
+WindowWidget.prototype.update = function (previous) {
+  applyPropertyDiffs(window, previous.attributes, this.attributes, previous.cache, this.cache);
+  this.component = previous.component;
+  return this.element;
+};
+
+WindowWidget.prototype.destroy = function () {
+  applyPropertyDiffs(window, this.attributes, {}, this.cache, {});
+};
+
+module.exports = function (attributes) {
+  return new WindowWidget(attributes);
+};
+
+},{"./domComponent":19,"./rendering":31,"virtual-dom/vnode/vtext.js":62}],37:[function(require,module,exports){
 var AttributeHook = require('virtual-dom/virtual-hyperscript/hooks/attribute-hook')
 
 var namespaceRegex = /^([a-z0-9_-]+)(--|:)([a-z0-9_-]+)$/i
@@ -3127,14 +3207,14 @@ function transform(vnode) {
 
 module.exports.transform = transform
 
-},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":49}],37:[function(require,module,exports){
+},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":50}],38:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 /*
  * random-string
  * https://github.com/valiton/node-random-string
@@ -3180,7 +3260,7 @@ module.exports = function randomString(opts) {
   return rnd;
 };
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 (function() {
     var self = this;
     var variableRegex, splatVariableRegex, escapeRegex, addGroupForTo, addVariablesInTo, compile, recogniseIn, extractParamsForFromAfter;
@@ -3279,22 +3359,22 @@ module.exports = function randomString(opts) {
         return params;
     };
 }).call(this);
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":44}],41:[function(require,module,exports){
+},{"./vdom/create-element.js":45}],42:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":63}],42:[function(require,module,exports){
+},{"./vtree/diff.js":64}],43:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":47}],43:[function(require,module,exports){
+},{"./vdom/patch.js":48}],44:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -3393,7 +3473,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":54,"is-object":37}],44:[function(require,module,exports){
+},{"../vnode/is-vhook.js":55,"is-object":38}],45:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -3441,7 +3521,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":52,"../vnode/is-vnode.js":55,"../vnode/is-vtext.js":56,"../vnode/is-widget.js":57,"./apply-properties":43,"global/document":4}],45:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":53,"../vnode/is-vnode.js":56,"../vnode/is-vtext.js":57,"../vnode/is-widget.js":58,"./apply-properties":44,"global/document":4}],46:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -3528,7 +3608,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -3681,7 +3761,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":57,"../vnode/vpatch.js":60,"./apply-properties":43,"./update-widget":48}],47:[function(require,module,exports){
+},{"../vnode/is-widget.js":58,"../vnode/vpatch.js":61,"./apply-properties":44,"./update-widget":49}],48:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -3763,7 +3843,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":44,"./dom-index":45,"./patch-op":46,"global/document":4,"x-is-array":64}],48:[function(require,module,exports){
+},{"./create-element":45,"./dom-index":46,"./patch-op":47,"global/document":4,"x-is-array":65}],49:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -3780,7 +3860,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":57}],49:[function(require,module,exports){
+},{"../vnode/is-widget.js":58}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = AttributeHook;
@@ -3817,7 +3897,7 @@ AttributeHook.prototype.unhook = function (node, prop, next) {
 
 AttributeHook.prototype.type = 'AttributeHook';
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 module.exports = SoftSetHook;
@@ -3836,7 +3916,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 var split = require('browser-split');
@@ -3892,7 +3972,7 @@ function parseTag(tag, props) {
     return props.namespace ? tagName : tagName.toUpperCase();
 }
 
-},{"browser-split":3}],52:[function(require,module,exports){
+},{"browser-split":3}],53:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -3934,14 +4014,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":53,"./is-vnode":55,"./is-vtext":56,"./is-widget":57}],53:[function(require,module,exports){
+},{"./is-thunk":54,"./is-vnode":56,"./is-vtext":57,"./is-widget":58}],54:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -3950,7 +4030,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -3959,7 +4039,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":58}],56:[function(require,module,exports){
+},{"./version":59}],57:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -3968,17 +4048,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":58}],57:[function(require,module,exports){
+},{"./version":59}],58:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 module.exports = "2"
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -4052,7 +4132,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":53,"./is-vhook":54,"./is-vnode":55,"./is-widget":57,"./version":58}],60:[function(require,module,exports){
+},{"./is-thunk":54,"./is-vhook":55,"./is-vnode":56,"./is-widget":58,"./version":59}],61:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -4076,7 +4156,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":58}],61:[function(require,module,exports){
+},{"./version":59}],62:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -4088,7 +4168,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":58}],62:[function(require,module,exports){
+},{"./version":59}],63:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -4148,7 +4228,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":54,"is-object":37}],63:[function(require,module,exports){
+},{"../vnode/is-vhook":55,"is-object":38}],64:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -4577,7 +4657,7 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":52,"../vnode/is-thunk":53,"../vnode/is-vnode":55,"../vnode/is-vtext":56,"../vnode/is-widget":57,"../vnode/vpatch":60,"./diff-props":62,"x-is-array":64}],64:[function(require,module,exports){
+},{"../vnode/handle-thunk":53,"../vnode/is-thunk":54,"../vnode/is-vnode":56,"../vnode/is-vtext":57,"../vnode/is-widget":58,"../vnode/vpatch":61,"./diff-props":63,"x-is-array":65}],65:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -4587,7 +4667,7 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 var http = require('httpism')
 
 function APIService() {
@@ -5067,12 +5147,13 @@ function createObjectProps(globalObject, props) {
 
 module.exports = new APIService();
 
-},{"httpism":6}],66:[function(require,module,exports){
-var hyperdom = require('hyperdom');
-var h = hyperdom.html;
-var router = require('hyperdom-router');
-var api = require('../services/APIService');
-var http = require('httpism');
+},{"httpism":6}],67:[function(require,module,exports){
+var hyperdom = require('hyperdom'),
+    h = hyperdom.html,
+    router = require('hyperdom-router'),
+    windowEvents = require('hyperdom/windowEvents'),
+    api = require('../services/APIService'),
+    http = require('httpism');
 
 var routes = {
   root: router.route('/'),
@@ -5089,6 +5170,23 @@ var CardTemplates = {};
 class App {
   constructor(data) {
     this.header = new Header();
+
+    window.onresize = function() {
+      if (window.innerWidth > 600) {
+        if (!$('section.step').hasClass('wide')) {
+          $('section.step').addClass('wide');
+        }
+      } else {
+        $('section.step').removeClass('wide');
+      }
+    }
+
+    var templateUrl = '//localhost:5002/templates';
+    http.get(templateUrl)
+    .then(function (res) { //Must make sure this isn't needed before it returns, since it's asynchronous!
+      CardTemplates = res.body;
+      console.log(CardTemplates)
+    });
 
     var issueKeys = Object.keys(partyStances.opinions.issues);
     issueKeys.forEach(function(issueKey, i) {
@@ -5107,9 +5205,9 @@ class App {
             index: j
           },
           tasks: [
-            "question-agree",
+            "question-disagree",
             "question-neutral",
-            "question-disagree"
+            "question-agree"
           ]
         }
       })
@@ -5307,18 +5405,19 @@ class Step {
       case 'postcode-compare':
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
-          type: 'postcode-compare',
+          type: 'postcode',
           name: 'Student and not sure where to vote from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌',
-          footerContentTemplate: "voteNow"
+          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
         break;
 
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          data.cardGroups.push(cards)
+          // params.name = 'Organization';
+          data.cardGroups.push(cards);
         })
+        console.log(JSON.stringify(data.cardGroups))
         break;
 
       case 'story':
@@ -5369,20 +5468,19 @@ class Step {
         }])
     }
     this.cardGroups = data.cardGroups.map(function(cards){
-      if(!cards.nextStep){
-        cards.nextStep = params.next;
-      }
       cards.forEach(function(card, i) {
-        cards[i].nextStep = cards[i].nextStep || cards.nextStep;
-        // cards[i].type = cards[i].type || cards.type;
+        if(!cards[i].nextStep){
+          cards[i].nextStep = params.next;
+        }
+        console.log(cards[i].type)
+        cards[i].type = cards[i].type || params.name;
+        console.log(cards[i].type)
       });
-      console.log('params.name');
-      console.log(params.name);
       if (cards.constructor !== Array || cards.length == 1) {
-        // return ([new Card(cards[0])]);
-        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+        return ([new Card(cards[0])]);
+        // return (new CardSlider({cards:cards,nextStep:params.next}));
       } else {
-        return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
+        return (new CardSlider({cards:cards,nextStep:params.next}));
       }
     })
 
@@ -5411,7 +5509,8 @@ class Step {
 
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
-    return h("section.step" /*+ (this.params.name=='result' ? ".large" : "")*/,
+    return h("section.step"
+      + (this.params.name=='result' && window.innerWidth > 600 ? ".wide" : ""),
       h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
         ["div.cards"].concat(this.headers).concat(this.cardGroups)
@@ -5427,7 +5526,6 @@ class CardSlider {
 
   render() {
     const self = this;
-    console.log(self)
     const cards = self.data.cards.map(function(card){
       return (new Card(card));
     })
@@ -5446,12 +5544,9 @@ class Card {
   constructor(data) {
     this.cardContent = new CardContent(data);
     this.data = data;
-    console.log(this.data)
   }
 
   render() {
-    // igor: this doesn't seem right as CardTemplates should never be modified
-    // igor: to refactor
     delete CardTemplates.card[0].content[0].content[1].template;
     CardTemplates.card[0].content[0].content[1].content = this.cardContent;
     return getCardDom(this.data, CardTemplates.card)[0];
@@ -5480,9 +5575,11 @@ class CardContent {
 
   render() {
     const self = this;
-    switch (this.data.type) {
+    console.log('self.data.type');
+    console.log(self.data.type);
+    switch (self.data.type) {
       case 'postcode':
-        var data = this.data; //Necessary??
+        var data = self.data; //Necessary??
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
@@ -5495,7 +5592,7 @@ class CardContent {
         }
         return h('div', getCardDom(data, CardTemplates['postcodeInput']));
         // return h('.content',
-        //   h('h2', this.data.name),
+        //   h('h2', self.data.name),
         //   h('div.body-content',
         //     h('form.postcode-form',
         //       {
@@ -5513,16 +5610,16 @@ class CardContent {
         //       h('button.btn.btn-success', {type: "submit"}, "Go!")
         //     ),
         //     h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-        //     h('p', this.data.description)
+        //     h('p', self.data.description)
         //   )
         // )
         break;
 
 
       case 'vote-worth':
-        var data = this.data;
+        var data = self.data;
         return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.name),
+          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.name),
           h('div.body-content',
             h('form.postcode-form',
               {
@@ -5582,7 +5679,7 @@ class CardContent {
               undefined
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.description)
+            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.description)
           ),
           h('div.footer',
             (
@@ -5625,65 +5722,9 @@ class CardContent {
         break;
 
       case 'postcode-compare':
-        var data = this.data;
-        // temp: this is for testing loops with real constituencyResults data
-        /*
-        this.data.constituencyResults = {
-          heading: "Header",
-          subheading: "Subheader",
-          constituencies: [
-            {
-              type: "constituency",
-              location: "London",
-              parties: "One vs Two"
-            },
-            {
-              type: "constituency",
-              location: "Yorkshire",
-              parties: "Three vs Four"
-            }
-          ]
-        }
-        */
-        data.postcodeSubmit = function(e){
-          e.stopPropagation();
-          model.user.isWaiting = true;
-          api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-            if (results.error) {
-              console.log("Sorry, we didn't recognise that postcode!")
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                error: 'bad-postcode',
-              }).replace();
-            } else {
-              model.user.isWaiting = false;
-              model.user.resultsCompare.push(results);
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                next: data.nextStep,
-                attempt: model.user.resultsCompare.length
-              }).replace();
-            }
-          });
-          return false;
-        }
-        if(model.user.resultsCompare.length){
-          const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
-          data.constituencyResults = {
-            heading: latestResults.text.heading,
-            subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats // todo: fix "type" here
-          }
-        }
-        console.log("WOWOWOW")
-        console.log(data.constituencyResults)
-        data.postcodeBinding = [model.user, 'postcode'];
-        data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        var data = self.data;
         return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
+          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),
           h('div.body-content',
             h('form.postcode-form',
               {
@@ -5743,7 +5784,7 @@ class CardContent {
               undefined
             ),
             h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
+            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.description)
           ),
           h('div.footer',
             (
@@ -5798,26 +5839,26 @@ class CardContent {
             dots: false,
             infinite: false,
             adaptiveHeight: true,
-            centerMode: true,
+            // centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: true,
-            // variableWidth: true,
+            variableWidth: true,
             // swipeToSlide: true
           });
         },100)
-        const description = markdownToHtml(this.data.description);
+        const description = markdownToHtml(self.data.description);
         console.log('---description---');
         console.log(description);
         return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.name),
+          h('img', {'src': self.data.image, 'class': 'party-logo'}),
+          h('h2', self.data.name),
           h('div.body-content',
             h.rawHtml('p', description)
           ),
-          (this.data.footer?
+          (self.data.footer?
             h('div.footer',
-              this.data.footer.map(function(elem){
+              self.data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -5849,11 +5890,11 @@ class CardContent {
             dots: false,
             infinite: false,
             adaptiveHeight: true,
-            centerMode: true,
+            // centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: true,
-            // variableWidth: true,
+            variableWidth: true,
             // swipeToSlide: true
           });
           slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
@@ -5863,14 +5904,14 @@ class CardContent {
           });
         },100)
         return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.name),
+          h('img', {'src': self.data.image, 'class': 'party-logo'}),
+          h('h2', self.data.name),
           h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.content))
+            h.rawHtml('p', markdownToHtml(self.data.content))
           ),
-          (this.data.footer?
+          (self.data.footer?
             h('div.footer',
-              this.data.footer.map(function(elem){
+              self.data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -5891,7 +5932,7 @@ class CardContent {
 
       case 'question':
         const tasksDom = [];
-        this.data.tasks.forEach(function(name) {
+        self.data.tasks.forEach(function(name) {
           const task = model.tasks[name];
           task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
           tasksDom.push(
@@ -5907,28 +5948,25 @@ class CardContent {
           );
         });
         return h('.content',
-          h('h2', this.data.name),
+          h('h2', self.data.name),
           h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.description))
+            h.rawHtml('p', markdownToHtml(self.data.description))
           ),
           h('section.questions',tasksDom)
         )
 
       default:
-        return h('.content',
-          h('h2', this.data.name),
-          h('div.body-content',
-            h('p', this.data.description)
-          )
-        )
+        console.log('Defaulting');
+        return h('div', getCardDom(self.data, CardTemplates[self.data.type]));
     }
-    if (this.data.type == 'postcode') {
+    //Think this is probably unnecessary?
+    if (self.data.type == 'postcode') {
 
     } else {
       return h('.content',
-        h('h2', this.data.name),
+        h('h2', self.data.name),
         h('div.body-content',
-          h('p', this.data.description)
+          h('p', self.data.description)
         )
       )
     }
@@ -6029,16 +6067,31 @@ function getResults(){
             description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
           }
           yourFooter = "BackToDashboard";
+          shareButtonCard = [];
           extraCards = [];
         } else {
           results.parties[0].matches.plus.forEach(function(match) {
             yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
             + match.description + '<br>';
-          })
+          });
           results.parties[0].chances.plus.forEach(function(chance) {
             yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
             + chance.description + '<br>';
-          })
+          });
+          shareButtonCard = [
+            {
+              name: "Spread the #GE2017 ❤️",
+              type: "share",
+              button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+              buttonClass1: "btn-facebook",
+              buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+              target1: "_blank",
+              button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+              buttonClass2: "btn-twitter",
+              buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+              target2: "_blank"
+            }
+          ];
           extraCards = [
             {
               name: "You and your matched party",
@@ -6053,14 +6106,16 @@ function getResults(){
         model.user.results.push([
           [
             {
-              image: results.parties[0] && results.parties[0].image && ("/img/party-logos/" + results.parties[0].image) || '/img/party-logos/party.jpg',
+              image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
               name: results.parties[0] && results.parties[0].name,
               description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
               footer: [
                 yourFooter
-              ]
+              ],
+              type: "Organization" // Temporary
             }
           ],
+          shareButtonCard,
           extraCards
         ]);
         resolve();
@@ -6108,32 +6163,15 @@ var markdownToHtml = function(text) {
 
 
 var getCardDom = function(data, template) {
-  // console.log('data');
-  // console.log(data);
-  // console.log('template');
-  // console.log(template);
-  // console.log(template);
   data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
-  const dom = template.map(function(element) {
+  var dom = [];
+  template.forEach(function(element) {
     var content,
-        skip,
         attr = {};
-    if(
-      element.condition
-      &&
-      (
-        !getObjectPathProperty(data, element.condition) && !element.condition.match(/^!/)
-        ||
-        getObjectPathProperty(data, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
-      )
-    )
-      return undefined;
-    else if (element.template)
+    if (element.template)
       content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
     else if (!element.content)
       content = '';
-    else if (element.loop)
-      content = getObjectPathProperty(data, element.loop).map(function(el){return getCardDom(el, element.content)});
     else if (element.content.constructor === Array)
       content = getCardDom(data, element.content);
     else if (element.content.var)
@@ -6144,350 +6182,31 @@ var getCardDom = function(data, template) {
     if (element.attr) {
       var attrKeys = Object.keys(element.attr);
       attrKeys.forEach(function(attrKey) {
-        attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        if (attrKey == "style" && typeof(element.attr.style) == "object") {
+          var styleKeys = Object.keys(element.attr.style);
+          var styles = {}
+          styleKeys.forEach(function(styleKey) {
+            var style = element.attr.style[styleKey];
+            styles[styleKey] = style.var ? getObjectPathProperty(data, style.var) : style; //'var' MUST use dot notation, not []
+            if (styleKey == "background-image" && style.var) {
+              styles[styleKey] = 'url("' + styles[styleKey] + '")'
+            }
+          });
+          attr[attrKey] = styles;
+        } else {
+          attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        }
       })
     }
     if (element.content && element.content.markdown) {
-      console.log('--MARKDOWN--')
-      console.log(element.content)
-      console.log(content)
-       return h.rawHtml(element.dom, attr, markdownToHtml(content));
+      dom.push(h.rawHtml(element.dom, attr, markdownToHtml(content)));
     } else {
-      console.log('--NOT MARKDOWN--')
-      console.log(element.content)
-      console.log(content)
-      return h(element.dom, attr, content);
+      dom.push(h(element.dom, attr, content));
     }
   });
   return dom;
 }
 
-const loadTemplates = function(templateUrl){
-  return new Promise(function(resolve,reject){
-    http.get(templateUrl)
-    .then(function (res) {
-      resolve(res.body);
-    });
-  });
-}
+hyperdom.append(document.body, new App());
 
-const _temporaryTemplates = function(){
-  var tempData = {
-    name: "Barack Obama",
-    description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
-    "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
-    "@type": "http://localhost:5002/Person"
-  };
-  CardTemplates.card = [
-    {
-      "dom": "div.card",
-      "attr": {
-        "data-uri": {
-          "var": "@id",
-        },
-        "style": "height: auto"
-      },
-      "content": [
-        {
-          "dom": "div.card-visible",
-          "content": [
-            {
-              "dom": "div.close",
-              "content": [
-                {
-                  "dom": "i.fa.fa-times",
-                  "attr": {
-                    "data-hidden": "true"
-                  }
-                }
-              ]
-            },
-            {
-              "dom": "div.content",
-              "attr": {
-                "class": {
-                  "var": "@type"
-                }
-              },
-              "template": {
-                "var": "type"
-              }
-            },
-            {
-              "dom": "a.card-icon",
-              "attr": {
-                "target": "_blank",
-                "tabindex": "-1"
-              },
-              "content": [
-                {
-                  "dom": "img",
-                  "attr": {
-                    "src": "http://app.explaain.com/card-logo.png"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "button.edit-button",
-          "attr": {
-            "tabindex": "-1"
-          },
-          "content": [
-            {
-              "dom": "i.fa.fa-pencil",
-              "attr": {
-                "aria-hidden": "true"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  CardTemplates["Person"] = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name"
-      }
-    },
-    {
-      "dom": "div.card-image",
-      "content": [{
-        "dom": "img",
-        "attr": {"src": {
-          "var": "image"
-        }}
-      }]
-    },
-    {
-      "dom": "div.body-content",
-      "content": {
-        "var": "description",
-        "markdown": true
-      }
-    }
-  ];
-  CardTemplates.postcodeCompare = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name",
-        "default": "Please enter your postcode"
-      }
-    },
-    {
-      "dom": "div.body-content",
-      "content": [
-        {
-          "dom": "form.postcode-form",
-          "attr": {
-            "onsubmit": {
-              "var": "postcodeSubmit"
-            }
-          },
-          "content": [
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Home Postcode",
-                "binding": {
-                  "var": "postcodeBinding"
-                }
-              }
-            },
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Uni Postcode",
-                "binding": {
-                  "var": "postcodeUniBinding"
-                }
-              }
-            },
-            {
-              "dom": "button.btn.btn-success",
-              "attr": {
-                "type": "submit"
-              },
-              "content": "Compare"
-            }
-          ]
-        },
-        {
-          "dom": "h3",
-          "content": {
-            "var": "subheading"
-          }
-        },
-        {
-          "dom": "p",
-          "content": {
-            "var": "description",
-            "markdown": true
-          }
-        },
-        {
-          "dom": "div",
-          "condition": "constituencyResults",
-          "template": "constituencyResults"
-        }
-      ]
-    },
-    {
-      "dom": "div",
-      "template": "footer"
-    }
-  ]
-
-  CardTemplates.footer = [
-    {
-      "dom": ".footer",
-      "content": [
-        {
-          "dom": "div",
-          "template": {
-            "var": "footerContentTemplate"
-          }
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.voteNow = [
-    {
-      "dom": "div",
-      "content": [
-        {
-          "dom": ".bold",
-          "content": "or go straight to register"
-        },
-        {
-          "dom": "p",
-          "content": [
-            {
-              "dom": "a.discard-card-style",
-              "attr": {
-                "href": "https://www.gov.uk/register-to-vote",
-                "target":"_blank",
-              },
-              "content": [
-                {
-                  "dom": "button.btn.btn-primary",
-                  "content": "Register >"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "p.small",
-          "content": "This link will take you to the official gov.uk website"
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituencyResults = [
-    {
-      "dom": ".seats",
-      "content": [
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.heading"
-          }
-        },
-        {
-          "dom": "div",
-          "content": {
-            "var": "constituencyResults.subheading"
-          }
-        },
-        {
-          "dom": ".seat-list",
-          "loop": "constituencyResults.constituencies",
-          "content": [
-            {
-              "dom": "span",
-              "template": "constituency"
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  CardTemplates.constituency = [
-    {
-      "dom": "div.seat.column50",
-      "content": [
-        {
-          "dom": "div.location.small",
-          "content": {
-            "var": "location"
-          },
-        },
-        {
-          "dom": "div.versus.bold.line1em",
-          "content": {
-            "var": "parties"
-          }
-        }
-      ]
-    }
-  ]
-
-  // Usage:
-  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
-  CardTemplates.loopExample = [
-    {
-      "dom": ".people",
-      "loop": "people", // changing the scope of data
-      "content": [
-        {
-          "dom": ".person",
-          "content": [
-            {
-              "dom": "div",
-              "content": {
-                "var": "name"
-              }
-            },
-            {
-              "dom": "div",
-              "content": {
-                "var": "age"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  console.log(tempData);
-  console.log(CardTemplates.card);
-  var tempDom = getCardDom(tempData, CardTemplates.card);
-  console.log(tempDom);
-  console.log(CardTemplates)
-}
-
-
-
-loadTemplates('//explaain-api.herokuapp.com/templates').then(function(_templates){
-  CardTemplates = _templates;
-  _temporaryTemplates(); // todo: this is needed for development purposes, move templated to backend once tested
-  hyperdom.append(document.body, new App());
-});
-
-},{"../models/model":1,"../services/APIService":65,"httpism":6,"hyperdom":20,"hyperdom-router":14}]},{},[66]);
+},{"../models/model":1,"../services/APIService":66,"httpism":6,"hyperdom":20,"hyperdom-router":14,"hyperdom/windowEvents":36}]},{},[67]);
