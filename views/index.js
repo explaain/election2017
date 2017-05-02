@@ -809,7 +809,7 @@ class CardContent {
               nextQuestion: self.data.nextQuestion,
               final: self.data.final,
               next: self.data.nextStep?self.data.nextStep:task.goto.next
-            }).a( { "class": "task" + (task.subtype?" "+task.subtype:"")},
+            }).a( { "class": "task " + (task.subtype?" "+task.subtype:"")},
               h('h5', task.label)
             )
           );
