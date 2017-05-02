@@ -175,10 +175,10 @@ module.exports = function(CardTemplates){
       "dom": ".footer",
       "content": [
         {
-          "dom": "div",
+          "dom": "div"/*,
           "template": {
             "var": "footerContentTemplate"
-          }
+          }*/
         }
       ]
     }
