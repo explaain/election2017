@@ -145,6 +145,11 @@ module.exports = function(CardTemplates){
           ]
         },
         {
+          "dom": "div",
+          //"condition": "isWaiting",
+          "template": "loading"
+        },
+        {
           "dom": "h3",
           "content": {
             "var": "subheading"
@@ -181,6 +186,19 @@ module.exports = function(CardTemplates){
           }*/
         }
       ]
+    }
+  ]
+
+  CardTemplates.loading = [
+    {
+      "dom": 'div', // this is temporary
+      "content": "Loading"
+    },
+    {
+      "dom": 'img.loading',
+      "attr": {
+        'src': '/img/loading.gif'
+      }
     }
   ]
 

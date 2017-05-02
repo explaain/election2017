@@ -162,6 +162,11 @@ module.exports = function(CardTemplates){
           ]
         },
         {
+          "dom": "div",
+          //"condition": "isWaiting",
+          "template": "loading"
+        },
+        {
           "dom": "h3",
           "content": {
             "var": "subheading"
@@ -198,6 +203,19 @@ module.exports = function(CardTemplates){
           }*/
         }
       ]
+    }
+  ]
+
+  CardTemplates.loading = [
+    {
+      "dom": 'div', // this is temporary
+      "content": "Loading"
+    },
+    {
+      "dom": 'img.loading',
+      "attr": {
+        'src': '/img/loading.gif'
+      }
     }
   ]
 
@@ -388,12 +406,13 @@ module.exports = function(){
     var pList = path.split('.');
     var len = pList.length;
     for(var i = 0; i < len-1; i++) {
-        var elem = pList[i];
-        if( !schema[elem] ) schema[elem] = {}
-        schema = schema[elem];
+      var elem = pList[i];
+      if( !schema[elem] ) schema[elem] = {}
+      schema = schema[elem];
     }
     return schema[pList[len-1]];
   }
+
   return getObjectPathProperty;
 }
 
