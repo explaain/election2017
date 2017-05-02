@@ -22,7 +22,8 @@ const
   markdownToHtml = require("../includes/markdownToHtml")(),
   getObjectPathProperty = require("../includes/getObjectPathProperty")(),
   getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml),
-  updateData = require('../includes/updateData')(updateModel)
+  updateData = require('../includes/updateData')(updateModel),
+  getModel = require('../includes/getModel')(getObjectPathProperty,model)
 ;
 
 Model = model;
@@ -918,10 +919,6 @@ class BackToDashboard {
       )
     );
   }
-}
-
-function getModel(path){
-  return getObjectPathProperty(model, path);  // a moving reference to internal objects within model
 }
 
 function getResults(){
