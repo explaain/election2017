@@ -31,6 +31,8 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
   return delay(500).then(function(){
     return getContenders(postcode)
     .then(function(results) {
+      console.log('contenders')
+      console.log(results)
       if (results.error) {
         return results;
       } else {

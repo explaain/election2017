@@ -2,52 +2,62 @@ var partyStories = [
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise to leave the EU including the [single market](http://api.explaain.com/Detail/57c9d7a25b3c7111005578c2) and end [free movement of people](http://api.explaain.com/Detail/5902df4ae04b710011c7af43)."
+    content: "Promise to leave the EU including the [single market](http://api.explaain.com/Detail/57c9d7a25b3c7111005578c2) and end [free movement of people](http://api.explaain.com/Detail/5902df4ae04b710011c7af43).",
+    image: "/img/party-stories/eu.jpg"
   },
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise to reduce [net migration](http://api.explaain.com/Detail/5902dfb6e04b710011c7af45) to the [tens of thousands.](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)"
+    content: "Promise to reduce [net migration](http://api.explaain.com/Detail/5902dfb6e04b710011c7af45) to the [tens of thousands.](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)",
+    image: "/img/party-stories/migration.jpg"
   },
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise no raise on [NI](http://api.explaain.com/Detail/5902e0ede04b710011c7af47), [VAT](http://api.explaain.com/Detail/5902e138e04b710011c7af48) or [income tax](http://api.explaain.com/Detail/5902e1eee04b710011c7af49) during the [next parliament](http://api.explaain.com/Detail/5902e072e04b710011c7af46)."
+    content: "Promise no raise on [NI](http://api.explaain.com/Detail/5902e0ede04b710011c7af47), [VAT](http://api.explaain.com/Detail/5902e138e04b710011c7af48) or [income tax](http://api.explaain.com/Detail/5902e1eee04b710011c7af49) during the [next parliament](http://api.explaain.com/Detail/5902e072e04b710011c7af46).",
+    image: "/img/party-stories/budget.png"
   },
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise to bring back [Grammar schools](http://api.explaain.com/Detail/5902e349e04b710011c7af4a)"
+    content: "Promise to bring back [Grammar schools](http://api.explaain.com/Detail/5902e349e04b710011c7af4a)",
+    image: "/img/party-stories/education.png"
   },
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise to build 1 million new homes, with a focus on [affordable rents](http://api.explaain.com/Detail/5902e429e04b710011c7af4b) as well as home ownership."
+    content: "Promise to build 1 million new homes, with a focus on [affordable rents](http://api.explaain.com/Detail/5902e429e04b710011c7af4b) as well as home ownership.",
+    image: "/img/party-stories/housing.png"
   },
   {
     party: "conservative",
     header: "Conservatives",
-    content: "Promise to maintain foreign aid spending at [0.7%](http://api.explaain.com/Detail/5902e489e04b710011c7af4c)."
+    content: "Promise to maintain foreign aid spending at [0.7%](http://api.explaain.com/Detail/5902e489e04b710011c7af4c).",
+    image: "/img/party-stories/aid.jpg"
   },
   {
     party: "labour",
     header: "Labour",
     content: "Promise to leave the EU and [end free movement of people](http://api.explaain.com/Detail/5902df4ae04b710011c7af43) BUT retain partial access to the [single market](http://api.explaain.com/Detail/57c9d8835b3c7111005578c3).",
+    image: "/img/party-stories/labour-eu.jpg"
   },
   {
     party: "labour",
     header: "Labour",
     content: "Promise to create full employment via a [National Investment Bank](http://api.explaain.com/Detail/5902e647e04b710011c7af4d)",
+    image: "/img/party-stories/employment.jpg"
   },
   {
     party: "labour",
     header: "Labour",
     content: "Promise to increase the [minimum wage](http://api.explaain.com/Detail/5902e6ade04b710011c7af4e) to £10 an hour.",
+    image: "/img/party-stories/aid.jpg"
   },
   {
     party: "labour",
     header: "Labour",
     content: "Promise to [nationalise](http://api.explaain.com/Detail/5902e82de04b710011c7af4f) the railways.",
+    image: "/img/party-stories/railway.png"
   },
   {
     party: "labour",

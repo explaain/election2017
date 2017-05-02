@@ -17,19 +17,21 @@ const model = require('../models/model')
 Model = model;
 var CardTemplates = {};
 
+var WideDecide = function() {
+  // if (window.innerWidth > 600) {
+  //   console.log('hi');
+  //   if (!$('section.step').hasClass('wide')) {
+  //     $('section.step').addClass('wide');
+  //   }
+  // } else {
+  //   console.log('hi2');
+  //   $('section.step').removeClass('wide');
+  // }
+}
+
 class App {
   constructor(data) {
     this.header = new Header();
-
-    window.onresize = function() {
-      if (window.innerWidth > 600) {
-        if (!$('section.step').hasClass('wide')) {
-          $('section.step').addClass('wide');
-        }
-      } else {
-        $('section.step').removeClass('wide');
-      }
-    }
 
     var templateUrl = '//localhost:5002/templates';
     http.get(templateUrl)
@@ -222,12 +224,19 @@ class Question {
 
 class Step {
   constructor(params) {
+    const self = this;
     this.step = model.steps[params.name];
     this.error = params.error;
     this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
       updateData(model.tasks[params.task].dataUpdates);
+
+
+
+    window.onresize = function() {
+      WideDecide();
+    }
 
     var data = {
       cardGroups: []
@@ -246,7 +255,7 @@ class Step {
       case 'vote-worth':
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
-          type: 'postcode',
+          type: 'vote-worth',
           name: 'Want to see how much your vote is worth?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
@@ -255,7 +264,7 @@ class Step {
       case 'postcode-compare':
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
-          type: 'postcode',
+          type: 'postcode-compare',
           name: 'Student and not sure where to vote from?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
@@ -350,6 +359,7 @@ class Step {
   }
 
   onload() {
+    WideDecide();
     if (this.step.label == 'Party stories') {
       $('div.body').addClass('backColor');
     } else {
@@ -360,7 +370,7 @@ class Step {
   render() {
     // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
     return h("section.step"
-      + (this.params.name=='result' && window.innerWidth > 600 ? ".wide" : ""),
+      + ( (this.params.name=='result' || this.params.name=='story') && window.innerWidth > 600 ? ".wide" : ""),
       h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
       h.apply(null,
         ["div.cards"].concat(this.headers).concat(this.cardGroups)
@@ -419,8 +429,8 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
-    console.log('this.data');
-    console.log(this.data);
+    // console.log('this.data');
+    // console.log(this.data);
   }
 
   render() {
@@ -468,6 +478,7 @@ class CardContent {
 
       case 'vote-worth':
         var data = self.data;
+        console.log('hh')
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.name),
           h('div.body-content',
@@ -501,7 +512,7 @@ class CardContent {
               },
               h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
               // h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Compare")
+              h('button.btn.btn-success', {type: "submit"}, "Check it out!")
             ),
             (model.user.resultsOptions.length?
               h("div.seats",{'class': { 'hide': model.user.isWaiting }},
@@ -739,12 +750,12 @@ class CardContent {
           var slickContainer = $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
             dots: false,
             infinite: false,
-            adaptiveHeight: true,
+            // adaptiveHeight: true,
             // centerMode: true,
             centerPadding: '15px',
             slidesToShow: 1,
             arrows: true,
-            variableWidth: true,
+            // variableWidth: true,
             // swipeToSlide: true
           });
           slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
@@ -753,31 +764,37 @@ class CardContent {
             })[0].colorLight);
           });
         },100)
-        return h('div.content.text-left',
-          h('img', {'src': self.data.image, 'class': 'party-logo'}),
-          h('h2', self.data.name),
-          h('div.body-content',
-            h.rawHtml('p', markdownToHtml(self.data.content))
-          ),
-          (self.data.footer?
-            h('div.footer',
-              self.data.footer.map(function(elem){
-                switch (elem) {
-                  case "ShareButtons":
-                    return (new ShareButtons())
-                    break;
-                  case "BackToDashboard":
-                    return (new BackToDashboard())
-                    break;
-                  default:
-                    return undefined;
-                }
-              })
-            )
-            :
-            undefined
-          )
-        )
+        console.log('self.data');
+        self.data.name = self.data.header;
+        self.data.description = self.data.content;
+        console.log(self.data);
+        // console.log(h('div', getCardDom(self.data, CardTemplates['Organization'])));
+        return h('div', getCardDom(self.data, CardTemplates['Organization']));
+        // return h('div.content.text-left',
+        //   h('img', {'src': self.data.image, 'class': 'party-logo'}),
+        //   h('h2', self.data.name),
+        //   h('div.body-content',
+        //     h.rawHtml('p', markdownToHtml(self.data.content))
+        //   ),
+        //   (self.data.footer?
+        //     h('div.footer',
+        //       self.data.footer.map(function(elem){
+        //         switch (elem) {
+        //           case "ShareButtons":
+        //             return (new ShareButtons())
+        //             break;
+        //           case "BackToDashboard":
+        //             return (new BackToDashboard())
+        //             break;
+        //           default:
+        //             return undefined;
+        //         }
+        //       })
+        //     )
+        //     :
+        //     undefined
+        //   )
+        // )
         break;
 
       case 'question':
