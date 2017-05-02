@@ -18,6 +18,7 @@ router.start();
 
 const model = require('../models/model');
 const updateModel = require("../includes/updateModel")(model);
+const updateObject = require("../includes/updateObject")();
 
 Model = model;
 var CardTemplates = {};
@@ -1023,14 +1024,6 @@ function getResultsCompare(){
     },1000)
   })
 };
-
-var updateObject = function(obj, objUpdates) {
-  var objKeys = Object.keys(objUpdates);
-  objKeys.forEach(function(key) {
-    obj[key] = objUpdates[key];
-  })
-  return obj;
-}
 
 var markdownToHtml = function(text) {
   return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
