@@ -23,7 +23,8 @@ const
   getObjectPathProperty = require("../includes/getObjectPathProperty")(),
   getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml),
   updateData = require('../includes/updateData')(updateModel),
-  getModel = require('../includes/getModel')(getObjectPathProperty,model)
+  getModel = require('../includes/getModel')(getObjectPathProperty,model),
+  loadTemplates = require('../includes/loadTemplates')(http)
 ;
 
 Model = model;
@@ -1020,15 +1021,6 @@ function getResultsCompare(){
     },1000)
   })
 };
-
-const loadTemplates = function(templateUrl){
-  return new Promise(function(resolve,reject){
-    http.get(templateUrl)
-    .then(function (res) {
-      resolve(res.body);
-    });
-  });
-}
 
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
 loadTemplates(templatesUrl).then(function(_templates){
