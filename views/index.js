@@ -6,15 +6,9 @@ const
   api = require('../services/APIService'),
   http = require('httpism'),
   model = require('../models/model'),
-  updateModel = require("../includes/updateModel")(model),
-  updateObject = require("../includes/updateObject")(),
-  markdownToHtml = require("../includes/markdownToHtml")(),
-  getObjectPathProperty = require("../includes/getObjectPathProperty")(),
   CardTemplates = {},
-  getCardDom = require('../includes/getCardDom')(h,getObjectPathProperty,markdownToHtml,CardTemplates),
-  updateData = require('../includes/updateData')(updateModel),
-  getModel = require('../includes/getModel')(getObjectPathProperty,model),
-  loadTemplates = require('../includes/loadTemplates')(http)
+  Helpers = require("../includes/helpers"),
+  helpers = new Helpers(model,h,CardTemplates,http)
 ;
 
 const routes = {
@@ -199,7 +193,7 @@ class Dashboard {
         );
       } else {
         taskProps.onclick = function(e){
-          updateData(task.dataUpdates);
+          helpers.updateData(task.dataUpdates);
         };
         tasksDOM.push(
           h( "a",
@@ -227,7 +221,7 @@ class Step {
     this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
-      updateData(model.tasks[params.task].dataUpdates);
+      helpers.updateData(model.tasks[params.task].dataUpdates);
 
 
 
@@ -406,7 +400,7 @@ class Card {
   render() {
     delete CardTemplates.card.content[0].content[1].template;
     CardTemplates.card.content[0].content[1].content = this.cardContent;
-    return getCardDom(this.data, CardTemplates.card);
+    return helpers.assembleCards(this.data, CardTemplates.card);
 
     // return h('div.card',
     //   h('div.card-visible',
@@ -448,7 +442,7 @@ class CardContent {
           });
           return false;
         }
-        return h('div', getCardDom(data, CardTemplates['postcodeInput']));
+        return h('div', helpers.assembleCards(data, CardTemplates['postcodeInput']));
         // return h('.content',
         //   h('h2', self.data.name),
         //   h('div.body-content',
@@ -630,7 +624,7 @@ class CardContent {
         console.log(data.constituencyResults)
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        /*return h('div', getCardDom({
+        /*return h('div', helpers.assembleCards({
           "rows": [
             {
               "cells": [
@@ -670,11 +664,11 @@ class CardContent {
                   "name": "losses",
                   "value": 79
                 }
-              ]
+              ] // helpers.assembleCards
             },
           ]
         }, CardTemplates['partiesTable']));*/
-        return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
+        return helpers.assembleCards(data, CardTemplates['postcodeCompare']);
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),
           h('div.body-content',
@@ -859,8 +853,8 @@ class CardContent {
         self.data.name = self.data.header;
         self.data.description = self.data.content;
         console.log(self.data);
-        // console.log(h('div', getCardDom(self.data, CardTemplates['Organization'])));
-        return h('div', getCardDom(self.data, CardTemplates['Organization']));
+        // console.log(h('div', helpers.assembleCards(self.data, CardTemplates['Organization'])));
+        return h('div', helpers.assembleCards(self.data, CardTemplates['Organization']));
         // return h('div.content.text-left',
         //   h('img', {'src': self.data.image, 'class': 'party-logo'}),
         //   h('h2', self.data.name),
@@ -915,7 +909,7 @@ class CardContent {
 
       default:
         console.log('Defaulting');
-        return h('div', getCardDom(self.data, CardTemplates[self.data.type]));
+        return h('div', helpers.assembleCards(self.data, CardTemplates[self.data.type]));
     }
     //Think this is probably unnecessary?
     if (self.data.type == 'postcode') {
@@ -1058,7 +1052,7 @@ function getResultsCompare(){
 };
 
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
-loadTemplates(templatesUrl).then(function(templates){
+helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
     CardTemplates[key] = templates[key];
   };
