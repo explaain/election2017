@@ -430,6 +430,7 @@ class CardContent {
     // console.log(this.data);
   }
 
+
   render() {
     const self = this;
     console.log('self.data.type');
@@ -484,6 +485,7 @@ class CardContent {
                 'class': { 'hide': model.user.isWaiting },
                 'onsubmit': function(e) {
                   e.stopPropagation();
+
                   model.user.isWaiting = true;
                   api.getPostcodeOptions(model.user.postcode).then(function(results){
                     model.user.isWaiting = false;
@@ -600,10 +602,13 @@ class CardContent {
           ]
         }
         */
+        data.isWaiting = model.user.isWaiting === "postcode-compare";
         data.postcodeSubmit = function(e){
           e.stopPropagation();
-          model.user.isWaiting = true;
+          model.user.isWaiting = "postcode-compare";
+          self.render();
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
+            delete model.user.isWaiting;
             if (results.error) {
               console.log("Sorry, we didn't recognise that postcode!")
               routes.step({
@@ -612,7 +617,6 @@ class CardContent {
                 error: 'bad-postcode',
               }).replace();
             } else {
-              model.user.isWaiting = false;
               model.user.resultsCompare.push(results);
               routes.step({
                 name: 'postcode-compare',

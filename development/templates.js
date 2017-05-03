@@ -146,7 +146,7 @@ module.exports = function(CardTemplates){
         },
         {
           "dom": "div",
-          //"condition": "isWaiting",
+          "condition": "isWaiting",
           "template": "loading"
         },
         {
@@ -180,10 +180,11 @@ module.exports = function(CardTemplates){
       "dom": ".footer",
       "content": [
         {
-          "dom": "div"/*,
+          "dom": "div",
+          "condition": "footerContentTemplate",
           "template": {
             "var": "footerContentTemplate"
-          }*/
+          }
         }
       ]
     }
@@ -191,11 +192,7 @@ module.exports = function(CardTemplates){
 
   CardTemplates.loading = [
     {
-      "dom": 'div', // this is temporary
-      "content": "Loading"
-    },
-    {
-      "dom": 'img.loading',
+      "dom": 'img.loading.showing',
       "attr": {
         'src': '/img/loading.gif'
       }
