@@ -181,6 +181,9 @@ module.exports = function(CardTemplates){
       "content": [
         {
           "dom": "div",
+          "map": [
+            ["footerContentTemplate","footerContentTemplate2"]
+          ],
           "condition": "footerContentTemplate",
           "template": {
             "var": "footerContentTemplate"

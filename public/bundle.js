@@ -198,6 +198,9 @@ module.exports = function(CardTemplates){
       "content": [
         {
           "dom": "div",
+          "map": [
+            ["footerContentTemplate","footerContentTemplate2"]
+          ],
           "condition": "footerContentTemplate",
           "template": {
             "var": "footerContentTemplate"
@@ -372,28 +375,37 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
   const getCardDom = function(data, template) {
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
     const dom = template.map(function(element) {
+      // If element is not passing a param map, then the whole data object is going to be used and passed to templates
+      var params = {};
+      if(element.map){
+        element.map.forEach(function(kv){
+          params[kv[0]] = getObjectPathProperty(data, kv[1]);
+        });
+      } else {
+        params = data;
+      }
       var content,
-          attr = {};
+        attr = {};
       if(
         element.condition
         &&
         (
-          !getObjectPathProperty(data, element.condition) && !element.condition.match(/^!/)
+          !getObjectPathProperty(params, element.condition) && !element.condition.match(/^!/)
           ||
-          getObjectPathProperty(data, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
+          getObjectPathProperty(params, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
         )
       )
         return undefined;
       else if (element.template)
-        content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
+        content = getCardDom(params, CardTemplates[element.template.var ? getObjectPathProperty(params, element.template.var) : element.template])
       else if (!element.content)
         content = '';
       else if (element.loop)
-        content = getObjectPathProperty(data, element.loop).map(function(el){return getCardDom(el, element.content)});
+        content = getObjectPathProperty(params, element.loop).map(function(el){return getCardDom(el, element.content)});
       else if (element.content.constructor === Array)
-        content = getCardDom(data, element.content);
+        content = getCardDom(params, element.content);
       else if (element.content.var)
-        content = getObjectPathProperty(data, element.content.var) || ''; //'var' MUST use dot notation, not []
+        content = getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
       else
         content = element.default ? element.default : element.content;
 
@@ -412,7 +424,7 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
             });
             attr[attrKey] = styles;
           } else {
-            attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+            attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(params, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
           }
         })
       }
@@ -6276,7 +6288,7 @@ class CardContent {
             subheading: latestResults.text.subheading,
             constituencies: latestResults.seats // todo: fix "type" here
           }
-          data.footerContentTemplate = 'shareButtons';
+          data.footerContentTemplate2 = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)

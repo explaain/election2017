@@ -616,7 +616,7 @@ class CardContent {
             subheading: latestResults.text.subheading,
             constituencies: latestResults.seats // todo: fix "type" here
           }
-          data.footerContentTemplate = 'shareButtons';
+          data.footerContentTemplate2 = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)
