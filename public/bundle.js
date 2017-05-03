@@ -16,7 +16,7 @@ module.exports = function(model){
 
 },{}],2:[function(require,module,exports){
 module.exports = function(CardTemplates){
-  CardTemplates.card = [
+  CardTemplates.card =
     {
       "dom": "div.card",
       "attr": {
@@ -84,7 +84,7 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ];
+  ;
   CardTemplates["Person"] = [
     {
       "dom": "h2",
@@ -109,97 +109,100 @@ module.exports = function(CardTemplates){
       }
     }
   ];
-  CardTemplates.postcodeCompare = [
-    {
-      "dom": "h2",
-      "condition": "!constituencyResults",
-      "content": {
-        "var": "name",
-        "default": "Please enter your postcode"
-      }
-    },
-    {
-      "dom": "div.body-content",
-      "content": [
-        {
-          "dom": "form.postcode-form",
-          "attr": {
-            "onsubmit": {
-              "var": "postcodeSubmit"
+  CardTemplates.postcodeCompare = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": "h2",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "name",
+          "default": "Please enter your postcode"
+        }
+      },
+      {
+        "dom": "div.body-content",
+        "content": [
+          {
+            "dom": "form.postcode-form",
+            "attr": {
+              "onsubmit": {
+                "var": "postcodeSubmit"
+              }
+            },
+            "content": [
+              {
+                "dom": "input.form-control",
+                "attr": {
+                  "autofocus": "true",
+                  "type": "text",
+                  "name": "postcode",
+                  "placeholder": "Home Postcode",
+                  "binding": {
+                    "var": "postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom": "input.form-control",
+                "attr": {
+                  "autofocus": "true",
+                  "type": "text",
+                  "name": "postcode",
+                  "placeholder": "Uni Postcode",
+                  "binding": {
+                    "var": "postcodeUniBinding"
+                  }
+                }
+              },
+              {
+                "dom": "button.btn.btn-success",
+                "attr": {
+                  "type": "submit"
+                },
+                "content": "Compare"
+              }
+            ]
+          },
+          {
+            "dom": "div",
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom": "h3",
+            "content": {
+              "var": "subheading"
             }
           },
-          "content": [
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Home Postcode",
-                "binding": {
-                  "var": "postcodeBinding"
-                }
-              }
-            },
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Uni Postcode",
-                "binding": {
-                  "var": "postcodeUniBinding"
-                }
-              }
-            },
-            {
-              "dom": "button.btn.btn-success",
-              "attr": {
-                "type": "submit"
-              },
-              "content": "Compare"
+          {
+            "dom": "p",
+            "content": {
+              "var": "description",
+              "markdown": true
             }
-          ]
-        },
-        {
-          "dom": "div",
-          "condition": "isWaiting",
-          "template": "loading"
-        },
-        {
-          "dom": "h3",
-          "content": {
-            "var": "subheading"
+          },
+          {
+            "dom": "div",
+            "condition": "constituencyResults",
+            "template": "constituencyResults"
           }
-        },
-        {
-          "dom": "p",
-          "content": {
-            "var": "description",
-            "markdown": true
-          }
-        },
-        {
-          "dom": "div",
-          "condition": "constituencyResults",
-          "template": "constituencyResults"
-        }
-      ]
-    },
-    {
-      "dom": "div",
-      "template": "footer"
-    }
-  ]
+        ]
+      },
+      {
+        "dom": "div",
+        "template": "footer"
+      }
+    ]
+  }
 
-  CardTemplates.footer = [
+  CardTemplates.footer =
     {
       "dom": ".footer",
       "content": [
         {
           "dom": "div",
-          "map": [
+          "mapping": [
             ["footerContentTemplate","footerContentTemplate2"]
           ],
           "condition": "footerContentTemplate",
@@ -209,9 +212,9 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.partiesTable = [
+  CardTemplates.partiesTable =
     {
       "dom": "table",
       "loop": "rows",
@@ -221,9 +224,9 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.row = [
+  CardTemplates.row =
     {
       "dom": "tr",
       "loop": "cells",
@@ -233,27 +236,27 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.cell = [
+  CardTemplates.cell =
     {
       "dom": "td",
       "content": {
         "var": "value"
       }
     }
-  ]
+  ;
 
-  CardTemplates.loading = [
+  CardTemplates.loading =
     {
       "dom": 'img.loading.showing',
       "attr": {
         'src': '/img/loading.gif'
       }
     }
-  ]
+  ;
 
-  CardTemplates.voteNow = [
+  CardTemplates.voteNow =
     {
       "dom": "div",
       "content": [
@@ -285,9 +288,9 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.constituencyResults = [
+  CardTemplates.constituencyResults =
     {
       "dom": ".seats",
       "content": [
@@ -315,9 +318,9 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.constituency = [
+  CardTemplates.constituency =
     {
       "dom": "div.seat.column50",
       "content": [
@@ -335,9 +338,9 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
-  CardTemplates.shareButtons = [
+  CardTemplates.shareButtons =
     {
       "dom": "div.share-buttons",
       "content": [
@@ -373,11 +376,11 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 
   // Usage:
   // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
-  CardTemplates.loopExample = [
+  CardTemplates.loopExample =
     {
       "dom": ".people",
       "loop": "people", // changing the scope of data
@@ -401,7 +404,7 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ]
+  ;
 }
 
 },{}],3:[function(require,module,exports){
@@ -409,69 +412,67 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,cardTemplates){
   const getCardDom = function(data, template) {
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
     if (typeof template === 'string') { template = cardTemplates[template]; }
-    const dom = template.map(function(element) {
-      // If element is not passing a param map, then the whole data object is going to be used and passed to templates
-      var params = {};
-      if(element.map){
-        element.map.forEach(function(kv){
-          params[kv[0]] = getObjectPathProperty(data, kv[1]);
-        });
-      } else {
-        params = data;
-      }
-      var content,
-        attr = {};
-      if(
-        element.condition
-        &&
-        (
-          !getObjectPathProperty(params, element.condition) && !element.condition.match(/^!/)
-          ||
-          getObjectPathProperty(params, element.condition.replace(/^!/,"")) && element.condition.match(/^!/)
-        )
+    const element = template;
+    var params = {};
+    if(element.mapping){
+      element.mapping.forEach(function(kv){
+        params[kv[0]] = getObjectPathProperty(data, kv[1]);
+      });
+    } else {
+      params = data;
+    }
+    var content,
+      attr = {};
+    if(
+      element.condition
+      &&
+      (
+        !getObjectPathProperty(params, element.condition) && !element.condition.match(/^!/)
+        ||
+        getObjectPathProperty(params, element.condition.replace(/^!/,"")) && element.condition.match(/^!/)
       )
-        return undefined;
-      else if (element.template)
-        content = getCardDom(params, element.template.var ? getObjectPathProperty(params, element.template.var) : element.template)
-      else if (!element.content)
-        content = '';
-      else if (element.loop)
-        content = getObjectPathProperty(params, element.loop).map(function(el){return getCardDom(el, element.content)});
-      else if (element.content.constructor === Array)
-        content = getCardDom(params, element.content);
-      else if (element.content.var)
-        content = getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
-      else
-        content = element.default ? element.default : element.content;
+    )
+      return undefined;
+    else if (element.template)
+      content = getCardDom(params, element.template.var ? getObjectPathProperty(params, element.template.var) : element.template)
+    else if (!element.content)
+      content = '';
+    else if (element.loop)
+      content = getObjectPathProperty(params, element.loop).map(function(_params){return element.content.map(function(_element){return getCardDom(_params, _element);})});
+    else if (element.content.constructor === Array)
+      //content = getCardDom(params, element.content);
+      content = element.content.map(function(el){return getCardDom(params, el); });
+    else if (element.content.var)
+      content = getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
+    else
+      content = element.default ? element.default : element.content;
 
-      if (element.attr) {
-        var attrKeys = Object.keys(element.attr);
-        attrKeys.forEach(function(attrKey) {
-          if (attrKey == "style" && typeof(element.attr.style) == "object") {
-            var styleKeys = Object.keys(element.attr.style);
-            var styles = {}
-            styleKeys.forEach(function(styleKey) {
-              var style = element.attr.style[styleKey];
-              styles[styleKey] = style.var ? getObjectPathProperty(data, style.var) : style; //'var' MUST use dot notation, not []
-              if (styleKey == "background-image" && style.var) {
-                styles[styleKey] = 'url("' + styles[styleKey] + '")'
-              }
-            });
-            attr[attrKey] = styles;
-          } else {
-            attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(params, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
-          }
-        })
-      }
-      if (!element.dom && element.template){
-        return content;
-      } else if (element.content && element.content.markdown) {
-        return h.rawHtml(element.dom, attr, markdownToHtml(content));
-      } else {
-        return h(element.dom, attr, content);
-      }
-    });
-    return dom;
+    if (element.attr) {
+      var attrKeys = Object.keys(element.attr);
+      attrKeys.forEach(function(attrKey) {
+        if (attrKey == "style" && typeof(element.attr.style) == "object") {
+          var styleKeys = Object.keys(element.attr.style);
+          var styles = {}
+          styleKeys.forEach(function(styleKey) {
+            var style = element.attr.style[styleKey];
+            styles[styleKey] = style.var ? getObjectPathProperty(data, style.var) : style; //'var' MUST use dot notation, not []
+            if (styleKey == "background-image" && style.var) {
+              styles[styleKey] = 'url("' + styles[styleKey] + '")'
+            }
+          });
+          attr[attrKey] = styles;
+        } else {
+          attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(params, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        }
+      })
+    }
+    if (!element.dom && element.template){
+      return content;
+    } else if (element.content && element.content.markdown) {
+      return h.rawHtml(element.dom, attr, markdownToHtml(content));
+    } else {
+      return h(element.dom, attr, content);
+    }
   }
   return getCardDom;
 }
@@ -6113,9 +6114,9 @@ class Card {
   }
 
   render() {
-    delete CardTemplates.card[0].content[0].content[1].template;
-    CardTemplates.card[0].content[0].content[1].content = this.cardContent;
-    return getCardDom(this.data, CardTemplates.card)[0];
+    delete CardTemplates.card.content[0].content[1].template;
+    CardTemplates.card.content[0].content[1].content = this.cardContent;
+    return getCardDom(this.data, CardTemplates.card);
 
     // return h('div.card',
     //   h('div.card-visible',

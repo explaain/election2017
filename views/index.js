@@ -404,9 +404,9 @@ class Card {
   }
 
   render() {
-    delete CardTemplates.card[0].content[0].content[1].template;
-    CardTemplates.card[0].content[0].content[1].content = this.cardContent;
-    return getCardDom(this.data, CardTemplates.card)[0];
+    delete CardTemplates.card.content[0].content[1].template;
+    CardTemplates.card.content[0].content[1].content = this.cardContent;
+    return getCardDom(this.data, CardTemplates.card);
 
     // return h('div.card',
     //   h('div.card-visible',
