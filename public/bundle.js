@@ -392,7 +392,7 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
         (
           !getObjectPathProperty(params, element.condition) && !element.condition.match(/^!/)
           ||
-          getObjectPathProperty(params, element.condition.replace(/^!/),"") && element.condition.match(/^!/)
+          getObjectPathProperty(params, element.condition.replace(/^!/,"")) && element.condition.match(/^!/)
         )
       )
         return undefined;
