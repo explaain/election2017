@@ -614,14 +614,66 @@ class CardContent {
           data.constituencyResults = {
             heading: latestResults.text.heading,
             subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats // todo: fix "type" here
+            constituencies: latestResults.seats.map(function(seat){
+              return {
+                location: seat.location,
+                parties: seat.parties.map(function(party){
+                  return party.name;
+                }).join(" vs ")
+              }
+            })
           }
+          console.log(data.constituencyResults)
           data.footerContentTemplate2 = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
+        /*return h('div', getCardDom({
+          "rows": [
+            {
+              "cells": [
+                {
+                  "name": "name",
+                  "value": "Conservatives"
+                },
+                {
+                  "name": "seats",
+                  "value": 326
+                },
+                {
+                  "name": "gains",
+                  "value": 60
+                },
+                {
+                  "name": "losses",
+                  "value": 11
+                }
+              ]
+            },
+            {
+              "cells": [
+                {
+                  "name": "name",
+                  "value": "Labour"
+                },
+                {
+                  "name": "seats",
+                  "value": 230
+                },
+                {
+                  "name": "gains",
+                  "value": 6
+                },
+                {
+                  "name": "losses",
+                  "value": 79
+                }
+              ]
+            },
+          ]
+        }, CardTemplates['partiesTable']));*/
         return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),

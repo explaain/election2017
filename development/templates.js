@@ -95,6 +95,7 @@ module.exports = function(CardTemplates){
   CardTemplates.postcodeCompare = [
     {
       "dom": "h2",
+      "condition": "!constituencyResults",
       "content": {
         "var": "name",
         "default": "Please enter your postcode"
@@ -190,6 +191,39 @@ module.exports = function(CardTemplates){
           }
         }
       ]
+    }
+  ]
+
+  CardTemplates.partiesTable = [
+    {
+      "dom": "table",
+      "loop": "rows",
+      "content": [
+        {
+          "template":"row"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.row = [
+    {
+      "dom": "tr",
+      "loop": "cells",
+      "content": [
+        {
+          "template":"cell"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.cell = [
+    {
+      "dom": "td",
+      "content": {
+        "var": "value"
+      }
     }
   ]
 

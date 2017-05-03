@@ -112,6 +112,7 @@ module.exports = function(CardTemplates){
   CardTemplates.postcodeCompare = [
     {
       "dom": "h2",
+      "condition": "!constituencyResults",
       "content": {
         "var": "name",
         "default": "Please enter your postcode"
@@ -207,6 +208,39 @@ module.exports = function(CardTemplates){
           }
         }
       ]
+    }
+  ]
+
+  CardTemplates.partiesTable = [
+    {
+      "dom": "table",
+      "loop": "rows",
+      "content": [
+        {
+          "template":"row"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.row = [
+    {
+      "dom": "tr",
+      "loop": "cells",
+      "content": [
+        {
+          "template":"cell"
+        }
+      ]
+    }
+  ]
+
+  CardTemplates.cell = [
+    {
+      "dom": "td",
+      "content": {
+        "var": "value"
+      }
     }
   ]
 
@@ -371,9 +405,10 @@ module.exports = function(CardTemplates){
 }
 
 },{}],3:[function(require,module,exports){
-module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
+module.exports = function(h,getObjectPathProperty,markdownToHtml,cardTemplates){
   const getCardDom = function(data, template) {
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
+    if (typeof template === 'string') { template = cardTemplates[template]; }
     const dom = template.map(function(element) {
       // If element is not passing a param map, then the whole data object is going to be used and passed to templates
       var params = {};
@@ -397,7 +432,7 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
       )
         return undefined;
       else if (element.template)
-        content = getCardDom(params, CardTemplates[element.template.var ? getObjectPathProperty(params, element.template.var) : element.template])
+        content = getCardDom(params, element.template.var ? getObjectPathProperty(params, element.template.var) : element.template)
       else if (!element.content)
         content = '';
       else if (element.loop)
@@ -428,7 +463,9 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
           }
         })
       }
-      if (element.content && element.content.markdown) {
+      if (!element.dom && element.template){
+        return content;
+      } else if (element.content && element.content.markdown) {
         return h.rawHtml(element.dom, attr, markdownToHtml(content));
       } else {
         return h(element.dom, attr, content);
@@ -6286,14 +6323,66 @@ class CardContent {
           data.constituencyResults = {
             heading: latestResults.text.heading,
             subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats // todo: fix "type" here
+            constituencies: latestResults.seats.map(function(seat){
+              return {
+                location: seat.location,
+                parties: seat.parties.map(function(party){
+                  return party.name;
+                }).join(" vs ")
+              }
+            })
           }
+          console.log(data.constituencyResults)
           data.footerContentTemplate2 = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
+        /*return h('div', getCardDom({
+          "rows": [
+            {
+              "cells": [
+                {
+                  "name": "name",
+                  "value": "Conservatives"
+                },
+                {
+                  "name": "seats",
+                  "value": 326
+                },
+                {
+                  "name": "gains",
+                  "value": 60
+                },
+                {
+                  "name": "losses",
+                  "value": 11
+                }
+              ]
+            },
+            {
+              "cells": [
+                {
+                  "name": "name",
+                  "value": "Labour"
+                },
+                {
+                  "name": "seats",
+                  "value": 230
+                },
+                {
+                  "name": "gains",
+                  "value": 6
+                },
+                {
+                  "name": "losses",
+                  "value": 79
+                }
+              ]
+            },
+          ]
+        }, CardTemplates['partiesTable']));*/
         return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),

@@ -1,6 +1,7 @@
-module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
+module.exports = function(h,getObjectPathProperty,markdownToHtml,cardTemplates){
   const getCardDom = function(data, template) {
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
+    if (typeof template === 'string') { template = cardTemplates[template]; }
     const dom = template.map(function(element) {
       // If element is not passing a param map, then the whole data object is going to be used and passed to templates
       var params = {};
@@ -24,7 +25,7 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
       )
         return undefined;
       else if (element.template)
-        content = getCardDom(params, CardTemplates[element.template.var ? getObjectPathProperty(params, element.template.var) : element.template])
+        content = getCardDom(params, element.template.var ? getObjectPathProperty(params, element.template.var) : element.template)
       else if (!element.content)
         content = '';
       else if (element.loop)
@@ -55,7 +56,9 @@ module.exports = function(h,getObjectPathProperty,markdownToHtml,CardTemplates){
           }
         })
       }
-      if (element.content && element.content.markdown) {
+      if (!element.dom && element.template){
+        return content;
+      } else if (element.content && element.content.markdown) {
         return h.rawHtml(element.dom, attr, markdownToHtml(content));
       } else {
         return h(element.dom, attr, content);
