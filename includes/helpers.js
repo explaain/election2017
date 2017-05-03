@@ -42,6 +42,8 @@ module.exports = class Helpers {
       content = element.content.map(function(el){return self.assembleCards(params, el); });
     else if (element.content.var)
       content = self.getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
+    else if (element.content.func)
+      content = self.getObjectPathProperty(params, element.content.func[0]).apply(null,element.content.func.slice(1).map(function(p){return self.getObjectPathProperty(params, p)}));
     else
       content = element.default ? element.default : element.content;
 
