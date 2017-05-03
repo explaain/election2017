@@ -8,7 +8,7 @@ const
   model = require('../models/model'),
   CardTemplates = {},
   Helpers = require("../includes/helpers"),
-  helpers = new Helpers(model,h,CardTemplates,http)
+  helpers = new Helpers(model,h,CardTemplates,http, router)
 ;
 
 const routes = {
@@ -594,12 +594,7 @@ class CardContent {
               }).replace();
             } else {
               model.user.resultsCompare.push(results);
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                next: data.nextStep,
-                attempt: model.user.resultsCompare.length
-              }).replace();
+              helpers.rerender();
             }
           });
           return false;

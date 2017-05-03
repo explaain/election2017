@@ -1,10 +1,11 @@
 module.exports = class Helpers {
 
-  constructor(model, h, cardTemplates,http) {
+  constructor(model, h, cardTemplates,http, router) {
     this.model = model;
     this.h = h;
     this.cardTemplates = cardTemplates;
     this.http = http;
+    this.router = router;
   }
 
   assembleCards(data, template) {
@@ -148,6 +149,18 @@ module.exports = class Helpers {
       obj[key] = objUpdates[key];
     })
     return obj;
+  }
+
+  rerender(){
+    const self = this;
+    const params = {};
+    location.search.substr(1).split("&").forEach(function(kv){
+      const _kv = kv.split("=");
+      params[_kv[0]] = _kv[1];
+    });
+    if(!params.v){params.v=0}
+    params.v++;
+    self.router.route(location.pathname)(params).replace();;
   }
 
 }

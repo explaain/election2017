@@ -498,11 +498,12 @@ module.exports = function(CardTemplates){
 },{}],3:[function(require,module,exports){
 module.exports = class Helpers {
 
-  constructor(model, h, cardTemplates,http) {
+  constructor(model, h, cardTemplates,http, router) {
     this.model = model;
     this.h = h;
     this.cardTemplates = cardTemplates;
     this.http = http;
+    this.router = router;
   }
 
   assembleCards(data, template) {
@@ -646,6 +647,18 @@ module.exports = class Helpers {
       obj[key] = objUpdates[key];
     })
     return obj;
+  }
+
+  rerender(){
+    const self = this;
+    const params = {};
+    location.search.substr(1).split("&").forEach(function(kv){
+      const _kv = kv.split("=");
+      params[_kv[0]] = _kv[1];
+    });
+    if(!params.v){params.v=0}
+    params.v++;
+    self.router.route(location.pathname)(params).replace();;
   }
 
 }
@@ -5800,7 +5813,7 @@ const
   model = require('../models/model'),
   CardTemplates = {},
   Helpers = require("../includes/helpers"),
-  helpers = new Helpers(model,h,CardTemplates,http)
+  helpers = new Helpers(model,h,CardTemplates,http, router)
 ;
 
 const routes = {
@@ -6386,12 +6399,7 @@ class CardContent {
               }).replace();
             } else {
               model.user.resultsCompare.push(results);
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                next: data.nextStep,
-                attempt: model.user.resultsCompare.length
-              }).replace();
+              helpers.rerender();
             }
           });
           return false;
