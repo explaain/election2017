@@ -169,25 +169,113 @@ module.exports = function(CardTemplates){
             "dom": "div",
             "condition": "constituencyResults",
             "template": "constituencyResults"
+          },
+          {
+            "condition": "constituencyResults",
+            "template": "shareButtons"
           }
         ]
       },
       {
-        "dom": "div",
-        "template": "footer"
+        "dom": "div.footer",
+        "content": [
+          {
+            "condition": "!constituencyResults",
+            "content": [
+              {
+                "dom": "div.bold",
+                "content": "or go straight to register"
+              },
+              {
+                "template": "registerButton"
+              },
+              {
+                "template": "linkToGovUKWebsiteHint"
+              }
+            ]
+          },
+          {
+            "condition": "constituencyResults",
+            "content": [
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-success",
+                            "content": "Learn more"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
 
-  CardTemplates.footer =
+  CardTemplates.linkToGovUKWebsiteHint = {
+    "dom": "p.small",
+    "content": "This link will take you to the official gov.uk website"
+  }
+
+  CardTemplates.registerButton = {
+    "dom": "p",
+    "content": [
+      {
+        "dom": "a.discard-card-style",
+        "attr": {
+          "href": "https://www.gov.uk/register-to-vote",
+          "target":"_blank"
+        },
+        "content": [
+          {
+            "dom": "button.btn.btn-primary",
+            "content": "Register >"
+          }
+        ]
+      }
+    ]
+  }
+
+  /*CardTemplates.footer =
     {
       "dom": ".footer",
       "content": [
         {
           "dom": "div",
-          "mapping": [
-            ["footerContentTemplate","footerContentTemplate2"]
-          ],
           "condition": "footerContentTemplate",
           "template": {
             "var": "footerContentTemplate"
@@ -195,7 +283,7 @@ module.exports = function(CardTemplates){
         }
       ]
     }
-  ;
+  ;*/
 
   CardTemplates.partiesTable =
     {
@@ -278,7 +366,7 @@ module.exports = function(CardTemplates){
       "dom": ".seats",
       "content": [
         {
-          "dom": "div",
+          "dom": "div.bold",
           "content": {
             "var": "constituencyResults.heading"
           }

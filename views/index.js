@@ -578,6 +578,7 @@ class CardContent {
       case 'postcode-compare':
         var data = this.data;
         data.isWaiting = model.user.isWaiting === "postcode-compare";
+        data.render = function(){return false}
         data.postcodeSubmit = function(e){
           e.stopPropagation();
           model.user.isWaiting = "postcode-compare";
@@ -617,159 +618,14 @@ class CardContent {
               }
             })
           }
-          console.log(data.constituencyResults)
-          data.footerContentTemplate2 = 'shareButtons';
         }
-        console.log("constituency results:")
-        console.log(data.constituencyResults)
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        /*return h('div', helpers.assembleCards({
-          "rows": [
-            {
-              "cells": [
-                {
-                  "name": "name",
-                  "value": "Conservatives"
-                },
-                {
-                  "name": "seats",
-                  "value": 326
-                },
-                {
-                  "name": "gains",
-                  "value": 60
-                },
-                {
-                  "name": "losses",
-                  "value": 11
-                }
-              ]
-            },
-            {
-              "cells": [
-                {
-                  "name": "name",
-                  "value": "Labour"
-                },
-                {
-                  "name": "seats",
-                  "value": 230
-                },
-                {
-                  "name": "gains",
-                  "value": 6
-                },
-                {
-                  "name": "losses",
-                  "value": 79
-                }
-              ] // helpers.assembleCards
-            },
-          ]
-        }, CardTemplates['partiesTable']));*/
-        return helpers.assembleCards(data, CardTemplates['postcodeCompare']);
-        return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.name),
-          h('div.body-content',
-            h('form.postcode-form',
-              {
-                'class': { 'hide': model.user.isWaiting },
-                'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-                    if (results.error) {
-                      console.log("Sorry, we didn't recognise that postcode!")
-                      routes.step({
-                        name: 'postcode-compare',
-                        type: 'step',
-                        error: 'bad-postcode',
-                      }).replace();
-                    } else {
-                      model.user.isWaiting = false;
-                      model.user.resultsCompare.push(results);
-                      routes.step({
-                        name: 'postcode-compare',
-                        type: 'step',
-                        next: data.nextStep,
-                        attempt: model.user.resultsCompare.length
-                      }).replace();
-                    }
-                  });
-                  return false;
-                }
-              },
-              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
-              h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Compare")
-            ),
-            (model.user.resultsCompare.length?
-              h("div.seats",{'class': { 'hide': model.user.isWaiting }},
-                [
-                  h("div.bold",model.user.resultsCompare[model.user.resultsCompare.length-1].text.heading),
-                  h("div",model.user.resultsCompare[model.user.resultsCompare.length-1].text.subheading)
-                ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
-                  return h("div.seat.column50",
-                    h("div.location.small",seat.location),
-                    h("div.versus.bold.line1em",{style: {border: "solid 1px " /*+ seat.color*/}},seat.parties.map(function(elem){return elem.name;}).join(" vs "))
-                  )
-                })).concat([
-                  /*h("p.small.line1em",
-                    h(".small","Not convinced it's worth it? 😱"),
-                    h("a.discard-card-style.small",{
-                      onclick: function(e){
-                        // do something
-                      }
-                    },"Click here for 5 reason it is >")
-                  )*/
-                  (new ShareButtons())
-                ])
-              )
-              :
-              undefined
-            ),
-            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, self.data.description)
-          ),
-          h('div.footer',
-            (
-              !model.user.resultsCompare.length?
-              [
-                h("div.bold","or go straight to register"),
-                h("p",
-                  h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                    h("button.btn.btn-primary","Register >")
-                  )
-                ),
-                h("p.small", "This link will take you to the official gov.uk website")
-              ]
-              :
-              [
-                h(".column50",
-                  h("p",
-                    routes.root().a({"class":"discard-card-style"},
-                      h("button.btn.btn-success","Learn more")
-                    )
-                  ),
-                  h("p.small",
-                    h("br"),
-                    h("br")
-                  )
-                ),
-                h(".column50",
-                  h("div.big.bold","Go and register!"),
-                  h("p",
-                    h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                      h("button.btn.btn-primary","Register >")
-                    )
-                  ),
-                  h("p.small", "This link will take you to the official gov.uk website")
-                )
-              ]
-            )
-          )
-        )
+        data.onLearnMore = function(e){
+          e.stopPropagation();
+          routes.root().push();
+        }
+        return helpers.assembleCards(data, 'postcodeCompare');
         break;
 
       case 'result':

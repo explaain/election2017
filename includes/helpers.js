@@ -64,7 +64,7 @@ module.exports = class Helpers {
         }
       })
     }
-    if (!element.dom && element.template){
+    if (!element.dom){
       return content;
     } else if (element.content && element.content.markdown) {
       return self.h.rawHtml(element.dom, attr, self.markdownToHtml(content));
