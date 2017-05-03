@@ -583,25 +583,6 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        // temp: this is for testing loops with real constituencyResults data
-        /*
-        this.data.constituencyResults = {
-          heading: "Header",
-          subheading: "Subheader",
-          constituencies: [
-            {
-              type: "constituency",
-              location: "London",
-              parties: "One vs Two"
-            },
-            {
-              type: "constituency",
-              location: "Yorkshire",
-              parties: "Three vs Four"
-            }
-          ]
-        }
-        */
         data.isWaiting = model.user.isWaiting === "postcode-compare";
         data.postcodeSubmit = function(e){
           e.stopPropagation();
@@ -635,6 +616,7 @@ class CardContent {
             subheading: latestResults.text.subheading,
             constituencies: latestResults.seats // todo: fix "type" here
           }
+          data.footerContentTemplate = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)

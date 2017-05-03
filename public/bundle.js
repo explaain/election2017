@@ -300,6 +300,44 @@ module.exports = function(CardTemplates){
     }
   ]
 
+  CardTemplates.shareButtons = [
+    {
+      "dom": "div.share-buttons",
+      "content": [
+        {
+          "dom": "p",
+          "content": "Share this to help friends and family #GE2017"
+        },
+        {
+          "dom": "a.discard-card-style",
+          "attr": {
+            "target":"_blank",
+            "href": "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"
+          },
+          "content": [
+            {
+              "dom": "button.btn.btn-facebook",
+              "content": "Facebook"
+            }
+          ]
+        },
+        {
+          "dom": "a.discard-card-style",
+          "attr": {
+            "target":"_blank",
+            "href": "https://twitter.com/intent/tweet?text="
+          },
+          "content": [
+            {
+              "dom": "button.btn.btn-twitter",
+              "content": "Twitter"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
   // Usage:
   // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
   CardTemplates.loopExample = [
@@ -6205,25 +6243,6 @@ class CardContent {
 
       case 'postcode-compare':
         var data = this.data;
-        // temp: this is for testing loops with real constituencyResults data
-        /*
-        this.data.constituencyResults = {
-          heading: "Header",
-          subheading: "Subheader",
-          constituencies: [
-            {
-              type: "constituency",
-              location: "London",
-              parties: "One vs Two"
-            },
-            {
-              type: "constituency",
-              location: "Yorkshire",
-              parties: "Three vs Four"
-            }
-          ]
-        }
-        */
         data.isWaiting = model.user.isWaiting === "postcode-compare";
         data.postcodeSubmit = function(e){
           e.stopPropagation();
@@ -6257,6 +6276,7 @@ class CardContent {
             subheading: latestResults.text.subheading,
             constituencies: latestResults.seats // todo: fix "type" here
           }
+          data.footerContentTemplate = 'shareButtons';
         }
         console.log("constituency results:")
         console.log(data.constituencyResults)
