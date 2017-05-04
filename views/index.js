@@ -26,7 +26,7 @@ class App {
   constructor(data) {
     this.header = new Header();
 
-    // todo: remove this
+    // todo: should this be in a different place?
     var issueKeys = Object.keys(partyStances.opinions.issues);
     issueKeys.forEach(function(issueKey, i) {
       var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
@@ -294,6 +294,7 @@ class Step {
           name: "Goodness me, you're early! 😳",
           description: "This feature is coming soon...! 👻"
         }])
+        
     }
     this.cardGroups = data.cardGroups.map(function(cards){
       cards.forEach(function(card, i) {
@@ -565,6 +566,7 @@ class BackToDashboard {
   }
 }
 
+// todo: should this be in APIService?
 function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
