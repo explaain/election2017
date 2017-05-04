@@ -797,13 +797,9 @@ module.exports = class Designers {
   }
 
   onStepLoad(){
-    $("h1").addClass("hide");
     setTimeout(function(){
-      $("h1").removeClass("hide");
-    })
-    $(".slick-container").addClass("hide")
-    setTimeout(function(){
-      $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+      $(".step").show().addClass("initiated");
+      $(".slick-container:not(.slick-initialized)").slick({
         dots: false,
         infinite: false,
         adaptiveHeight: true,
