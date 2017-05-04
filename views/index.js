@@ -272,12 +272,6 @@ class Step {
         break;
 
       case 'story':
-        // var cards = [];
-        // partyStories.forEach(function(card) {
-        //   card.push({
-        //
-        //   });
-        // })
         data.cardGroups.push(partyStories)
         break;
 
@@ -329,7 +323,6 @@ class Step {
       });
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0])]);
-        // return (new CardGroup({cards:cards,nextStep:params.next}));
       } else {
         return (new CardGroup({cards:cards,nextStep:params.next}));
       }
@@ -410,14 +403,14 @@ class Card {
 class CardContent {
 
   constructor(data) {
-    console.log(data)
     this.data = data;
   }
 
   render() {
 
     const self = this;
-    var data = self.data; // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
+    // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
+    var data = self.data;
 
     switch (self.data.type) {
 
@@ -470,7 +463,6 @@ class CardContent {
         data.isWaiting = model.user.isWaiting === "postcode-compare";
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        // todo: duplicating code - should be a function for processing results?
         if(model.user.resultsCompare.length){
           const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
           data.constituencyResults = dataProcessor.processConstituencySeats(latestResults);
