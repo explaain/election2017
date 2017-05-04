@@ -6385,7 +6385,6 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          // params.name = 'Organization';
           data.cardGroups.push(cards);
         })
         console.log(JSON.stringify(data.cardGroups))
@@ -6594,14 +6593,14 @@ class CardContent {
               helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
               model.user.resultsCompare.push(results);
-              helpers.rerender();
             }
+            helpers.rerender();
           });
           return false;
         }
         return helpers.assembleCards(data, 'postcodeCompare');
 
-      case 'result':
+      case 'result': // todo: refactor
         const description = helpers.markdownToHtml(data.description);
         return h('div.content.text-left',
           h('img', {'src': data.image, 'class': 'party-logo'}),
