@@ -108,6 +108,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "form.postcode-form",
+            "condition": "!isWaiting",
             "attr": {
               "onsubmit": {
                 "var": "postcodeSubmit"
@@ -148,7 +149,6 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "div",
             "condition": "isWaiting",
             "template": "loading"
           },
@@ -476,4 +476,69 @@ module.exports = function(CardTemplates){
       ]
     }
   ;
+
+  CardTemplates.postcodeInput = {
+    "dom":"div.content",
+    "content":[
+      {
+        "dom":"h2",
+        "content":{
+          "var":"name",
+          "default":"Please enter your postcode"
+        }
+      },
+      {
+        "dom":"div.body-content",
+        "content":[
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom":"h3",
+            "content":{
+              "var":"subheading"
+            }
+          },
+          {
+            "dom":"p",
+            "content":{
+              "var":"description",
+              "markdown":true
+            }
+          }
+        ]
+      }
+    ]
+  }
 }

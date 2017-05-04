@@ -125,6 +125,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "form.postcode-form",
+            "condition": "!isWaiting",
             "attr": {
               "onsubmit": {
                 "var": "postcodeSubmit"
@@ -165,7 +166,6 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "div",
             "condition": "isWaiting",
             "template": "loading"
           },
@@ -493,6 +493,71 @@ module.exports = function(CardTemplates){
       ]
     }
   ;
+
+  CardTemplates.postcodeInput = {
+    "dom":"div.content",
+    "content":[
+      {
+        "dom":"h2",
+        "content":{
+          "var":"name",
+          "default":"Please enter your postcode"
+        }
+      },
+      {
+        "dom":"div.body-content",
+        "content":[
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom":"h3",
+            "content":{
+              "var":"subheading"
+            }
+          },
+          {
+            "dom":"p",
+            "content":{
+              "var":"description",
+              "markdown":true
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 },{}],3:[function(require,module,exports){
@@ -6143,9 +6208,9 @@ class Step {
       });
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0])]);
-        // return (new CardSlider({cards:cards,nextStep:params.next}));
+        // return (new CardGroup({cards:cards,nextStep:params.next}));
       } else {
-        return (new CardSlider({cards:cards,nextStep:params.next}));
+        return (new CardGroup({cards:cards,nextStep:params.next}));
       }
     })
 
@@ -6185,7 +6250,7 @@ class Step {
   }
 }
 
-class CardSlider {
+class CardGroup {
   constructor(data) {
     this.data = data;
   }
@@ -6216,71 +6281,39 @@ class Card {
     delete CardTemplates.card.content[0].content[1].template;
     CardTemplates.card.content[0].content[1].content = this.cardContent;
     return helpers.assembleCards(this.data, CardTemplates.card);
-
-    // return h('div.card',
-    //   h('div.card-visible',
-    //     h('div.close'),
-    //     this.cardContent,
-    //     h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
-    //       h('img', {'src': 'http://app.explaain.com/card-logo.png'})
-    //     )
-    //   )
-    // )
   }
 }
 
-// igor: local "loading" didn't work because after onclick it triggers render() immediately and... redefines loading to "false" :)
-// igor: a better way to go is to have a global user state as "isWaiting", that should make sense!
-
 class CardContent {
+
   constructor(data) {
+    console.log(data)
     this.data = data;
   }
 
-
   render() {
+
     const self = this;
     var data = self.data; // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
+
     switch (self.data.type) {
+
       case 'postcode':
+        data.isWaiting = model.user.isWaiting === "postcode-input";
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
-          $(e.srcElement).html('<img class="loading showing" src="/img/loading.gif">');
-          model.user.isWaiting = true;
+          model.user.isWaiting = "postcode-input";
+          helpers.rerender();
           getResults().then(function(){
+            delete model.user.isWaiting;
             routes.step({ name: data.nextStep, type: data.type }).push();
           });
           return false;
         }
-        return h('div', helpers.assembleCards(data, CardTemplates['postcodeInput']));
-        // return h('.content',
-        //   h('h2', self.data.name),
-        //   h('div.body-content',
-        //     h('form.postcode-form',
-        //       {
-        //         'class': { 'hide': model.user.isWaiting },
-        //         'onsubmit': function(e) {
-        //           e.stopPropagation();
-        //           model.user.isWaiting = true;
-        //           getResults().then(function(){
-        //             routes.step({ name: data.nextStep, type: data.type }).push();
-        //           });
-        //           return false;
-        //         }
-        //       },
-        //       h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
-        //       h('button.btn.btn-success', {type: "submit"}, "Go!")
-        //     ),
-        //     h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-        //     h('p', self.data.description)
-        //   )
-        // )
-        break;
-
+        return helpers.assembleCards(data, 'postcodeInput');
 
       case 'vote-worth':
-        console.log('hh')
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.name),
           h('div.body-content',
@@ -6450,9 +6483,7 @@ class CardContent {
             // swipeToSlide: true
           });
         },100)
-        const description = markdownToHtml(self.data.description);
-        console.log('---description---');
-        console.log(description);
+        const description = helpers.markdownToHtml(self.data.description);
         return h('div.content.text-left',
           h('img', {'src': self.data.image, 'class': 'party-logo'}),
           h('h2', self.data.name),
@@ -6506,10 +6537,8 @@ class CardContent {
             })[0].colorLight);
           });
         },100)
-        console.log('self.data');
         self.data.name = self.data.header;
         self.data.description = self.data.content;
-        console.log(self.data);
         // console.log(h('div', helpers.assembleCards(self.data, CardTemplates['Organization'])));
         return h('div', helpers.assembleCards(self.data, CardTemplates['Organization']));
         // return h('div.content.text-left',
@@ -6559,7 +6588,7 @@ class CardContent {
         return h('.content',
           h('h2', self.data.name),
           h('div.body-content',
-            h.rawHtml('p', markdownToHtml(self.data.description))
+            h.rawHtml('p', helpers.markdownToHtml(self.data.description))
           ),
           h('section.questions',tasksDom)
         )
@@ -6612,8 +6641,7 @@ function getResults(){
   return new Promise(function(resolve,reject){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
-        updateObject(model.user, results.data.user);
-        model.user.isWaiting = false;
+        helpers.updateObject(model.user, results.data.user);
         // igor: We have to refactor results a bit to make them reusable in cards
         // igor: change this content to create cards based on the data you retrieve
         // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
@@ -6684,30 +6712,6 @@ function getResults(){
   })
 }
 
-function getResultsCompare(){
-  return new Promise(function(resolve,reject){
-    // igor: todo: change this to real API call instead of set timeout!
-    setTimeout(function(){
-      model.user.isWaiting = false;
-      model.user.resultsCompare.push({
-        seats: [
-          {
-            location: "Eastborne",
-            parties: ["Conservative","Lib Dem"],
-            color: "#000099"
-          },
-          {
-            location: "Bristol South",
-            parties: ["Labour","Conservative"],
-            color: "#990000"
-          }
-        ]
-      });
-      resolve();
-    },1000)
-  })
-};
-
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
 helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
@@ -6718,7 +6722,6 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
   //       2) move templates from development/templates.js to server
   //       3) comment the lines below or remove it completely
   require("../development/templates.js")(CardTemplates);
-  console.log(CardTemplates);
   require("../development/model.js")(model);
   hyperdom.append(document.body, new App());
 });
