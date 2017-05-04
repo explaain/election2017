@@ -22,15 +22,27 @@ module.exports = class Designers {
   }
 
   onStepLoad(){
-    $(".slick-container:not(.slick-initialized)").slick({
-      dots: false,
-      infinite: false,
-      adaptiveHeight: true,
-      centerPadding: '15px',
-      slidesToShow: 1,
-      arrows: true,
-      variableWidth: true
-    });
+    $(".slick-container").hide();
+    setTimeout(function(){
+      $(".slick-container").show();
+      $(".slick-container:not(.slick-initialized)").slick({
+        dots: false,
+        infinite: false,
+        adaptiveHeight: true,
+        centerPadding: '15px',
+        slidesToShow: 1,
+        arrows: true,
+        variableWidth: true
+      });
+    })
+  }
+
+  uniqueStepLayout(step){
+    if (step.label == 'Party stories') {
+      $('div.body').addClass('backColor');
+    } else {
+      $('div.body').removeClass('backColor');
+    }
   }
 
 }

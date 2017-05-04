@@ -795,15 +795,27 @@ module.exports = class Designers {
   }
 
   onStepLoad(){
-    $(".slick-container:not(.slick-initialized)").slick({
-      dots: false,
-      infinite: false,
-      adaptiveHeight: true,
-      centerPadding: '15px',
-      slidesToShow: 1,
-      arrows: true,
-      variableWidth: true
-    });
+    $(".slick-container").hide();
+    setTimeout(function(){
+      $(".slick-container").show();
+      $(".slick-container:not(.slick-initialized)").slick({
+        dots: false,
+        infinite: false,
+        adaptiveHeight: true,
+        centerPadding: '15px',
+        slidesToShow: 1,
+        arrows: true,
+        variableWidth: true
+      });
+    })
+  }
+
+  uniqueStepLayout(step){
+    if (step.label == 'Party stories') {
+      $('div.body').addClass('backColor');
+    } else {
+      $('div.body').removeClass('backColor');
+    }
   }
 
 }
@@ -6462,19 +6474,13 @@ class Step {
   }
 
   onload() {
-
+    const self = this;
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
       designers.onStepLoad();
       designers.adaptLayout();
     })
-
-    // todo: refactor
-    if (this.step.label == 'Party stories') {
-      $('div.body').addClass('backColor');
-    } else {
-      $('div.body').removeClass('backColor');
-    }
+    designers.uniqueStepLayout(self.step);
   }
 
   render() {
