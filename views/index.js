@@ -371,6 +371,7 @@ class Step {
 }
 
 class CardGroup {
+
   constructor(data) {
     this.data = data;
   }
@@ -381,7 +382,7 @@ class CardGroup {
       return (new Card(card));
     })
 
-    return h('div.card-carousel.layer',
+    return h('.card-carousel.layer',
       h('div',
         h.apply(null,
           ["div.slick-container",{role: "listbox"}].concat(cards)
@@ -398,6 +399,7 @@ class Card {
   }
 
   render() {
+    // todo: something is not right here...
     delete CardTemplates.card.content[0].content[1].template;
     CardTemplates.card.content[0].content[1].content = this.cardContent;
     return helpers.assembleCards(this.data, CardTemplates.card);
