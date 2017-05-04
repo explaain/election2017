@@ -719,21 +719,12 @@ class CardContent {
         console.log('Defaulting');
         return h('div', helpers.assembleCards(self.data, CardTemplates[self.data.type]));
     }
-    //Think this is probably unnecessary?
-    if (self.data.type == 'postcode') {
 
-    } else {
-      return h('.content',
-        h('h2', self.data.name),
-        h('div.body-content',
-          h('p', self.data.description)
-        )
-      )
-    }
   }
 
 }
 
+// todo: this will not be needed soon
 class ShareButtons {
   render() {
     return h("div.share-buttons",
