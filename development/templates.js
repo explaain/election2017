@@ -68,7 +68,7 @@ module.exports = function(CardTemplates){
       ]
     }
   ;
-  CardTemplates["Person"] = [
+  CardTemplates.Person = [
     {
       "dom": "h2",
       "content": {
@@ -145,6 +145,148 @@ module.exports = function(CardTemplates){
                   "type": "submit"
                 },
                 "content": "Compare"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom": "h3",
+            "content": {
+              "var": "subheading"
+            }
+          },
+          {
+            "dom": "p",
+            "content": {
+              "var": "description",
+              "markdown": true
+            }
+          },
+          {
+            "dom": "div",
+            "condition": "constituencyResults",
+            "template": "constituencyResults"
+          },
+          {
+            "condition": "constituencyResults",
+            "template": "shareButtons"
+          }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "content": [
+          {
+            "condition": "!constituencyResults",
+            "content": [
+              {
+                "dom": "div.bold",
+                "content": "or go straight to register"
+              },
+              {
+                "template": "registerButton"
+              },
+              {
+                "template": "linkToGovUKWebsiteHint"
+              }
+            ]
+          },
+          {
+            "condition": "constituencyResults",
+            "content": [
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-success",
+                            "content": "Learn more"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.voteWorth = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": "h2",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "name",
+          "default": "Please enter your postcode"
+        }
+      },
+      {
+        "dom": "div.body-content",
+        "content": [
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
               }
             ]
           },
