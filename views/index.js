@@ -7,8 +7,8 @@ const
   http = require('httpism'),
   model = require('../models/model'),
   CardTemplates = {},
-  Helpers = require("../includes/helpers"),
-  helpers = new Helpers(model,h,CardTemplates,http, router)
+  Helpers = require("../includes/helpers"), helpers = new Helpers(model,h,CardTemplates,http, router),
+  DataProcessor = require("../includes/dataprocessor"), dataProcessor = new DataProcessor()
 ;
 
 const routes = {
@@ -439,21 +439,9 @@ class CardContent {
       case 'vote-worth':
         data.isWaiting = model.user.isWaiting === "vote-worth";
         data.postcodeBinding = [model.user, 'postcode'];
-        // todo: duplicating code - should be a function for processing results?
         if(model.user.resultsOptions.length){
           const latestResults = model.user.resultsOptions[model.user.resultsOptions.length-1];
-          data.constituencyResults = {
-            heading: latestResults.text.heading,
-            subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats.map(function(seat){
-              return {
-                location: seat.location,
-                parties: seat.parties.map(function(party){
-                  return party.name;
-                }).join(" vs ")
-              }
-            })
-          }
+          data.constituencyResults = dataProcessor.processConstituencySeats(latestResults);
         }
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
@@ -485,18 +473,7 @@ class CardContent {
         // todo: duplicating code - should be a function for processing results?
         if(model.user.resultsCompare.length){
           const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
-          data.constituencyResults = {
-            heading: latestResults.text.heading,
-            subheading: latestResults.text.subheading,
-            constituencies: latestResults.seats.map(function(seat){
-              return {
-                location: seat.location,
-                parties: seat.parties.map(function(party){
-                  return party.name;
-                }).join(" vs ")
-              }
-            })
-          }
+          data.constituencyResults = dataProcessor.processConstituencySeats(latestResults);
         }
         data.onLearnMore = function(e){
           e.stopPropagation();
@@ -641,15 +618,12 @@ class CardContent {
 // todo: this will not be needed soon
 class ShareButtons {
   render() {
-    return h("div.share-buttons",
-      h("p","Share this to help friends and family #GE2017"),
-      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
-        h("button.btn.btn-facebook","Facebook")
-      ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote" + (model.user.constituency ? " in %23" + model.user.constituency.name.replace(/\s/g, '') : "") + ". How are you using your vote? ge2017.com"},
-        h("button.btn.btn-twitter","Twitter")
-      )
-    );
+    const data = {
+      name: "Spread the #GE2017 ❤️",
+      facebookShareHref: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button",
+      twitterShareHref: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote" + (model.user.constituency ? " in %23" + model.user.constituency.name.replace(/\s/g, '') : "") + ". How are you using your vote? ge2017.com",
+    };
+    return helpers.assembleCards(data, 'shareButtons');
   }
 }
 
@@ -670,9 +644,6 @@ function getResults(){
     api.getResults(model.user.postcode, model.user)
       .then(function(results) {
         helpers.updateObject(model.user, results.data.user);
-        // igor: We have to refactor results a bit to make them reusable in cards
-        // igor: change this content to create cards based on the data you retrieve
-        // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
         var yourParty = "",
             yourArea = "",
             yourFooter = "ShareButtons",

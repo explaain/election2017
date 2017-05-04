@@ -554,13 +554,18 @@ module.exports = function(CardTemplates){
       "content": [
         {
           "dom": "p",
-          "content": "Share this to help friends and family #GE2017"
+          "content": {
+            "var": "name",
+            "default": "Share this to help friends and family #GE2017"
+          }
         },
         {
           "dom": "a.discard-card-style",
           "attr": {
             "target":"_blank",
-            "href": "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"
+            "href": {
+              "var": "facebookShareHref"
+            }
           },
           "content": [
             {
@@ -573,7 +578,7 @@ module.exports = function(CardTemplates){
           "dom": "a.discard-card-style",
           "attr": {
             "target":"_blank",
-            "href": "https://twitter.com/intent/tweet?text="
+            "href": "twitterShareHref"
           },
           "content": [
             {
