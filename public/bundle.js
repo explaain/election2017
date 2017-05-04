@@ -6344,7 +6344,7 @@ class Step {
     if (params.task && model.tasks[params.task].dataUpdates)
       helpers.updateData(model.tasks[params.task].dataUpdates);
 
-    var data = {
+    const data = {
       cardGroups: []
     };
     switch (params.name) {
@@ -6613,8 +6613,8 @@ class CardContent {
         return h('div.content.text-left',
           h('img', {'src': self.data.image, 'class': 'party-logo'}),
           h('h2', self.data.name),
-          h('div.body-content'/*,
-            h.rawHtml('p', description)*/
+          h('div.body-content',
+            h.rawHtml('p', description)
           ),
           (self.data.footer?
             h('div.footer',
