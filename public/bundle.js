@@ -781,13 +781,17 @@ module.exports = function(){
   return {
 
     onWindowResize: function(){
-      $(window).on("resize",function(){
+      const onresize = function(){
         if ($(window).innerWidth() > 600) {
           $('section.step').addClass('wide');
         } else {
           $('section.step').removeClass('wide');
         }
+      }
+      $(window).on("resize",function(){
+        onresize();
       })
+      onresize();
     },
 
     onStepLoad: function(){
@@ -6248,6 +6252,7 @@ class Progress {
     }
     progress_current+=model.landedOnPostcode;
     progress_current+=model.landedOnResult;
+    // todo: why does it lead you to postdode-compare?
     return routes.step({
       name: 'postcode-compare',
       type: 'step',
@@ -6425,7 +6430,7 @@ class Step {
           name: "Goodness me, you're early! 😳",
           description: "This feature is coming soon...! 👻"
         }])
-        
+
     }
     this.cardGroups = data.cardGroups.map(function(cards){
       cards.forEach(function(card, i) {
@@ -6463,6 +6468,7 @@ class Step {
       designers.onStepLoad();
     })
 
+    // todo: refactor
     if (this.step.label == 'Party stories') {
       $('div.body').addClass('backColor');
     } else {
@@ -6471,13 +6477,9 @@ class Step {
   }
 
   render() {
-    // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
-    return h("section.step"
-      + ( (this.params.name=='result' || this.params.name=='story') && window.innerWidth > 600 ? ".wide" : ""),
+    return h("section.step",
       h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
-      h.apply(null,
-        ["div.cards"].concat(this.headers).concat(this.cardGroups)
-      )
+      h("div.cards",this.headers,this.cardGroups)
     )
   }
 }

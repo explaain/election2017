@@ -8,13 +8,17 @@ module.exports = function(){
   return {
 
     onWindowResize: function(){
-      $(window).on("resize",function(){
+      const onresize = function(){
         if ($(window).innerWidth() > 600) {
           $('section.step').addClass('wide');
         } else {
           $('section.step').removeClass('wide');
         }
+      }
+      $(window).on("resize",function(){
+        onresize();
       })
+      onresize();
     },
 
     onStepLoad: function(){
