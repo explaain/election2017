@@ -160,18 +160,6 @@ module.exports = class Helpers {
     return obj;
   }
 
-  rerender(){
-    const self = this;
-    const params = {};
-    location.search.substr(1).split("&").forEach(function(kv){
-      const _kv = kv.split("=");
-      params[_kv[0]] = _kv[1];
-    });
-    if(!params.v){params.v=0}
-    params.v++;
-    self.router.route(location.pathname)(params).replace();
-  }
-
   throwError(err){
     const self = this;
     self.model.user.error = err;

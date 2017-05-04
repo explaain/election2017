@@ -1013,18 +1013,6 @@ module.exports = class Helpers {
     return obj;
   }
 
-  rerender(){
-    const self = this;
-    const params = {};
-    location.search.substr(1).split("&").forEach(function(kv){
-      const _kv = kv.split("=");
-      params[_kv[0]] = _kv[1];
-    });
-    if(!params.v){params.v=0}
-    params.v++;
-    self.router.route(location.pathname)(params).replace();
-  }
-
   throwError(err){
     const self = this;
     self.model.user.error = err;
@@ -6549,7 +6537,7 @@ class CardContent {
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
           model.user.isWaiting = "postcode-input";
-          helpers.rerender();
+          self.refresh();
           getResults().then(function(){
             delete model.user.isWaiting;
             routes.step({ name: data.nextStep, type: data.type }).push();
@@ -6568,7 +6556,7 @@ class CardContent {
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
           model.user.isWaiting = "vote-worth";
-          helpers.rerender();
+          self.refresh();
           api.getPostcodeOptions(model.user.postcode).then(function(results){
             model.user.isWaiting = false;
             if (results.error) {
@@ -6576,7 +6564,7 @@ class CardContent {
             } else {
               model.user.resultsOptions.push(results);
             }
-            helpers.rerender();
+            self.refresh();
           });
           return false;
         }
@@ -6604,7 +6592,7 @@ class CardContent {
             } else {
               model.user.resultsCompare.push(results);
             }
-            helpers.rerender();
+            self.refresh();
           });
           return false;
         }
