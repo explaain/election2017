@@ -6235,18 +6235,14 @@ class Card {
 class CardContent {
   constructor(data) {
     this.data = data;
-    // console.log('this.data');
-    // console.log(this.data);
   }
 
 
   render() {
     const self = this;
-    console.log('self.data.type');
-    console.log(self.data.type);
+    var data = self.data; // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
     switch (self.data.type) {
       case 'postcode':
-        var data = self.data; //Necessary??
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
@@ -6284,7 +6280,6 @@ class CardContent {
 
 
       case 'vote-worth':
-        var data = self.data;
         console.log('hh')
         return h('.content',
           h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, self.data.name),
@@ -6391,13 +6386,14 @@ class CardContent {
         break;
 
       case 'postcode-compare':
-        var data = this.data;
         data.isWaiting = model.user.isWaiting === "postcode-compare";
-        data.render = function(){return false}
+        data.onLearnMore = function(e){
+          e.stopPropagation();
+          routes.root().push();
+        }
         data.postcodeSubmit = function(e){
           e.stopPropagation();
           model.user.isWaiting = "postcode-compare";
-          self.render();
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
             delete model.user.isWaiting;
             if (results.error) {
@@ -6431,12 +6427,7 @@ class CardContent {
         }
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeUniBinding = [model.user, 'postcode_uni'];
-        data.onLearnMore = function(e){
-          e.stopPropagation();
-          routes.root().push();
-        }
         return helpers.assembleCards(data, 'postcodeCompare');
-        break;
 
       case 'result':
         // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
