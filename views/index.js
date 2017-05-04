@@ -25,32 +25,6 @@ Model = model;
 class App {
   constructor(data) {
     this.header = new Header();
-
-    // todo: should this be in a different place?
-    var issueKeys = Object.keys(partyStances.opinions.issues);
-    issueKeys.forEach(function(issueKey, i) {
-      var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
-      debateKeys.forEach(function(debateKey, j) {
-        model.questions[debateKey] = {
-          question: partyStances.opinions.issues[issueKey].debates[debateKey].question,
-          issue: {
-            key: issueKey,
-            description: partyStances.opinions.issues[issueKey].description,
-            index: i
-          },
-          debate: {
-            key: debateKey,
-            description: partyStances.opinions.issues[issueKey].debates[debateKey].description,
-            index: j
-          },
-          tasks: [
-            "question-disagree",
-            "question-neutral",
-            "question-agree"
-          ]
-        }
-      })
-    })
   }
 
   render() {
@@ -629,6 +603,8 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
     require("../development/templates.js")(CardTemplates);
     require("../development/model.js")(model);
   }
+  // todo: move this to development? Is this needed for production?
+  require("../development/generatePartyStances.js")(model,partyStances)();
   hyperdom.append(document.body, new App());
 });
 
