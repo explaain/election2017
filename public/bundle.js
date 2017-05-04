@@ -6142,8 +6142,8 @@ const
   http = require('httpism'),
   model = require('../models/model'),
   CardTemplates = {},
-  Helpers = require("../includes/helpers"), helpers = new Helpers(model,h,CardTemplates,http, router),
-  DataProcessor = require("../includes/dataprocessor"), dataProcessor = new DataProcessor(),
+  helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
+  dataProcessor = new (require("../includes/dataprocessor"))(),
   designers = require("../includes/designers")()
 ;
 
