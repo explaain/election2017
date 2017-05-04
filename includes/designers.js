@@ -24,18 +24,15 @@ module.exports = class Designers {
   }
 
   onStepLoad(){
-    setTimeout(function(){
-      $(".step").show().addClass("initiated");
-      $(".slick-container:not(.slick-initialized)").slick({
-        dots: false,
-        infinite: false,
-        adaptiveHeight: true,
-        centerPadding: '15px',
-        slidesToShow: 1,
-        arrows: true,
-        variableWidth: true
-      });
-    })
+    $(".slick-container:not(.slick-initialized)").slick({
+      dots: false,
+      infinite: false,
+      adaptiveHeight: true,
+      centerPadding: '15px',
+      slidesToShow: 1,
+      arrows: true,
+      variableWidth: true
+    });
   }
 
 }

@@ -217,6 +217,7 @@ class Step {
     const data = {
       cardGroups: []
     };
+
     switch (params.name) {
 
       case 'postcode':
