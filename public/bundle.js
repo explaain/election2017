@@ -112,14 +112,7 @@ module.exports = function(CardTemplates){
   CardTemplates.postcodeCompare = {
     "dom": "div",
     "content": [
-      {
-        "dom": "h2",
-        "condition": "!constituencyResults",
-        "content": {
-          "var": "name",
-          "default": "Please enter your postcode"
-        }
-      },
+      { "template": "postcodeFormHeader" },
       {
         "dom": "div.body-content",
         "content": [
@@ -266,14 +259,7 @@ module.exports = function(CardTemplates){
   CardTemplates.voteWorth = {
     "dom": "div",
     "content": [
-      {
-        "dom": "h2",
-        "condition": "!constituencyResults",
-        "content": {
-          "var": "name",
-          "default": "Please enter your postcode"
-        }
-      },
+      { "template": "postcodeFormHeader" },
       {
         "dom": "div.body-content",
         "content": [
@@ -403,6 +389,15 @@ module.exports = function(CardTemplates){
         ]
       }
     ]
+  }
+
+  CardTemplates.postcodeFormHeader = {
+    "dom": "h2",
+    "condition": "!constituencyResults",
+    "content": {
+      "var": "name",
+      "default": "Please enter your postcode"
+    }
   }
 
   CardTemplates.linkToGovUKWebsiteHint = {
@@ -639,13 +634,7 @@ module.exports = function(CardTemplates){
   CardTemplates.postcodeInput = {
     "dom":"div.content",
     "content":[
-      {
-        "dom":"h2",
-        "content":{
-          "var":"name",
-          "default":"Please enter your postcode"
-        }
-      },
+      { "template": "postcodeFormHeader" },
       {
         "dom":"div.body-content",
         "content":[
