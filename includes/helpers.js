@@ -9,6 +9,7 @@ module.exports = class Helpers {
   }
 
   assembleCards(data, template) {
+    // todo: resolve issue with global and local scopes (remember the problem with passing function)
     const self = this;
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
     if (typeof template === 'string') { template = self.cardTemplates[template]; }
@@ -57,8 +58,6 @@ module.exports = class Helpers {
           styleKeys.forEach(function(styleKey) {
             var style = element.attr.style[styleKey];
             var styleValue;
-            console.log("STYLE")
-            console.log(style)
             if(style.var) {
               styleValue = self.getObjectPathProperty(data, style.var);
             } else if (style.func) {

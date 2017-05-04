@@ -165,7 +165,10 @@ module.exports = function(CardTemplates){
           },
           {
             "condition": "constituencyResults",
-            "template": "shareButtons"
+            "template": "shareButtons",
+            /*"mapping": [
+              ["name", "shareHeader"]
+            ]*/
           }
         ]
       },
@@ -555,7 +558,7 @@ module.exports = function(CardTemplates){
         {
           "dom": "p",
           "content": {
-            "var": "name",
+            "var": "shareHeading",
             "default": "Share this to help friends and family #GE2017"
           }
         },
