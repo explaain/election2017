@@ -777,43 +777,44 @@ module.exports = class DataProcessor {
  *
  */
 
-module.exports = function(){
-  return {
+module.exports = class Designers {
 
-    onWindowResize: function(){
-      const onresize = function(){
-        if ($(window).innerWidth() > 600) {
-          $('section.step').addClass('wide');
-        } else {
-          $('section.step').removeClass('wide');
-        }
-      }
-      $(window).on("resize",function(){
-        onresize();
-      })
-      onresize();
-    },
 
-    onStepLoad: function(){
-      $("h1").addClass("hide");
-      setTimeout(function(){
-        $("h1").removeClass("hide");
-      })
-      $(".slick-container").addClass("hide")
-      setTimeout(function(){
-        $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-          dots: false,
-          infinite: false,
-          adaptiveHeight: true,
-          centerPadding: '15px',
-          slidesToShow: 1,
-          arrows: true,
-          variableWidth: true
-        });
-      })
-    }
 
+  onWindowResize(){
+    const self = this;
+    $(window).on("resize",function(){
+      self.adaptLayout()
+    })
   }
+
+  adaptLayout() {
+    if ($(window).innerWidth() > 600) {
+      $('section.step').addClass('wide');
+    } else {
+      $('section.step').removeClass('wide');
+    }
+  }
+
+  onStepLoad(){
+    $("h1").addClass("hide");
+    setTimeout(function(){
+      $("h1").removeClass("hide");
+    })
+    $(".slick-container").addClass("hide")
+    setTimeout(function(){
+      $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+        dots: false,
+        infinite: false,
+        adaptiveHeight: true,
+        centerPadding: '15px',
+        slidesToShow: 1,
+        arrows: true,
+        variableWidth: true
+      });
+    })
+  }
+
 }
 
 },{}],5:[function(require,module,exports){
@@ -988,7 +989,15 @@ module.exports = class Helpers {
     });
     if(!params.v){params.v=0}
     params.v++;
-    self.router.route(location.pathname)(params).replace();;
+    self.router.route(location.pathname)(params).replace();
+  }
+
+  throwError(err){
+    console.log(self.model)
+    self.model.user.error = "err";
+    setTimeout(function(){
+      delete self.model.user.error;
+    },500);
   }
 
 }
@@ -6144,7 +6153,7 @@ const
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
   dataProcessor = new (require("../includes/dataprocessor"))(),
-  designers = require("../includes/designers")()
+  designers = new (require("../includes/designers"))()
 ;
 
 const routes = {
@@ -6343,7 +6352,7 @@ class Step {
   constructor(params) {
     const self = this;
     this.step = model.steps[params.name];
-    this.error = params.error;
+    this.error = model.user.error;
     this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
@@ -6466,6 +6475,7 @@ class Step {
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
       designers.onStepLoad();
+      designers.adaptLayout();
     })
 
     // todo: refactor
@@ -6477,9 +6487,10 @@ class Step {
   }
 
   render() {
+    const self = this;
     return h("section.step",
-      h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
-      h("div.cards",this.headers,this.cardGroups)
+      (self.error?h('p.error', self.error):null),
+      h("div.cards",self.headers,self.cardGroups)
     )
   }
 }
@@ -6560,17 +6571,11 @@ class CardContent {
           api.getPostcodeOptions(model.user.postcode).then(function(results){
             model.user.isWaiting = false;
             if (results.error) {
-              // todo: duplicating code + refactor this
-              console.log("Sorry, we didn't recognise that postcode!")
-              routes.step({
-                name: 'vote-worth',
-                type: 'step',
-                error: 'bad-postcode',
-              }).replace();
+              helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
               model.user.resultsOptions.push(results);
-              helpers.rerender();
             }
+            helpers.rerender();
           });
           return false;
         }

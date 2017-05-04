@@ -298,6 +298,7 @@ section.questions a.task:hover {
   display: none !important; /*Temporary */
 }
 .step.wide .card, .step.wide .card .card-visible, .step.wide .card .content, .step.wide .card section {
+  /* todo: why is this needed? */
   height: 300px;
 }
 .card section {

@@ -169,7 +169,15 @@ module.exports = class Helpers {
     });
     if(!params.v){params.v=0}
     params.v++;
-    self.router.route(location.pathname)(params).replace();;
+    self.router.route(location.pathname)(params).replace();
+  }
+
+  throwError(err){
+    console.log(self.model)
+    self.model.user.error = "err";
+    setTimeout(function(){
+      delete self.model.user.error;
+    },500);
   }
 
 }

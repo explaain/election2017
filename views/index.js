@@ -9,7 +9,7 @@ const
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
   dataProcessor = new (require("../includes/dataprocessor"))(),
-  designers = require("../includes/designers")()
+  designers = new (require("../includes/designers"))()
 ;
 
 const routes = {
@@ -208,7 +208,7 @@ class Step {
   constructor(params) {
     const self = this;
     this.step = model.steps[params.name];
-    this.error = params.error;
+    this.error = model.user.error;
     this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
@@ -331,6 +331,7 @@ class Step {
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
       designers.onStepLoad();
+      designers.adaptLayout();
     })
 
     // todo: refactor
@@ -342,9 +343,10 @@ class Step {
   }
 
   render() {
+    const self = this;
     return h("section.step",
-      h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
-      h("div.cards",this.headers,this.cardGroups)
+      (self.error?h('p.error', self.error):null),
+      h("div.cards",self.headers,self.cardGroups)
     )
   }
 }
@@ -425,17 +427,11 @@ class CardContent {
           api.getPostcodeOptions(model.user.postcode).then(function(results){
             model.user.isWaiting = false;
             if (results.error) {
-              // todo: duplicating code + refactor this
-              console.log("Sorry, we didn't recognise that postcode!")
-              routes.step({
-                name: 'vote-worth',
-                type: 'step',
-                error: 'bad-postcode',
-              }).replace();
+              helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
               model.user.resultsOptions.push(results);
-              helpers.rerender();
             }
+            helpers.rerender();
           });
           return false;
         }
