@@ -779,8 +779,6 @@ module.exports = class DataProcessor {
 
 module.exports = class Designers {
 
-
-
   onWindowResize(){
     const self = this;
     $(window).on("resize",function(){
