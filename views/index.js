@@ -8,7 +8,8 @@ const
   model = require('../models/model'),
   CardTemplates = {},
   Helpers = require("../includes/helpers"), helpers = new Helpers(model,h,CardTemplates,http, router),
-  DataProcessor = require("../includes/dataprocessor"), dataProcessor = new DataProcessor()
+  DataProcessor = require("../includes/dataprocessor"), dataProcessor = new DataProcessor(),
+  designers = require("../includes/designers")()
 ;
 
 const routes = {
@@ -20,18 +21,6 @@ const routes = {
 router.start();
 
 Model = model;
-
-var WideDecide = function() {
-  // if (window.innerWidth > 600) {
-  //   console.log('hi');
-  //   if (!$('section.step').hasClass('wide')) {
-  //     $('section.step').addClass('wide');
-  //   }
-  // } else {
-  //   console.log('hi2');
-  //   $('section.step').removeClass('wide');
-  // }
-}
 
 class App {
   constructor(data) {
@@ -224,12 +213,6 @@ class Step {
     if (params.task && model.tasks[params.task].dataUpdates)
       helpers.updateData(model.tasks[params.task].dataUpdates);
 
-
-
-    window.onresize = function() {
-      WideDecide();
-    }
-
     var data = {
       cardGroups: []
     };
@@ -344,25 +327,12 @@ class Step {
   }
 
   onload() {
+
+    // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
-      $("h1").addClass("hide");
-      setTimeout(function(){
-        $("h1").removeClass("hide");
-      })
-      $(".slick-container").addClass("hide")
-      setTimeout(function(){
-        $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-          dots: false,
-          infinite: false,
-          adaptiveHeight: true,
-          centerPadding: '15px',
-          slidesToShow: 1,
-          arrows: true,
-          variableWidth: true
-        });
-      })
+      designers.onStepLoad();
     })
-    WideDecide();
+
     if (this.step.label == 'Party stories') {
       $('div.body').addClass('backColor');
     } else {
@@ -400,6 +370,7 @@ class CardGroup {
       )
     )
   }
+
 }
 
 class Card {
@@ -681,3 +652,5 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
   require("../development/model.js")(model);
   hyperdom.append(document.body, new App());
 });
+
+designers.onWindowResize();
