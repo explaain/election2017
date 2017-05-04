@@ -680,4 +680,53 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+
+  CardTemplates.question = {
+    "dom": ".content",
+    "content": [
+      {
+        "dom": "h2",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": ".body-content",
+        "content": {
+          "var": "description",
+          "markdown": true
+        }
+      },
+      {
+        "dom": "section.questions",
+        "content": [
+          {
+            "loop": "answers",
+            "content": [{"template": "answer"}]
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.answer = {
+    "dom": "a",
+    "attr": {
+      "class": {
+        "var": "class"
+      },
+      "onclick": {
+        "var": "onclick"
+      }
+    },
+    "content": [
+      {
+        "dom": "h5",
+        "content": {
+          "var": "label"
+        }
+      }
+    ]
+  }
+
 }

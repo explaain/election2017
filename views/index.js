@@ -166,7 +166,7 @@ class Dashboard {
       if(task.conditions){
         conditionsMet = false;
         task.conditions.forEach(function(path){
-          if(getModel(path)){
+          if(helpers.getModel(path)){
             conditionsMet = true;
           }
         })
@@ -573,29 +573,24 @@ class CardContent {
         return helpers.assembleCards(self.data, 'Organization');
 
       case 'question':
-        const tasksDom = [];
-        self.data.tasks.forEach(function(name) {
+        data.answers = self.data.tasks.map(function(name) {
           const task = model.tasks[name];
-          task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
-          tasksDom.push(
-            routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
-              name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
-              task: name,
-              nextQuestion: self.data.nextQuestion,
-              final: self.data.final,
-              next: self.data.nextStep?self.data.nextStep:task.goto.next
-            }).a( { "class": "task " + (task.subtype?" "+task.subtype:"")},
-              h('h5', task.label)
-            )
-          );
+          return {
+            "class": "task" + (task.subtype?" "+task.subtype:""),
+            label: task.label,
+            onclick: function(){
+              helpers.updateData([{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]);
+              routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
+                name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
+                task: name,
+                nextQuestion: self.data.nextQuestion,
+                final: self.data.final,
+                next: self.data.nextStep?self.data.nextStep:task.goto.next
+              }).push();
+            }
+          }
         });
-        return h('.content',
-          h('h2', self.data.name),
-          h('div.body-content',
-            h.rawHtml('p', helpers.markdownToHtml(self.data.description))
-          ),
-          h('section.questions',tasksDom)
-        )
+        return helpers.assembleCards(data, 'question');
 
       default:
         console.log('Defaulting');
