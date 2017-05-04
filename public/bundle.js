@@ -6433,6 +6433,24 @@ class Step {
   }
 
   onload() {
+    setTimeout(function(){
+      $("h1").addClass("hide");
+      setTimeout(function(){
+        $("h1").removeClass("hide");
+      })
+      $(".slick-container").addClass("hide")
+      setTimeout(function(){
+        $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
+          dots: false,
+          infinite: false,
+          adaptiveHeight: true,
+          centerPadding: '15px',
+          slidesToShow: 1,
+          arrows: true,
+          variableWidth: true
+        });
+      })
+    })
     WideDecide();
     if (this.step.label == 'Party stories') {
       $('div.body').addClass('backColor');
@@ -6467,9 +6485,7 @@ class CardGroup {
 
     return h('.card-carousel.layer',
       h('div',
-        h.apply(null,
-          ["div.slick-container",{role: "listbox"}].concat(cards)
-        )
+        h("div.slick-container",{role: "listbox"},cards)
       )
     )
   }
@@ -6496,7 +6512,6 @@ class CardContent {
   }
 
   render() {
-
     const self = this;
     // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
     var data = self.data;
@@ -6583,26 +6598,6 @@ class CardContent {
         return helpers.assembleCards(data, 'postcodeCompare');
 
       case 'result':
-        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
-        // igor: todo: this is very ugly, so needs to be refactored asap
-        $("h1").addClass("hide");
-        window.setTimeout(function(){
-          $("h1").removeClass("hide");
-        })
-        $(".slick-container").addClass("hide")
-        window.setTimeout(function(){
-          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-            dots: false,
-            infinite: false,
-            adaptiveHeight: true,
-            // centerMode: true,
-            centerPadding: '15px',
-            slidesToShow: 1,
-            arrows: true,
-            variableWidth: true,
-            // swipeToSlide: true
-          });
-        },100)
         const description = helpers.markdownToHtml(self.data.description);
         return h('div.content.text-left',
           h('img', {'src': self.data.image, 'class': 'party-logo'}),
@@ -6632,31 +6627,6 @@ class CardContent {
         break;
 
       case 'story':
-        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
-        // igor: todo: this is very ugly, so needs to be refactored asap
-        $("h1").addClass("hide");
-        window.setTimeout(function(){
-          $("h1").removeClass("hide");
-        })
-        $(".slick-container").addClass("hide")
-        window.setTimeout(function(){
-          var slickContainer = $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-            dots: false,
-            infinite: false,
-            // adaptiveHeight: true,
-            // centerMode: true,
-            centerPadding: '15px',
-            slidesToShow: 1,
-            arrows: true,
-            // variableWidth: true,
-            // swipeToSlide: true
-          });
-          slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
-            $('div.body').addClass('backColor').css('background-color', allParties.filter(function(party) {
-              return party.key == partyStories[nextSlide].party;
-            })[0].colorLight);
-          });
-        },100)
         self.data.name = self.data.header;
         self.data.description = self.data.content;
         return helpers.assembleCards(self.data, 'Organization');
