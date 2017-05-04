@@ -456,13 +456,7 @@ class CardContent {
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
             delete model.user.isWaiting;
             if (results.error) {
-              // todo: duplicating code + refactor this
-              console.log("Sorry, we didn't recognise that postcode!")
-              routes.step({
-                name: 'postcode-compare',
-                type: 'step',
-                error: 'bad-postcode',
-              }).replace();
+              helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
               model.user.resultsCompare.push(results);
               helpers.rerender();

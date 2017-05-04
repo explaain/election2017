@@ -173,7 +173,7 @@ module.exports = class Helpers {
   }
 
   throwError(err){
-    console.log(self.model)
+    const self = this;
     self.model.user.error = "err";
     setTimeout(function(){
       delete self.model.user.error;
