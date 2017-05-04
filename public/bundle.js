@@ -6527,10 +6527,9 @@ class CardContent {
 
   render() {
     const self = this;
-    // todo: const data is redeclared somewhere - this is not good. investigate where is it redeclared
-    var data = self.data;
+    const data = self.data;
 
-    switch (self.data.type) {
+    switch (data.type) {
 
       case 'postcode':
         data.isWaiting = model.user.isWaiting === "postcode-input";
@@ -6612,16 +6611,16 @@ class CardContent {
         return helpers.assembleCards(data, 'postcodeCompare');
 
       case 'result':
-        const description = helpers.markdownToHtml(self.data.description);
+        const description = helpers.markdownToHtml(data.description);
         return h('div.content.text-left',
-          h('img', {'src': self.data.image, 'class': 'party-logo'}),
-          h('h2', self.data.name),
+          h('img', {'src': data.image, 'class': 'party-logo'}),
+          h('h2', data.name),
           h('div.body-content',
             h.rawHtml('p', description)
           ),
-          (self.data.footer?
+          (data.footer?
             h('div.footer',
-              self.data.footer.map(function(elem){
+              data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -6641,24 +6640,24 @@ class CardContent {
         break;
 
       case 'story':
-        self.data.name = self.data.header;
-        self.data.description = self.data.content;
-        return helpers.assembleCards(self.data, 'Organization');
+        data.name = data.header;
+        data.description = data.content;
+        return helpers.assembleCards(data, 'Organization');
 
       case 'question':
-        data.answers = self.data.tasks.map(function(name) {
+        data.answers = data.tasks.map(function(name) {
           const task = model.tasks[name];
           return {
             "class": "task" + (task.subtype?" "+task.subtype:""),
             label: task.label,
             onclick: function(){
-              helpers.updateData([{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]);
-              routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
-                name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
+              helpers.updateData([{data: ("user.opinions.issues."+data.issueKey+".debates."+data.debateKey+".opinion"), value: task.goto.opinion}]);
+              routes[(data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
+                name: data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:data.final),
                 task: name,
-                nextQuestion: self.data.nextQuestion,
-                final: self.data.final,
-                next: self.data.nextStep?self.data.nextStep:task.goto.next
+                nextQuestion: data.nextQuestion,
+                final: data.final,
+                next: data.nextStep?data.nextStep:task.goto.next
               }).push();
             }
           }
@@ -6667,7 +6666,7 @@ class CardContent {
 
       default:
         console.log('Defaulting');
-        return helpers.assembleCards(self.data, self.data.type);
+        return helpers.assembleCards(data, data.type);
 
     }
 
