@@ -644,12 +644,10 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
     CardTemplates[key] = templates[key];
   };
-  // for development purposes, populates temporary templates for CardTemplates
-  // todo: 1) wait for refactoring to complete
-  //       2) move templates from development/templates.js to server
-  //       3) comment the lines below or remove it completely
-  require("../development/templates.js")(CardTemplates);
-  require("../development/model.js")(model);
+  if(location.hostname==="localhost"){
+    require("../development/templates.js")(CardTemplates);
+    require("../development/model.js")(model);
+  }
   hyperdom.append(document.body, new App());
 });
 
