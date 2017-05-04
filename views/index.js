@@ -300,9 +300,7 @@ class Step {
         if(!cards[i].nextStep){
           cards[i].nextStep = params.next;
         }
-        console.log(cards[i].type)
         cards[i].type = cards[i].type || params.name;
-        console.log(cards[i].type)
       });
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0])]);
