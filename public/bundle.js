@@ -6489,8 +6489,8 @@ class CardContent {
         return h('div.content.text-left',
           h('img', {'src': self.data.image, 'class': 'party-logo'}),
           h('h2', self.data.name),
-          h('div.body-content',
-            h.rawHtml('p', description)
+          h('div.body-content'/*,
+            h.rawHtml('p', description)*/
           ),
           (self.data.footer?
             h('div.footer',
@@ -6541,34 +6541,7 @@ class CardContent {
         },100)
         self.data.name = self.data.header;
         self.data.description = self.data.content;
-        // console.log(h('div', helpers.assembleCards(self.data, CardTemplates['Organization'])));
-        return h('div', helpers.assembleCards(self.data, CardTemplates['Organization']));
-        // return h('div.content.text-left',
-        //   h('img', {'src': self.data.image, 'class': 'party-logo'}),
-        //   h('h2', self.data.name),
-        //   h('div.body-content',
-        //     h.rawHtml('p', markdownToHtml(self.data.content))
-        //   ),
-        //   (self.data.footer?
-        //     h('div.footer',
-        //       self.data.footer.map(function(elem){
-        //         switch (elem) {
-        //           case "ShareButtons":
-        //             return (new ShareButtons())
-        //             break;
-        //           case "BackToDashboard":
-        //             return (new BackToDashboard())
-        //             break;
-        //           default:
-        //             return undefined;
-        //         }
-        //       })
-        //     )
-        //     :
-        //     undefined
-        //   )
-        // )
-        break;
+        return helpers.assembleCards(self.data, 'Organization');
 
       case 'question':
         const tasksDom = [];
@@ -6597,7 +6570,8 @@ class CardContent {
 
       default:
         console.log('Defaulting');
-        return h('div', helpers.assembleCards(self.data, CardTemplates[self.data.type]));
+        return helpers.assembleCards(self.data, self.data.type);
+
     }
 
   }
