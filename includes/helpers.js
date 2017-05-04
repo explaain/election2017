@@ -56,7 +56,17 @@ module.exports = class Helpers {
           var styles = {}
           styleKeys.forEach(function(styleKey) {
             var style = element.attr.style[styleKey];
-            styles[styleKey] = style.var ? self.getObjectPathProperty(data, style.var) : style; //'var' MUST use dot notation, not []
+            var styleValue;
+            console.log("STYLE")
+            console.log(style)
+            if(style.var) {
+              styleValue = self.getObjectPathProperty(data, style.var);
+            } else if (style.func) {
+              styleValue = self.getObjectPathProperty(params, style.func[0]).apply(null,style.func.slice(1).map(function(p){return self.getObjectPathProperty(params, p)}));
+            } else {
+              styleValue = style;
+            }
+            styles[styleKey] = styleValue;
             if (styleKey == "background-image" && style.var) {
               styles[styleKey] = 'url("' + styles[styleKey] + '")'
             }
