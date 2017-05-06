@@ -15,7 +15,7 @@ module.exports = class Designers {
 
   adaptLayout() {
     if ($(window).innerWidth() > 600) {
-      $('section.step').addClass('wide');
+      // $('section.step').addClass('wide');
     } else {
       $('section.step').removeClass('wide');
     }

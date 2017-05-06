@@ -1,158 +1,254 @@
+//NOTE: Jeremy has replaced some of these, copied from api.explaain.com
+
 module.exports = function(CardTemplates){
   CardTemplates.card =
-    {
-      "dom": "div.card",
-      "attr": {
-        "data-uri": {
-          "var": "@id",
-        },
-        "style": "height: auto"
+  //   {
+  //     "dom": "div.card",
+  //     "attr": {
+  //       "data-uri": {
+  //         "var": "@id",
+  //       },
+  //       "style": "height: auto"
+  //     },
+  //     "content": [
+  //       {
+  //         "dom": "div.card-visible",
+  //         "content": [
+  //           {
+  //             "dom": "div.close",
+  //             "content": [
+  //               {
+  //                 "dom": "i.fa.fa-times",
+  //                 "attr": {
+  //                   "data-hidden": "true"
+  //                 }
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             "dom": "div.content",
+  //             "attr": {
+  //               "class": {
+  //                 "var": "@type"
+  //               }
+  //             },
+  //             "template": {
+  //               "var": "type"
+  //             }
+  //           },
+  //           {
+  //             "dom": "a.card-icon",
+  //             "attr": {
+  //               "target": "_blank",
+  //               "tabindex": "-1"
+  //             },
+  //             "content": [
+  //               {
+  //                 "dom": "img",
+  //                 "attr": {
+  //                   "src": "http://app.explaain.com/card-logo.png"
+  //                 }
+  //               }
+  //             ]
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "dom": "button.edit-button",
+  //         "attr": {
+  //           "tabindex": "-1"
+  //         },
+  //         "content": [
+  //           {
+  //             "dom": "i.fa.fa-pencil",
+  //             "attr": {
+  //               "aria-hidden": "true"
+  //             }
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // ;
+  CardTemplates.card = {
+    "dom": "div.card",
+    "attr": {
+      "class": {
+        "var": "type"
       },
-      "content": [
-        {
-          "dom": "div.card-visible",
-          "content": [
-            {
-              "dom": "div.close",
-              "content": [
-                {
-                  "dom": "i.fa.fa-times",
-                  "attr": {
-                    "data-hidden": "true"
-                  }
+      "data-uri": {
+        "var": "@id"
+      },
+      "style": "height: auto"
+    },
+    "content": [
+      {
+        "dom": "div.card-visible",
+        "content": [
+          {
+            "dom": "div.close",
+            "content": [
+              {
+                "dom": "i.fa.fa-times",
+                "attr": {
+                  "data-hidden": "true"
                 }
-              ]
-            },
-            {
-              "dom": "div.content",
-              "attr": {
-                "class": {
-                  "var": "@type"
-                }
-              },
-              "template": {
-                "var": "type"
               }
-            },
-            {
-              "dom": "a.card-icon",
-              "attr": {
-                "target": "_blank",
-                "tabindex": "-1"
-              },
-              "content": [
-                {
-                  "dom": "img",
-                  "attr": {
-                    "src": "http://app.explaain.com/card-logo.png"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "button.edit-button",
-          "attr": {
-            "tabindex": "-1"
+            ]
           },
-          "content": [
-            {
-              "dom": "i.fa.fa-pencil",
-              "attr": {
-                "aria-hidden": "true"
+          {
+            "template": {
+              "var": "type"
+            }
+          },
+          {
+            "dom": "a.card-icon",
+            "attr": {
+              "target": "_blank",
+              "tabindex": "-1"
+            },
+            "content": [
+              {
+                "dom": "img",
+                "attr": {
+                  "src": "http://app.explaain.com/card-logo.png"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "button.edit-button",
+        "attr": {
+          "tabindex": "-1"
+        },
+        "content": [
+          {
+            "dom": "i.fa.fa-pencil",
+            "attr": {
+              "aria-hidden": "true"
+            }
+          }
+        ]
+      }
+    ]
+  };
+  // CardTemplates.Person = [
+  //   {
+  //     "dom": "h2",
+  //     "content": {
+  //       "var": "name"
+  //     }
+  //   },
+  //   {
+  //     "dom": "div.card-image",
+  //     "content": [{
+  //       "dom": "img",
+  //       "attr": {"src": {
+  //         "var": "image"
+  //       }}
+  //     }]
+  //   },
+  //   {
+  //     "dom": "div.body-content",
+  //     "content": {
+  //       "var": "description",
+  //       "markdown": true
+  //     }
+  //   }
+  // ];
+  CardTemplates.Person = {
+    "dom": "div.content",
+    "content": [
+      {
+        "dom": "h2",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": "div.card-image",
+        "content": [
+          {
+            "dom": "img",
+            "attr": {
+              "src": {
+                "var": "image"
               }
             }
-          ]
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content",
+        "content": {
+          "var": "description",
+          "markdown": true
         }
-      ]
-    }
-  ;
-  CardTemplates.Person = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name"
       }
-    },
-    {
-      "dom": "div.card-image",
-      "content": [{
-        "dom": "img",
-        "attr": {"src": {
-          "var": "image"
-        }}
-      }]
-    },
-    {
-      "dom": "div.body-content",
-      "content": {
-        "var": "description",
-        "markdown": true
-      }
-    }
-  ];
+    ]
+  };
+
   CardTemplates.postcodeCompare = {
     "dom": "div",
     "content": [
       { "template": "postcodeFormHeader" },
       {
-        "dom": "div.body-content",
+        "dom": "form.postcode-form",
+        "attr": {
+          "onsubmit": {
+            "var": "postcodeSubmit"
+          }
+        },
         "content": [
           {
-            "dom": "form.postcode-form",
-            "condition": "!isWaiting",
+            "dom": "input.form-control",
             "attr": {
-              "onsubmit": {
-                "var": "postcodeSubmit"
+              "autofocus": "true",
+              "type": "text",
+              "name": "postcode",
+              "placeholder": "Home Postcode",
+              "binding": {
+                "var": "postcodeBinding"
               }
-            },
-            "content": [
-              {
-                "dom": "input.form-control",
-                "attr": {
-                  "autofocus": "true",
-                  "type": "text",
-                  "name": "postcode",
-                  "placeholder": "Home Postcode",
-                  "binding": {
-                    "var": "postcodeBinding"
-                  }
-                }
-              },
-              {
-                "dom": "input.form-control",
-                "attr": {
-                  "autofocus": "true",
-                  "type": "text",
-                  "name": "postcode",
-                  "placeholder": "Uni Postcode",
-                  "binding": {
-                    "var": "postcodeUniBinding"
-                  }
-                }
-              },
-              {
-                "dom": "button.btn.btn-success",
-                "attr": {
-                  "type": "submit"
-                },
-                "content": "Compare"
-              }
-            ]
+            }
           },
           {
-            "condition": "isWaiting",
-            "template": "loading"
+            "dom": "input.form-control",
+            "attr": {
+              "autofocus": "true",
+              "type": "text",
+              "name": "postcode",
+              "placeholder": "Uni Postcode",
+              "binding": {
+                "var": "postcodeUniBinding"
+              }
+            }
           },
+          {
+            "dom": "button.btn.btn-success",
+            "attr": {
+              "type": "submit"
+            },
+            "content": "Compare"
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content",
+        "condition": "!isWaiting",
+        "content": [
           {
             "dom": "h3",
+            "condition": "!constituencyResults",
             "content": {
               "var": "subheading"
             }
           },
           {
             "dom": "p",
+            "condition": "!constituencyResults",
             "content": {
               "var": "description",
               "markdown": true
@@ -162,39 +258,26 @@ module.exports = function(CardTemplates){
             "dom": "div",
             "condition": "constituencyResults",
             "template": "constituencyResults"
-          },
-          {
-            "condition": "constituencyResults",
-            "template": "shareButtons",
-            /*"mapping": [
-              ["name", "shareHeader"]
-            ]*/
           }
         ]
       },
       {
-        "dom": "div.footer",
+        "condition": "isWaiting",
+        "template": "loading"
+      },
+      {
+        "dom": "section.divider",
         "content": [
           {
-            "condition": "!constituencyResults",
+            {
+              "dom": "h2",
+              "content": "Make your vote count"
+            },
+            "dom": "div.layout-table",
             "content": [
               {
-                "dom": "div.bold",
-                "content": "or go straight to register"
-              },
-              {
-                "template": "registerButton"
-              },
-              {
-                "template": "linkToGovUKWebsiteHint"
-              }
-            ]
-          },
-          {
-            "condition": "constituencyResults",
-            "content": [
-              {
-                "dom": ".column50",
+                "dom": "div.column",
+                "condition": "constituencyResults",
                 "content": [
                   {
                     "dom": "p",
@@ -208,7 +291,7 @@ module.exports = function(CardTemplates){
                         },
                         "content": [
                           {
-                            "dom": "button.btn.btn-success",
+                            "dom": "button.btn.btn-primary",
                             "content": "Learn more"
                           }
                         ]
@@ -225,8 +308,18 @@ module.exports = function(CardTemplates){
                 ]
               },
               {
-                "dom": ".column50",
+                "dom": "div.column",
                 "content": [
+                  {
+                    "condition": "!constituencyResults",
+                    "dom": "div.bold",
+                    "content": "or go straight to register"
+                  },
+                  // {
+                  //   "condition": "constituencyResults",
+                  //   "dom": "div.bold",
+                  //   "content": "Make your vote count"
+                  // },
                   {
                     "template": "registerButton"
                   },
@@ -237,6 +330,41 @@ module.exports = function(CardTemplates){
               }
             ]
           }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "h2",
+            "content": "Multiply your vote"
+          },
+          {
+            "dom": "p",
+            "content": "Share with 10 friends and make everyone's vote count #GE2017"
+          },
+          {
+            "template": "shareButtons",
+            /*"mapping": [
+              ["name", "shareHeader"]
+            ]*/
+          },
+          // {
+          //   "condition": "!constituencyResults",
+          //   "content": [
+          //     {
+          //       "dom": "div.bold",
+          //       "content": "or go straight to register"
+          //     },
+          //     {
+          //       "template": "registerButton"
+          //     },
+          //     {
+          //       "template": "linkToGovUKWebsiteHint"
+          //     }
+          //   ]
+          // }
         ]
       }
     ]
@@ -392,7 +520,7 @@ module.exports = function(CardTemplates){
   }
 
   CardTemplates.registerButton = {
-    "dom": "p",
+    "dom": "p.register",
     "content": [
       {
         "dom": "a.discard-card-style",
@@ -512,7 +640,7 @@ module.exports = function(CardTemplates){
           }
         },
         {
-          "dom": "div",
+          "dom": "div.subheading",
           "content": {
             "var": "constituencyResults.subheading"
           }
@@ -522,7 +650,6 @@ module.exports = function(CardTemplates){
           "loop": "constituencyResults.constituencies",
           "content": [
             {
-              "dom": "span",
               "template": "constituency"
             }
           ]
@@ -536,17 +663,70 @@ module.exports = function(CardTemplates){
       "dom": "div.seat.column50",
       "content": [
         {
-          "dom": "div.location.small",
+          "dom": "div.location",
           "content": {
             "var": "location"
-          },
+          }
         },
         {
           "dom": "div.versus.bold.line1em",
-          "content": {
-            "var": "parties"
-          }
+          "content": [
+            {
+              "dom": "div.party",
+              "attr": {
+                "style": {
+                  "background-color": {
+                    "var": "party1Color"
+                  },
+                  "height": {
+                    "var": "party1Height"
+                  }
+                }
+              },
+              "content": [
+                {
+                  "dom": "div.name",
+                  "content": {
+                    "var": "party1"
+                  }
+                }
+              ]
+            },
+            {
+              "dom": "div.vs",
+              "condition": "swingSeat",
+              "content": "VS"
+            },
+            {
+              "dom": "div.party",
+              "condition": "swingSeat",
+              "attr": {
+                "style": {
+                  "background-color": {
+                    "var": "party2Color"
+                  },
+                  "height": {
+                    "var": "party2Height"
+                  }
+                }
+              },
+              "content": [
+                {
+                  "dom": "div.name",
+                  "content": {
+                    "var": "party2"
+                  }
+                }
+              ]
+            }
+          ]
         }
+        // {
+        //   "dom": "div.versus.bold.line1em",
+        //   "content": {
+        //     "var": "partyString"
+        //   }
+        // }
       ]
     }
   ;
@@ -573,6 +753,7 @@ module.exports = function(CardTemplates){
           "content": [
             {
               "dom": "button.btn.btn-facebook",
+              "icon": "fa-facebook",
               "content": "Facebook"
             }
           ]
@@ -586,6 +767,7 @@ module.exports = function(CardTemplates){
           "content": [
             {
               "dom": "button.btn.btn-twitter",
+              "icon": "fa-facebook",
               "content": "Twitter"
             }
           ]

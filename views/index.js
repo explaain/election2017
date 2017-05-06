@@ -92,6 +92,7 @@ class Progress {
     progress_current+=model.landedOnPostcode;
     progress_current+=model.landedOnResult;
     // todo: why does it lead you to postdode-compare?
+    // Answer (from Jeremy) - currently it's just a shortcut so we can demo it to people without having a button on the dashboard!
     return routes.step({
       name: 'postcode-compare',
       type: 'step',
@@ -216,8 +217,9 @@ class Step {
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
           type: 'postcode-compare',
-          name: 'Student and not sure where to vote from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+          name: 'Student? Unsure where to vote from?',
+          subheading: 'Why do we need this?',
+          description: 'We need your postcode to show data relating to your constituency 👌'
         }])
         break;
 
@@ -599,7 +601,7 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
     CardTemplates[key] = templates[key];
   };
-  if(location.hostname==="localhost"){
+  if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
     require("../development/templates.js")(CardTemplates);
     require("../development/model.js")(model);
   }
