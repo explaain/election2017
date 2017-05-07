@@ -12,7 +12,7 @@ var allParties = [
     key: "labour",
     name: "Labour Party",
     color: "#e43b2c",
-    colorLight: "#f7625d",
+    colorLight: "#fb3029",
     description: "Have promised to ‘accept the will of the people’ with both UK and EU citizens having [guaranteed rights](http://api.explaain.com/Detail/5901bfd2fcb4070011e4de52), retaining access to the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed) but no [second public vote](http://api.explaain.com/Detail/5901c186fcb4070011e4de55) on the terms of the Brexit deal.",
     logo: "labour.png",
     image: "labour.jpg"

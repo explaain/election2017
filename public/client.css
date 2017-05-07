@@ -52,6 +52,9 @@ header img.ge2017-logo {
   margin: 10px auto;
   display: block;
 }
+.body.standalone header img.ge2017-logo {
+  margin-bottom: -10px;
+}
 header a:hover img.ge2017-logo {
   opacity: 0.7;
 }
@@ -70,6 +73,7 @@ header a.home {
   -ms-transition: opacity .5s;
   transition: opacity .5s;
 }
+.body.standalone header a.home,
 header a.home.fade-hidden {
   opacity: 0;
   pointer-events: none;
@@ -366,7 +370,7 @@ section:not(.wide) .card section.card-media {
 }
 
 .card form.postcode-form input[type="text"] {
-  max-width: 110px;
+  max-width: 30%;
   display: inline-block;
   margin: 0 2px 0 2px;
 }
@@ -563,36 +567,84 @@ section:not(.wide) .card section.card-media {
   margin: 20px 0
 }
 
-.seat .location {
+.seat .impact {
+  color: #da368f;
   font-weight: bold;
-  line-height: 1.2;
-  margin-bottom: 10px;
-  vertical-align: middle;
+  font-size: 1.2em;
+}
+.seat .impact i {
+  display: block;
+  margin: -8px 0 3px;
+  font-size: 1.4em;
 }
 
 .seat .versus{
   min-height: 74px;
   border-radius: 10px;
   overflow: hidden;
-  height: 200px;
-  border: 1px solid #bbb;
+/*   height: 200px; */
+  border: 1px solid #ddd;
+  padding: 20px;
 }
-.seat .versus .party {
+.seat .versus.swing-true {
+  border: 4px solid #da368f;
+  margin: -3px 0;
+}
+
+.seat .location {
+  font-weight: bold;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  vertical-align: middle;
+  height: 40px;
+/*   padding: 20px; */
+}
+.seat .versus .swing-icon {
+  font-size: 60px;
+  color: #999;
+  margin-bottom: 10px;
+}
+.seat .versus.swing-true .swing-icon {
+  color: #da368f;
+}
+
+
+/* .seat .versus .party {
   padding: 10px;
   height: 50%;
   border-top: 1px solid #bbb;
-}
-.seat .versus .party:nth-child(1) {
+} */
+/* .seat .versus .party:nth-child(1) {
   border: none;
+} */
+.seat .versus .parties-container {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-align: center;
+  justify-content: center;
+}
+.seat .versus .parties {
 }
 .seat .vs {
-  position: relative;
-  top: -10px;
-  height: 0;
-  color: #eee;
-  font-weight: 800
+  display: inline-block;
+  color: #999;
+  font-weight: 400;
+  padding: 0 5px;
 }
-.seat .versus .party .name {color: white;line-height: 1.4;font-size: 1em;/* font-weight: 400; */vertical-align: middle;position: relative;top: 50%;transform: translateY(-50%);/*   display: none; */}
+.seat .versus .party .name {
+  color: white;
+  line-height: 1.4;
+  font-size: 1em;
+  /* font-weight: 400; */
+/*   vertical-align: middle; */
+/*   position: relative; */
+/*   top: 50%; */
+/*   transform: translateY(-50%); */
+  /*   display: none; */
+}
 
 /* igor: 50% width columns in cards */
 .card .column50 {
@@ -619,7 +671,7 @@ section:not(.wide) .card section.card-media {
 }
 .card.postcode-compare .body-content div.subheading {
   font-size: 0.9em;
-  margin: 10px 0 15px;
+  margin: 10px 0 5px;
 }
 .card.postcode-compare .body-content .seat-list {
   display: table;
@@ -664,6 +716,10 @@ section:not(.wide) .card section.card-media {
   margin: auto;
   margin-top: 20px;
   overflow: hidden;
+}
+
+.body.standalone header .progress {
+  display: none;
 }
 
 .progress-inner {

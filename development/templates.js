@@ -231,7 +231,18 @@ module.exports = function(CardTemplates){
             "attr": {
               "type": "submit"
             },
-            "content": "Compare"
+            "content": [
+              {
+                "dom": "span",
+                "content": "Compare",
+                "condition": "!constituencyResults"
+              },
+              {
+                "dom": "span",
+                "content": "Go Again",
+                "condition": "constituencyResults"
+              }
+            ]
           }
         ]
       },
@@ -664,92 +675,88 @@ module.exports = function(CardTemplates){
       "dom": "div.seat.column50",
       "content": [
         {
-          "dom": "div.location",
-          "content": {
-            "var": "location"
-          }
+          "dom": "div.impact",
+          "condition": "swingSeat",
+          "content": [
+            {
+              "dom": "span",
+              "content": "Most Impact"
+            },
+            {
+              "dom": "i.fa.fa-caret-down"
+            }
+          ]
         },
         {
           "dom": "div.versus.bold.line1em",
+          "attr": {
+            "class": {
+              "var": "swingClass"
+            }
+          },
           "content": [
             {
-              "dom": "div.party",
-              "attr": {
-                "style": {
-                  "background-color": {
-                    "var": "party1Color"
-                  },
-                  // "background-image": {
-                  //   "var": "party1Image"
-                  // },
-                  "height": {
-                    "var": "party1Height"
-                  }
-                }
-              },
-              "content": [
-                // {
-                //   "dom": "img.party-image",
-                //   "attr": {
-                //     "src": {
-                //       "var": "party1Image"
-                //     }
-                //   }
-                // },
-                {
-                  "dom": "div.name",
-                  "content": {
-                    "var": "party1"
-                  }
-                }
-              ]
+              "dom": "div.location",
+              "content": {
+                "var": "location"
+              }
             },
             {
-              "dom": "div.vs",
-              "condition": "swingSeat",
-              "content": "VS"
+              "dom": "i.swing-icon.fa",
+              "attr": {
+                "class": {
+                  "var": "swingIcon"
+                }
+              }
             },
             {
-              "dom": "div.party",
-              "condition": "swingSeat",
-              "attr": {
-                "style": {
-                  "background-color": {
-                    "var": "party2Color"
-                  },
-                  // "background-image": {
-                  //   "var": "party2Image"
-                  // },
-                  "height": {
-                    "var": "party2Height"
-                  }
-                }
-              },
+              "dom": "div.parties-container",
               "content": [
-                // {
-                //   "dom": "img.party-image",
-                //   "attr": {
-                //     "src": {
-                //       "var": "party2Image"
-                //     }
-                //   }
-                // },
                 {
-                  "dom": "div.name",
-                  "content": {
-                    "var": "party2"
-                  }
+                  "dom": "div.parties",
+                  "content": [
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party1"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party1Color"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "dom": "span.vs",
+                      "condition": "!swingSeat",
+                      "content": " safe seat "
+                    },
+                    {
+                      "dom": "div.vs",
+                      "condition": "swingSeat",
+                      "content": " vs "
+                    },
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party2"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party2Color"
+                          }
+                        }
+                      }
+                    },
+                  ]
                 }
               ]
             }
           ]
         }
-        // {
-        //   "dom": "div.versus.bold.line1em",
-        //   "content": {
-        //     "var": "partyString"
-        //   }
-        // }
       ]
     }
   ;

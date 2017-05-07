@@ -278,7 +278,18 @@ module.exports = function(CardTemplates){
             "attr": {
               "type": "submit"
             },
-            "content": "Compare"
+            "content": [
+              {
+                "dom": "span",
+                "content": "Compare",
+                "condition": "!constituencyResults"
+              },
+              {
+                "dom": "span",
+                "content": "Go Again",
+                "condition": "constituencyResults"
+              }
+            ]
           }
         ]
       },
@@ -711,92 +722,88 @@ module.exports = function(CardTemplates){
       "dom": "div.seat.column50",
       "content": [
         {
-          "dom": "div.location",
-          "content": {
-            "var": "location"
-          }
+          "dom": "div.impact",
+          "condition": "swingSeat",
+          "content": [
+            {
+              "dom": "span",
+              "content": "Most Impact"
+            },
+            {
+              "dom": "i.fa.fa-caret-down"
+            }
+          ]
         },
         {
           "dom": "div.versus.bold.line1em",
+          "attr": {
+            "class": {
+              "var": "swingClass"
+            }
+          },
           "content": [
             {
-              "dom": "div.party",
-              "attr": {
-                "style": {
-                  "background-color": {
-                    "var": "party1Color"
-                  },
-                  // "background-image": {
-                  //   "var": "party1Image"
-                  // },
-                  "height": {
-                    "var": "party1Height"
-                  }
-                }
-              },
-              "content": [
-                // {
-                //   "dom": "img.party-image",
-                //   "attr": {
-                //     "src": {
-                //       "var": "party1Image"
-                //     }
-                //   }
-                // },
-                {
-                  "dom": "div.name",
-                  "content": {
-                    "var": "party1"
-                  }
-                }
-              ]
+              "dom": "div.location",
+              "content": {
+                "var": "location"
+              }
             },
             {
-              "dom": "div.vs",
-              "condition": "swingSeat",
-              "content": "VS"
+              "dom": "i.swing-icon.fa",
+              "attr": {
+                "class": {
+                  "var": "swingIcon"
+                }
+              }
             },
             {
-              "dom": "div.party",
-              "condition": "swingSeat",
-              "attr": {
-                "style": {
-                  "background-color": {
-                    "var": "party2Color"
-                  },
-                  // "background-image": {
-                  //   "var": "party2Image"
-                  // },
-                  "height": {
-                    "var": "party2Height"
-                  }
-                }
-              },
+              "dom": "div.parties-container",
               "content": [
-                // {
-                //   "dom": "img.party-image",
-                //   "attr": {
-                //     "src": {
-                //       "var": "party2Image"
-                //     }
-                //   }
-                // },
                 {
-                  "dom": "div.name",
-                  "content": {
-                    "var": "party2"
-                  }
+                  "dom": "div.parties",
+                  "content": [
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party1"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party1Color"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "dom": "span.vs",
+                      "condition": "!swingSeat",
+                      "content": " safe seat "
+                    },
+                    {
+                      "dom": "div.vs",
+                      "condition": "swingSeat",
+                      "content": " vs "
+                    },
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party2"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party2Color"
+                          }
+                        }
+                      }
+                    },
+                  ]
                 }
               ]
             }
           ]
         }
-        // {
-        //   "dom": "div.versus.bold.line1em",
-        //   "content": {
-        //     "var": "partyString"
-        //   }
-        // }
       ]
     }
   ;
@@ -1000,11 +1007,13 @@ module.exports = class DataProcessor {
           }).join(" vs "),
           numberOfParties: seat.parties.length,
           swingSeat: (seat.parties.length > 1),
-          party1: seat.parties[0].name,
+          swingIcon: (seat.parties.length > 1) ? 'fa-random' : 'fa-lock',
+          swingClass: "swing-" + (seat.parties.length > 1),
+          party1: seat.parties[0].name.replace(' Party', ''),
           party1Color: seat.parties[0].colorLight,
           party1Height: (100/seat.parties.length) + '%',
           party1Image: "/img/party-logos/" + seat.parties[0].logo,
-          party2: seat.parties[1] ? seat.parties[1].name : null,
+          party2: seat.parties[1] ? seat.parties[1].name.replace(' Party', '') : null,
           party2Color: seat.parties[1] ? seat.parties[1].colorLight : null,
           party2Height: (100/seat.parties.length) + '%',
           party2Image: seat.parties[1] ? "/img/party-logos/" + seat.parties[1].logo : null
@@ -6395,8 +6404,8 @@ const
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
-  step: router.route('/steps/:name')
-  // embed: router.route('/embed/:name')
+  step: router.route('/steps/:name'),
+  students: router.route('/students') //'student' too?
 };
 
 router.start();
@@ -6413,14 +6422,14 @@ class App {
     if (Embed) {
 
       var params = {
-        name: EmbedStep
+        name: StepName
       }
       var step = new Step(params);
       return h('div',step);
 
     } else {
 
-      return h('div.body',
+      return h('div.body' + (Standalone ? '.standalone' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -6437,6 +6446,15 @@ class App {
           }),
 
           routes.step(function (params) {
+            var step = new Step(params);
+            return h('div',step);
+          }),
+
+          routes.students(function (params) {
+            var params = {
+              name: StepName
+            }
+            console.log(params);
             var step = new Step(params);
             return h('div',step);
           })

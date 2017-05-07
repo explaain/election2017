@@ -15,8 +15,8 @@ const
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
-  step: router.route('/steps/:name')
-  // embed: router.route('/embed/:name')
+  step: router.route('/steps/:name'),
+  students: router.route('/students') //'student' too?
 };
 
 router.start();
@@ -33,14 +33,14 @@ class App {
     if (Embed) {
 
       var params = {
-        name: EmbedStep
+        name: StepName
       }
       var step = new Step(params);
       return h('div',step);
 
     } else {
 
-      return h('div.body',
+      return h('div.body' + (Standalone ? '.standalone' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -57,6 +57,15 @@ class App {
           }),
 
           routes.step(function (params) {
+            var step = new Step(params);
+            return h('div',step);
+          }),
+
+          routes.students(function (params) {
+            var params = {
+              name: StepName
+            }
+            console.log(params);
             var step = new Step(params);
             return h('div',step);
           })

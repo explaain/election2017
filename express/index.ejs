@@ -43,8 +43,9 @@
     <script type="text/javascript">
       var Model;
       var Embed = <%= embed %>;
-      if (Embed) {
-        var EmbedStep = "<%= step %>";
+      var Standalone = <%= standalone %>;
+      if (Standalone || Embed) {
+        var StepName = "<%= step %>";
       }
     </script>
     <script src="/data/allParties.js"></script>

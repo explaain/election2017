@@ -11,10 +11,16 @@ var path = require('path');
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res, next) {
-  res.render('../express/index', { embed: false,  step: '' });
+  res.render('../express/index', { standalone: false, embed: false,  step: '' });
+});
+app.get('/students/', function(req, res, next) {
+  res.render('../express/index', { standalone: true, embed: false, step: 'postcode-compare' });
+});
+app.get('/student/', function(req, res, next) {
+  res.render('../express/index', { standalone: true, embed: false, step: req.params.step });
 });
 app.get('/embed/:step', function(req, res, next) {
-  res.render('../express/index', { embed: true, step: req.params.step });
+  res.render('../express/index', { standalone: false, embed: true, step: req.params.step });
 });
 
 
