@@ -9,16 +9,12 @@ module.exports = class Helpers {
   }
 
   assembleCards(data, template) {
-    console.log(data,JSON.stringify(template));
     // todo: resolve issue with global and local scopes (remember the problem with passing function)
     const self = this;
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
-    console.log(data.type);
     if (typeof template === 'string') { template = self.cardTemplates[template]; }
     const element = template;
     var params = {};
-    console.log(self.cardTemplates);
-    console.log(element);
     if(element.mapping){
       element.mapping.forEach(function(kv){
         params[kv[0]] = self.getObjectPathProperty(data, kv[1]);
@@ -26,7 +22,6 @@ module.exports = class Helpers {
     } else {
       params = data;
     }
-    console.log(element)
     var content,
       attr = {};
     if(
@@ -77,10 +72,6 @@ module.exports = class Helpers {
           });
           attr[attrKey] = styles;
         } else {
-          console.log(attrKey);
-          console.log(element.attr[attrKey]);
-          try{console.log(self.getObjectPathProperty(params, element.attr[attrKey].var));}catch(e) {}
-
           attr[attrKey] = element.attr[attrKey].var ? self.getObjectPathProperty(params, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
         }
       })

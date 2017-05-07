@@ -15,11 +15,13 @@ module.exports = class DataProcessor {
           numberOfParties: seat.parties.length,
           swingSeat: (seat.parties.length > 1),
           party1: seat.parties[0].name,
-          party1Color: seat.parties[0].color,
+          party1Color: seat.parties[0].colorLight,
           party1Height: (100/seat.parties.length) + '%',
+          party1Image: "/img/party-logos/" + seat.parties[0].logo,
           party2: seat.parties[1] ? seat.parties[1].name : null,
-          party2Color: seat.parties[1] ? seat.parties[1].color : null,
-          party2Height: (100/seat.parties.length) + '%'
+          party2Color: seat.parties[1] ? seat.parties[1].colorLight : null,
+          party2Height: (100/seat.parties.length) + '%',
+          party2Image: seat.parties[1] ? "/img/party-logos/" + seat.parties[1].logo : null
         }
       })
     };

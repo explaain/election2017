@@ -269,10 +269,11 @@ module.exports = function(CardTemplates){
         "dom": "section.divider",
         "content": [
           {
-            {
-              "dom": "h2",
-              "content": "Make your vote count"
-            },
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "Make your vote count"
+          },
+          {
             "dom": "div.layout-table",
             "content": [
               {
@@ -531,7 +532,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "button.btn.btn-primary",
-            "content": "Register >"
+            "content": "Register To Vote  >"
           }
         ]
       }
@@ -678,12 +679,23 @@ module.exports = function(CardTemplates){
                   "background-color": {
                     "var": "party1Color"
                   },
+                  // "background-image": {
+                  //   "var": "party1Image"
+                  // },
                   "height": {
                     "var": "party1Height"
                   }
                 }
               },
               "content": [
+                // {
+                //   "dom": "img.party-image",
+                //   "attr": {
+                //     "src": {
+                //       "var": "party1Image"
+                //     }
+                //   }
+                // },
                 {
                   "dom": "div.name",
                   "content": {
@@ -705,12 +717,23 @@ module.exports = function(CardTemplates){
                   "background-color": {
                     "var": "party2Color"
                   },
+                  // "background-image": {
+                  //   "var": "party2Image"
+                  // },
                   "height": {
                     "var": "party2Height"
                   }
                 }
               },
               "content": [
+                // {
+                //   "dom": "img.party-image",
+                //   "attr": {
+                //     "src": {
+                //       "var": "party2Image"
+                //     }
+                //   }
+                // },
                 {
                   "dom": "div.name",
                   "content": {

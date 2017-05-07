@@ -16,6 +16,7 @@ const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name')
+  // embed: router.route('/embed/:name')
 };
 
 router.start();
@@ -29,29 +30,39 @@ class App {
 
   render() {
 
-    return h('div.body',
-      h('div.main',
-        h('div.top-strip'),
-        this.header,
+    if (Embed) {
 
-        routes.root(function () {
-          var dashboard = new Dashboard({dashboard: 'home'});
-          return h("div", dashboard)
-        }),
+      var params = {
+        name: EmbedStep
+      }
+      var step = new Step(params);
+      return h('div',step);
 
-        routes.dashboard(function (params) {
-          var dashboard = new Dashboard({dashboard: params.name});
-          return h("div", dashboard)
-        }),
+    } else {
 
-        routes.step(function (params) {
-          var step = new Step(params);
-          return h('div',
-            step
-          );
-        })
+      return h('div.body',
+        h('div.main',
+          h('div.top-strip'),
+
+          this.header,
+
+          routes.root(function () {
+            var dashboard = new Dashboard({dashboard: 'home'});
+            return h("div", dashboard)
+          }),
+
+          routes.dashboard(function (params) {
+            var dashboard = new Dashboard({dashboard: params.name});
+            return h("div", dashboard)
+          }),
+
+          routes.step(function (params) {
+            var step = new Step(params);
+            return h('div',step);
+          })
+        )
       )
-    )
+    }
   }
 }
 
@@ -228,7 +239,6 @@ class Step {
         model.user.results[model.user.results.length-1].forEach(function(cards){
           data.cardGroups.push(cards);
         })
-        console.log(JSON.stringify(data.cardGroups))
         break;
 
       case 'story':

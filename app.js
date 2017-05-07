@@ -1,14 +1,26 @@
 var express = require('express');
+var ejs = require('ejs');
 var app = express();
 var path = require('path');
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+// app.get('/', function (req, res) {
+//   res.sendFile(__dirname + '/public/index.html');
+// });
+
+
+app.set('view engine', 'ejs');
+
+app.get('/', function(req, res, next) {
+  res.render('../express/index', { embed: false,  step: '' });
+});
+app.get('/embed/:step', function(req, res, next) {
+  res.render('../express/index', { embed: true, step: req.params.step });
 });
 
-/*  
-  This is temporary to make sure we do not see the 
-  ugly 404 page if we accidentally refresh the page 
+
+/*
+  This is temporary to make sure we do not see the
+  ugly 404 page if we accidentally refresh the page
 */
 app.get('/:page/*', function (req, res , next) {
   if(

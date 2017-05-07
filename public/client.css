@@ -1,5 +1,5 @@
-body {
-
+body.embed {
+  background: transparent;
 }
 
 body > div.body {
@@ -358,7 +358,7 @@ section:not(.wide) .card section.card-media {
 /* igor: styling a form in the card */
 
 .card form.postcode-form {
-  margin-top:30px;
+  margin: 30px 0 25px;
 }
 
 .card form.postcode-form button[type="submit"] {
@@ -372,7 +372,7 @@ section:not(.wide) .card section.card-media {
 }
 
 .card.postcode-compare section button {
-  padding: 8px 20px;
+  padding: 12px 20px;
   font-size: 1.02em;
 }
 .card.postcode-compare section .register button {
@@ -541,6 +541,7 @@ section:not(.wide) .card section.card-media {
 
 .small {
   font-size:12px;
+  margin-bottom: 0;
 }
 
 .big {
@@ -574,27 +575,24 @@ section:not(.wide) .card section.card-media {
   border-radius: 10px;
   overflow: hidden;
   height: 200px;
+  border: 1px solid #bbb;
 }
 .seat .versus .party {
   padding: 10px;
   height: 50%;
+  border-top: 1px solid #bbb;
+}
+.seat .versus .party:nth-child(1) {
+  border: none;
 }
 .seat .vs {
   position: relative;
-  top: -12px;
+  top: -10px;
   height: 0;
-  color: #ddd;
+  color: #eee;
+  font-weight: 800
 }
-.seat .versus .party .name {
-  color: white;
-  line-height: 1.4;
-  font-size: 1em;
-  font-weight: 400;
-  vertical-align: middle;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  }
+.seat .versus .party .name {color: white;line-height: 1.4;font-size: 1em;/* font-weight: 400; */vertical-align: middle;position: relative;top: 50%;transform: translateY(-50%);/*   display: none; */}
 
 /* igor: 50% width columns in cards */
 .card .column50 {
@@ -602,11 +600,10 @@ section:not(.wide) .card section.card-media {
   display: inline-block;
   margin: 0px;
 }
-.card.postcode-compare h2 {
-/*   margin-top: 30px; */
-  font-size: 1.2em;
-  display: block;
+.card.postcode-compare .body-content {
+  border-top: 1px solid #ddd;
 }
+.card.postcode-compare h2 {font-size: 1.4em;display: block;}
 .card.postcode-compare .body-content h3 {
   font-size: 0.95em;
   margin: 15px 0 4px 0;
@@ -626,12 +623,14 @@ section:not(.wide) .card section.card-media {
 }
 .card.postcode-compare .body-content .seat-list {
   display: table;
+  width: 100%;
 }
 .card.postcode-compare section {
   width: 100%;
 }
 .card .layout-table {
   display: table;
+  margin: auto;
 }
 .card.postcode-compare .column {
   display: table-cell;
@@ -643,6 +642,16 @@ section:not(.wide) .card section.card-media {
   width: 50%;
   padding: 5px;
   box-sizing: border-box;
+}
+
+.card.postcode-compare .seat.column50 div.party {
+  background-size: cover;
+  background-position: center;
+/*   background-image: none !important; */
+/*   background-color: #e6e6ff; */
+}
+.card.postcode-compare .seat.column50 img.party-image {
+  width: 50%;
 }
 
 /* Progress bar */
@@ -664,4 +673,6 @@ section:not(.wide) .card section.card-media {
   -moz-transition: width .5s;
   -ms-transition: width .5s;
   transition: width .5s;
+}
+idth .5s;
 }
