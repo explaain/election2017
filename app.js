@@ -24,9 +24,10 @@ app.get('/', function(req, res, next) {
 app.get('/students/', function(req, res, next) {
   res.render('../express/index', { standalone: true, embed: false, step: 'postcode-compare' });
 });
-//This doesn't work yet - redirect???
+//This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
 app.get('/student/', function(req, res, next) {
-  res.render('../express/index', { standalone: true, embed: false, step: req.params.step });
+  res.redirect(301,"/students");
+  //res.render('../express/index', { standalone: true, embed: false, step: req.params.step });
 });
 
 app.get('/embed/:step', function(req, res, next) {
