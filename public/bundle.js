@@ -1153,6 +1153,13 @@ module.exports = class Designers {
         variableWidth: true
       });
     })
+    // Correcting the height of Versus divs
+    if($(".versus").length===2){
+      const mh1 = Math.max($(".versus .location").eq(0).height(),$(".versus .location").eq(1).height());
+      $(".versus .location").css({"min-height":mh1});
+      const mh2 = Math.max($(".versus").eq(0).height(),$(".versus").eq(1).height());
+      $(".versus").height({"min-height":mh2})
+    }
   }
 
   uniqueStepLayout(step){
@@ -8758,7 +8765,7 @@ const
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
   http = require('httpism'),
-  q = require('hyperdom-router'),
+  q = require('q'),
   model = require('../models/model'),
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
@@ -9404,4 +9411,4 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
 
 designers.onWindowResize();
 
-},{"../development/generatePartyStances.js":1,"../development/model.js":2,"../development/templates.js":3,"../includes/dataprocessor":4,"../includes/designers":5,"../includes/helpers":6,"../models/model":7,"../services/APIService":74,"httpism":13,"hyperdom":27,"hyperdom-router":21,"hyperdom/windowEvents":43}]},{},[75]);
+},{"../development/generatePartyStances.js":1,"../development/model.js":2,"../development/templates.js":3,"../includes/dataprocessor":4,"../includes/designers":5,"../includes/helpers":6,"../models/model":7,"../services/APIService":74,"httpism":13,"hyperdom":27,"hyperdom-router":21,"hyperdom/windowEvents":43,"q":46}]},{},[75]);

@@ -35,6 +35,13 @@ module.exports = class Designers {
         variableWidth: true
       });
     })
+    // Correcting the height of Versus divs
+    if($(".versus").length===2){
+      const mh1 = Math.max($(".versus .location").eq(0).height(),$(".versus .location").eq(1).height());
+      $(".versus .location").css({"min-height":mh1});
+      const mh2 = Math.max($(".versus").eq(0).height(),$(".versus").eq(1).height());
+      $(".versus").height({"min-height":mh2})
+    }
   }
 
   uniqueStepLayout(step){
