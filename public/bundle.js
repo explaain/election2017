@@ -1,4 +1,4 @@
-"use strict";
+
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -3988,7 +3988,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return children;
     };
   }, { "./component": 23, "./isVdom": 27, "virtual-dom/vnode/vtext.js": 68 }], 41: [function (require, module, exports) {
-    'use strict';
+
 
     var VNode = require('virtual-dom/vnode/vnode.js');
     var isHook = require('virtual-dom/vnode/is-vhook');
@@ -4201,7 +4201,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     module.exports.transform = transform;
   }, { "virtual-dom/virtual-hyperscript/hooks/attribute-hook": 56 }], 44: [function (require, module, exports) {
-    "use strict";
+
 
     module.exports = function isObject(x) {
       return (typeof x === "undefined" ? "undefined" : _typeof(x)) === "object" && x !== null;
@@ -4215,7 +4215,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
      * Licensed under the MIT license.
      */
 
-    'use strict';
+
 
     var numbers = '0123456789',
         letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
@@ -4837,7 +4837,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return false;
     }
   }, { "../vnode/is-widget.js": 64 }], 56: [function (require, module, exports) {
-    'use strict';
+
 
     module.exports = AttributeHook;
 
@@ -4870,7 +4870,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     AttributeHook.prototype.type = 'AttributeHook';
   }, {}], 57: [function (require, module, exports) {
-    'use strict';
+
 
     module.exports = SoftSetHook;
 
@@ -4888,7 +4888,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     };
   }, {}], 58: [function (require, module, exports) {
-    'use strict';
+
 
     var split = require('browser-split');
 
