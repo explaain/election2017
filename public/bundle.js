@@ -1,4 +1,1314 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = function(model,partyStances){
+  return function(){
+    var issueKeys = Object.keys(partyStances.opinions.issues);
+    issueKeys.forEach(function(issueKey, i) {
+      var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
+      debateKeys.forEach(function(debateKey, j) {
+        model.questions[debateKey] = {
+          question: partyStances.opinions.issues[issueKey].debates[debateKey].question,
+          issue: {
+            key: issueKey,
+            description: partyStances.opinions.issues[issueKey].description,
+            index: i
+          },
+          debate: {
+            key: debateKey,
+            description: partyStances.opinions.issues[issueKey].debates[debateKey].description,
+            index: j
+          },
+          tasks: [
+            "question-disagree",
+            "question-neutral",
+            "question-agree"
+          ]
+        }
+      })
+    })
+  }
+}
+
+},{}],2:[function(require,module,exports){
+module.exports = function(model){
+  model.dashboards.home.tasks.push("!TEST-postcode-compare");
+  model.tasks["!TEST-postcode-compare"] = {
+    subtype: "multi-submit",
+    color: "#00a2e5",
+    label: "TEST comparing postcodes",
+    goto: {
+      type: 'step',
+      name: 'postcode-compare',
+      next: 'result'
+    },
+    dataUpdates: []
+  };
+}
+
+},{}],3:[function(require,module,exports){
+//NOTE: Jeremy has replaced some of these, copied from api.explaain.com
+
+module.exports = function(CardTemplates){
+  CardTemplates.card =
+  //   {
+  //     "dom": "div.card",
+  //     "attr": {
+  //       "data-uri": {
+  //         "var": "@id",
+  //       },
+  //       "style": "height: auto"
+  //     },
+  //     "content": [
+  //       {
+  //         "dom": "div.card-visible",
+  //         "content": [
+  //           {
+  //             "dom": "div.close",
+  //             "content": [
+  //               {
+  //                 "dom": "i.fa.fa-times",
+  //                 "attr": {
+  //                   "data-hidden": "true"
+  //                 }
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             "dom": "div.content",
+  //             "attr": {
+  //               "class": {
+  //                 "var": "@type"
+  //               }
+  //             },
+  //             "template": {
+  //               "var": "type"
+  //             }
+  //           },
+  //           {
+  //             "dom": "a.card-icon",
+  //             "attr": {
+  //               "target": "_blank",
+  //               "tabindex": "-1"
+  //             },
+  //             "content": [
+  //               {
+  //                 "dom": "img",
+  //                 "attr": {
+  //                   "src": "http://app.explaain.com/card-logo.png"
+  //                 }
+  //               }
+  //             ]
+  //           }
+  //         ]
+  //       },
+  //       {
+  //         "dom": "button.edit-button",
+  //         "attr": {
+  //           "tabindex": "-1"
+  //         },
+  //         "content": [
+  //           {
+  //             "dom": "i.fa.fa-pencil",
+  //             "attr": {
+  //               "aria-hidden": "true"
+  //             }
+  //           }
+  //         ]
+  //       }
+  //     ]
+  //   }
+  // ;
+  CardTemplates.card = {
+    "dom": "div.card",
+    "attr": {
+      "class": {
+        "var": "type"
+      },
+      "data-uri": {
+        "var": "@id"
+      },
+      "style": "height: auto"
+    },
+    "content": [
+      {
+        "dom": "div.card-visible",
+        "content": [
+          {
+            "dom": "div.close",
+            "content": [
+              {
+                "dom": "i.fa.fa-times",
+                "attr": {
+                  "data-hidden": "true"
+                }
+              }
+            ]
+          },
+          {
+            "template": {
+              "var": "type"
+            }
+          },
+          {
+            "dom": "a.card-icon",
+            "attr": {
+              "target": "_blank",
+              "tabindex": "-1"
+            },
+            "content": [
+              {
+                "dom": "img",
+                "attr": {
+                  "src": "http://app.explaain.com/card-logo.png"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "button.edit-button",
+        "attr": {
+          "tabindex": "-1"
+        },
+        "content": [
+          {
+            "dom": "i.fa.fa-pencil",
+            "attr": {
+              "aria-hidden": "true"
+            }
+          }
+        ]
+      }
+    ]
+  };
+  // CardTemplates.Person = [
+  //   {
+  //     "dom": "h2",
+  //     "content": {
+  //       "var": "name"
+  //     }
+  //   },
+  //   {
+  //     "dom": "div.card-image",
+  //     "content": [{
+  //       "dom": "img",
+  //       "attr": {"src": {
+  //         "var": "image"
+  //       }}
+  //     }]
+  //   },
+  //   {
+  //     "dom": "div.body-content",
+  //     "content": {
+  //       "var": "description",
+  //       "markdown": true
+  //     }
+  //   }
+  // ];
+  CardTemplates.Person = {
+    "dom": "div.content",
+    "content": [
+      {
+        "dom": "h2",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": "div.card-image",
+        "content": [
+          {
+            "dom": "img",
+            "attr": {
+              "src": {
+                "var": "image"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content",
+        "content": {
+          "var": "description",
+          "markdown": true
+        }
+      }
+    ]
+  };
+
+  CardTemplates.postcodeCompare = {
+    "dom": "div.content.postcode-compare.wow",
+    "attr": {
+      "class": {
+        "var": "constituencyResults.resultsClass"
+      }
+    },
+    "content": [
+      { "template": "postcodeFormHeader" },
+      {
+        "dom": "form.postcode-form",
+        "attr": {
+          "onsubmit": {
+            "var": "postcodeSubmit"
+          }
+        },
+        "content": [
+          {
+            "dom": "input.form-control",
+            "attr": {
+              "autofocus": "true",
+              "type": "text",
+              "name": "postcode",
+              "placeholder": "Home Postcode",
+              "binding": {
+                "var": "postcodeBinding"
+              }
+            }
+          },
+          {
+            "dom": "input.form-control",
+            "attr": {
+              "type": "text",
+              "name": "postcode",
+              "placeholder": "Uni Postcode",
+              "binding": {
+                "var": "postcodeUniBinding"
+              }
+            }
+          },
+          {
+            "dom": "button.btn.btn-success",
+            "attr": {
+              "type": "submit"
+            },
+            "content": [
+              {
+                "dom": "span",
+                "content": "Compare",
+                "condition": "!constituencyResults"
+              },
+              {
+                "dom": "span",
+                "content": "Go Again",
+                "condition": "constituencyResults"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content",
+        "condition": "!constituencyResults",
+        "content": [
+          {
+            "dom": "h3",
+            "condition": "!isWaiting",
+            "content": {
+              "var": "subheading"
+            }
+          },
+          {
+            "dom": "p",
+            "condition": "!isWaiting",
+            "content": {
+              "var": "description",
+              "markdown": true
+            }
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content.results",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "template": "constituencyResults"
+          }
+        ]
+      },
+      {
+        "condition": "isWaiting",
+        "template": "loading"
+      },
+      {
+        "dom": "section.divider",
+        "content": [
+          {
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "Secondly, make your vote count 🎉"
+          },
+          {
+            "dom": "p",
+            "condition": "constituencyResults",
+            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+          },
+          {
+            "dom": "div.layout-table",
+            "content": [
+              {
+                "dom": "div.column",
+                "condition": "constituencyResults",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-primary",
+                            "content": "Learn more"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": "div.column",
+                "content": [
+                  {
+                    "condition": "!constituencyResults",
+                    "dom": "div.bold",
+                    "content": "or go straight to register"
+                  },
+                  // {
+                  //   "condition": "constituencyResults",
+                  //   "dom": "div.bold",
+                  //   "content": "Make your vote count"
+                  // },
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "h2",
+            "content": "Thirdly, multiply your vote"
+          },
+          {
+            "dom": "p",
+            "content": "Share with 10 friends and make everyone's vote count #GE2017"
+          },
+          {
+            "template": "shareButtons",
+            "mapping": [
+              ["facebookShareHref", "constituencyResults.facebookShareHref"],
+              ["twitterShareHref", "constituencyResults.twitterShareHref"]
+            ]
+          },
+          // {
+          //   "condition": "!constituencyResults",
+          //   "content": [
+          //     {
+          //       "dom": "div.bold",
+          //       "content": "or go straight to register"
+          //     },
+          //     {
+          //       "template": "registerButton"
+          //     },
+          //     {
+          //       "template": "linkToGovUKWebsiteHint"
+          //     }
+          //   ]
+          // }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.voteWorth = {
+    "dom": "div",
+    "content": [
+      { "template": "postcodeFormHeader" },
+      {
+        "dom": "div.body-content",
+        "content": [
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom": "h3",
+            "content": {
+              "var": "subheading"
+            }
+          },
+          {
+            "dom": "p",
+            "content": {
+              "var": "description",
+              "markdown": true
+            }
+          },
+          {
+            "dom": "div",
+            "condition": "constituencyResults",
+            "template": "constituencyResults"
+          },
+          {
+            "condition": "constituencyResults",
+            "template": "shareButtons"
+          }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "content": [
+          {
+            "condition": "!constituencyResults",
+            "content": [
+              {
+                "dom": "div.bold",
+                "content": "or go straight to register"
+              },
+              {
+                "template": "registerButton"
+              },
+              {
+                "template": "linkToGovUKWebsiteHint"
+              }
+            ]
+          },
+          {
+            "condition": "constituencyResults",
+            "content": [
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-success",
+                            "content": "Learn more"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": ".column50",
+                "content": [
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.postcodeFormHeader = {
+    "dom": "div",
+    "content":
+    [
+      {
+        "dom": "h2",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "name",
+          "default": "Please enter your postcode"
+        }
+      },
+      {
+        "dom": "p",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "subtitle"
+        }
+      }
+    ]
+  }
+
+  CardTemplates.linkToGovUKWebsiteHint = {
+    "dom": "p.small",
+    "content": "This link will take you to the official gov.uk website"
+  }
+
+  CardTemplates.registerButton = {
+    "dom": "p.register",
+    "content": [
+      {
+        "dom": "a.discard-card-style",
+        "attr": {
+          "href": "https://www.gov.uk/register-to-vote",
+          "target":"_blank"
+        },
+        "content": [
+          {
+            "dom": "button.btn.btn-primary",
+            "content": "Register To Vote  >"
+          }
+        ]
+      }
+    ]
+  }
+
+  /*CardTemplates.footer =
+    {
+      "dom": ".footer",
+      "content": [
+        {
+          "dom": "div",
+          "condition": "footerContentTemplate",
+          "template": {
+            "var": "footerContentTemplate"
+          }
+        }
+      ]
+    }
+  ;*/
+
+  CardTemplates.partiesTable =
+    {
+      "dom": "table",
+      "loop": "rows",
+      "content": [
+        {
+          "template":"row"
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.row =
+    {
+      "dom": "tr",
+      "loop": "cells",
+      "content": [
+        {
+          "template":"cell"
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.cell =
+    {
+      "dom": "td",
+      "content": {
+        "var": "value"
+      }
+    }
+  ;
+
+  CardTemplates.loading =
+    {
+      "dom": 'img.loading.showing',
+      "attr": {
+        'src': '/img/loading.gif'
+      }
+    }
+  ;
+
+  CardTemplates.voteNow =
+    {
+      "dom": "div",
+      "content": [
+        {
+          "dom": ".bold",
+          "content": "or go straight to register"
+        },
+        {
+          "dom": "p",
+          "content": [
+            {
+              "dom": "a.discard-card-style",
+              "attr": {
+                "href": "https://www.gov.uk/register-to-vote",
+                "target":"_blank",
+              },
+              "content": [
+                {
+                  "dom": "button.btn.btn-primary",
+                  "content": "Register >"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "dom": "p.small",
+          "content": "This link will take you to the official gov.uk website"
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.constituencyResults =
+    {
+      "dom": ".seats",
+      "attr": {
+        "class": {
+          "var": "constituencyResults.numberOfSwingSeats"
+        }
+      },
+      "content": [
+        {
+          "dom": "div.bold",
+          "content": {
+            "var": "constituencyResults.heading"
+          }
+        },
+        {
+          "dom": "div.subheading",
+          "content": {
+            "var": "constituencyResults.subheading",
+            "markdown": "true"
+          }
+        },
+        {
+          "dom": ".seat-list",
+          "loop": "constituencyResults.constituencies",
+          "content": [
+            {
+              "template": "constituency"
+            }
+          ]
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.constituency =
+    {
+      "dom": "div.seat.column50",
+      "content": [
+        {
+          "dom": "div.impact",
+          "condition": "swingSeat",
+          "content": [
+            {
+              "dom": "span",
+              "content": "Most Impact"
+            },
+            {
+              "dom": "i.fa.fa-caret-down"
+            }
+          ]
+        },
+        {
+          "dom": "div.versus.bold.line1em",
+          "attr": {
+            "class": {
+              "var": "swingClass"
+            }
+          },
+          "content": [
+            {
+              "dom": "div.location",
+              "content": {
+                "var": "location"
+              }
+            },
+            {
+              "dom": "i.swing-icon.fa",
+              "attr": {
+                "class": {
+                  "var": "swingIcon"
+                }
+              }
+            },
+            {
+              "dom": "div.parties-container",
+              "content": [
+                {
+                  "dom": "div.parties",
+                  "content": [
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party1"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party1Color"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "dom": "span.vs",
+                      "condition": "!swingSeat",
+                      "content": " safe seat "
+                    },
+                    {
+                      "dom": "div.vs",
+                      "condition": "swingSeat",
+                      "content": " vs "
+                    },
+                    {
+                      "dom": "span.name",
+                      "content": {
+                        "var": "party2"
+                      },
+                      "attr": {
+                        "style": {
+                          "color": {
+                            "var": "party2Color"
+                          }
+                        }
+                      }
+                    },
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.shareButtons =
+    {
+      "dom": "div.share-buttons",
+      "content": [
+        {
+          "dom": "p",
+          "content": {
+            "var": "shareHeading",
+            "default": "Share this to help friends and family #GE2017"
+          }
+        },
+        {
+          "dom": "a.discard-card-style",
+          "attr": {
+            "target":"_blank",
+            "href": {
+              "var": "facebookShareHref"
+            }
+          },
+          "content": [
+            {
+              "dom": "button.btn.btn-facebook",
+              "icon": "fa-facebook",
+              "content": [
+                {
+                  "dom": "i.fa.fa-facebook"
+                },
+                {
+                  "dom": "span",
+                  "content": "Share on Facebook"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "dom": "a.discard-card-style",
+          "attr": {
+            "target":"_blank",
+            "href": {
+              "var": "twitterShareHref"
+            }
+          },
+          "content": [
+            {
+              "dom": "button.btn.btn-twitter",
+              "icon": "fa-twitter",
+              "content": [
+                {
+                  "dom": "i.fa.fa-twitter"
+                },
+                {
+                  "dom": "span",
+                  "content": "Share on Twitter"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ;
+
+  // Usage:
+  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
+  CardTemplates.loopExample =
+    {
+      "dom": ".people",
+      "loop": "people", // changing the scope of data
+      "content": [
+        {
+          "dom": ".person",
+          "content": [
+            {
+              "dom": "div",
+              "content": {
+                "var": "name"
+              }
+            },
+            {
+              "dom": "div",
+              "content": {
+                "var": "age"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ;
+
+  CardTemplates.postcodeInput = {
+    "dom":"div.content",
+    "content":[
+      { "template": "postcodeFormHeader" },
+      {
+        "dom":"div.body-content",
+        "content":[
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom":"h3",
+            "content":{
+              "var":"subheading"
+            }
+          },
+          {
+            "dom":"p",
+            "content":{
+              "var":"description",
+              "markdown":true
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.question = {
+    "dom": ".content",
+    "content": [
+      {
+        "dom": "h2",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": ".body-content",
+        "content": {
+          "var": "description",
+          "markdown": true
+        }
+      },
+      {
+        "dom": "section.questions",
+        "content": [
+          {
+            "loop": "answers",
+            "content": [{"template": "answer"}]
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.answer = {
+    "dom": "a",
+    "attr": {
+      "class": {
+        "var": "class"
+      },
+      "onclick": {
+        "var": "onclick"
+      }
+    },
+    "content": [
+      {
+        "dom": "h5",
+        "content": {
+          "var": "label"
+        }
+      }
+    ]
+  }
+
+}
+
+},{}],4:[function(require,module,exports){
+module.exports = class DataProcessor {
+
+  constructor() {}
+
+  processConstituencySeats(data) {
+    return {
+      heading: data.text.heading,
+      subheading: data.text.subheading,
+      twitterShareHref: data.twitterShareHref,
+      facebookShareHref: data.facebookShareHref,
+      resultsClass: 'resultsLoaded',
+      constituencies: data.seats.map(function(seat){
+        return {
+          location: seat.location,
+          partyString: seat.parties.map(function(party){
+            return party.name;
+          }).join(" vs "),
+          numberOfParties: seat.parties.length,
+          swingSeat: (seat.parties.length > 1),
+          swingIcon: (seat.parties.length > 1) ? 'fa-random' : 'fa-lock',
+          swingClass: "swing-" + (seat.parties.length > 1),
+          party1: seat.parties[0].name.replace(' Party', ''),
+          party1Color: seat.parties[0].colorLight,
+          party1Height: (100/seat.parties.length) + '%',
+          party1Image: "/img/party-logos/" + seat.parties[0].logo,
+          party2: seat.parties[1] ? seat.parties[1].name.replace(' Party', '') : null,
+          party2Color: seat.parties[1] ? seat.parties[1].colorLight : null,
+          party2Height: (100/seat.parties.length) + '%',
+          party2Image: seat.parties[1] ? "/img/party-logos/" + seat.parties[1].logo : null
+        }
+      })
+    };
+  }
+
+}
+
+},{}],5:[function(require,module,exports){
+/*
+ * This module is made for visual design JavaScript
+ * Dependencies - jQuery, Slick
+ *
+ */
+
+module.exports = class Designers {
+
+  onWindowResize(){
+    const self = this;
+    $(window).on("resize",function(){
+      self.adaptLayout()
+    })
+  }
+
+  adaptLayout() {
+    if ($(window).innerWidth() > 600) {
+      // $('section.step').addClass('wide');
+    } else {
+      $('section.step').removeClass('wide');
+    }
+  }
+
+  onStepLoad(){
+    $(".slick-container").hide();
+    setTimeout(function(){
+      $(".slick-container").show();
+      $(".slick-container:not(.slick-initialized)").slick({
+        dots: false,
+        infinite: false,
+        adaptiveHeight: true,
+        centerPadding: '15px',
+        slidesToShow: 1,
+        arrows: true,
+        variableWidth: true
+      });
+    })
+  }
+
+  uniqueStepLayout(step){
+    if (step.label == 'Party stories') {
+      $('div.body').addClass('backColor');
+    } else {
+      $('div.body').removeClass('backColor');
+    }
+  }
+
+}
+
+},{}],6:[function(require,module,exports){
+const q = require("q");
+
+module.exports = class Helpers {
+
+  constructor(model, h, cardTemplates,http, router) {
+    this.model = model;
+    this.h = h;
+    this.cardTemplates = cardTemplates;
+    this.http = http;
+    this.router = router;
+  }
+
+  assembleCards(data, template) {
+    // todo: resolve issue with global and local scopes (remember the problem with passing function)
+    const self = this;
+    data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
+    if (typeof template === 'string') { template = self.cardTemplates[template]; }
+    const element = template;
+    var params = {};
+    if(element.mapping){
+      element.mapping.forEach(function(kv){
+        params[kv[0]] = self.getObjectPathProperty(data, kv[1]);
+      });
+    } else {
+      params = data;
+    }
+    var content,
+      attr = {};
+    if(
+      element.condition
+      &&
+      (
+        !self.getObjectPathProperty(params, element.condition) && !element.condition.match(/^!/)
+        ||
+        self.getObjectPathProperty(params, element.condition.replace(/^!/,"")) && element.condition.match(/^!/)
+      )
+    )
+      return undefined;
+    else if (element.template)
+      content = self.assembleCards(params, element.template.var ? self.getObjectPathProperty(params, element.template.var) : element.template)
+    else if (!element.content)
+      content = '';
+    else if (element.loop)
+      content = self.getObjectPathProperty(params, element.loop).map(function(_params){return element.content.map(function(_element){return self.assembleCards(_params, _element);})});
+    else if (element.content.constructor === Array)
+      content = element.content.map(function(el){return self.assembleCards(params, el); });
+    else if (element.content.var)
+      content = self.getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
+    else if (element.content.func)
+      content = self.getObjectPathProperty(params, element.content.func[0]).apply(null,element.content.func.slice(1).map(function(p){return self.getObjectPathProperty(params, p)}));
+    else
+      content = element.default ? element.default : element.content;
+
+    if (element.attr) {
+      var attrKeys = Object.keys(element.attr);
+      attrKeys.forEach(function(attrKey) {
+        if (attrKey == "style" && typeof(element.attr.style) == "object") {
+          var styleKeys = Object.keys(element.attr.style);
+          var styles = {}
+          styleKeys.forEach(function(styleKey) {
+            var style = element.attr.style[styleKey];
+            var styleValue;
+            if(style.var) {
+              styleValue = self.getObjectPathProperty(data, style.var);
+            } else if (style.func) {
+              styleValue = self.getObjectPathProperty(params, style.func[0]).apply(null,style.func.slice(1).map(function(p){return self.getObjectPathProperty(params, p)}));
+            } else {
+              styleValue = style;
+            }
+            styles[styleKey] = styleValue;
+            if (styleKey == "background-image" && style.var) {
+              styles[styleKey] = 'url("' + styles[styleKey] + '")'
+            }
+          });
+          attr[attrKey] = styles;
+        } else {
+          attr[attrKey] = element.attr[attrKey].var ? self.getObjectPathProperty(params, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
+        }
+      })
+    }
+    if (!element.dom){
+      return content;
+    } else if (element.content && element.content.markdown) {
+      return self.h.rawHtml(element.dom, attr, self.markdownToHtml(content));
+    } else if (element.content && element.content.html) {
+      return self.h.rawHtml(element.dom, attr, content);
+    } else {
+      return self.h(element.dom, attr, content);
+    }
+  }
+
+  getModel(path){
+    const self = this;
+    return self.getObjectPathProperty(self.model, path);  // a moving reference to internal objects within model
+  }
+
+  getObjectPathProperty(object, path){
+    const self = this;
+    var schema = object;  // a moving reference to internal objects within the object
+    var pList = path.split('.');
+    var len = pList.length;
+    for(var i = 0; i < len-1; i++) {
+      var elem = pList[i];
+      if( !schema[elem] ) schema[elem] = {}
+      schema = schema[elem];
+    }
+    return schema[pList[len-1]];
+  }
+
+  loadTemplates(templateUrl){
+    const self = this;
+    var deferred = q.defer();
+    self.http.get(templateUrl)
+    .then(function (res) {
+      deferred.resolve(res.body);
+    });
+    return deferred.promise;
+  }
+
+  markdownToHtml(text) {
+    const self = this;
+    return text.replace(
+      /\[([^\]]+)\]\(([^\)]+)\)/g,
+      "<a class='internal' tabindex='-1' href='$2'>$1</a>"
+    );
+  }
+
+  updateData(dataUpdates) {
+    const self = this;
+    dataUpdates.forEach(function(update) {
+      self.updateModel(update.data, update.value, update.action);
+    });
+  }
+
+  updateModel(path, value, action) {
+    const self = this;
+    var schema = self.model;  // a moving reference to internal objects within model
+    var pList = path.split('.');
+    var len = pList.length;
+    for(var i = 0; i < len-1; i++) {
+      var elem = pList[i];
+      if( !schema[elem] ) schema[elem] = {}
+      schema = schema[elem];
+    }
+    switch(action){
+      case "toggle":
+        if(schema[pList[len-1]]){
+          delete schema[pList[len-1]];
+        } else {
+          schema[pList[len-1]] = value;
+        }
+        break;
+      default:
+        schema[pList[len-1]] = value;
+    }
+  }
+
+  updateObject(obj, objUpdates) {
+    const self = this;
+    var objKeys = Object.keys(objUpdates);
+    objKeys.forEach(function(key) {
+      obj[key] = objUpdates[key];
+    })
+    return obj;
+  }
+
+  throwError(err){
+    const self = this;
+    self.model.user.error = err;
+    $('html, body').animate({ scrollTop: 0}, 500);
+    setTimeout(function(){
+      delete self.model.user.error;
+    },500);
+  }
+
+}
+
+},{"q":46}],7:[function(require,module,exports){
 module.exports = {
   step: -1,
   // todo: those are temporary here, refactor
@@ -359,17 +1669,6 @@ module.exports = {
         name: 'question'
       }
     },
-    "!TEST-postcode-compare": {
-      subtype: "multi-submit",
-      color: "#00a2e5",
-      label: "TEST comparing postcodes",
-      goto: {
-        type: 'step',
-        name: 'postcode-compare',
-        next: 'result'
-      },
-      dataUpdates: []
-    },
   },
 
   // Steps are essentially pages
@@ -416,9 +1715,9 @@ module.exports = {
   }
 };
 
-},{}],2:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 
-},{}],3:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /*!
  * Cross-Browser Split 1.1.1
  * Copyright 2007-2012 Steven Levithan <stevenlevithan.com>
@@ -526,7 +1825,189 @@ module.exports = (function split(undef) {
   return self;
 })();
 
-},{}],4:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],11:[function(require,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
@@ -545,7 +2026,7 @@ if (typeof document !== 'undefined') {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":2}],5:[function(require,module,exports){
+},{"min-document":8}],12:[function(require,module,exports){
 (function (global){
 if (typeof window !== "undefined") {
     module.exports = window;
@@ -558,7 +2039,7 @@ if (typeof window !== "undefined") {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],6:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var httpism = require('./httpism');
 var middleware = require('./browserMiddleware');
 var utils = require('./middlewareUtils');
@@ -577,7 +2058,7 @@ module.exports = httpism(
   ]
 );
 
-},{"./browserMiddleware":7,"./httpism":8,"./middlewareUtils":10}],7:[function(require,module,exports){
+},{"./browserMiddleware":14,"./httpism":15,"./middlewareUtils":17}],14:[function(require,module,exports){
 var window = require('global');
 var utils = require('./middlewareUtils');
 var querystringLite = require('./querystring-lite');
@@ -789,7 +2270,7 @@ function addAbortToPromise(promise, abort) {
   };
 }
 
-},{"./middlewareUtils":10,"./querystring-lite":12,"global":5,"random-string":38}],8:[function(require,module,exports){
+},{"./middlewareUtils":17,"./querystring-lite":19,"global":12,"random-string":47}],15:[function(require,module,exports){
 var merge = require('./merge');
 var resolveUrl = require('./resolveUrl');
 var utils = require('./middlewareUtils');
@@ -959,7 +2440,7 @@ function parseClientArguments() {
 
 module.exports = client;
 
-},{"./merge":9,"./middlewareUtils":10,"./resolveUrl":13}],9:[function(require,module,exports){
+},{"./merge":16,"./middlewareUtils":17,"./resolveUrl":20}],16:[function(require,module,exports){
 module.exports = function(x, y) {
   if (x && y) {
     var r = {};
@@ -980,7 +2461,7 @@ module.exports = function(x, y) {
   }
 };
 
-},{}],10:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var merge = require("./merge");
 var querystringLite = require('./querystring-lite');
 var obfuscateUrlPassword = require('./obfuscateUrlPassword');
@@ -1072,12 +2553,12 @@ exports.mergeQueryString = function(request) {
   request.url = path + "?" + qs.stringify(mergedQueryString);
 };
 
-},{"./merge":9,"./obfuscateUrlPassword":11,"./querystring-lite":12}],11:[function(require,module,exports){
+},{"./merge":16,"./obfuscateUrlPassword":18,"./querystring-lite":19}],18:[function(require,module,exports){
 module.exports = function(url) {
   return url.replace(/^([-a-z]*:\/\/[^:]*:)[^@]*@/, function(_, first) { return first + '********@'; });
 };
 
-},{}],12:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 module.exports = {
   parse: function (string) {
     var params = {};
@@ -1104,7 +2585,7 @@ module.exports = {
   }
 };
 
-},{}],13:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 // from https://gist.github.com/Yaffle/1088850
 
 /*jslint regexp: true, white: true, maxerr: 50, indent: 2 */
@@ -1152,7 +2633,7 @@ module.exports = function (base, href) {// RFC 3986
          href.hash;
 };
 
-},{}],14:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var routism = require('routism');
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
@@ -1772,7 +3253,7 @@ exports.hash = {
   }
 };
 
-},{"hyperdom":20,"routism":39}],15:[function(require,module,exports){
+},{"hyperdom":27,"routism":48}],22:[function(require,module,exports){
 var listener = require('./listener');
 var binding = require('./binding')
 
@@ -1929,7 +3410,7 @@ function customEvent(name) {
   }
 }
 
-},{"./binding":16,"./listener":22}],16:[function(require,module,exports){
+},{"./binding":23,"./listener":29}],23:[function(require,module,exports){
 var refreshify = require('./refreshify');
 var meta = require('./meta');
 
@@ -1970,7 +3451,7 @@ function bindingObject(model, property, setter) {
   };
 }
 
-},{"./meta":23,"./refreshify":29}],17:[function(require,module,exports){
+},{"./meta":30,"./refreshify":36}],24:[function(require,module,exports){
 var domComponent = require('./domComponent');
 var hyperdomMeta = require('./meta');
 var render = require('./render');
@@ -2111,7 +3592,7 @@ Component.prototype.destroy = function (element) {
 
 module.exports = Component;
 
-},{"./domComponent":19,"./meta":23,"./render":30}],18:[function(require,module,exports){
+},{"./domComponent":26,"./meta":30,"./render":37}],25:[function(require,module,exports){
 function deprecationWarning() {
   var warningIssued = false;
 
@@ -2133,7 +3614,7 @@ module.exports = {
   mapBinding: deprecationWarning()
 };
 
-},{}],19:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var createElement = require('virtual-dom/create-element');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -2192,7 +3673,7 @@ function domComponent(options) {
 
 exports.create = domComponent;
 
-},{"./isVdom":21,"./toVdom":34,"virtual-dom/create-element":40,"virtual-dom/diff":41,"virtual-dom/patch":42}],20:[function(require,module,exports){
+},{"./isVdom":28,"./toVdom":41,"virtual-dom/create-element":49,"virtual-dom/diff":50,"virtual-dom/patch":51}],27:[function(require,module,exports){
 var rendering = require('./rendering')
 var refreshify = require('./refreshify')
 var binding = require('./binding')
@@ -2219,7 +3700,7 @@ exports.component = function(model) {
 
 exports.currentRender = render.currentRender
 
-},{"./binding":16,"./component":17,"./meta":23,"./refreshEventResult":28,"./refreshify":29,"./render":30,"./rendering":31}],21:[function(require,module,exports){
+},{"./binding":23,"./component":24,"./meta":30,"./refreshEventResult":35,"./refreshify":36,"./render":37,"./rendering":38}],28:[function(require,module,exports){
 var virtualDomVersion = require("virtual-dom/vnode/version")
 
 module.exports = function(x) {
@@ -2231,7 +3712,7 @@ module.exports = function(x) {
   }
 };
 
-},{"virtual-dom/vnode/version":58}],22:[function(require,module,exports){
+},{"virtual-dom/vnode/version":67}],29:[function(require,module,exports){
 var refreshify = require('./refreshify');
 
 function ListenerHook(listener) {
@@ -2250,7 +3731,7 @@ module.exports = function (listener) {
   return new ListenerHook(listener);
 };
 
-},{"./refreshify":29}],23:[function(require,module,exports){
+},{"./refreshify":36}],30:[function(require,module,exports){
 module.exports = function (model, property) {
   var hyperdomMeta = model._hyperdomMeta;
 
@@ -2272,7 +3753,7 @@ module.exports = function (model, property) {
   }
 };
 
-},{}],24:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var hyperdomMeta = require('./meta');
 var runRender = require('./render');
 var Set = require('./set');
@@ -2466,7 +3947,7 @@ Mount.prototype.remove = function () {
 
 module.exports = Mount;
 
-},{"./meta":23,"./propertyHook":26,"./refreshEventResult":28,"./render":30,"./set":32,"virtual-dom/vnode/vtext.js":61}],25:[function(require,module,exports){
+},{"./meta":30,"./propertyHook":33,"./refreshEventResult":35,"./render":37,"./set":39,"virtual-dom/vnode/vtext.js":70}],32:[function(require,module,exports){
 var render = require('./render');
 var bindModel = require('./bindModel')
 
@@ -2565,7 +4046,7 @@ function generateConditionalClassNames(obj) {
   }).join(' ') || undefined;
 }
 
-},{"./bindModel":15,"./render":30}],26:[function(require,module,exports){
+},{"./bindModel":22,"./render":37}],33:[function(require,module,exports){
 function PropertyHook(value) {
   this.value = value;
 }
@@ -2580,7 +4061,7 @@ PropertyHook.prototype.unhook = function (element, property) {
 
 module.exports = PropertyHook;
 
-},{}],27:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var deprecations = require('./deprecations');
 var refreshify = require('./refreshify');
 
@@ -2589,7 +4070,7 @@ module.exports = function(promise) {
   refreshify(function() { return promise }, {refresh: 'promise'})()
 }
 
-},{"./deprecations":18,"./refreshify":29}],28:[function(require,module,exports){
+},{"./deprecations":25,"./refreshify":36}],35:[function(require,module,exports){
 var deprecations = require('./deprecations');
 
 module.exports = refreshAfterEvent
@@ -2660,14 +4141,14 @@ function cloneOptions(options) {
   }
 }
 
-},{"./deprecations":18}],29:[function(require,module,exports){
+},{"./deprecations":25}],36:[function(require,module,exports){
 var render = require('./render');
 
 module.exports = function(fn, options) {
   return render.currentRender().mount.refreshify(fn, options)
 }
 
-},{"./render":30}],30:[function(require,module,exports){
+},{"./render":37}],37:[function(require,module,exports){
 var simplePromise = require('./simplePromise');
 
 function runRender(mount, fn) {
@@ -2710,7 +4191,7 @@ var defaultRender = {
   }
 }
 
-},{"./simplePromise":33}],31:[function(require,module,exports){
+},{"./simplePromise":40}],38:[function(require,module,exports){
 var vhtml = require('./vhtml');
 var domComponent = require('./domComponent');
 var bindingMeta = require('./meta');
@@ -2889,7 +4370,7 @@ function rawHtml() {
 
 exports.html.rawHtml = rawHtml;
 
-},{"./binding":16,"./deprecations":18,"./domComponent":19,"./meta":23,"./mount":24,"./prepareAttributes":25,"./refreshAfter":27,"./refreshEventResult":28,"./render":30,"./toVdom":34,"./vhtml":35,"virtual-dom/virtual-hyperscript/parse-tag":51}],32:[function(require,module,exports){
+},{"./binding":23,"./deprecations":25,"./domComponent":26,"./meta":30,"./mount":31,"./prepareAttributes":32,"./refreshAfter":34,"./refreshEventResult":35,"./render":37,"./toVdom":41,"./vhtml":42,"virtual-dom/virtual-hyperscript/parse-tag":60}],39:[function(require,module,exports){
 if (typeof Set === 'function') {
   module.exports = Set;
 } else {
@@ -2917,7 +4398,7 @@ if (typeof Set === 'function') {
   };
 }
 
-},{}],33:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 function SimplePromise () {
   this.listeners = [];
 }
@@ -2944,7 +4425,7 @@ module.exports = function () {
   return new SimplePromise();
 };
 
-},{}],34:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var vtext = require("virtual-dom/vnode/vtext.js")
 var isVdom = require('./isVdom');
 var Component = require('./component')
@@ -2985,7 +4466,7 @@ module.exports.recursive = function (child) {
   return children;
 };
 
-},{"./component":17,"./isVdom":21,"virtual-dom/vnode/vtext.js":61}],35:[function(require,module,exports){
+},{"./component":24,"./isVdom":28,"virtual-dom/vnode/vtext.js":70}],42:[function(require,module,exports){
 'use strict';
 
 var VNode = require('virtual-dom/vnode/vnode.js');
@@ -3030,7 +4511,87 @@ function h(tagName, props, children) {
   return vnode
 }
 
-},{"./xml":36,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":50,"virtual-dom/vnode/is-vhook":54,"virtual-dom/vnode/vnode.js":59}],36:[function(require,module,exports){
+},{"./xml":44,"virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":59,"virtual-dom/vnode/is-vhook":63,"virtual-dom/vnode/vnode.js":68}],43:[function(require,module,exports){
+var domComponent = require('./domComponent');
+var rendering = require('./rendering');
+var VText = require("virtual-dom/vnode/vtext.js")
+
+function WindowWidget(attributes) {
+  this.attributes = attributes;
+  this.vdom = new VText('');
+  this.component = domComponent.create();
+
+  var self = this;
+  this.cache = {};
+  Object.keys(this.attributes).forEach(function (key) {
+    self.cache[key] = rendering.html.refreshify(self.attributes[key]);
+  });
+}
+
+WindowWidget.prototype.type = 'Widget';
+
+WindowWidget.prototype.init = function () {
+  applyPropertyDiffs(window, {}, this.attributes, {}, this.cache);
+  return this.element = document.createTextNode('');
+};
+
+function uniq(array) {
+  var sortedArray = array.slice();
+  sortedArray.sort();
+
+  var last;
+
+  for(var n = 0; n < sortedArray.length;) {
+    var current = sortedArray[n];
+
+    if (last === current) {
+      sortedArray.splice(n, 1);
+    } else {
+      n++;
+    }
+    last = current;
+  }
+
+  return sortedArray;
+}
+
+function applyPropertyDiffs(element, previous, current, previousCache, currentCache) {
+  uniq(Object.keys(previous).concat(Object.keys(current))).forEach(function (key) {
+    if (/^on/.test(key)) {
+      var event = key.slice(2);
+
+      var prev = previous[key];
+      var curr = current[key];
+      var refreshPrev = previousCache[key];
+      var refreshCurr = currentCache[key];
+
+      if (prev !== undefined && curr === undefined) {
+        element.removeEventListener(event, refreshPrev);
+      } else if (prev !== undefined && curr !== undefined && prev !== curr) {
+        element.removeEventListener(event, refreshPrev);
+        element.addEventListener(event, refreshCurr);
+      } else if (prev === undefined && curr !== undefined) {
+        element.addEventListener(event, refreshCurr);
+      }
+    }
+  });
+}
+
+WindowWidget.prototype.update = function (previous) {
+  applyPropertyDiffs(window, previous.attributes, this.attributes, previous.cache, this.cache);
+  this.component = previous.component;
+  return this.element;
+};
+
+WindowWidget.prototype.destroy = function () {
+  applyPropertyDiffs(window, this.attributes, {}, this.cache, {});
+};
+
+module.exports = function (attributes) {
+  return new WindowWidget(attributes);
+};
+
+},{"./domComponent":26,"./rendering":38,"virtual-dom/vnode/vtext.js":70}],44:[function(require,module,exports){
 var AttributeHook = require('virtual-dom/virtual-hyperscript/hooks/attribute-hook')
 
 var namespaceRegex = /^([a-z0-9_-]+)(--|:)([a-z0-9_-]+)$/i
@@ -3126,14 +4687,2091 @@ function transform(vnode) {
 
 module.exports.transform = transform
 
-},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":49}],37:[function(require,module,exports){
+},{"virtual-dom/virtual-hyperscript/hooks/attribute-hook":58}],45:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],38:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
+(function (process){
+// vim:ts=4:sts=4:sw=4:
+/*!
+ *
+ * Copyright 2009-2017 Kris Kowal under the terms of the MIT
+ * license found at https://github.com/kriskowal/q/blob/v1/LICENSE
+ *
+ * With parts by Tyler Close
+ * Copyright 2007-2009 Tyler Close under the terms of the MIT X license found
+ * at http://www.opensource.org/licenses/mit-license.html
+ * Forked at ref_send.js version: 2009-05-11
+ *
+ * With parts by Mark Miller
+ * Copyright (C) 2011 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+(function (definition) {
+    "use strict";
+
+    // This file will function properly as a <script> tag, or a module
+    // using CommonJS and NodeJS or RequireJS module formats.  In
+    // Common/Node/RequireJS, the module exports the Q API and when
+    // executed as a simple <script>, it creates a Q global instead.
+
+    // Montage Require
+    if (typeof bootstrap === "function") {
+        bootstrap("promise", definition);
+
+    // CommonJS
+    } else if (typeof exports === "object" && typeof module === "object") {
+        module.exports = definition();
+
+    // RequireJS
+    } else if (typeof define === "function" && define.amd) {
+        define(definition);
+
+    // SES (Secure EcmaScript)
+    } else if (typeof ses !== "undefined") {
+        if (!ses.ok()) {
+            return;
+        } else {
+            ses.makeQ = definition;
+        }
+
+    // <script>
+    } else if (typeof window !== "undefined" || typeof self !== "undefined") {
+        // Prefer window over self for add-on scripts. Use self for
+        // non-windowed contexts.
+        var global = typeof window !== "undefined" ? window : self;
+
+        // Get the `window` object, save the previous Q global
+        // and initialize Q as a global.
+        var previousQ = global.Q;
+        global.Q = definition();
+
+        // Add a noConflict function so Q can be removed from the
+        // global namespace.
+        global.Q.noConflict = function () {
+            global.Q = previousQ;
+            return this;
+        };
+
+    } else {
+        throw new Error("This environment was not anticipated by Q. Please file a bug.");
+    }
+
+})(function () {
+"use strict";
+
+var hasStacks = false;
+try {
+    throw new Error();
+} catch (e) {
+    hasStacks = !!e.stack;
+}
+
+// All code after this point will be filtered from stack traces reported
+// by Q.
+var qStartingLine = captureLine();
+var qFileName;
+
+// shims
+
+// used for fallback in "allResolved"
+var noop = function () {};
+
+// Use the fastest possible means to execute a task in a future turn
+// of the event loop.
+var nextTick =(function () {
+    // linked list of tasks (single, with head node)
+    var head = {task: void 0, next: null};
+    var tail = head;
+    var flushing = false;
+    var requestTick = void 0;
+    var isNodeJS = false;
+    // queue for late tasks, used by unhandled rejection tracking
+    var laterQueue = [];
+
+    function flush() {
+        /* jshint loopfunc: true */
+        var task, domain;
+
+        while (head.next) {
+            head = head.next;
+            task = head.task;
+            head.task = void 0;
+            domain = head.domain;
+
+            if (domain) {
+                head.domain = void 0;
+                domain.enter();
+            }
+            runSingle(task, domain);
+
+        }
+        while (laterQueue.length) {
+            task = laterQueue.pop();
+            runSingle(task);
+        }
+        flushing = false;
+    }
+    // runs a single function in the async queue
+    function runSingle(task, domain) {
+        try {
+            task();
+
+        } catch (e) {
+            if (isNodeJS) {
+                // In node, uncaught exceptions are considered fatal errors.
+                // Re-throw them synchronously to interrupt flushing!
+
+                // Ensure continuation if the uncaught exception is suppressed
+                // listening "uncaughtException" events (as domains does).
+                // Continue in next event to avoid tick recursion.
+                if (domain) {
+                    domain.exit();
+                }
+                setTimeout(flush, 0);
+                if (domain) {
+                    domain.enter();
+                }
+
+                throw e;
+
+            } else {
+                // In browsers, uncaught exceptions are not fatal.
+                // Re-throw them asynchronously to avoid slow-downs.
+                setTimeout(function () {
+                    throw e;
+                }, 0);
+            }
+        }
+
+        if (domain) {
+            domain.exit();
+        }
+    }
+
+    nextTick = function (task) {
+        tail = tail.next = {
+            task: task,
+            domain: isNodeJS && process.domain,
+            next: null
+        };
+
+        if (!flushing) {
+            flushing = true;
+            requestTick();
+        }
+    };
+
+    if (typeof process === "object" &&
+        process.toString() === "[object process]" && process.nextTick) {
+        // Ensure Q is in a real Node environment, with a `process.nextTick`.
+        // To see through fake Node environments:
+        // * Mocha test runner - exposes a `process` global without a `nextTick`
+        // * Browserify - exposes a `process.nexTick` function that uses
+        //   `setTimeout`. In this case `setImmediate` is preferred because
+        //    it is faster. Browserify's `process.toString()` yields
+        //   "[object Object]", while in a real Node environment
+        //   `process.toString()` yields "[object process]".
+        isNodeJS = true;
+
+        requestTick = function () {
+            process.nextTick(flush);
+        };
+
+    } else if (typeof setImmediate === "function") {
+        // In IE10, Node.js 0.9+, or https://github.com/NobleJS/setImmediate
+        if (typeof window !== "undefined") {
+            requestTick = setImmediate.bind(window, flush);
+        } else {
+            requestTick = function () {
+                setImmediate(flush);
+            };
+        }
+
+    } else if (typeof MessageChannel !== "undefined") {
+        // modern browsers
+        // http://www.nonblocking.io/2011/06/windownexttick.html
+        var channel = new MessageChannel();
+        // At least Safari Version 6.0.5 (8536.30.1) intermittently cannot create
+        // working message ports the first time a page loads.
+        channel.port1.onmessage = function () {
+            requestTick = requestPortTick;
+            channel.port1.onmessage = flush;
+            flush();
+        };
+        var requestPortTick = function () {
+            // Opera requires us to provide a message payload, regardless of
+            // whether we use it.
+            channel.port2.postMessage(0);
+        };
+        requestTick = function () {
+            setTimeout(flush, 0);
+            requestPortTick();
+        };
+
+    } else {
+        // old browsers
+        requestTick = function () {
+            setTimeout(flush, 0);
+        };
+    }
+    // runs a task after all other tasks have been run
+    // this is useful for unhandled rejection tracking that needs to happen
+    // after all `then`d tasks have been run.
+    nextTick.runAfter = function (task) {
+        laterQueue.push(task);
+        if (!flushing) {
+            flushing = true;
+            requestTick();
+        }
+    };
+    return nextTick;
+})();
+
+// Attempt to make generics safe in the face of downstream
+// modifications.
+// There is no situation where this is necessary.
+// If you need a security guarantee, these primordials need to be
+// deeply frozen anyway, and if you don’t need a security guarantee,
+// this is just plain paranoid.
+// However, this **might** have the nice side-effect of reducing the size of
+// the minified code by reducing x.call() to merely x()
+// See Mark Miller’s explanation of what this does.
+// http://wiki.ecmascript.org/doku.php?id=conventions:safe_meta_programming
+var call = Function.call;
+function uncurryThis(f) {
+    return function () {
+        return call.apply(f, arguments);
+    };
+}
+// This is equivalent, but slower:
+// uncurryThis = Function_bind.bind(Function_bind.call);
+// http://jsperf.com/uncurrythis
+
+var array_slice = uncurryThis(Array.prototype.slice);
+
+var array_reduce = uncurryThis(
+    Array.prototype.reduce || function (callback, basis) {
+        var index = 0,
+            length = this.length;
+        // concerning the initial value, if one is not provided
+        if (arguments.length === 1) {
+            // seek to the first value in the array, accounting
+            // for the possibility that is is a sparse array
+            do {
+                if (index in this) {
+                    basis = this[index++];
+                    break;
+                }
+                if (++index >= length) {
+                    throw new TypeError();
+                }
+            } while (1);
+        }
+        // reduce
+        for (; index < length; index++) {
+            // account for the possibility that the array is sparse
+            if (index in this) {
+                basis = callback(basis, this[index], index);
+            }
+        }
+        return basis;
+    }
+);
+
+var array_indexOf = uncurryThis(
+    Array.prototype.indexOf || function (value) {
+        // not a very good shim, but good enough for our one use of it
+        for (var i = 0; i < this.length; i++) {
+            if (this[i] === value) {
+                return i;
+            }
+        }
+        return -1;
+    }
+);
+
+var array_map = uncurryThis(
+    Array.prototype.map || function (callback, thisp) {
+        var self = this;
+        var collect = [];
+        array_reduce(self, function (undefined, value, index) {
+            collect.push(callback.call(thisp, value, index, self));
+        }, void 0);
+        return collect;
+    }
+);
+
+var object_create = Object.create || function (prototype) {
+    function Type() { }
+    Type.prototype = prototype;
+    return new Type();
+};
+
+var object_defineProperty = Object.defineProperty || function (obj, prop, descriptor) {
+    obj[prop] = descriptor.value;
+    return obj;
+};
+
+var object_hasOwnProperty = uncurryThis(Object.prototype.hasOwnProperty);
+
+var object_keys = Object.keys || function (object) {
+    var keys = [];
+    for (var key in object) {
+        if (object_hasOwnProperty(object, key)) {
+            keys.push(key);
+        }
+    }
+    return keys;
+};
+
+var object_toString = uncurryThis(Object.prototype.toString);
+
+function isObject(value) {
+    return value === Object(value);
+}
+
+// generator related shims
+
+// FIXME: Remove this function once ES6 generators are in SpiderMonkey.
+function isStopIteration(exception) {
+    return (
+        object_toString(exception) === "[object StopIteration]" ||
+        exception instanceof QReturnValue
+    );
+}
+
+// FIXME: Remove this helper and Q.return once ES6 generators are in
+// SpiderMonkey.
+var QReturnValue;
+if (typeof ReturnValue !== "undefined") {
+    QReturnValue = ReturnValue;
+} else {
+    QReturnValue = function (value) {
+        this.value = value;
+    };
+}
+
+// long stack traces
+
+var STACK_JUMP_SEPARATOR = "From previous event:";
+
+function makeStackTraceLong(error, promise) {
+    // If possible, transform the error stack trace by removing Node and Q
+    // cruft, then concatenating with the stack trace of `promise`. See #57.
+    if (hasStacks &&
+        promise.stack &&
+        typeof error === "object" &&
+        error !== null &&
+        error.stack
+    ) {
+        var stacks = [];
+        for (var p = promise; !!p; p = p.source) {
+            if (p.stack && (!error.__minimumStackCounter__ || error.__minimumStackCounter__ > p.stackCounter)) {
+                object_defineProperty(error, "__minimumStackCounter__", {value: p.stackCounter, configurable: true});
+                stacks.unshift(p.stack);
+            }
+        }
+        stacks.unshift(error.stack);
+
+        var concatedStacks = stacks.join("\n" + STACK_JUMP_SEPARATOR + "\n");
+        var stack = filterStackString(concatedStacks);
+        object_defineProperty(error, "stack", {value: stack, configurable: true});
+    }
+}
+
+function filterStackString(stackString) {
+    var lines = stackString.split("\n");
+    var desiredLines = [];
+    for (var i = 0; i < lines.length; ++i) {
+        var line = lines[i];
+
+        if (!isInternalFrame(line) && !isNodeFrame(line) && line) {
+            desiredLines.push(line);
+        }
+    }
+    return desiredLines.join("\n");
+}
+
+function isNodeFrame(stackLine) {
+    return stackLine.indexOf("(module.js:") !== -1 ||
+           stackLine.indexOf("(node.js:") !== -1;
+}
+
+function getFileNameAndLineNumber(stackLine) {
+    // Named functions: "at functionName (filename:lineNumber:columnNumber)"
+    // In IE10 function name can have spaces ("Anonymous function") O_o
+    var attempt1 = /at .+ \((.+):(\d+):(?:\d+)\)$/.exec(stackLine);
+    if (attempt1) {
+        return [attempt1[1], Number(attempt1[2])];
+    }
+
+    // Anonymous functions: "at filename:lineNumber:columnNumber"
+    var attempt2 = /at ([^ ]+):(\d+):(?:\d+)$/.exec(stackLine);
+    if (attempt2) {
+        return [attempt2[1], Number(attempt2[2])];
+    }
+
+    // Firefox style: "function@filename:lineNumber or @filename:lineNumber"
+    var attempt3 = /.*@(.+):(\d+)$/.exec(stackLine);
+    if (attempt3) {
+        return [attempt3[1], Number(attempt3[2])];
+    }
+}
+
+function isInternalFrame(stackLine) {
+    var fileNameAndLineNumber = getFileNameAndLineNumber(stackLine);
+
+    if (!fileNameAndLineNumber) {
+        return false;
+    }
+
+    var fileName = fileNameAndLineNumber[0];
+    var lineNumber = fileNameAndLineNumber[1];
+
+    return fileName === qFileName &&
+        lineNumber >= qStartingLine &&
+        lineNumber <= qEndingLine;
+}
+
+// discover own file name and line number range for filtering stack
+// traces
+function captureLine() {
+    if (!hasStacks) {
+        return;
+    }
+
+    try {
+        throw new Error();
+    } catch (e) {
+        var lines = e.stack.split("\n");
+        var firstLine = lines[0].indexOf("@") > 0 ? lines[1] : lines[2];
+        var fileNameAndLineNumber = getFileNameAndLineNumber(firstLine);
+        if (!fileNameAndLineNumber) {
+            return;
+        }
+
+        qFileName = fileNameAndLineNumber[0];
+        return fileNameAndLineNumber[1];
+    }
+}
+
+function deprecate(callback, name, alternative) {
+    return function () {
+        if (typeof console !== "undefined" &&
+            typeof console.warn === "function") {
+            console.warn(name + " is deprecated, use " + alternative +
+                         " instead.", new Error("").stack);
+        }
+        return callback.apply(callback, arguments);
+    };
+}
+
+// end of shims
+// beginning of real work
+
+/**
+ * Constructs a promise for an immediate reference, passes promises through, or
+ * coerces promises from different systems.
+ * @param value immediate reference or promise
+ */
+function Q(value) {
+    // If the object is already a Promise, return it directly.  This enables
+    // the resolve function to both be used to created references from objects,
+    // but to tolerably coerce non-promises to promises.
+    if (value instanceof Promise) {
+        return value;
+    }
+
+    // assimilate thenables
+    if (isPromiseAlike(value)) {
+        return coerce(value);
+    } else {
+        return fulfill(value);
+    }
+}
+Q.resolve = Q;
+
+/**
+ * Performs a task in a future turn of the event loop.
+ * @param {Function} task
+ */
+Q.nextTick = nextTick;
+
+/**
+ * Controls whether or not long stack traces will be on
+ */
+Q.longStackSupport = false;
+
+/**
+ * The counter is used to determine the stopping point for building
+ * long stack traces. In makeStackTraceLong we walk backwards through
+ * the linked list of promises, only stacks which were created before
+ * the rejection are concatenated.
+ */
+var longStackCounter = 1;
+
+// enable long stacks if Q_DEBUG is set
+if (typeof process === "object" && process && process.env && process.env.Q_DEBUG) {
+    Q.longStackSupport = true;
+}
+
+/**
+ * Constructs a {promise, resolve, reject} object.
+ *
+ * `resolve` is a callback to invoke with a more resolved value for the
+ * promise. To fulfill the promise, invoke `resolve` with any value that is
+ * not a thenable. To reject the promise, invoke `resolve` with a rejected
+ * thenable, or invoke `reject` with the reason directly. To resolve the
+ * promise to another thenable, thus putting it in the same state, invoke
+ * `resolve` with that other thenable.
+ */
+Q.defer = defer;
+function defer() {
+    // if "messages" is an "Array", that indicates that the promise has not yet
+    // been resolved.  If it is "undefined", it has been resolved.  Each
+    // element of the messages array is itself an array of complete arguments to
+    // forward to the resolved promise.  We coerce the resolution value to a
+    // promise using the `resolve` function because it handles both fully
+    // non-thenable values and other thenables gracefully.
+    var messages = [], progressListeners = [], resolvedPromise;
+
+    var deferred = object_create(defer.prototype);
+    var promise = object_create(Promise.prototype);
+
+    promise.promiseDispatch = function (resolve, op, operands) {
+        var args = array_slice(arguments);
+        if (messages) {
+            messages.push(args);
+            if (op === "when" && operands[1]) { // progress operand
+                progressListeners.push(operands[1]);
+            }
+        } else {
+            Q.nextTick(function () {
+                resolvedPromise.promiseDispatch.apply(resolvedPromise, args);
+            });
+        }
+    };
+
+    // XXX deprecated
+    promise.valueOf = function () {
+        if (messages) {
+            return promise;
+        }
+        var nearerValue = nearer(resolvedPromise);
+        if (isPromise(nearerValue)) {
+            resolvedPromise = nearerValue; // shorten chain
+        }
+        return nearerValue;
+    };
+
+    promise.inspect = function () {
+        if (!resolvedPromise) {
+            return { state: "pending" };
+        }
+        return resolvedPromise.inspect();
+    };
+
+    if (Q.longStackSupport && hasStacks) {
+        try {
+            throw new Error();
+        } catch (e) {
+            // NOTE: don't try to use `Error.captureStackTrace` or transfer the
+            // accessor around; that causes memory leaks as per GH-111. Just
+            // reify the stack trace as a string ASAP.
+            //
+            // At the same time, cut off the first line; it's always just
+            // "[object Promise]\n", as per the `toString`.
+            promise.stack = e.stack.substring(e.stack.indexOf("\n") + 1);
+            promise.stackCounter = longStackCounter++;
+        }
+    }
+
+    // NOTE: we do the checks for `resolvedPromise` in each method, instead of
+    // consolidating them into `become`, since otherwise we'd create new
+    // promises with the lines `become(whatever(value))`. See e.g. GH-252.
+
+    function become(newPromise) {
+        resolvedPromise = newPromise;
+
+        if (Q.longStackSupport && hasStacks) {
+            // Only hold a reference to the new promise if long stacks
+            // are enabled to reduce memory usage
+            promise.source = newPromise;
+        }
+
+        array_reduce(messages, function (undefined, message) {
+            Q.nextTick(function () {
+                newPromise.promiseDispatch.apply(newPromise, message);
+            });
+        }, void 0);
+
+        messages = void 0;
+        progressListeners = void 0;
+    }
+
+    deferred.promise = promise;
+    deferred.resolve = function (value) {
+        if (resolvedPromise) {
+            return;
+        }
+
+        become(Q(value));
+    };
+
+    deferred.fulfill = function (value) {
+        if (resolvedPromise) {
+            return;
+        }
+
+        become(fulfill(value));
+    };
+    deferred.reject = function (reason) {
+        if (resolvedPromise) {
+            return;
+        }
+
+        become(reject(reason));
+    };
+    deferred.notify = function (progress) {
+        if (resolvedPromise) {
+            return;
+        }
+
+        array_reduce(progressListeners, function (undefined, progressListener) {
+            Q.nextTick(function () {
+                progressListener(progress);
+            });
+        }, void 0);
+    };
+
+    return deferred;
+}
+
+/**
+ * Creates a Node-style callback that will resolve or reject the deferred
+ * promise.
+ * @returns a nodeback
+ */
+defer.prototype.makeNodeResolver = function () {
+    var self = this;
+    return function (error, value) {
+        if (error) {
+            self.reject(error);
+        } else if (arguments.length > 2) {
+            self.resolve(array_slice(arguments, 1));
+        } else {
+            self.resolve(value);
+        }
+    };
+};
+
+/**
+ * @param resolver {Function} a function that returns nothing and accepts
+ * the resolve, reject, and notify functions for a deferred.
+ * @returns a promise that may be resolved with the given resolve and reject
+ * functions, or rejected by a thrown exception in resolver
+ */
+Q.Promise = promise; // ES6
+Q.promise = promise;
+function promise(resolver) {
+    if (typeof resolver !== "function") {
+        throw new TypeError("resolver must be a function.");
+    }
+    var deferred = defer();
+    try {
+        resolver(deferred.resolve, deferred.reject, deferred.notify);
+    } catch (reason) {
+        deferred.reject(reason);
+    }
+    return deferred.promise;
+}
+
+promise.race = race; // ES6
+promise.all = all; // ES6
+promise.reject = reject; // ES6
+promise.resolve = Q; // ES6
+
+// XXX experimental.  This method is a way to denote that a local value is
+// serializable and should be immediately dispatched to a remote upon request,
+// instead of passing a reference.
+Q.passByCopy = function (object) {
+    //freeze(object);
+    //passByCopies.set(object, true);
+    return object;
+};
+
+Promise.prototype.passByCopy = function () {
+    //freeze(object);
+    //passByCopies.set(object, true);
+    return this;
+};
+
+/**
+ * If two promises eventually fulfill to the same value, promises that value,
+ * but otherwise rejects.
+ * @param x {Any*}
+ * @param y {Any*}
+ * @returns {Any*} a promise for x and y if they are the same, but a rejection
+ * otherwise.
+ *
+ */
+Q.join = function (x, y) {
+    return Q(x).join(y);
+};
+
+Promise.prototype.join = function (that) {
+    return Q([this, that]).spread(function (x, y) {
+        if (x === y) {
+            // TODO: "===" should be Object.is or equiv
+            return x;
+        } else {
+            throw new Error("Q can't join: not the same: " + x + " " + y);
+        }
+    });
+};
+
+/**
+ * Returns a promise for the first of an array of promises to become settled.
+ * @param answers {Array[Any*]} promises to race
+ * @returns {Any*} the first promise to be settled
+ */
+Q.race = race;
+function race(answerPs) {
+    return promise(function (resolve, reject) {
+        // Switch to this once we can assume at least ES5
+        // answerPs.forEach(function (answerP) {
+        //     Q(answerP).then(resolve, reject);
+        // });
+        // Use this in the meantime
+        for (var i = 0, len = answerPs.length; i < len; i++) {
+            Q(answerPs[i]).then(resolve, reject);
+        }
+    });
+}
+
+Promise.prototype.race = function () {
+    return this.then(Q.race);
+};
+
+/**
+ * Constructs a Promise with a promise descriptor object and optional fallback
+ * function.  The descriptor contains methods like when(rejected), get(name),
+ * set(name, value), post(name, args), and delete(name), which all
+ * return either a value, a promise for a value, or a rejection.  The fallback
+ * accepts the operation name, a resolver, and any further arguments that would
+ * have been forwarded to the appropriate method above had a method been
+ * provided with the proper name.  The API makes no guarantees about the nature
+ * of the returned object, apart from that it is usable whereever promises are
+ * bought and sold.
+ */
+Q.makePromise = Promise;
+function Promise(descriptor, fallback, inspect) {
+    if (fallback === void 0) {
+        fallback = function (op) {
+            return reject(new Error(
+                "Promise does not support operation: " + op
+            ));
+        };
+    }
+    if (inspect === void 0) {
+        inspect = function () {
+            return {state: "unknown"};
+        };
+    }
+
+    var promise = object_create(Promise.prototype);
+
+    promise.promiseDispatch = function (resolve, op, args) {
+        var result;
+        try {
+            if (descriptor[op]) {
+                result = descriptor[op].apply(promise, args);
+            } else {
+                result = fallback.call(promise, op, args);
+            }
+        } catch (exception) {
+            result = reject(exception);
+        }
+        if (resolve) {
+            resolve(result);
+        }
+    };
+
+    promise.inspect = inspect;
+
+    // XXX deprecated `valueOf` and `exception` support
+    if (inspect) {
+        var inspected = inspect();
+        if (inspected.state === "rejected") {
+            promise.exception = inspected.reason;
+        }
+
+        promise.valueOf = function () {
+            var inspected = inspect();
+            if (inspected.state === "pending" ||
+                inspected.state === "rejected") {
+                return promise;
+            }
+            return inspected.value;
+        };
+    }
+
+    return promise;
+}
+
+Promise.prototype.toString = function () {
+    return "[object Promise]";
+};
+
+Promise.prototype.then = function (fulfilled, rejected, progressed) {
+    var self = this;
+    var deferred = defer();
+    var done = false;   // ensure the untrusted promise makes at most a
+                        // single call to one of the callbacks
+
+    function _fulfilled(value) {
+        try {
+            return typeof fulfilled === "function" ? fulfilled(value) : value;
+        } catch (exception) {
+            return reject(exception);
+        }
+    }
+
+    function _rejected(exception) {
+        if (typeof rejected === "function") {
+            makeStackTraceLong(exception, self);
+            try {
+                return rejected(exception);
+            } catch (newException) {
+                return reject(newException);
+            }
+        }
+        return reject(exception);
+    }
+
+    function _progressed(value) {
+        return typeof progressed === "function" ? progressed(value) : value;
+    }
+
+    Q.nextTick(function () {
+        self.promiseDispatch(function (value) {
+            if (done) {
+                return;
+            }
+            done = true;
+
+            deferred.resolve(_fulfilled(value));
+        }, "when", [function (exception) {
+            if (done) {
+                return;
+            }
+            done = true;
+
+            deferred.resolve(_rejected(exception));
+        }]);
+    });
+
+    // Progress propagator need to be attached in the current tick.
+    self.promiseDispatch(void 0, "when", [void 0, function (value) {
+        var newValue;
+        var threw = false;
+        try {
+            newValue = _progressed(value);
+        } catch (e) {
+            threw = true;
+            if (Q.onerror) {
+                Q.onerror(e);
+            } else {
+                throw e;
+            }
+        }
+
+        if (!threw) {
+            deferred.notify(newValue);
+        }
+    }]);
+
+    return deferred.promise;
+};
+
+Q.tap = function (promise, callback) {
+    return Q(promise).tap(callback);
+};
+
+/**
+ * Works almost like "finally", but not called for rejections.
+ * Original resolution value is passed through callback unaffected.
+ * Callback may return a promise that will be awaited for.
+ * @param {Function} callback
+ * @returns {Q.Promise}
+ * @example
+ * doSomething()
+ *   .then(...)
+ *   .tap(console.log)
+ *   .then(...);
+ */
+Promise.prototype.tap = function (callback) {
+    callback = Q(callback);
+
+    return this.then(function (value) {
+        return callback.fcall(value).thenResolve(value);
+    });
+};
+
+/**
+ * Registers an observer on a promise.
+ *
+ * Guarantees:
+ *
+ * 1. that fulfilled and rejected will be called only once.
+ * 2. that either the fulfilled callback or the rejected callback will be
+ *    called, but not both.
+ * 3. that fulfilled and rejected will not be called in this turn.
+ *
+ * @param value      promise or immediate reference to observe
+ * @param fulfilled  function to be called with the fulfilled value
+ * @param rejected   function to be called with the rejection exception
+ * @param progressed function to be called on any progress notifications
+ * @return promise for the return value from the invoked callback
+ */
+Q.when = when;
+function when(value, fulfilled, rejected, progressed) {
+    return Q(value).then(fulfilled, rejected, progressed);
+}
+
+Promise.prototype.thenResolve = function (value) {
+    return this.then(function () { return value; });
+};
+
+Q.thenResolve = function (promise, value) {
+    return Q(promise).thenResolve(value);
+};
+
+Promise.prototype.thenReject = function (reason) {
+    return this.then(function () { throw reason; });
+};
+
+Q.thenReject = function (promise, reason) {
+    return Q(promise).thenReject(reason);
+};
+
+/**
+ * If an object is not a promise, it is as "near" as possible.
+ * If a promise is rejected, it is as "near" as possible too.
+ * If it’s a fulfilled promise, the fulfillment value is nearer.
+ * If it’s a deferred promise and the deferred has been resolved, the
+ * resolution is "nearer".
+ * @param object
+ * @returns most resolved (nearest) form of the object
+ */
+
+// XXX should we re-do this?
+Q.nearer = nearer;
+function nearer(value) {
+    if (isPromise(value)) {
+        var inspected = value.inspect();
+        if (inspected.state === "fulfilled") {
+            return inspected.value;
+        }
+    }
+    return value;
+}
+
+/**
+ * @returns whether the given object is a promise.
+ * Otherwise it is a fulfilled value.
+ */
+Q.isPromise = isPromise;
+function isPromise(object) {
+    return object instanceof Promise;
+}
+
+Q.isPromiseAlike = isPromiseAlike;
+function isPromiseAlike(object) {
+    return isObject(object) && typeof object.then === "function";
+}
+
+/**
+ * @returns whether the given object is a pending promise, meaning not
+ * fulfilled or rejected.
+ */
+Q.isPending = isPending;
+function isPending(object) {
+    return isPromise(object) && object.inspect().state === "pending";
+}
+
+Promise.prototype.isPending = function () {
+    return this.inspect().state === "pending";
+};
+
+/**
+ * @returns whether the given object is a value or fulfilled
+ * promise.
+ */
+Q.isFulfilled = isFulfilled;
+function isFulfilled(object) {
+    return !isPromise(object) || object.inspect().state === "fulfilled";
+}
+
+Promise.prototype.isFulfilled = function () {
+    return this.inspect().state === "fulfilled";
+};
+
+/**
+ * @returns whether the given object is a rejected promise.
+ */
+Q.isRejected = isRejected;
+function isRejected(object) {
+    return isPromise(object) && object.inspect().state === "rejected";
+}
+
+Promise.prototype.isRejected = function () {
+    return this.inspect().state === "rejected";
+};
+
+//// BEGIN UNHANDLED REJECTION TRACKING
+
+// This promise library consumes exceptions thrown in handlers so they can be
+// handled by a subsequent promise.  The exceptions get added to this array when
+// they are created, and removed when they are handled.  Note that in ES6 or
+// shimmed environments, this would naturally be a `Set`.
+var unhandledReasons = [];
+var unhandledRejections = [];
+var reportedUnhandledRejections = [];
+var trackUnhandledRejections = true;
+
+function resetUnhandledRejections() {
+    unhandledReasons.length = 0;
+    unhandledRejections.length = 0;
+
+    if (!trackUnhandledRejections) {
+        trackUnhandledRejections = true;
+    }
+}
+
+function trackRejection(promise, reason) {
+    if (!trackUnhandledRejections) {
+        return;
+    }
+    if (typeof process === "object" && typeof process.emit === "function") {
+        Q.nextTick.runAfter(function () {
+            if (array_indexOf(unhandledRejections, promise) !== -1) {
+                process.emit("unhandledRejection", reason, promise);
+                reportedUnhandledRejections.push(promise);
+            }
+        });
+    }
+
+    unhandledRejections.push(promise);
+    if (reason && typeof reason.stack !== "undefined") {
+        unhandledReasons.push(reason.stack);
+    } else {
+        unhandledReasons.push("(no stack) " + reason);
+    }
+}
+
+function untrackRejection(promise) {
+    if (!trackUnhandledRejections) {
+        return;
+    }
+
+    var at = array_indexOf(unhandledRejections, promise);
+    if (at !== -1) {
+        if (typeof process === "object" && typeof process.emit === "function") {
+            Q.nextTick.runAfter(function () {
+                var atReport = array_indexOf(reportedUnhandledRejections, promise);
+                if (atReport !== -1) {
+                    process.emit("rejectionHandled", unhandledReasons[at], promise);
+                    reportedUnhandledRejections.splice(atReport, 1);
+                }
+            });
+        }
+        unhandledRejections.splice(at, 1);
+        unhandledReasons.splice(at, 1);
+    }
+}
+
+Q.resetUnhandledRejections = resetUnhandledRejections;
+
+Q.getUnhandledReasons = function () {
+    // Make a copy so that consumers can't interfere with our internal state.
+    return unhandledReasons.slice();
+};
+
+Q.stopUnhandledRejectionTracking = function () {
+    resetUnhandledRejections();
+    trackUnhandledRejections = false;
+};
+
+resetUnhandledRejections();
+
+//// END UNHANDLED REJECTION TRACKING
+
+/**
+ * Constructs a rejected promise.
+ * @param reason value describing the failure
+ */
+Q.reject = reject;
+function reject(reason) {
+    var rejection = Promise({
+        "when": function (rejected) {
+            // note that the error has been handled
+            if (rejected) {
+                untrackRejection(this);
+            }
+            return rejected ? rejected(reason) : this;
+        }
+    }, function fallback() {
+        return this;
+    }, function inspect() {
+        return { state: "rejected", reason: reason };
+    });
+
+    // Note that the reason has not been handled.
+    trackRejection(rejection, reason);
+
+    return rejection;
+}
+
+/**
+ * Constructs a fulfilled promise for an immediate reference.
+ * @param value immediate reference
+ */
+Q.fulfill = fulfill;
+function fulfill(value) {
+    return Promise({
+        "when": function () {
+            return value;
+        },
+        "get": function (name) {
+            return value[name];
+        },
+        "set": function (name, rhs) {
+            value[name] = rhs;
+        },
+        "delete": function (name) {
+            delete value[name];
+        },
+        "post": function (name, args) {
+            // Mark Miller proposes that post with no name should apply a
+            // promised function.
+            if (name === null || name === void 0) {
+                return value.apply(void 0, args);
+            } else {
+                return value[name].apply(value, args);
+            }
+        },
+        "apply": function (thisp, args) {
+            return value.apply(thisp, args);
+        },
+        "keys": function () {
+            return object_keys(value);
+        }
+    }, void 0, function inspect() {
+        return { state: "fulfilled", value: value };
+    });
+}
+
+/**
+ * Converts thenables to Q promises.
+ * @param promise thenable promise
+ * @returns a Q promise
+ */
+function coerce(promise) {
+    var deferred = defer();
+    Q.nextTick(function () {
+        try {
+            promise.then(deferred.resolve, deferred.reject, deferred.notify);
+        } catch (exception) {
+            deferred.reject(exception);
+        }
+    });
+    return deferred.promise;
+}
+
+/**
+ * Annotates an object such that it will never be
+ * transferred away from this process over any promise
+ * communication channel.
+ * @param object
+ * @returns promise a wrapping of that object that
+ * additionally responds to the "isDef" message
+ * without a rejection.
+ */
+Q.master = master;
+function master(object) {
+    return Promise({
+        "isDef": function () {}
+    }, function fallback(op, args) {
+        return dispatch(object, op, args);
+    }, function () {
+        return Q(object).inspect();
+    });
+}
+
+/**
+ * Spreads the values of a promised array of arguments into the
+ * fulfillment callback.
+ * @param fulfilled callback that receives variadic arguments from the
+ * promised array
+ * @param rejected callback that receives the exception if the promise
+ * is rejected.
+ * @returns a promise for the return value or thrown exception of
+ * either callback.
+ */
+Q.spread = spread;
+function spread(value, fulfilled, rejected) {
+    return Q(value).spread(fulfilled, rejected);
+}
+
+Promise.prototype.spread = function (fulfilled, rejected) {
+    return this.all().then(function (array) {
+        return fulfilled.apply(void 0, array);
+    }, rejected);
+};
+
+/**
+ * The async function is a decorator for generator functions, turning
+ * them into asynchronous generators.  Although generators are only part
+ * of the newest ECMAScript 6 drafts, this code does not cause syntax
+ * errors in older engines.  This code should continue to work and will
+ * in fact improve over time as the language improves.
+ *
+ * ES6 generators are currently part of V8 version 3.19 with the
+ * --harmony-generators runtime flag enabled.  SpiderMonkey has had them
+ * for longer, but under an older Python-inspired form.  This function
+ * works on both kinds of generators.
+ *
+ * Decorates a generator function such that:
+ *  - it may yield promises
+ *  - execution will continue when that promise is fulfilled
+ *  - the value of the yield expression will be the fulfilled value
+ *  - it returns a promise for the return value (when the generator
+ *    stops iterating)
+ *  - the decorated function returns a promise for the return value
+ *    of the generator or the first rejected promise among those
+ *    yielded.
+ *  - if an error is thrown in the generator, it propagates through
+ *    every following yield until it is caught, or until it escapes
+ *    the generator function altogether, and is translated into a
+ *    rejection for the promise returned by the decorated generator.
+ */
+Q.async = async;
+function async(makeGenerator) {
+    return function () {
+        // when verb is "send", arg is a value
+        // when verb is "throw", arg is an exception
+        function continuer(verb, arg) {
+            var result;
+
+            // Until V8 3.19 / Chromium 29 is released, SpiderMonkey is the only
+            // engine that has a deployed base of browsers that support generators.
+            // However, SM's generators use the Python-inspired semantics of
+            // outdated ES6 drafts.  We would like to support ES6, but we'd also
+            // like to make it possible to use generators in deployed browsers, so
+            // we also support Python-style generators.  At some point we can remove
+            // this block.
+
+            if (typeof StopIteration === "undefined") {
+                // ES6 Generators
+                try {
+                    result = generator[verb](arg);
+                } catch (exception) {
+                    return reject(exception);
+                }
+                if (result.done) {
+                    return Q(result.value);
+                } else {
+                    return when(result.value, callback, errback);
+                }
+            } else {
+                // SpiderMonkey Generators
+                // FIXME: Remove this case when SM does ES6 generators.
+                try {
+                    result = generator[verb](arg);
+                } catch (exception) {
+                    if (isStopIteration(exception)) {
+                        return Q(exception.value);
+                    } else {
+                        return reject(exception);
+                    }
+                }
+                return when(result, callback, errback);
+            }
+        }
+        var generator = makeGenerator.apply(this, arguments);
+        var callback = continuer.bind(continuer, "next");
+        var errback = continuer.bind(continuer, "throw");
+        return callback();
+    };
+}
+
+/**
+ * The spawn function is a small wrapper around async that immediately
+ * calls the generator and also ends the promise chain, so that any
+ * unhandled errors are thrown instead of forwarded to the error
+ * handler. This is useful because it's extremely common to run
+ * generators at the top-level to work with libraries.
+ */
+Q.spawn = spawn;
+function spawn(makeGenerator) {
+    Q.done(Q.async(makeGenerator)());
+}
+
+// FIXME: Remove this interface once ES6 generators are in SpiderMonkey.
+/**
+ * Throws a ReturnValue exception to stop an asynchronous generator.
+ *
+ * This interface is a stop-gap measure to support generator return
+ * values in older Firefox/SpiderMonkey.  In browsers that support ES6
+ * generators like Chromium 29, just use "return" in your generator
+ * functions.
+ *
+ * @param value the return value for the surrounding generator
+ * @throws ReturnValue exception with the value.
+ * @example
+ * // ES6 style
+ * Q.async(function* () {
+ *      var foo = yield getFooPromise();
+ *      var bar = yield getBarPromise();
+ *      return foo + bar;
+ * })
+ * // Older SpiderMonkey style
+ * Q.async(function () {
+ *      var foo = yield getFooPromise();
+ *      var bar = yield getBarPromise();
+ *      Q.return(foo + bar);
+ * })
+ */
+Q["return"] = _return;
+function _return(value) {
+    throw new QReturnValue(value);
+}
+
+/**
+ * The promised function decorator ensures that any promise arguments
+ * are settled and passed as values (`this` is also settled and passed
+ * as a value).  It will also ensure that the result of a function is
+ * always a promise.
+ *
+ * @example
+ * var add = Q.promised(function (a, b) {
+ *     return a + b;
+ * });
+ * add(Q(a), Q(B));
+ *
+ * @param {function} callback The function to decorate
+ * @returns {function} a function that has been decorated.
+ */
+Q.promised = promised;
+function promised(callback) {
+    return function () {
+        return spread([this, all(arguments)], function (self, args) {
+            return callback.apply(self, args);
+        });
+    };
+}
+
+/**
+ * sends a message to a value in a future turn
+ * @param object* the recipient
+ * @param op the name of the message operation, e.g., "when",
+ * @param args further arguments to be forwarded to the operation
+ * @returns result {Promise} a promise for the result of the operation
+ */
+Q.dispatch = dispatch;
+function dispatch(object, op, args) {
+    return Q(object).dispatch(op, args);
+}
+
+Promise.prototype.dispatch = function (op, args) {
+    var self = this;
+    var deferred = defer();
+    Q.nextTick(function () {
+        self.promiseDispatch(deferred.resolve, op, args);
+    });
+    return deferred.promise;
+};
+
+/**
+ * Gets the value of a property in a future turn.
+ * @param object    promise or immediate reference for target object
+ * @param name      name of property to get
+ * @return promise for the property value
+ */
+Q.get = function (object, key) {
+    return Q(object).dispatch("get", [key]);
+};
+
+Promise.prototype.get = function (key) {
+    return this.dispatch("get", [key]);
+};
+
+/**
+ * Sets the value of a property in a future turn.
+ * @param object    promise or immediate reference for object object
+ * @param name      name of property to set
+ * @param value     new value of property
+ * @return promise for the return value
+ */
+Q.set = function (object, key, value) {
+    return Q(object).dispatch("set", [key, value]);
+};
+
+Promise.prototype.set = function (key, value) {
+    return this.dispatch("set", [key, value]);
+};
+
+/**
+ * Deletes a property in a future turn.
+ * @param object    promise or immediate reference for target object
+ * @param name      name of property to delete
+ * @return promise for the return value
+ */
+Q.del = // XXX legacy
+Q["delete"] = function (object, key) {
+    return Q(object).dispatch("delete", [key]);
+};
+
+Promise.prototype.del = // XXX legacy
+Promise.prototype["delete"] = function (key) {
+    return this.dispatch("delete", [key]);
+};
+
+/**
+ * Invokes a method in a future turn.
+ * @param object    promise or immediate reference for target object
+ * @param name      name of method to invoke
+ * @param value     a value to post, typically an array of
+ *                  invocation arguments for promises that
+ *                  are ultimately backed with `resolve` values,
+ *                  as opposed to those backed with URLs
+ *                  wherein the posted value can be any
+ *                  JSON serializable object.
+ * @return promise for the return value
+ */
+// bound locally because it is used by other methods
+Q.mapply = // XXX As proposed by "Redsandro"
+Q.post = function (object, name, args) {
+    return Q(object).dispatch("post", [name, args]);
+};
+
+Promise.prototype.mapply = // XXX As proposed by "Redsandro"
+Promise.prototype.post = function (name, args) {
+    return this.dispatch("post", [name, args]);
+};
+
+/**
+ * Invokes a method in a future turn.
+ * @param object    promise or immediate reference for target object
+ * @param name      name of method to invoke
+ * @param ...args   array of invocation arguments
+ * @return promise for the return value
+ */
+Q.send = // XXX Mark Miller's proposed parlance
+Q.mcall = // XXX As proposed by "Redsandro"
+Q.invoke = function (object, name /*...args*/) {
+    return Q(object).dispatch("post", [name, array_slice(arguments, 2)]);
+};
+
+Promise.prototype.send = // XXX Mark Miller's proposed parlance
+Promise.prototype.mcall = // XXX As proposed by "Redsandro"
+Promise.prototype.invoke = function (name /*...args*/) {
+    return this.dispatch("post", [name, array_slice(arguments, 1)]);
+};
+
+/**
+ * Applies the promised function in a future turn.
+ * @param object    promise or immediate reference for target function
+ * @param args      array of application arguments
+ */
+Q.fapply = function (object, args) {
+    return Q(object).dispatch("apply", [void 0, args]);
+};
+
+Promise.prototype.fapply = function (args) {
+    return this.dispatch("apply", [void 0, args]);
+};
+
+/**
+ * Calls the promised function in a future turn.
+ * @param object    promise or immediate reference for target function
+ * @param ...args   array of application arguments
+ */
+Q["try"] =
+Q.fcall = function (object /* ...args*/) {
+    return Q(object).dispatch("apply", [void 0, array_slice(arguments, 1)]);
+};
+
+Promise.prototype.fcall = function (/*...args*/) {
+    return this.dispatch("apply", [void 0, array_slice(arguments)]);
+};
+
+/**
+ * Binds the promised function, transforming return values into a fulfilled
+ * promise and thrown errors into a rejected one.
+ * @param object    promise or immediate reference for target function
+ * @param ...args   array of application arguments
+ */
+Q.fbind = function (object /*...args*/) {
+    var promise = Q(object);
+    var args = array_slice(arguments, 1);
+    return function fbound() {
+        return promise.dispatch("apply", [
+            this,
+            args.concat(array_slice(arguments))
+        ]);
+    };
+};
+Promise.prototype.fbind = function (/*...args*/) {
+    var promise = this;
+    var args = array_slice(arguments);
+    return function fbound() {
+        return promise.dispatch("apply", [
+            this,
+            args.concat(array_slice(arguments))
+        ]);
+    };
+};
+
+/**
+ * Requests the names of the owned properties of a promised
+ * object in a future turn.
+ * @param object    promise or immediate reference for target object
+ * @return promise for the keys of the eventually settled object
+ */
+Q.keys = function (object) {
+    return Q(object).dispatch("keys", []);
+};
+
+Promise.prototype.keys = function () {
+    return this.dispatch("keys", []);
+};
+
+/**
+ * Turns an array of promises into a promise for an array.  If any of
+ * the promises gets rejected, the whole array is rejected immediately.
+ * @param {Array*} an array (or promise for an array) of values (or
+ * promises for values)
+ * @returns a promise for an array of the corresponding values
+ */
+// By Mark Miller
+// http://wiki.ecmascript.org/doku.php?id=strawman:concurrency&rev=1308776521#allfulfilled
+Q.all = all;
+function all(promises) {
+    return when(promises, function (promises) {
+        var pendingCount = 0;
+        var deferred = defer();
+        array_reduce(promises, function (undefined, promise, index) {
+            var snapshot;
+            if (
+                isPromise(promise) &&
+                (snapshot = promise.inspect()).state === "fulfilled"
+            ) {
+                promises[index] = snapshot.value;
+            } else {
+                ++pendingCount;
+                when(
+                    promise,
+                    function (value) {
+                        promises[index] = value;
+                        if (--pendingCount === 0) {
+                            deferred.resolve(promises);
+                        }
+                    },
+                    deferred.reject,
+                    function (progress) {
+                        deferred.notify({ index: index, value: progress });
+                    }
+                );
+            }
+        }, void 0);
+        if (pendingCount === 0) {
+            deferred.resolve(promises);
+        }
+        return deferred.promise;
+    });
+}
+
+Promise.prototype.all = function () {
+    return all(this);
+};
+
+/**
+ * Returns the first resolved promise of an array. Prior rejected promises are
+ * ignored.  Rejects only if all promises are rejected.
+ * @param {Array*} an array containing values or promises for values
+ * @returns a promise fulfilled with the value of the first resolved promise,
+ * or a rejected promise if all promises are rejected.
+ */
+Q.any = any;
+
+function any(promises) {
+    if (promises.length === 0) {
+        return Q.resolve();
+    }
+
+    var deferred = Q.defer();
+    var pendingCount = 0;
+    array_reduce(promises, function (prev, current, index) {
+        var promise = promises[index];
+
+        pendingCount++;
+
+        when(promise, onFulfilled, onRejected, onProgress);
+        function onFulfilled(result) {
+            deferred.resolve(result);
+        }
+        function onRejected(err) {
+            pendingCount--;
+            if (pendingCount === 0) {
+                err.message = ("Q can't get fulfillment value from any promise, all " +
+                    "promises were rejected. Last error message: " + err.message);
+                deferred.reject(err);
+            }
+        }
+        function onProgress(progress) {
+            deferred.notify({
+                index: index,
+                value: progress
+            });
+        }
+    }, undefined);
+
+    return deferred.promise;
+}
+
+Promise.prototype.any = function () {
+    return any(this);
+};
+
+/**
+ * Waits for all promises to be settled, either fulfilled or
+ * rejected.  This is distinct from `all` since that would stop
+ * waiting at the first rejection.  The promise returned by
+ * `allResolved` will never be rejected.
+ * @param promises a promise for an array (or an array) of promises
+ * (or values)
+ * @return a promise for an array of promises
+ */
+Q.allResolved = deprecate(allResolved, "allResolved", "allSettled");
+function allResolved(promises) {
+    return when(promises, function (promises) {
+        promises = array_map(promises, Q);
+        return when(all(array_map(promises, function (promise) {
+            return when(promise, noop, noop);
+        })), function () {
+            return promises;
+        });
+    });
+}
+
+Promise.prototype.allResolved = function () {
+    return allResolved(this);
+};
+
+/**
+ * @see Promise#allSettled
+ */
+Q.allSettled = allSettled;
+function allSettled(promises) {
+    return Q(promises).allSettled();
+}
+
+/**
+ * Turns an array of promises into a promise for an array of their states (as
+ * returned by `inspect`) when they have all settled.
+ * @param {Array[Any*]} values an array (or promise for an array) of values (or
+ * promises for values)
+ * @returns {Array[State]} an array of states for the respective values.
+ */
+Promise.prototype.allSettled = function () {
+    return this.then(function (promises) {
+        return all(array_map(promises, function (promise) {
+            promise = Q(promise);
+            function regardless() {
+                return promise.inspect();
+            }
+            return promise.then(regardless, regardless);
+        }));
+    });
+};
+
+/**
+ * Captures the failure of a promise, giving an oportunity to recover
+ * with a callback.  If the given promise is fulfilled, the returned
+ * promise is fulfilled.
+ * @param {Any*} promise for something
+ * @param {Function} callback to fulfill the returned promise if the
+ * given promise is rejected
+ * @returns a promise for the return value of the callback
+ */
+Q.fail = // XXX legacy
+Q["catch"] = function (object, rejected) {
+    return Q(object).then(void 0, rejected);
+};
+
+Promise.prototype.fail = // XXX legacy
+Promise.prototype["catch"] = function (rejected) {
+    return this.then(void 0, rejected);
+};
+
+/**
+ * Attaches a listener that can respond to progress notifications from a
+ * promise's originating deferred. This listener receives the exact arguments
+ * passed to ``deferred.notify``.
+ * @param {Any*} promise for something
+ * @param {Function} callback to receive any progress notifications
+ * @returns the given promise, unchanged
+ */
+Q.progress = progress;
+function progress(object, progressed) {
+    return Q(object).then(void 0, void 0, progressed);
+}
+
+Promise.prototype.progress = function (progressed) {
+    return this.then(void 0, void 0, progressed);
+};
+
+/**
+ * Provides an opportunity to observe the settling of a promise,
+ * regardless of whether the promise is fulfilled or rejected.  Forwards
+ * the resolution to the returned promise when the callback is done.
+ * The callback can return a promise to defer completion.
+ * @param {Any*} promise
+ * @param {Function} callback to observe the resolution of the given
+ * promise, takes no arguments.
+ * @returns a promise for the resolution of the given promise when
+ * ``fin`` is done.
+ */
+Q.fin = // XXX legacy
+Q["finally"] = function (object, callback) {
+    return Q(object)["finally"](callback);
+};
+
+Promise.prototype.fin = // XXX legacy
+Promise.prototype["finally"] = function (callback) {
+    if (!callback || typeof callback.apply !== "function") {
+        throw new Error("Q can't apply finally callback");
+    }
+    callback = Q(callback);
+    return this.then(function (value) {
+        return callback.fcall().then(function () {
+            return value;
+        });
+    }, function (reason) {
+        // TODO attempt to recycle the rejection with "this".
+        return callback.fcall().then(function () {
+            throw reason;
+        });
+    });
+};
+
+/**
+ * Terminates a chain of promises, forcing rejections to be
+ * thrown as exceptions.
+ * @param {Any*} promise at the end of a chain of promises
+ * @returns nothing
+ */
+Q.done = function (object, fulfilled, rejected, progress) {
+    return Q(object).done(fulfilled, rejected, progress);
+};
+
+Promise.prototype.done = function (fulfilled, rejected, progress) {
+    var onUnhandledError = function (error) {
+        // forward to a future turn so that ``when``
+        // does not catch it and turn it into a rejection.
+        Q.nextTick(function () {
+            makeStackTraceLong(error, promise);
+            if (Q.onerror) {
+                Q.onerror(error);
+            } else {
+                throw error;
+            }
+        });
+    };
+
+    // Avoid unnecessary `nextTick`ing via an unnecessary `when`.
+    var promise = fulfilled || rejected || progress ?
+        this.then(fulfilled, rejected, progress) :
+        this;
+
+    if (typeof process === "object" && process && process.domain) {
+        onUnhandledError = process.domain.bind(onUnhandledError);
+    }
+
+    promise.then(void 0, onUnhandledError);
+};
+
+/**
+ * Causes a promise to be rejected if it does not get fulfilled before
+ * some milliseconds time out.
+ * @param {Any*} promise
+ * @param {Number} milliseconds timeout
+ * @param {Any*} custom error message or Error object (optional)
+ * @returns a promise for the resolution of the given promise if it is
+ * fulfilled before the timeout, otherwise rejected.
+ */
+Q.timeout = function (object, ms, error) {
+    return Q(object).timeout(ms, error);
+};
+
+Promise.prototype.timeout = function (ms, error) {
+    var deferred = defer();
+    var timeoutId = setTimeout(function () {
+        if (!error || "string" === typeof error) {
+            error = new Error(error || "Timed out after " + ms + " ms");
+            error.code = "ETIMEDOUT";
+        }
+        deferred.reject(error);
+    }, ms);
+
+    this.then(function (value) {
+        clearTimeout(timeoutId);
+        deferred.resolve(value);
+    }, function (exception) {
+        clearTimeout(timeoutId);
+        deferred.reject(exception);
+    }, deferred.notify);
+
+    return deferred.promise;
+};
+
+/**
+ * Returns a promise for the given value (or promised value), some
+ * milliseconds after it resolved. Passes rejections immediately.
+ * @param {Any*} promise
+ * @param {Number} milliseconds
+ * @returns a promise for the resolution of the given promise after milliseconds
+ * time has elapsed since the resolution of the given promise.
+ * If the given promise rejects, that is passed immediately.
+ */
+Q.delay = function (object, timeout) {
+    if (timeout === void 0) {
+        timeout = object;
+        object = void 0;
+    }
+    return Q(object).delay(timeout);
+};
+
+Promise.prototype.delay = function (timeout) {
+    return this.then(function (value) {
+        var deferred = defer();
+        setTimeout(function () {
+            deferred.resolve(value);
+        }, timeout);
+        return deferred.promise;
+    });
+};
+
+/**
+ * Passes a continuation to a Node function, which is called with the given
+ * arguments provided as an array, and returns a promise.
+ *
+ *      Q.nfapply(FS.readFile, [__filename])
+ *      .then(function (content) {
+ *      })
+ *
+ */
+Q.nfapply = function (callback, args) {
+    return Q(callback).nfapply(args);
+};
+
+Promise.prototype.nfapply = function (args) {
+    var deferred = defer();
+    var nodeArgs = array_slice(args);
+    nodeArgs.push(deferred.makeNodeResolver());
+    this.fapply(nodeArgs).fail(deferred.reject);
+    return deferred.promise;
+};
+
+/**
+ * Passes a continuation to a Node function, which is called with the given
+ * arguments provided individually, and returns a promise.
+ * @example
+ * Q.nfcall(FS.readFile, __filename)
+ * .then(function (content) {
+ * })
+ *
+ */
+Q.nfcall = function (callback /*...args*/) {
+    var args = array_slice(arguments, 1);
+    return Q(callback).nfapply(args);
+};
+
+Promise.prototype.nfcall = function (/*...args*/) {
+    var nodeArgs = array_slice(arguments);
+    var deferred = defer();
+    nodeArgs.push(deferred.makeNodeResolver());
+    this.fapply(nodeArgs).fail(deferred.reject);
+    return deferred.promise;
+};
+
+/**
+ * Wraps a NodeJS continuation passing function and returns an equivalent
+ * version that returns a promise.
+ * @example
+ * Q.nfbind(FS.readFile, __filename)("utf-8")
+ * .then(console.log)
+ * .done()
+ */
+Q.nfbind =
+Q.denodeify = function (callback /*...args*/) {
+    if (callback === undefined) {
+        throw new Error("Q can't wrap an undefined function");
+    }
+    var baseArgs = array_slice(arguments, 1);
+    return function () {
+        var nodeArgs = baseArgs.concat(array_slice(arguments));
+        var deferred = defer();
+        nodeArgs.push(deferred.makeNodeResolver());
+        Q(callback).fapply(nodeArgs).fail(deferred.reject);
+        return deferred.promise;
+    };
+};
+
+Promise.prototype.nfbind =
+Promise.prototype.denodeify = function (/*...args*/) {
+    var args = array_slice(arguments);
+    args.unshift(this);
+    return Q.denodeify.apply(void 0, args);
+};
+
+Q.nbind = function (callback, thisp /*...args*/) {
+    var baseArgs = array_slice(arguments, 2);
+    return function () {
+        var nodeArgs = baseArgs.concat(array_slice(arguments));
+        var deferred = defer();
+        nodeArgs.push(deferred.makeNodeResolver());
+        function bound() {
+            return callback.apply(thisp, arguments);
+        }
+        Q(bound).fapply(nodeArgs).fail(deferred.reject);
+        return deferred.promise;
+    };
+};
+
+Promise.prototype.nbind = function (/*thisp, ...args*/) {
+    var args = array_slice(arguments, 0);
+    args.unshift(this);
+    return Q.nbind.apply(void 0, args);
+};
+
+/**
+ * Calls a method of a Node-style object that accepts a Node-style
+ * callback with a given array of arguments, plus a provided callback.
+ * @param object an object that has the named method
+ * @param {String} name name of the method of object
+ * @param {Array} args arguments to pass to the method; the callback
+ * will be provided by Q and appended to these arguments.
+ * @returns a promise for the value or error
+ */
+Q.nmapply = // XXX As proposed by "Redsandro"
+Q.npost = function (object, name, args) {
+    return Q(object).npost(name, args);
+};
+
+Promise.prototype.nmapply = // XXX As proposed by "Redsandro"
+Promise.prototype.npost = function (name, args) {
+    var nodeArgs = array_slice(args || []);
+    var deferred = defer();
+    nodeArgs.push(deferred.makeNodeResolver());
+    this.dispatch("post", [name, nodeArgs]).fail(deferred.reject);
+    return deferred.promise;
+};
+
+/**
+ * Calls a method of a Node-style object that accepts a Node-style
+ * callback, forwarding the given variadic arguments, plus a provided
+ * callback argument.
+ * @param object an object that has the named method
+ * @param {String} name name of the method of object
+ * @param ...args arguments to pass to the method; the callback will
+ * be provided by Q and appended to these arguments.
+ * @returns a promise for the value or error
+ */
+Q.nsend = // XXX Based on Mark Miller's proposed "send"
+Q.nmcall = // XXX Based on "Redsandro's" proposal
+Q.ninvoke = function (object, name /*...args*/) {
+    var nodeArgs = array_slice(arguments, 2);
+    var deferred = defer();
+    nodeArgs.push(deferred.makeNodeResolver());
+    Q(object).dispatch("post", [name, nodeArgs]).fail(deferred.reject);
+    return deferred.promise;
+};
+
+Promise.prototype.nsend = // XXX Based on Mark Miller's proposed "send"
+Promise.prototype.nmcall = // XXX Based on "Redsandro's" proposal
+Promise.prototype.ninvoke = function (name /*...args*/) {
+    var nodeArgs = array_slice(arguments, 1);
+    var deferred = defer();
+    nodeArgs.push(deferred.makeNodeResolver());
+    this.dispatch("post", [name, nodeArgs]).fail(deferred.reject);
+    return deferred.promise;
+};
+
+/**
+ * If a function would like to support both Node continuation-passing-style and
+ * promise-returning-style, it can end its internal promise chain with
+ * `nodeify(nodeback)`, forwarding the optional nodeback argument.  If the user
+ * elects to use a nodeback, the result will be sent there.  If they do not
+ * pass a nodeback, they will receive the result promise.
+ * @param object a result (or a promise for a result)
+ * @param {Function} nodeback a Node.js-style callback
+ * @returns either the promise or nothing
+ */
+Q.nodeify = nodeify;
+function nodeify(object, nodeback) {
+    return Q(object).nodeify(nodeback);
+}
+
+Promise.prototype.nodeify = function (nodeback) {
+    if (nodeback) {
+        this.then(function (value) {
+            Q.nextTick(function () {
+                nodeback(null, value);
+            });
+        }, function (error) {
+            Q.nextTick(function () {
+                nodeback(error);
+            });
+        });
+    } else {
+        return this;
+    }
+};
+
+Q.noConflict = function() {
+    throw new Error("Q.noConflict only works when Q is used as a global");
+};
+
+// All code before this point will be filtered from stack traces.
+var qEndingLine = captureLine();
+
+return Q;
+
+});
+
+}).call(this,require('_process'))
+},{"_process":10}],47:[function(require,module,exports){
 /*
  * random-string
  * https://github.com/valiton/node-random-string
@@ -3179,7 +6817,7 @@ module.exports = function randomString(opts) {
   return rnd;
 };
 
-},{}],39:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 (function() {
     var self = this;
     var variableRegex, splatVariableRegex, escapeRegex, addGroupForTo, addVariablesInTo, compile, recogniseIn, extractParamsForFromAfter;
@@ -3278,22 +6916,22 @@ module.exports = function randomString(opts) {
         return params;
     };
 }).call(this);
-},{}],40:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":44}],41:[function(require,module,exports){
+},{"./vdom/create-element.js":53}],50:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":63}],42:[function(require,module,exports){
+},{"./vtree/diff.js":72}],51:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":47}],43:[function(require,module,exports){
+},{"./vdom/patch.js":56}],52:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -3392,7 +7030,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":54,"is-object":37}],44:[function(require,module,exports){
+},{"../vnode/is-vhook.js":63,"is-object":45}],53:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -3440,7 +7078,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":52,"../vnode/is-vnode.js":55,"../vnode/is-vtext.js":56,"../vnode/is-widget.js":57,"./apply-properties":43,"global/document":4}],45:[function(require,module,exports){
+},{"../vnode/handle-thunk.js":61,"../vnode/is-vnode.js":64,"../vnode/is-vtext.js":65,"../vnode/is-widget.js":66,"./apply-properties":52,"global/document":11}],54:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -3527,7 +7165,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],46:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -3680,7 +7318,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":57,"../vnode/vpatch.js":60,"./apply-properties":43,"./update-widget":48}],47:[function(require,module,exports){
+},{"../vnode/is-widget.js":66,"../vnode/vpatch.js":69,"./apply-properties":52,"./update-widget":57}],56:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -3762,7 +7400,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./create-element":44,"./dom-index":45,"./patch-op":46,"global/document":4,"x-is-array":64}],48:[function(require,module,exports){
+},{"./create-element":53,"./dom-index":54,"./patch-op":55,"global/document":11,"x-is-array":73}],57:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -3779,7 +7417,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":57}],49:[function(require,module,exports){
+},{"../vnode/is-widget.js":66}],58:[function(require,module,exports){
 'use strict';
 
 module.exports = AttributeHook;
@@ -3816,7 +7454,7 @@ AttributeHook.prototype.unhook = function (node, prop, next) {
 
 AttributeHook.prototype.type = 'AttributeHook';
 
-},{}],50:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 module.exports = SoftSetHook;
@@ -3835,7 +7473,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],51:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 var split = require('browser-split');
@@ -3891,7 +7529,7 @@ function parseTag(tag, props) {
     return props.namespace ? tagName : tagName.toUpperCase();
 }
 
-},{"browser-split":3}],52:[function(require,module,exports){
+},{"browser-split":9}],61:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -3933,14 +7571,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":53,"./is-vnode":55,"./is-vtext":56,"./is-widget":57}],53:[function(require,module,exports){
+},{"./is-thunk":62,"./is-vnode":64,"./is-vtext":65,"./is-widget":66}],62:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],54:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -3949,7 +7587,7 @@ function isHook(hook) {
        typeof hook.unhook === "function" && !hook.hasOwnProperty("unhook"))
 }
 
-},{}],55:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -3958,7 +7596,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":58}],56:[function(require,module,exports){
+},{"./version":67}],65:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -3967,17 +7605,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":58}],57:[function(require,module,exports){
+},{"./version":67}],66:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],58:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 module.exports = "2"
 
-},{}],59:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -4051,7 +7689,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":53,"./is-vhook":54,"./is-vnode":55,"./is-widget":57,"./version":58}],60:[function(require,module,exports){
+},{"./is-thunk":62,"./is-vhook":63,"./is-vnode":64,"./is-widget":66,"./version":67}],69:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -4075,7 +7713,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":58}],61:[function(require,module,exports){
+},{"./version":67}],70:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -4087,7 +7725,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":58}],62:[function(require,module,exports){
+},{"./version":67}],71:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook")
 
@@ -4147,7 +7785,7 @@ function getPrototype(value) {
   }
 }
 
-},{"../vnode/is-vhook":54,"is-object":37}],63:[function(require,module,exports){
+},{"../vnode/is-vhook":63,"is-object":45}],72:[function(require,module,exports){
 var isArray = require("x-is-array")
 
 var VPatch = require("../vnode/vpatch")
@@ -4576,7 +8214,7 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":52,"../vnode/is-thunk":53,"../vnode/is-vnode":55,"../vnode/is-vtext":56,"../vnode/is-widget":57,"../vnode/vpatch":60,"./diff-props":62,"x-is-array":64}],64:[function(require,module,exports){
+},{"../vnode/handle-thunk":61,"../vnode/is-thunk":62,"../vnode/is-vnode":64,"../vnode/is-vtext":65,"../vnode/is-widget":66,"../vnode/vpatch":69,"./diff-props":71,"x-is-array":73}],73:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -4586,8 +8224,9 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],65:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 var http = require('httpism')
+const q = require("q")
 
 function APIService() {
 
@@ -4620,6 +8259,8 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
   return delay(500).then(function(){
     return getContenders(postcode)
     .then(function(results) {
+      console.log('contenders')
+      console.log(results)
       if (results.error) {
         return results;
       } else {
@@ -4660,29 +8301,35 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       }
       data.seats.push(results);
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
+        data.numberOfSwingSeats = "2",
         data.text = {
-          heading: "Looks like you're spoilt for choice!",
+          heading: "Firstly, it looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
+        data.numberOfSwingSeats = "0",
         data.text = {
-          heading: "Looks like there's not much choice!",
+          heading: "Firstly, it looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
+        data.numberOfSwingSeats = "1",
         data.text = {
-          heading: "Looks like your vote is worth more in one place than the other!",
+          heading: "Firstly, it looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
-      }
+      };
+      data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at home or in ' + (data.seats[1].location ? ' in %23' + data.seats[1].location.replace(/\s/g, '') : '') + ' in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)
       return data;
     })
   })
 }
 
-getContenders = function(postcode) {
+const getContenders = function(postcode) {
   var user = {};
+  var data = {};
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -4919,7 +8566,7 @@ APIService.prototype.getPartyChances = function(data) {
   })[0].name;
 
   allParties.forEach(function(party) {
-    partyKey = party.key;
+    var partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
@@ -5044,9 +8691,9 @@ var loadGe2015Results = APIService.prototype.loadGe2015Results;
 // igor: a simulation of delay for http requests :)
 
 function delay(t) {
-  return new Promise(function(resolve) {
-    setTimeout(resolve, t)
-  });
+  var deferred = q.defer();
+  setTimeout(deferred.resolve, t);
+  return deferred.promise;
 }
 
 function createObjectProps(globalObject, props) {
@@ -5066,80 +8713,84 @@ function createObjectProps(globalObject, props) {
 
 module.exports = new APIService();
 
-},{"httpism":6}],66:[function(require,module,exports){
-var hyperdom = require('hyperdom');
-var h = hyperdom.html;
-var router = require('hyperdom-router');
-var api = require('../services/APIService');
-var http = require('httpism');
+},{"httpism":13,"q":46}],75:[function(require,module,exports){
+const
+  hyperdom = require('hyperdom'),
+  h = hyperdom.html,
+  router = require('hyperdom-router'),
+  windowEvents = require('hyperdom/windowEvents'),
+  api = require('../services/APIService'),
+  http = require('httpism'),
+  q = require('hyperdom-router'),
+  model = require('../models/model'),
+  CardTemplates = {},
+  helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
+  dataProcessor = new (require("../includes/dataprocessor"))(),
+  designers = new (require("../includes/designers"))()
+;
 
-var routes = {
+
+
+const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
-  step: router.route('/steps/:name')
+  step: router.route('/steps/:name'),
+  students: router.route('/students') //'student' too?
 };
 
 router.start();
 
-const model = require('../models/model')
 Model = model;
-var CardTemplates = {};
 
 class App {
   constructor(data) {
     this.header = new Header();
-
-    var issueKeys = Object.keys(partyStances.opinions.issues);
-    issueKeys.forEach(function(issueKey, i) {
-      var debateKeys = Object.keys(partyStances.opinions.issues[issueKey].debates);
-      debateKeys.forEach(function(debateKey, j) {
-        model.questions[debateKey] = {
-          question: partyStances.opinions.issues[issueKey].debates[debateKey].question,
-          issue: {
-            key: issueKey,
-            description: partyStances.opinions.issues[issueKey].description,
-            index: i
-          },
-          debate: {
-            key: debateKey,
-            description: partyStances.opinions.issues[issueKey].debates[debateKey].description,
-            index: j
-          },
-          tasks: [
-            "question-agree",
-            "question-neutral",
-            "question-disagree"
-          ]
-        }
-      })
-    })
   }
 
   render() {
 
-    return h('div.body',
-      h('div.main',
-        h('div.top-strip'),
-        this.header,
+    if (Embed) {
 
-        routes.root(function () {
-          var dashboard = new Dashboard({dashboard: 'home'});
-          return h("div", dashboard)
-        }),
+      var params = {
+        name: StepName
+      }
+      var step = new Step(params);
+      return h('div',step);
 
-        routes.dashboard(function (params) {
-          var dashboard = new Dashboard({dashboard: params.name});
-          return h("div", dashboard)
-        }),
+    } else {
 
-        routes.step(function (params) {
-          var step = new Step(params);
-          return h('div',
-            step
-          );
-        })
+      return h('div.body' + (Standalone ? '.standalone' : ''),
+        h('div.main',
+          h('div.top-strip'),
+
+          this.header,
+
+          routes.root(function () {
+            var dashboard = new Dashboard({dashboard: 'home'});
+            return h("div", dashboard)
+          }),
+
+          routes.dashboard(function (params) {
+            var dashboard = new Dashboard({dashboard: params.name});
+            return h("div", dashboard)
+          }),
+
+          routes.step(function (params) {
+            var step = new Step(params);
+            return h('div',step);
+          }),
+
+          routes.students(function (params) {
+            var params = {
+              name: StepName
+            }
+            console.log(params);
+            var step = new Step(params);
+            return h('div',step);
+          })
+        )
       )
-    )
+    }
   }
 }
 
@@ -5179,6 +8830,8 @@ class Progress {
     }
     progress_current+=model.landedOnPostcode;
     progress_current+=model.landedOnResult;
+    // todo: why does it lead you to postdode-compare?
+    // Answer (from Jeremy) - currently it's just a shortcut so we can demo it to people without having a button on the dashboard!
     return routes.step({
       name: 'postcode-compare',
       type: 'step',
@@ -5217,7 +8870,7 @@ class Dashboard {
       if(task.conditions){
         conditionsMet = false;
         task.conditions.forEach(function(path){
-          if(getModel(path)){
+          if(helpers.getModel(path)){
             conditionsMet = true;
           }
         })
@@ -5245,7 +8898,7 @@ class Dashboard {
         );
       } else {
         taskProps.onclick = function(e){
-          updateData(task.dataUpdates);
+          helpers.updateData(task.dataUpdates);
         };
         tasksDOM.push(
           h( "a",
@@ -5265,28 +8918,25 @@ class Dashboard {
   }
 }
 
-class Question {
-  constructor(params) {
-
-  }
-}
-
 class Step {
   constructor(params) {
+    const self = this;
     this.step = model.steps[params.name];
-    this.error = params.error;
+    this.error = model.user.error;
+    this.params = params;
 
     if (params.task && model.tasks[params.task].dataUpdates)
-      updateData(model.tasks[params.task].dataUpdates);
+      helpers.updateData(model.tasks[params.task].dataUpdates);
 
-    var data = {
-      sliders: []
+    const data = {
+      cardGroups: []
     };
+
     switch (params.name) {
 
       case 'postcode':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
+        data.cardGroups.push([{
           type: 'postcode',
           name: 'Please enter your postcode:',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
@@ -5295,8 +8945,8 @@ class Step {
 
       case 'vote-worth':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
-          type: 'postcode',
+        data.cardGroups.push([{
+          type: 'vote-worth',
           name: 'Want to see how much your vote is worth?',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
         }])
@@ -5304,28 +8954,24 @@ class Step {
 
       case 'postcode-compare':
         model.landedOnPostcode = 1; // todo: temporary, refactor
-        data.sliders.push([{
-          type: 'postcode',
-          name: 'Student and not sure where to vote from?',
-          description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+        data.cardGroups.push([{
+          type: 'postcode-compare',
+          name: 'Student? Unsure where to vote from?',
+          subtitle: 'Not all parties stand a chance in each constituency. Compare your two postcodes to see where your vote counts most.',
+          subheading: 'Why do we need this?',
+          description: 'We need your postcode to show data relating to your constituency 👌'
         }])
         break;
 
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.user.results[model.user.results.length-1].forEach(function(cards){
-          data.sliders.push(cards)
+          data.cardGroups.push(cards);
         })
         break;
 
       case 'story':
-        // var cards = [];
-        // partyStories.forEach(function(card) {
-        //   card.push({
-        //
-        //   });
-        // })
-        data.sliders.push(partyStories)
+        data.cardGroups.push(partyStories)
         break;
 
       case 'question':
@@ -5348,7 +8994,7 @@ class Step {
         } else {
           finalStep = params.final;
         }
-        data.sliders.push([{
+        data.cardGroups.push([{
           name: question.issue.description + " - Question " + (question.debate.index+1),
           description: question.question,
           tasks: question.tasks,
@@ -5360,16 +9006,24 @@ class Step {
         break;
 
       default:
-        data.sliders.push([{
+        data.cardGroups.push([{
           name: "Goodness me, you're early! 😳",
           description: "This feature is coming soon...! 👻"
         }])
+
     }
-    this.sliders = data.sliders.map(function(cards){
-      if(!cards.nextStep){
-        cards.nextStep = params.next;
+    this.cardGroups = data.cardGroups.map(function(cards){
+      cards.forEach(function(card, i) {
+        if(!cards[i].nextStep){
+          cards[i].nextStep = params.next;
+        }
+        cards[i].type = cards[i].type || params.name;
+      });
+      if (cards.constructor !== Array || cards.length == 1) {
+        return ([new Card(cards[0])]);
+      } else {
+        return (new CardGroup({cards:cards,nextStep:params.next}));
       }
-      return (new CardSlider({cards:cards,nextStep:params.next,type: params.name}));
     })
 
     this.headers = [];
@@ -5388,25 +9042,26 @@ class Step {
   }
 
   onload() {
-    if (this.step.label == 'Party stories') {
-      $('div.body').addClass('backColor');
-    } else {
-      $('div.body').removeClass('backColor');
-    }
+    const self = this;
+    // todo: this might not be 100% stable, we should consider moving it
+    setTimeout(function(){
+      designers.onStepLoad();
+      designers.adaptLayout();
+    })
+    designers.uniqueStepLayout(self.step);
   }
 
   render() {
-    // igor: apply function: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+    const self = this;
     return h("section.step",
-      h('p.error', this.error ? 'Sorry, we didn\'t recognise that postcode!' : ''),
-      h.apply(null,
-        ["div.cards"].concat(this.headers).concat(this.sliders)
-      )
+      (self.error?h('p.error', self.error):null),
+      h("div.cards",self.headers,self.cardGroups)
     )
   }
 }
 
-class CardSlider {
+class CardGroup {
+
   constructor(data) {
     this.data = data;
   }
@@ -5414,19 +9069,16 @@ class CardSlider {
   render() {
     const self = this;
     const cards = self.data.cards.map(function(card){
-      card.nextStep = self.data.nextStep;
-      card.type = self.data.type;
       return (new Card(card));
     })
 
-    return h('div.card-carousel.layer',
+    return h('.card-carousel.layer',
       h('div',
-        h.apply(null,
-          ["div.slick-container",{role: "listbox"}].concat(cards)
-        )
+        h("div.slick-container",{role: "listbox"},cards)
       )
     )
   }
+
 }
 
 class Card {
@@ -5436,315 +9088,117 @@ class Card {
   }
 
   render() {
-    // igor: this doesn't seem right as CardTemplates should never be modified
-    // igor: to refactor
-    delete CardTemplates.card[0].content[0].content[1].template;
-    CardTemplates.card[0].content[0].content[1].content = this.cardContent;
-    return getCardDom(this.data, CardTemplates.card)[0];
-
-    // return h('div.card',
-    //   h('div.card-visible',
-    //     h('div.close'),
-    //     this.cardContent,
-    //     h('a.card-icon.external', {'href': 'http://api.explaain.com/Detail/5893a4f189218d1200c75e51'},
-    //       h('img', {'src': 'http://app.explaain.com/card-logo.png'})
-    //     )
-    //   )
-    // )
+    // todo: something is not right here...
+    delete CardTemplates.card.content[0].content[1].template;
+    CardTemplates.card.content[0].content[1].content = this.cardContent;
+    return helpers.assembleCards(this.data, CardTemplates.card);
   }
 }
 
-// igor: local "loading" didn't work because after onclick it triggers render() immediately and... redefines loading to "false" :)
-// igor: a better way to go is to have a global user state as "isWaiting", that should make sense!
-
 class CardContent {
+
   constructor(data) {
     this.data = data;
   }
 
   render() {
     const self = this;
-    switch (this.data.type) {
+    const data = self.data;
+
+    switch (data.type) {
+
       case 'postcode':
-        var data = this.data; //Necessary??
+        data.isWaiting = model.user.isWaiting === "postcode-input";
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
-          $(e.srcElement).html('<img class="loading showing" src="/img/loading.gif">');
-          model.user.isWaiting = true;
+          model.user.isWaiting = "postcode-input";
+          self.refresh();
           getResults().then(function(){
+            delete model.user.isWaiting;
             routes.step({ name: data.nextStep, type: data.type }).push();
           });
           return false;
         }
-        console.log(CardTemplates['postcodeInput'])
-        console.log(data)
-        return h('div', getCardDom(data, CardTemplates['postcodeInput']));
-        // return h('.content',
-        //   h('h2', this.data.name),
-        //   h('div.body-content',
-        //     h('form.postcode-form',
-        //       {
-        //         'class': { 'hide': model.user.isWaiting },
-        //         'onsubmit': function(e) {
-        //           e.stopPropagation();
-        //           model.user.isWaiting = true;
-        //           getResults().then(function(){
-        //             routes.step({ name: data.nextStep, type: data.type }).push();
-        //           });
-        //           return false;
-        //         }
-        //       },
-        //       h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Postcode', binding: [model.user, 'postcode'] }),
-        //       h('button.btn.btn-success', {type: "submit"}, "Go!")
-        //     ),
-        //     h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-        //     h('p', this.data.description)
-        //   )
-        // )
-        break;
-
+        return helpers.assembleCards(data, 'postcodeInput');
 
       case 'vote-worth':
-        var data = this.data;
-        return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.name),
-          h('div.body-content',
-            h('form.postcode-form',
-              {
-                'class': { 'hide': model.user.isWaiting },
-                'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  api.getPostcodeOptions(model.user.postcode).then(function(results){
-                    model.user.isWaiting = false;
-                    if (results.error) {
-                      console.log("Sorry, we didn't recognise that postcode!")
-                      routes.step({
-                        name: 'vote-worth',
-                        type: 'step',
-                        error: 'bad-postcode',
-                      }).replace();
-                    } else {
-                      model.user.resultsOptions.push(results);
-                      routes.step({
-                        name: 'vote-worth',
-                        type: 'step',
-                        next: data.nextStep,
-                        attempt: model.user.resultsOptions.length
-                      }).replace();
-                    }
-                  });
-                  return false;
-                }
-              },
-              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
-              // h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Compare")
-            ),
-            (model.user.resultsOptions.length?
-              h("div.seats",{'class': { 'hide': model.user.isWaiting }},
-                [
-                  h("div.bold",model.user.resultsOptions[model.user.resultsOptions.length-1].text.heading),
-                  h("div",model.user.resultsOptions[model.user.resultsOptions.length-1].text.subheading)
-                ].concat(model.user.resultsOptions[model.user.resultsOptions.length-1].seats.map(function(seat){
-                  return h("div.seat.column50",
-                    h("div.location.small",seat.location),
-                    h("div.versus.bold.line1em",{style: {border: "solid 1px " /*+ seat.color*/}},seat.parties.map(function(elem){return elem.name;}).join(" vs "))
-                  )
-                })).concat([
-                  /*h("p.small.line1em",
-                    h(".small","Not convinced it's worth it? 😱"),
-                    h("a.discard-card-style.small",{
-                      onclick: function(e){
-                        // do something
-                      }
-                    },"Click here for 5 reason it is >")
-                  )*/
-                  (new ShareButtons())
-                ])
-              )
-              :
-              undefined
-            ),
-            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsOptions.length }}, this.data.description)
-          ),
-          h('div.footer',
-            (
-              !model.user.resultsOptions.length?
-              [
-                h("div.bold","or go straight to register"),
-                h("p",
-                  h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                    h("button.btn.btn-primary","Register >")
-                  )
-                ),
-                h("p.small", "This link will take you to the official gov.uk website")
-              ]
-              :
-              [
-                h(".column50",
-                  h("p",
-                    routes.root().a({"class":"discard-card-style"},
-                      h("button.btn.btn-success","Learn more")
-                    )
-                  ),
-                  h("p.small",
-                    h("br"),
-                    h("br")
-                  )
-                ),
-                h(".column50",
-                  h("div.big.bold","Go and register!"),
-                  h("p",
-                    h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                      h("button.btn.btn-primary","Register >")
-                    )
-                  ),
-                  h("p.small", "This link will take you to the official gov.uk website")
-                )
-              ]
-            )
-          )
-        )
-        break;
+        data.isWaiting = model.user.isWaiting === "vote-worth";
+        data.postcodeBinding = [model.user, 'postcode'];
+        if(model.user.resultsOptions.length){
+          const latestResults = model.user.resultsOptions[model.user.resultsOptions.length-1];
+          data.constituencyResults = dataProcessor.processConstituencySeats(latestResults);
+        }
+        data.postcodeSubmit = function(e) {
+          e.stopPropagation();
+          model.user.isWaiting = "vote-worth";
+          self.refresh();
+          api.getPostcodeOptions(model.user.postcode).then(function(results){
+            model.user.isWaiting = false;
+            if (results.error) {
+              helpers.throwError("Sorry, we didn't recognise that postcode!")
+            } else {
+              model.user.resultsOptions.push(results);
+            }
+            self.refresh();
+          });
+          return false;
+        }
+        return helpers.assembleCards(data, 'voteWorth');
 
       case 'postcode-compare':
-        var data = this.data;
-        //return h('div', getCardDom(data, CardTemplates['postcodeCompare']));
-        return h('.content',
-          h('h2', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.name),
-          h('div.body-content',
-            h('form.postcode-form',
+        data.isWaiting = model.user.isWaiting === "postcode-compare";
+        data.postcodeBinding = [model.user, 'postcode'];
+        data.postcodeUniBinding = [model.user, 'postcode_uni'];
+        if(model.user.resultsCompare.length){
+          const latestResults = model.user.resultsCompare[model.user.resultsCompare.length-1];
+          data.constituencyResults = dataProcessor.processConstituencySeats(latestResults);
+        }
+        data.onLearnMore = function(e){
+          e.stopPropagation();
+          routes.root().push();
+        }
+        data.postcodeSubmit = function(e){
+          e.stopPropagation();
+          model.user.isWaiting = "postcode-compare";
+          api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
+            delete model.user.isWaiting;
+            var shareButtonCard = [
               {
-                'class': { 'hide': model.user.isWaiting },
-                'onsubmit': function(e) {
-                  e.stopPropagation();
-                  model.user.isWaiting = true;
-                  api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
-                    if (results.error) {
-                      console.log("Sorry, we didn't recognise that postcode!")
-                      routes.step({
-                        name: 'postcode-compare',
-                        type: 'step',
-                        error: 'bad-postcode',
-                      }).replace();
-                    } else {
-                      model.user.isWaiting = false;
-                      model.user.resultsCompare.push(results);
-                      routes.step({
-                        name: 'postcode-compare',
-                        type: 'step',
-                        next: data.nextStep,
-                        attempt: model.user.resultsCompare.length
-                      }).replace();
-                    }
-                  });
-                  return false;
-                }
-              },
-              h('input.form-control', { autofocus: true, type: "text", 'name': 'postcode', 'placeholder': 'Home Postcode', binding: [model.user, 'postcode'] }),
-              h('input.form-control', { type: "text", 'name': 'postcode-uni', 'placeholder': 'Uni Postcode', binding: [model.user, 'postcode_uni'] }),
-              h('button.btn.btn-success', {type: "submit"}, "Compare")
-            ),
-            (model.user.resultsCompare.length?
-              h("div.seats",{'class': { 'hide': model.user.isWaiting }},
-                [
-                  h("div.bold",model.user.resultsCompare[model.user.resultsCompare.length-1].text.heading),
-                  h("div",model.user.resultsCompare[model.user.resultsCompare.length-1].text.subheading)
-                ].concat(model.user.resultsCompare[model.user.resultsCompare.length-1].seats.map(function(seat){
-                  return h("div.seat.column50",
-                    h("div.location.small",seat.location),
-                    h("div.versus.bold.line1em",{style: {border: "solid 1px " /*+ seat.color*/}},seat.parties.map(function(elem){return elem.name;}).join(" vs "))
-                  )
-                })).concat([
-                  /*h("p.small.line1em",
-                    h(".small","Not convinced it's worth it? 😱"),
-                    h("a.discard-card-style.small",{
-                      onclick: function(e){
-                        // do something
-                      }
-                    },"Click here for 5 reason it is >")
-                  )*/
-                  (new ShareButtons())
-                ])
-              )
-              :
-              undefined
-            ),
-            h('img.loading', { 'src': '/img/loading.gif', 'class': { 'showing': model.user.isWaiting } }),
-            h('p', { 'class': {'hide': model.user.resultsCompare.length }}, this.data.description)
-          ),
-          h('div.footer',
-            (
-              !model.user.resultsCompare.length?
-              [
-                h("div.bold","or go straight to register"),
-                h("p",
-                  h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                    h("button.btn.btn-primary","Register >")
-                  )
-                ),
-                h("p.small", "This link will take you to the official gov.uk website")
-              ]
-              :
-              [
-                h(".column50",
-                  h("p",
-                    routes.root().a({"class":"discard-card-style"},
-                      h("button.btn.btn-success","Learn more")
-                    )
-                  ),
-                  h("p.small",
-                    h("br"),
-                    h("br")
-                  )
-                ),
-                h(".column50",
-                  h("div.big.bold","Go and register!"),
-                  h("p",
-                    h("a.discard-card-style",{href:"https://www.gov.uk/register-to-vote",target:"_blank"},
-                      h("button.btn.btn-primary","Register >")
-                    )
-                  ),
-                  h("p.small", "This link will take you to the official gov.uk website")
-                )
-              ]
-            )
-          )
-        )
-        break;
-
-      case 'result':
-        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
-        // igor: todo: this is very ugly, so needs to be refactored asap
-        $("h1").addClass("hide");
-        window.setTimeout(function(){
-          $("h1").removeClass("hide");
-        })
-        $(".slick-container").addClass("hide")
-        window.setTimeout(function(){
-          $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-            dots: false,
-            infinite: false,
-            adaptiveHeight: true,
-            centerMode: true,
-            centerPadding: '15px',
-            slidesToShow: 1,
-            arrows: false
+                name: "Spread the #GE2017 ❤️",
+                type: "share",
+                button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+                buttonClass1: "btn-facebook",
+                buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+                target1: "_blank",
+                button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+                buttonClass2: "btn-twitter",
+                buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+                target2: "_blank"
+              }
+            ];
+            if (results.error) {
+              helpers.throwError("Sorry, we didn't recognise that postcode!")
+            } else {
+              model.user.resultsCompare.push(results);
+            }
+            self.refresh();
           });
-        },100)
-        const content = markdownToHtml(this.data.content);
+          return false;
+        }
+        return helpers.assembleCards(data, 'postcodeCompare');
+
+      case 'result': // todo: refactor
+        const description = helpers.markdownToHtml(data.description);
         return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.header),
+          h('img', {'src': data.image, 'class': 'party-logo'}),
+          h('h2', data.name),
           h('div.body-content',
-            h.rawHtml('p', content)
+            h.rawHtml('p', description)
           ),
-          (this.data.footer?
+          (data.footer?
             h('div.footer',
-              this.data.footer.map(function(elem){
+              data.footer.map(function(elem){
                 switch (elem) {
                   case "ShareButtons":
                     return (new ShareButtons())
@@ -5764,116 +9218,52 @@ class CardContent {
         break;
 
       case 'story':
-        // igor: todo: this will be removed as this was developed especially for demo on 25 Apr 2017, so no refactoring needed here
-        // igor: todo: this is very ugly, so needs to be refactored asap
-        $("h1").addClass("hide");
-        window.setTimeout(function(){
-          $("h1").removeClass("hide");
-        })
-        $(".slick-container").addClass("hide")
-        window.setTimeout(function(){
-          var slickContainer = $(".slick-container:not(.slick-initialized)").removeClass("hide").slick({
-            dots: false,
-            infinite: false,
-            adaptiveHeight: true,
-            centerMode: true,
-            centerPadding: '15px',
-            slidesToShow: 1,
-            arrows: false
-          });
-          slickContainer.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
-            $('div.body').addClass('backColor').css('background-color', allParties.filter(function(party) {
-              return party.key == partyStories[nextSlide].party;
-            })[0].colorLight);
-          });
-        },100)
-        return h('div.content.text-left',
-          h('img', {'src': this.data.image, 'class': 'party-logo'}),
-          h('h2', this.data.header),
-          h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.content))
-          ),
-          (this.data.footer?
-            h('div.footer',
-              this.data.footer.map(function(elem){
-                switch (elem) {
-                  case "ShareButtons":
-                    return (new ShareButtons())
-                    break;
-                  case "BackToDashboard":
-                    return (new BackToDashboard())
-                    break;
-                  default:
-                    return undefined;
-                }
-              })
-            )
-            :
-            undefined
-          )
-        )
-        break;
+        data.name = data.header;
+        data.description = data.content;
+        return helpers.assembleCards(data, 'Organization');
 
       case 'question':
-        const tasksDom = [];
-        this.data.tasks.forEach(function(name) {
+        data.answers = data.tasks.map(function(name) {
           const task = model.tasks[name];
-          task.dataUpdates = [{data: ("user.opinions.issues."+self.data.issueKey+".debates."+self.data.debateKey+".opinion"), value: task.goto.opinion}]
-          tasksDom.push(
-            routes[(self.data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
-              name: self.data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:self.data.final),
-              task: name,
-              nextQuestion: self.data.nextQuestion,
-              final: self.data.final,
-              next: self.data.nextStep?self.data.nextStep:task.goto.next
-            }).a( { "class": "task" + (task.subtype?" "+task.subtype:"")},
-              h('h5', task.label)
-            )
-          );
+          return {
+            "class": "task" + (task.subtype?" "+task.subtype:""),
+            label: task.label,
+            onclick: function(){
+              helpers.updateData([{data: ("user.opinions.issues."+data.issueKey+".debates."+data.debateKey+".opinion"), value: task.goto.opinion}]);
+              routes[(data.nextQuestion&&task.goto.name==="question"?"step":task.goto.type)]({
+                name: data.nextQuestion?task.goto.name:(task.goto.name!=="question"?task.goto.name:data.final),
+                task: name,
+                nextQuestion: data.nextQuestion,
+                final: data.final,
+                next: data.nextStep?data.nextStep:task.goto.next
+              }).push();
+            }
+          }
         });
-        return h('.content',
-          h('h2', this.data.name),
-          h('div.body-content',
-            h.rawHtml('p', markdownToHtml(this.data.description))
-          ),
-          h('section.questions',tasksDom)
-        )
+        return helpers.assembleCards(data, 'question');
 
       default:
-        return h('.content',
-          h('h2', this.data.name),
-          h('div.body-content',
-            h('p', this.data.description)
-          )
-        )
-    }
-    if (this.data.type == 'postcode') {
+        console.log('Defaulting');
+        return helpers.assembleCards(data, data.type);
 
-    } else {
-      return h('.content',
-        h('h2', this.data.name),
-        h('div.body-content',
-          h('p', this.data.description)
-        )
-      )
     }
+
   }
 
 }
 
+// todo: this will not be needed soon
 class ShareButtons {
   render() {
-    return h("div.share-buttons",
-      h("p","Share this to help friends and family #GE2017"),
-      h("a.discard-card-style",{target:"_blank",href: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button"},
-        h("button.btn.btn-facebook","Facebook")
-      ),
-      h("a.discard-card-style",{target:"_blank",href: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote" + (model.user.constituency ? " in %23" + model.user.constituency.name.replace(/\s/g, '') : "") + ". How are you using your vote? ge2017.com"},
-        h("button.btn.btn-twitter","Twitter")
-      )
-    );
+    const data = {
+      name: "Spread the #GE2017 ❤️",
+      facebookShareHref: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button",
+      twitterShareHref: "https://twitter.com/intent/tweet?text="+"I know how to use my %23GE2017 vote" + (model.user.constituency ? " in %23" + model.user.constituency.name.replace(/\s/g, '') : "") + ". How are you using your vote? ge2017.com",
+    };
+    return helpers.assembleCards(data, 'shareButtons');
   }
 }
+
 
 class BackToDashboard {
   render() {
@@ -5886,407 +9276,95 @@ class BackToDashboard {
   }
 }
 
-updateData = function(dataUpdates) {
-  dataUpdates.forEach(function(update) {
-    updateModel(update.data, update.value, update.action);
-  });
-}
-
-// igor: we now need different actions for tasks, the one of them is "toggle"
-// igor: "toggle" works like a checkbox
-// igor: by default it just sets the value
-function updateModel(path, value, action) {
-    var schema = model;  // a moving reference to internal objects within model
-    var pList = path.split('.');
-    var len = pList.length;
-    for(var i = 0; i < len-1; i++) {
-        var elem = pList[i];
-        if( !schema[elem] ) schema[elem] = {}
-        schema = schema[elem];
-    }
-
-    switch(action){
-      case "toggle":
-        if(schema[pList[len-1]]){
-          delete schema[pList[len-1]];
-        } else {
-          schema[pList[len-1]] = value;
-        }
-        break;
-      default:
-        schema[pList[len-1]] = value;
-    }
-
-}
-
-function getModel(path){
-  return getObjectPathProperty(model, path);  // a moving reference to internal objects within model
-}
-
-function getObjectPathProperty(object, path){
-  var schema = object;  // a moving reference to internal objects within the object
-  var pList = path.split('.');
-  var len = pList.length;
-  for(var i = 0; i < len-1; i++) {
-      var elem = pList[i];
-      if( !schema[elem] ) schema[elem] = {}
-      schema = schema[elem];
-  }
-  return schema[pList[len-1]];
-}
-
+// todo: should this be in APIService?
 function getResults(){
-  return new Promise(function(resolve,reject){
-    api.getResults(model.user.postcode, model.user)
-      .then(function(results) {
-        updateObject(model.user, results.data.user);
-        model.user.isWaiting = false;
-        // igor: We have to refactor results a bit to make them reusable in cards
-        // igor: change this content to create cards based on the data you retrieve
-        // igor: in content you can use your markup language [...](...) or simple HTML, both will work just fine
-        var yourParty = "",
-            yourArea = "",
-            yourFooter = "ShareButtons",
-            extraCards;
-        if (!results.parties.length) {
-          results.parties[0] = {
-            name: "Hold up!",
-            description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
-          }
-          yourFooter = "BackToDashboard";
-          extraCards = [];
-        } else {
-          results.parties[0].matches.plus.forEach(function(match) {
-            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
-            + match.description + '<br>';
-          })
-          results.parties[0].chances.plus.forEach(function(chance) {
-            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
-            + chance.description + '<br>';
-          })
-          extraCards = [
-            {
-              header: "You and your matched party",
-              content: yourParty
-            },
-            {
-              header: "You and your area",
-              content: yourArea
-            }
-          ];
+  var deferred = q.defer();
+  api.getResults(model.user.postcode, model.user)
+    .then(function(results) {
+      helpers.updateObject(model.user, results.data.user);
+      var yourParty = "",
+          yourArea = "",
+          yourFooter = "ShareButtons",
+          extraCards;
+      if (!results.parties.length) {
+        results.parties[0] = {
+          name: "Hold up!",
+          description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
         }
-        model.user.results.push([
-          [
-            {
-              image: results.parties[0] && results.parties[0].image && ("/img/party-logos/" + results.parties[0].image) || '/img/party-logos/party.jpg',
-              header: results.parties[0] && results.parties[0].name,
-              content: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
-              footer: [
-                yourFooter
-              ]
-            }
-          ],
-          extraCards
-        ]);
-        resolve();
-      }
-    )
-  })
-}
-
-function getResultsCompare(){
-  return new Promise(function(resolve,reject){
-    // igor: todo: change this to real API call instead of set timeout!
-    setTimeout(function(){
-      model.user.isWaiting = false;
-      model.user.resultsCompare.push({
-        seats: [
+        yourFooter = "BackToDashboard";
+        shareButtonCard = [];
+        extraCards = [];
+      } else {
+        results.parties[0].matches.plus.forEach(function(match) {
+          yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+          + match.description + '<br>';
+        });
+        results.parties[0].chances.plus.forEach(function(chance) {
+          yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+          + chance.description + '<br>';
+        });
+        shareButtonCard = [
           {
-            location: "Eastborne",
-            parties: ["Conservative","Lib Dem"],
-            color: "#000099"
+            name: "Spread the #GE2017 ❤️",
+            type: "share",
+            button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+            buttonClass1: "btn-facebook",
+            buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+            target1: "_blank",
+            button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+            buttonClass2: "btn-twitter",
+            buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+            target2: "_blank"
+          }
+        ];
+        extraCards = [
+          {
+            name: "You and your matched party",
+            description: yourParty
           },
           {
-            location: "Bristol South",
-            parties: ["Labour","Conservative"],
-            color: "#990000"
+            name: "You and your area",
+            description: yourArea
           }
-        ]
-      });
-      resolve();
-    },1000)
-  })
-};
-
-var updateObject = function(obj, objUpdates) {
-  var objKeys = Object.keys(objUpdates);
-  objKeys.forEach(function(key) {
-    obj[key] = objUpdates[key];
-  })
-  return obj;
-}
-
-var markdownToHtml = function(text) {
-  return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g,"<a class='internal' tabindex='-1' href='$2'>$1</a>");
-}
-
-
-
-var getCardDom = function(data, template) {
-  console.log(template)
-  data.type = data.type || data["@type"].split('/')[data["@type"].split('/').length-1];
-  var dom = [];
-  template.forEach(function(element) {
-    var content,
-        attr = {};
-    if (element.template)
-      content = getCardDom(data, CardTemplates[element.template.var ? getObjectPathProperty(data, element.template.var) : element.template])
-    else if (!element.content)
-      content = '';
-    else if (element.content.constructor === Array)
-      content = getCardDom(data, element.content);
-    else if (element.content.var)
-      content = getObjectPathProperty(data, element.content.var) || ''; //'var' MUST use dot notation, not []
-    else
-      content = element.default ? element.default : element.content;
-
-    if (element.attr) {
-      var attrKeys = Object.keys(element.attr);
-      attrKeys.forEach(function(attrKey) {
-        attr[attrKey] = element.attr[attrKey].var ? getObjectPathProperty(data, element.attr[attrKey].var) :  element.attr[attrKey]; //'var' MUST use dot notation, not []
-      })
+        ];
+      }
+      model.user.results.push([
+        [
+          {
+            image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
+            name: results.parties[0] && results.parties[0].name,
+            description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
+            footer: [
+              yourFooter
+            ],
+            type: "Organization" // Temporary
+          }
+        ],
+        shareButtonCard,
+        extraCards
+      ]);
+      setTimeout(function(){
+        deferred.resolve();
+      },500);
     }
-    dom.push(h(element.dom, attr, content));
-  });
-  return dom;
+  )
+  return deferred.promise;
 }
 
-const loadTemplates = function(templateUrl){
-  return new Promise(function(resolve,reject){
-    http.get(templateUrl)
-    .then(function (res) {
-      resolve(res.body);
-    });
-  });
-}
-
-const _temporaryTemplates = function(){
-  var tempData = {
-    name: "Barack Obama",
-    description: "Barack Hussein Obama II is the 44th and current President of the United States. He is the first African American to hold the office. In January 2005, Obama was sworn in as a U.S.",
-    "@id": "http://localhost:5002/Person/58d8f23994a3d81e88797d09",
-    "@type": "http://localhost:5002/Person"
+const templatesUrl = '//explaain-api.herokuapp.com/templates';
+helpers.loadTemplates(templatesUrl).then(function(templates){
+  for(var key in templates){
+    CardTemplates[key] = templates[key];
   };
-  CardTemplates.card = [
-    {
-      "dom": "div.card",
-      "attr": {
-        "data-uri": {
-          "var": "@id",
-        },
-        "style": "height: auto"
-      },
-      "content": [
-        {
-          "dom": "div.card-visible",
-          "content": [
-            {
-              "dom": "div.close",
-              "content": [
-                {
-                  "dom": "i.fa.fa-times",
-                  "attr": {
-                    "data-hidden": "true"
-                  }
-                }
-              ]
-            },
-            {
-              "dom": "div.content",
-              "attr": {
-                "class": {
-                  "var": "@type"
-                }
-              },
-              "template": {
-                "var": "type"
-              }
-            },
-            {
-              "dom": "a.card-icon",
-              "attr": {
-                "target": "_blank",
-                "tabindex": "-1"
-              },
-              "content": [
-                {
-                  "dom": "img",
-                  "attr": {
-                    "src": "http://app.explaain.com/card-logo.png"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "button.edit-button",
-          "attr": {
-            "tabindex": "-1"
-          },
-          "content": [
-            {
-              "dom": "i.fa.fa-pencil",
-              "attr": {
-                "aria-hidden": "true"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ];
-  CardTemplates["Person"] = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name"
-      }
-    },
-    {
-      "dom": "div.card-image",
-      "content": [{
-        "dom": "img",
-        "attr": {"src": {
-          "var": "image"
-        }}
-      }]
-    },
-    {
-      "dom": "div.body-content",
-      "content": {
-        "var": "description",
-        "markdown": true
-      }
-    }
-  ];
-  CardTemplates.postcodeCompare = [
-    {
-      "dom": "h2",
-      "content": {
-        "var": "name",
-        "default": "Please enter your postcode"
-      }
-    },
-    {
-      "dom": "div.body-content",
-      "content": [
-        {
-          "dom": "form.postcode-form",
-          "attr": {
-            "onsubmit": {
-              "var": "postcodeSubmit"
-            }
-          },
-          "content": [
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Home Postcode",
-                "binding": {
-                  "var": "postcodeBinding"
-                }
-              }
-            },
-            {
-              "dom": "input.form-control",
-              "attr": {
-                "autofocus": "true",
-                "type": "text",
-                "name": "postcode",
-                "placeholder": "Uni Postcode",
-                "binding": {
-                  "var": "postcodeUniBinding"
-                }
-              }
-            },
-            {
-              "dom": "button.btn.btn-success",
-              "attr": {
-                "type": "submit"
-              },
-              "content": "Compare"
-            }
-          ]
-        },
-        {
-          "dom": "h3",
-          "content": {
-            "var": "subheading"
-          }
-        },
-        {
-          "dom": "p",
-          "content": {
-            "var": "description",
-            "markdown": true
-          }
-        }
-      ]
-    },
-
-  ]
-
-  CardTemplates.voteNow = [
-    {
-      "dom": ".footer",
-      "content": [
-        {
-          "dom": ".bold",
-          "content": "or go straight to register"
-        },
-        {
-          "dom": "p",
-          "content": [
-            {
-              "dom": "a.discard-card-style",
-              "attr": {
-                "href": "https://www.gov.uk/register-to-vote",
-                "target":"_blank",
-              },
-              "content": [
-                {
-                  "dom": "button.btn.btn-primary",
-                  "content": "Register >"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "p.small",
-          "content": "This link will take you to the official gov.uk website"
-        }
-      ]
-    }
-  ]
-
-  console.log(tempData);
-  console.log(CardTemplates.card);
-  var tempDom = getCardDom(tempData, CardTemplates.card);
-  console.log(tempDom);
-  console.log(CardTemplates)
-}
-
-
-
-loadTemplates('//explaain-api.herokuapp.com/templates').then(function(_templates){
-  CardTemplates = _templates;
-  _temporaryTemplates(); // todo: this is needed for development purposes, move templated to backend once tested
+  //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
+    require("../development/templates.js")(CardTemplates);
+    require("../development/model.js")(model);
+  //}
+  // todo: move this to development? Is this needed for production?
+  require("../development/generatePartyStances.js")(model,partyStances)();
   hyperdom.append(document.body, new App());
 });
 
-},{"../models/model":1,"../services/APIService":65,"httpism":6,"hyperdom":20,"hyperdom-router":14}]},{},[66]);
+designers.onWindowResize();
+
+},{"../development/generatePartyStances.js":1,"../development/model.js":2,"../development/templates.js":3,"../includes/dataprocessor":4,"../includes/designers":5,"../includes/helpers":6,"../models/model":7,"../services/APIService":74,"httpism":13,"hyperdom":27,"hyperdom-router":21,"hyperdom/windowEvents":43}]},{},[75]);

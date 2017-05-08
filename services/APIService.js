@@ -1,4 +1,5 @@
 var http = require('httpism')
+const q = require("q")
 
 function APIService() {
 
@@ -31,6 +32,8 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
   return delay(500).then(function(){
     return getContenders(postcode)
     .then(function(results) {
+      console.log('contenders')
+      console.log(results)
       if (results.error) {
         return results;
       } else {
@@ -71,29 +74,35 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       }
       data.seats.push(results);
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
+        data.numberOfSwingSeats = "2",
         data.text = {
-          heading: "Looks like you're spoilt for choice!",
+          heading: "Firstly, it looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
+        data.numberOfSwingSeats = "0",
         data.text = {
-          heading: "Looks like there's not much choice!",
+          heading: "Firstly, it looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
+        data.numberOfSwingSeats = "1",
         data.text = {
-          heading: "Looks like your vote is worth more in one place than the other!",
+          heading: "Firstly, it looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
-      }
+      };
+      data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at home or in ' + (data.seats[1].location ? ' in %23' + data.seats[1].location.replace(/\s/g, '') : '') + ' in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)
       return data;
     })
   })
 }
 
-getContenders = function(postcode) {
+const getContenders = function(postcode) {
   var user = {};
+  var data = {};
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -330,7 +339,7 @@ APIService.prototype.getPartyChances = function(data) {
   })[0].name;
 
   allParties.forEach(function(party) {
-    partyKey = party.key;
+    var partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
@@ -455,9 +464,9 @@ var loadGe2015Results = APIService.prototype.loadGe2015Results;
 // igor: a simulation of delay for http requests :)
 
 function delay(t) {
-  return new Promise(function(resolve) {
-    setTimeout(resolve, t)
-  });
+  var deferred = q.defer();
+  setTimeout(deferred.resolve, t);
+  return deferred.promise;
 }
 
 function createObjectProps(globalObject, props) {
