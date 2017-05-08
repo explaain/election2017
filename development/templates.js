@@ -191,10 +191,10 @@ module.exports = function(CardTemplates){
   };
 
   CardTemplates.postcodeCompare = {
-    "dom": "div.content.postcode-compare",
+    "dom": "div.content.postcode-compare.wow",
     "attr": {
       "class": {
-        "var": "constituencyResults.constituencyClass"
+        "var": "constituencyResults.resultsClass"
       }
     },
     "content": [
@@ -818,7 +818,15 @@ module.exports = function(CardTemplates){
             {
               "dom": "button.btn.btn-facebook",
               "icon": "fa-facebook",
-              "content": "Facebook"
+              "content": [
+                {
+                  "dom": "i.fa.fa-facebook"
+                },
+                {
+                  "dom": "span",
+                  "content": "Share on Facebook"
+                }
+              ]
             }
           ]
         },
@@ -826,13 +834,23 @@ module.exports = function(CardTemplates){
           "dom": "a.discard-card-style",
           "attr": {
             "target":"_blank",
-            "href": "twitterShareHref"
+            "href": {
+              "var": "twitteShareHref"
+            }
           },
           "content": [
             {
               "dom": "button.btn.btn-twitter",
               "icon": "fa-facebook",
-              "content": "Twitter"
+              "content": [
+                {
+                  "dom": "i.fa.fa-twitter"
+                },
+                {
+                  "dom": "span",
+                  "content": "Share on Twitter"
+                }
+              ]
             }
           ]
         }

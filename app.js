@@ -16,9 +16,11 @@ app.get('/', function(req, res, next) {
 app.get('/students/', function(req, res, next) {
   res.render('../express/index', { standalone: true, embed: false, step: 'postcode-compare' });
 });
+//This doesn't work yet - redirect???
 app.get('/student/', function(req, res, next) {
   res.render('../express/index', { standalone: true, embed: false, step: req.params.step });
 });
+
 app.get('/embed/:step', function(req, res, next) {
   res.render('../express/index', { standalone: false, embed: true, step: req.params.step });
 });
