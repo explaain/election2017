@@ -1213,6 +1213,8 @@ module.exports = class Helpers {
       return content;
     } else if (element.content && element.content.markdown) {
       return self.h.rawHtml(element.dom, attr, self.markdownToHtml(content));
+    } else if (element.content && element.content.html) {
+      return self.h.rawHtml(element.dom, attr, content);
     } else {
       return self.h(element.dom, attr, content);
     }
