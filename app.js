@@ -50,10 +50,10 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res, next) {
-  res.render('/index', { standalone: false, embed: false,  step: '' });
+  res.render('index', { standalone: false, embed: false,  step: '' });
 });
 app.get('/students/', function(req, res, next) {
-  res.render('/students', { standalone: true, embed: false, step: 'postcode-compare' });
+  res.render('index', { standalone: true, embed: false, step: 'postcode-compare' });
 });
 //This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
 app.get('/student/', function(req, res, next) {
@@ -62,7 +62,7 @@ app.get('/student/', function(req, res, next) {
 });
 
 app.get('/embed/:step', function(req, res, next) {
-  res.render('/index', { standalone: false, embed: true, step: req.params.step });
+  res.render('index', { standalone: false, embed: true, step: req.params.step });
 });
 
 
