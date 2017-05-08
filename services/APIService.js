@@ -73,16 +73,19 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       }
       data.seats.push(results);
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
+        data.numberOfSwingSeats = "2",
         data.text = {
           heading: "Looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
+        data.numberOfSwingSeats = "0",
         data.text = {
           heading: "Looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
+        data.numberOfSwingSeats = "1",
         data.text = {
           heading: "Looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."

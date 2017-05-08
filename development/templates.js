@@ -191,7 +191,12 @@ module.exports = function(CardTemplates){
   };
 
   CardTemplates.postcodeCompare = {
-    "dom": "div",
+    "dom": "div.content.postcode-compare",
+    "attr": {
+      "class": {
+        "var": "constituencyResults"
+      }
+    },
     "content": [
       { "template": "postcodeFormHeader" },
       {
@@ -248,26 +253,32 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": "div.body-content",
-        "condition": "!isWaiting",
+        "condition": "!constituencyResults",
         "content": [
           {
             "dom": "h3",
-            "condition": "!constituencyResults",
+            "condition": "!isWaiting",
             "content": {
               "var": "subheading"
             }
           },
           {
             "dom": "p",
-            "condition": "!constituencyResults",
+            "condition": "!isWaiting",
             "content": {
               "var": "description",
               "markdown": true
             }
-          },
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content.results",
+        "condition": "constituencyResults",
+        "content": [
           {
             "dom": "div",
-            "condition": "constituencyResults",
+            "condition": "!isWaiting",
             "template": "constituencyResults"
           }
         ]
@@ -644,6 +655,11 @@ module.exports = function(CardTemplates){
   CardTemplates.constituencyResults =
     {
       "dom": ".seats",
+      "attr": {
+        "class": {
+          "var": "constituencyResults.numberOfSwingSeats"
+        }
+      },
       "content": [
         {
           "dom": "div.bold",

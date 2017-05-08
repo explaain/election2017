@@ -238,7 +238,12 @@ module.exports = function(CardTemplates){
   };
 
   CardTemplates.postcodeCompare = {
-    "dom": "div",
+    "dom": "div.content.postcode-compare",
+    "attr": {
+      "class": {
+        "var": "constituencyResults"
+      }
+    },
     "content": [
       { "template": "postcodeFormHeader" },
       {
@@ -295,26 +300,32 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": "div.body-content",
-        "condition": "!isWaiting",
+        "condition": "!constituencyResults",
         "content": [
           {
             "dom": "h3",
-            "condition": "!constituencyResults",
+            "condition": "!isWaiting",
             "content": {
               "var": "subheading"
             }
           },
           {
             "dom": "p",
-            "condition": "!constituencyResults",
+            "condition": "!isWaiting",
             "content": {
               "var": "description",
               "markdown": true
             }
-          },
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content.results",
+        "condition": "constituencyResults",
+        "content": [
           {
             "dom": "div",
-            "condition": "constituencyResults",
+            "condition": "!isWaiting",
             "template": "constituencyResults"
           }
         ]
@@ -691,6 +702,11 @@ module.exports = function(CardTemplates){
   CardTemplates.constituencyResults =
     {
       "dom": ".seats",
+      "attr": {
+        "class": {
+          "var": "constituencyResults.numberOfSwingSeats"
+        }
+      },
       "content": [
         {
           "dom": "div.bold",
@@ -5980,16 +5996,19 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       }
       data.seats.push(results);
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
+        data.numberOfSwingSeats = "2",
         data.text = {
           heading: "Looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
+        data.numberOfSwingSeats = "0",
         data.text = {
           heading: "Looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
+        data.numberOfSwingSeats = "1",
         data.text = {
           heading: "Looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."

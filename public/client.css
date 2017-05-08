@@ -106,10 +106,9 @@ img.party-logo {
 
 img.loading {
   display: none;
-  height:40px;
+  height:50px;
   text-align: center;
-  margin: auto;
-  margin-top:20px;
+  margin:30px auto;
   animation-name: loading;
   animation-duration: .4s;
   opacity:0;
@@ -341,6 +340,7 @@ section:not(.wide) .card section.card-media {
 }
 .card .body-content {
   margin: auto;
+  margin-top: -25px;
 }
 .card .content h2 {
   margin: 1em 0;
@@ -652,8 +652,9 @@ section:not(.wide) .card section.card-media {
   display: inline-block;
   margin: 0px;
 }
-.card.postcode-compare .body-content {
+.body-content.results {
   border-top: 1px solid #ddd;
+  margin: auto;
 }
 .card.postcode-compare h2 {font-size: 1.4em;display: block;}
 .card.postcode-compare .body-content h3 {
