@@ -444,6 +444,20 @@ class CardContent {
           model.user.isWaiting = "postcode-compare";
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
             delete model.user.isWaiting;
+            var shareButtonCard = [
+              {
+                name: "Spread the #GE2017 ❤️",
+                type: "share",
+                button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+                buttonClass1: "btn-facebook",
+                buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+                target1: "_blank",
+                button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+                buttonClass2: "btn-twitter",
+                buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+                target2: "_blank"
+              }
+            ];
             if (results.error) {
               helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {

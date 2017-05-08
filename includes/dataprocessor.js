@@ -6,6 +6,9 @@ module.exports = class DataProcessor {
     return {
       heading: data.text.heading,
       subheading: data.text.subheading,
+      twitterShareHref: data.twitterShareHref,
+      facebookShareHref: data.facebookShareHref,
+      resultsClass: data.constituencyResults ? 'resultsLoaded' : '',
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,

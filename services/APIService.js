@@ -90,7 +90,9 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
           heading: "Firstly, it looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
-      }
+      };
+      data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at home or in ' + (data.seats[1].location ? ' in %23' + data.seats[1].location.replace(/\s/g, '') : '') + ' in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)
       return data;
     })
