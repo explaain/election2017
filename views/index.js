@@ -5,7 +5,7 @@ const
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
   http = require('httpism'),
-  q = require('hyperdom-router'),
+  q = require('q'),
   model = require('../models/model'),
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),

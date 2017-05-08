@@ -8721,7 +8721,7 @@ const
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
   http = require('httpism'),
-  q = require('hyperdom-router'),
+  q = require('q'),
   model = require('../models/model'),
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
@@ -9367,4 +9367,4 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
 
 designers.onWindowResize();
 
-},{"../development/generatePartyStances.js":1,"../development/model.js":2,"../development/templates.js":3,"../includes/dataprocessor":4,"../includes/designers":5,"../includes/helpers":6,"../models/model":7,"../services/APIService":74,"httpism":13,"hyperdom":27,"hyperdom-router":21,"hyperdom/windowEvents":43}]},{},[75]);
+},{"../development/generatePartyStances.js":1,"../development/model.js":2,"../development/templates.js":3,"../includes/dataprocessor":4,"../includes/designers":5,"../includes/helpers":6,"../models/model":7,"../services/APIService":74,"httpism":13,"hyperdom":27,"hyperdom-router":21,"hyperdom/windowEvents":43,"q":46}]},{},[75]);
