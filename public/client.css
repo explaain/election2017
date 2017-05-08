@@ -375,7 +375,7 @@ section:not(.wide) .card section.card-media {
 }
 
 .card form.postcode-form button[type="submit"] {
-  margin:-2px 2px 0 2px;
+  margin:0 2px;
 }
 
 .card form.postcode-form input[type="text"] {

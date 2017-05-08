@@ -222,7 +222,6 @@ module.exports = function(CardTemplates){
           {
             "dom": "input.form-control",
             "attr": {
-              "autofocus": "true",
               "type": "text",
               "name": "postcode",
               "placeholder": "Uni Postcode",
