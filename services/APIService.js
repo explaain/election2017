@@ -99,8 +99,9 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   })
 }
 
-getContenders = function(postcode) {
+const getContenders = function(postcode) {
   var user = {};
+  var data = {};
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -337,7 +338,7 @@ APIService.prototype.getPartyChances = function(data) {
   })[0].name;
 
   allParties.forEach(function(party) {
-    partyKey = party.key;
+    var partyKey = party.key;
     try {
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
