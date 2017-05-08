@@ -167,6 +167,7 @@ module.exports = class Helpers {
   throwError(err){
     const self = this;
     self.model.user.error = err;
+    $('html, body').animate({ scrollTop: 0}, 500);
     setTimeout(function(){
       delete self.model.user.error;
     },500);
