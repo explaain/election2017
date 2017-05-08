@@ -9,9 +9,12 @@ module.exports = class DataProcessor {
       twitterShareHref: data.twitterShareHref,
       facebookShareHref: data.facebookShareHref,
       resultsClass: 'resultsLoaded',
+      numberOfSwingSeats: 'swings-' + data.numberOfSwingSeats,
+      calculateText: "[How did we calculate this?](http://api.explaain.com/Detail/59106472116f53001109340c)",
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,
+          uniHomeLocation: seat.uniHomeLocation,
           partyString: seat.parties.map(function(party){
             return party.name;
           }).join(" vs "),

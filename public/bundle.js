@@ -158,7 +158,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "img",
                 "attr": {
-                  "src": "http://app.explaain.com/card-logo.png"
+                  "src": "//explaain-app.herokuapp.com/card-logo.png"
                 }
               }
             ]
@@ -323,6 +323,16 @@ module.exports = function(CardTemplates){
         "condition": "constituencyResults",
         "content": [
           {
+            "dom": "div.step-number.step-1",
+            "condition": "constituencyResults",
+            "content": "1"
+          },
+          {
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "First, choose your area"
+          },
+          {
             "dom": "div",
             "condition": "!isWaiting",
             "template": "constituencyResults"
@@ -337,9 +347,14 @@ module.exports = function(CardTemplates){
         "dom": "section.divider",
         "content": [
           {
+            "dom": "div.step-number.step-2",
+            "condition": "constituencyResults",
+            "content": "2"
+          },
+          {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Secondly, make your vote count 🎉"
+            "content": "Next, set it in stone 🎉"
           },
           {
             "dom": "p",
@@ -350,7 +365,7 @@ module.exports = function(CardTemplates){
             "dom": "div.layout-table",
             "content": [
               {
-                "dom": "div.column",
+                "dom": "div.column.learn-more",
                 "condition": "constituencyResults",
                 "content": [
                   {
@@ -411,12 +426,16 @@ module.exports = function(CardTemplates){
         "condition": "constituencyResults",
         "content": [
           {
+            "dom": "div.step-number.step-3",
+            "content": "3"
+          },
+          {
             "dom": "h2",
-            "content": "Thirdly, multiply your vote"
+            "content": "Finally, multiply your vote"
           },
           {
             "dom": "p",
-            "content": "Share with 10 friends and make everyone's vote count #GE2017"
+            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
           },
           {
             "template": "shareButtons",
@@ -747,6 +766,13 @@ module.exports = function(CardTemplates){
               "template": "constituency"
             }
           ]
+        },
+        {
+          "dom": "div.calculate",
+          "content":{
+             "var": "constituencyResults.calculateText",
+             "markdown": "true"
+           }
         }
       ]
     }
@@ -779,6 +805,12 @@ module.exports = function(CardTemplates){
           "content": [
             {
               "dom": "div.location",
+              "content": {
+                "var": "uniHomeLocation"
+              }
+            },
+            {
+              "dom": "div.constituency",
               "content": {
                 "var": "location"
               }
@@ -1055,9 +1087,12 @@ module.exports = class DataProcessor {
       twitterShareHref: data.twitterShareHref,
       facebookShareHref: data.facebookShareHref,
       resultsClass: 'resultsLoaded',
+      numberOfSwingSeats: 'swings-' + data.numberOfSwingSeats,
+      calculateText: "[How did we calculate this?](http://api.explaain.com/Detail/59106472116f53001109340c)",
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,
+          uniHomeLocation: seat.uniHomeLocation,
           partyString: seat.parties.map(function(party){
             return party.name;
           }).join(" vs "),
@@ -8303,22 +8338,24 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
         data.numberOfSwingSeats = "2",
         data.text = {
-          heading: "Firstly, it looks like you're spoilt for choice!",
+          heading: "Looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
         data.numberOfSwingSeats = "0",
         data.text = {
-          heading: "Firstly, it looks like there's not much choice!",
+          heading: "Looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
         data.numberOfSwingSeats = "1",
         data.text = {
-          heading: "Firstly, it looks like your vote is worth more in one place than the other!",
+          heading: "Looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
       };
+      data.seats[0].uniHomeLocation = 'Home',
+      data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
       data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at home or in ' + (data.seats[1].location ? ' in %23' + data.seats[1].location.replace(/\s/g, '') : '') + ' in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)

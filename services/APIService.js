@@ -76,22 +76,24 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
         data.numberOfSwingSeats = "2",
         data.text = {
-          heading: "Firstly, it looks like you're spoilt for choice!",
+          heading: "Looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
         data.numberOfSwingSeats = "0",
         data.text = {
-          heading: "Firstly, it looks like there's not much choice!",
+          heading: "Looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
         data.numberOfSwingSeats = "1",
         data.text = {
-          heading: "Firstly, it looks like your vote is worth more in one place than the other!",
+          heading: "Looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
       };
+      data.seats[0].uniHomeLocation = 'Home',
+      data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
       data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at home or in ' + (data.seats[1].location ? ' in %23' + data.seats[1].location.replace(/\s/g, '') : '') + ' in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)

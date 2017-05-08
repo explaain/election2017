@@ -111,7 +111,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "img",
                 "attr": {
-                  "src": "http://app.explaain.com/card-logo.png"
+                  "src": "//explaain-app.herokuapp.com/card-logo.png"
                 }
               }
             ]
@@ -276,6 +276,16 @@ module.exports = function(CardTemplates){
         "condition": "constituencyResults",
         "content": [
           {
+            "dom": "div.step-number.step-1",
+            "condition": "constituencyResults",
+            "content": "1"
+          },
+          {
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "First, choose your area"
+          },
+          {
             "dom": "div",
             "condition": "!isWaiting",
             "template": "constituencyResults"
@@ -290,9 +300,14 @@ module.exports = function(CardTemplates){
         "dom": "section.divider",
         "content": [
           {
+            "dom": "div.step-number.step-2",
+            "condition": "constituencyResults",
+            "content": "2"
+          },
+          {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Secondly, make your vote count 🎉"
+            "content": "Next, set it in stone 🎉"
           },
           {
             "dom": "p",
@@ -303,7 +318,7 @@ module.exports = function(CardTemplates){
             "dom": "div.layout-table",
             "content": [
               {
-                "dom": "div.column",
+                "dom": "div.column.learn-more",
                 "condition": "constituencyResults",
                 "content": [
                   {
@@ -364,12 +379,16 @@ module.exports = function(CardTemplates){
         "condition": "constituencyResults",
         "content": [
           {
+            "dom": "div.step-number.step-3",
+            "content": "3"
+          },
+          {
             "dom": "h2",
-            "content": "Thirdly, multiply your vote"
+            "content": "Finally, multiply your vote"
           },
           {
             "dom": "p",
-            "content": "Share with 10 friends and make everyone's vote count #GE2017"
+            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
           },
           {
             "template": "shareButtons",
@@ -700,6 +719,13 @@ module.exports = function(CardTemplates){
               "template": "constituency"
             }
           ]
+        },
+        {
+          "dom": "div.calculate",
+          "content":{
+             "var": "constituencyResults.calculateText",
+             "markdown": "true"
+           }
         }
       ]
     }
@@ -732,6 +758,12 @@ module.exports = function(CardTemplates){
           "content": [
             {
               "dom": "div.location",
+              "content": {
+                "var": "uniHomeLocation"
+              }
+            },
+            {
+              "dom": "div.constituency",
               "content": {
                 "var": "location"
               }

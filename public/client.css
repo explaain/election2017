@@ -317,6 +317,21 @@ section.questions a.task:hover {
   border-top: 1px solid #ddd;
   padding: 10px;
 }
+.card div.step-number {
+  position: absolute;
+  left: -20px;
+  margin-top: -31px;
+  font-size: 1.5em;
+  color: #bbb;
+  z-index: 1000;
+  background-color: #dd2569;
+  width: 40px;
+  height: 40px;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.7
+}
 section .card section {
   padding-bottom: 1em;
 }
@@ -374,6 +389,29 @@ section:not(.wide) .card section.card-media {
   margin: 30px 0 25px;
 }
 
+.card.postcode-compare .card-visible, .card.postcode-compare .content, .card.postcode-compare .content > div, .card.postcode-compare .content section, .card.postcode-compare .content .body-content  {
+  overflow: visible;
+}
+
+.card.postcode-compare .body-content {
+  padding: 10px;
+  line-height: 1.2;
+}
+.card.postcode-compare input,
+.card.postcode-compare button {
+  transition: height 0.5s, padding: 0.5s;
+  -webkit-transition: height 0.5s, padding: 0.5s;
+}
+.card.postcode-compare .content:not(.resultsLoaded) form.postcode-form input {
+  height: 42px;
+  font-size: 1.02em;
+}
+.card.postcode-compare .content:not(.resultsLoaded) form.postcode-form button {
+  padding: 8px 16px;
+  font-size: 1.02em;
+  margin-top: -3px;
+}
+
 .card form.postcode-form button[type="submit"] {
   margin:0 2px;
 }
@@ -385,11 +423,11 @@ section:not(.wide) .card section.card-media {
 }
 
 .card.postcode-compare section button {
-  padding: 12px 12px;
-  font-size: 1.02em;
+/*   padding: 12px 12px; */
+/*   font-size: 1.02em; */
 }
-.card.postcode-compare section .register button {
-  width: 100%;
+.card.postcode-compare .content.resultsLoaded .register button {
+  width: 100% !important;
 }
 
 .card.postcode-compare .register button {
@@ -400,6 +438,15 @@ section:not(.wide) .card section.card-media {
   background-color: #449d44;
   border-color: #398439;
 }
+.card.postcode-compare .content.resultsLoaded .learn-more button, .card.postcode-compare .content.resultsLoaded .register button {
+  padding: 12px 12px;
+  font-size: 1.02em;
+}
+
+.card.postcode-compare .calculate {
+  margin: 20px;
+  font-size: 0.8em;
+}
 
 
 .card form.postcode-form input[type="text"]::-webkit-input-placeholder { font-size:12px }
@@ -409,6 +456,7 @@ section:not(.wide) .card section.card-media {
 
 .card h2 {
   font-weight:900;
+  line-height: 1.2;
 }
 
 /* igor: animation */
@@ -580,10 +628,14 @@ section:not(.wide) .card section.card-media {
   color: #da368f;
   font-weight: bold;
   font-size: 1.2em;
+  margin-top: 10px;
+}
+.seats.swings-2 .impact {
+  display: none;
 }
 .seat .impact i {
   display: block;
-  margin: -8px 0 3px;
+  margin: -3px 0 3px;
   font-size: 1.4em;
 }
 
@@ -614,6 +666,18 @@ section:not(.wide) .card section.card-media {
 .seat:nth-of-type(4){animation-delay: .9s}
 
 
+.step-number {
+  animation-name: taskpop;
+  animation-duration: .2s;
+  transform: scale(0,0) rotate(-5deg);
+  animation-fill-mode: forwards;
+}
+
+.step-number.step-1{animation-delay: 1s}
+.step-number.step-2{animation-delay: 1.2s}
+.step-number.step-3{animation-delay: 1.4s}
+.step-number.step-4{animation-delay: 1.6s}
+
 .seat .location {
   font-weight: bold;
   line-height: 1.2;
@@ -621,6 +685,12 @@ section:not(.wide) .card section.card-media {
   vertical-align: middle;
   /*height: 40px;*/
 /*   padding: 20px; */
+}
+.seat .constituency {
+  font-size: 0.8em;
+  font-weight: 400;
+  margin: 10px;
+  font-style: italic;
 }
 .seat .versus .swing-icon {
   font-size: 60px;
@@ -698,9 +768,22 @@ section:not(.wide) .card section.card-media {
   font-size: 0.9em;
   margin: 10px 0 5px;
 }
+.card.postcode-compare .body-content .seats.swings-2 div.subheading {
+  color: #da368f;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
 .card.postcode-compare .body-content .seat-list {
   display: table;
   width: 100%;
+}
+.card.postcode-compare .share-buttons {
+  margin: 10px;
+}
+.card.postcode-compare .share-buttons .btn {
+  padding: 12px;
+  width: calc(50% - 10px);
 }
 .card.postcode-compare section {
   width: 100%;
@@ -708,7 +791,6 @@ section:not(.wide) .card section.card-media {
 .card .layout-table {
   display: table;
   margin: auto;
-
 }
 .card.postcode-compare .column {
   display: table-cell;
