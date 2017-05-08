@@ -283,7 +283,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "First, choose your area"
+            "content": "First, here are your options"
           },
           {
             "dom": "div",

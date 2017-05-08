@@ -11,7 +11,12 @@
     <link rel="stylesheet" type="text/css" href="/client.css">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
-    <%- include partials/meta-home.ejs %>
+    <% if(step=='postcode-compare'){ %>
+       <%- include partials/meta-students.ejs %>
+     <% } else{ %>
+       <%- include partials/meta-home.ejs %>
+    <% } %>
+
   </head>
   <body class='desktop'>
     <div id="app"></div>
