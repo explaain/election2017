@@ -6,6 +6,7 @@ module.exports = class DataProcessor {
     return {
       heading: data.text.heading,
       subheading: data.text.subheading,
+      constituencyClass: "test", // todo Jeremy: put something here
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,

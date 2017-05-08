@@ -241,7 +241,7 @@ module.exports = function(CardTemplates){
     "dom": "div.content.postcode-compare",
     "attr": {
       "class": {
-        "var": "constituencyResults"
+        "var": "constituencyResults.constituencyClass"
       }
     },
     "content": [
@@ -1033,6 +1033,7 @@ module.exports = class DataProcessor {
     return {
       heading: data.text.heading,
       subheading: data.text.subheading,
+      constituencyClass: "test", // todo Jeremy: put something here
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,

@@ -194,7 +194,7 @@ module.exports = function(CardTemplates){
     "dom": "div.content.postcode-compare",
     "attr": {
       "class": {
-        "var": "constituencyResults"
+        "var": "constituencyResults.constituencyClass"
       }
     },
     "content": [
