@@ -7088,10 +7088,10 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
     CardTemplates[key] = templates[key];
   };
-  if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
+  //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
     require("../development/templates.js")(CardTemplates);
     require("../development/model.js")(model);
-  }
+  //}
   // todo: move this to development? Is this needed for production?
   require("../development/generatePartyStances.js")(model,partyStances)();
   hyperdom.append(document.body, new App());
