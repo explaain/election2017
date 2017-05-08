@@ -374,9 +374,10 @@ module.exports = function(CardTemplates){
           },
           {
             "template": "shareButtons",
-            /*"mapping": [
-              ["name", "shareHeader"]
-            ]*/
+            "mapping": [
+              ["facebookShareHref", "constituencyResults.facebookShareHref"],
+              ["twitterShareHref", "constituencyResults.twitterShareHref"]
+            ]
           },
           // {
           //   "condition": "!constituencyResults",
@@ -835,13 +836,13 @@ module.exports = function(CardTemplates){
           "attr": {
             "target":"_blank",
             "href": {
-              "var": "twitteShareHref"
+              "var": "twitterShareHref"
             }
           },
           "content": [
             {
               "dom": "button.btn.btn-twitter",
-              "icon": "fa-facebook",
+              "icon": "fa-twitter",
               "content": [
                 {
                   "dom": "i.fa.fa-twitter"
