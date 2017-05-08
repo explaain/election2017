@@ -1,3 +1,7 @@
+if(typeof Promise === "undefined"){
+  const Promise = require('es6-promise').Promise;
+}
+
 const
   hyperdom = require('hyperdom'),
   h = hyperdom.html,
