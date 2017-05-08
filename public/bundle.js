@@ -1131,6 +1131,8 @@ module.exports = class Designers {
 }
 
 },{}],6:[function(require,module,exports){
+const q = require("q");
+
 module.exports = class Helpers {
 
   constructor(model, h, cardTemplates,http, router) {
@@ -1240,12 +1242,12 @@ module.exports = class Helpers {
 
   loadTemplates(templateUrl){
     const self = this;
-    return new Promise(function(resolve,reject){
-      self.http.get(templateUrl)
-      .then(function (res) {
-        resolve(res.body);
-      });
+    var deferred = q.defer();
+    self.http.get(templateUrl)
+    .then(function (res) {
+      deferred.resolve(res.body);
     });
+    return deferred.promise;
   }
 
   markdownToHtml(text) {
@@ -1305,7 +1307,7 @@ module.exports = class Helpers {
 
 }
 
-},{}],7:[function(require,module,exports){
+},{"q":46}],7:[function(require,module,exports){
 module.exports = {
   step: -1,
   // todo: those are temporary here, refactor
@@ -8223,7 +8225,7 @@ function isArray(obj) {
 
 },{}],74:[function(require,module,exports){
 var http = require('httpism')
-const Q = require("q")
+const q = require("q")
 
 function APIService() {
 
@@ -8688,7 +8690,7 @@ var loadGe2015Results = APIService.prototype.loadGe2015Results;
 // igor: a simulation of delay for http requests :)
 
 function delay(t) {
-  var deferred = Q.defer();
+  var deferred = q.defer();
   setTimeout(deferred.resolve, t);
   return deferred.promise;
 }

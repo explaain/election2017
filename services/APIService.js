@@ -1,5 +1,5 @@
 var http = require('httpism')
-const Q = require("q")
+const q = require("q")
 
 function APIService() {
 
@@ -464,7 +464,7 @@ var loadGe2015Results = APIService.prototype.loadGe2015Results;
 // igor: a simulation of delay for http requests :)
 
 function delay(t) {
-  var deferred = Q.defer();
+  var deferred = q.defer();
   setTimeout(deferred.resolve, t);
   return deferred.promise;
 }

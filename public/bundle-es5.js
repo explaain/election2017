@@ -939,6 +939,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       return Designers;
     }();
   }, {}], 6: [function (require, module, exports) {
+    var q = require("q");
+
     module.exports = function () {
       function Helpers(model, h, cardTemplates, http, router) {
         _classCallCheck(this, Helpers);
@@ -1044,11 +1046,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "loadTemplates",
         value: function loadTemplates(templateUrl) {
           var self = this;
-          return new Promise(function (resolve, reject) {
-            self.http.get(templateUrl).then(function (res) {
-              resolve(res.body);
-            });
+          var deferred = q.defer();
+          self.http.get(templateUrl).then(function (res) {
+            deferred.resolve(res.body);
           });
+          return deferred.promise;
         }
       }, {
         key: "markdownToHtml",
@@ -1111,7 +1113,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
       return Helpers;
     }();
-  }, {}], 7: [function (require, module, exports) {
+  }, { "q": 46 }], 7: [function (require, module, exports) {
     module.exports = {
       step: -1,
       // todo: those are temporary here, refactor
@@ -7810,7 +7812,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }
   }, {}], 74: [function (require, module, exports) {
     var http = require('httpism');
-    var Q = require("q");
+    var q = require("q");
 
     function APIService() {}
 
@@ -8245,7 +8247,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     // igor: a simulation of delay for http requests :)
 
     function delay(t) {
-      var deferred = Q.defer();
+      var deferred = q.defer();
       setTimeout(deferred.resolve, t);
       return deferred.promise;
     }

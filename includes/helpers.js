@@ -1,3 +1,5 @@
+const q = require("q");
+
 module.exports = class Helpers {
 
   constructor(model, h, cardTemplates,http, router) {
@@ -107,12 +109,12 @@ module.exports = class Helpers {
 
   loadTemplates(templateUrl){
     const self = this;
-    return new Promise(function(resolve,reject){
-      self.http.get(templateUrl)
-      .then(function (res) {
-        resolve(res.body);
-      });
+    var deferred = q.defer();
+    self.http.get(templateUrl)
+    .then(function (res) {
+      deferred.resolve(res.body);
     });
+    return deferred.promise;
   }
 
   markdownToHtml(text) {
