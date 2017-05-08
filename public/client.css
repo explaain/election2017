@@ -758,3 +758,15 @@ section:not(.wide) .card section.card-media {
 }
 idth .5s;
 }
+
+/* Fixing specific browsers */
+
+/* Safari Mac */
+
+input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
