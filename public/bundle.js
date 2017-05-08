@@ -904,7 +904,7 @@ module.exports = function(CardTemplates){
                 },
                 {
                   "dom": "span",
-                  "content": "Share on Facebook"
+                  "content": "Facebook"
                 }
               ]
             }
@@ -928,7 +928,7 @@ module.exports = function(CardTemplates){
                 },
                 {
                   "dom": "span",
-                  "content": "Share on Twitter"
+                  "content": "Twitter"
                 }
               ]
             }

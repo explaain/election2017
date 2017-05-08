@@ -683,9 +683,9 @@ section:not(.wide) .card section.card-media {
   line-height: 1.2;
   margin-bottom: 10px;
   vertical-align: middle;
-  /*height: 40px;*/
-/*   padding: 20px; */
+  font-size: 1.3em;
 }
+.seat .location
 .seat .constituency {
   font-size: 0.8em;
   font-weight: 400;
@@ -782,8 +782,9 @@ section:not(.wide) .card section.card-media {
   margin: 10px;
 }
 .card.postcode-compare .share-buttons .btn {
-  padding: 12px;
-  width: calc(50% - 10px);
+  padding: 12px 24px;
+/*   width: calc(50% - 10px); */
+  font-size: 1.02em;
 }
 .card.postcode-compare section {
   width: 100%;
