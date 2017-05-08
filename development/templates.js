@@ -293,7 +293,12 @@ module.exports = function(CardTemplates){
           {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Make your vote count"
+            "content": "Secondly, make your vote count 🎉"
+          },
+          {
+            "dom": "p",
+            "condition": "constituencyResults",
+            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
           },
           {
             "dom": "div.layout-table",
@@ -361,7 +366,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "h2",
-            "content": "Multiply your vote"
+            "content": "Thirdly, multiply your vote"
           },
           {
             "dom": "p",
@@ -529,12 +534,25 @@ module.exports = function(CardTemplates){
   }
 
   CardTemplates.postcodeFormHeader = {
-    "dom": "h2",
-    "condition": "!constituencyResults",
-    "content": {
-      "var": "name",
-      "default": "Please enter your postcode"
-    }
+    "dom": "div",
+    "content":
+    [
+      {
+        "dom": "h2",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "name",
+          "default": "Please enter your postcode"
+        }
+      },
+      {
+        "dom": "p",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "subtitle"
+        }
+      }
+    ]
   }
 
   CardTemplates.linkToGovUKWebsiteHint = {

@@ -340,7 +340,12 @@ module.exports = function(CardTemplates){
           {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Make your vote count"
+            "content": "Secondly, make your vote count 🎉"
+          },
+          {
+            "dom": "p",
+            "condition": "constituencyResults",
+            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
           },
           {
             "dom": "div.layout-table",
@@ -408,7 +413,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "h2",
-            "content": "Multiply your vote"
+            "content": "Thirdly, multiply your vote"
           },
           {
             "dom": "p",
@@ -576,12 +581,25 @@ module.exports = function(CardTemplates){
   }
 
   CardTemplates.postcodeFormHeader = {
-    "dom": "h2",
-    "condition": "!constituencyResults",
-    "content": {
-      "var": "name",
-      "default": "Please enter your postcode"
-    }
+    "dom": "div",
+    "content":
+    [
+      {
+        "dom": "h2",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "name",
+          "default": "Please enter your postcode"
+        }
+      },
+      {
+        "dom": "p",
+        "condition": "!constituencyResults",
+        "content": {
+          "var": "subtitle"
+        }
+      }
+    ]
   }
 
   CardTemplates.linkToGovUKWebsiteHint = {
@@ -5998,19 +6016,19 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       if (data.seats[0].parties.length > 1 && data.seats[1].parties.length > 1) {
         data.numberOfSwingSeats = "2",
         data.text = {
-          heading: "Looks like you're spoilt for choice!",
+          heading: "Firstly, it looks like you're spoilt for choice!",
           subheading: "Both are contested seats"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
         data.numberOfSwingSeats = "0",
         data.text = {
-          heading: "Looks like there's not much choice!",
+          heading: "Firstly, it looks like there's not much choice!",
           subheading: "Both are safe seats."
         }
       } else {
         data.numberOfSwingSeats = "1",
         data.text = {
-          heading: "Looks like your vote is worth more in one place than the other!",
+          heading: "Firstly, it looks like your vote is worth more in one place than the other!",
           subheading: "Only one of your constituencies is a contested seat."
         }
       }
@@ -6646,6 +6664,7 @@ class Step {
         data.cardGroups.push([{
           type: 'postcode-compare',
           name: 'Student? Unsure where to vote from?',
+          subtitle: 'Not all parties stand a chance in each constituency. Compare your two postcodes to see where your vote counts most.',
           subheading: 'Why do we need this?',
           description: 'We need your postcode to show data relating to your constituency 👌'
         }])
