@@ -10,6 +10,14 @@ var path = require('path');
 
 app.set('view engine', 'ejs');
 
+app.use(function(req, res, next) {
+  const trailingSlashRegExp = new RegExp("\\/(\\?.+)?$");
+  if(req.url.length > 1 && req.url.match(trailingSlashRegExp))
+    res.redirect(301, req.url.replace(trailingSlashRegExp,"$1"));
+  else
+    next();
+});
+
 app.get('/', function(req, res, next) {
   res.render('../express/index', { standalone: false, embed: false,  step: '' });
 });
