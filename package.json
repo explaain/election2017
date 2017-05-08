@@ -16,6 +16,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "cookies": "^0.7.0",
     "ejs": "^2.5.6",
     "express": "^4.14.0",
     "httpism": "^2.7.0",

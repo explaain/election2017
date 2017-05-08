@@ -2,6 +2,7 @@ var express = require('express');
 var ejs = require('ejs');
 var app = express();
 var path = require('path');
+const Cookies = require('cookies');
 
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/public/index.html');
@@ -16,6 +17,35 @@ app.use(function(req, res, next) {
     res.redirect(301, req.url.replace(trailingSlashRegExp,"$1"));
   else
     next();
+});
+
+// Temporary forcing all visitors to be redirected to /students
+// except those who visited /beta
+
+app.get('/beta', function (req, res , next) {
+  const cookies = new Cookies( req, res );
+  const dn = new Date();
+  cookies.set("access","all",{expires:new Date(dn.setDate(dn.getDate()+1))}); // 1 day expiration
+  res.redirect('/')
+});
+
+app.get('/flush', function (req, res , next) {
+  const cookies = new Cookies( req, res );
+  cookies.set("access"); // deleting the cookie
+  res.redirect('/');
+});
+
+app.use(function(req, res, next) {
+  const cookies = new Cookies( req, res );
+  if(cookies.get("access")==="all"){
+    next();
+  } else {
+    if(req.url==='/'){
+      res.redirect("/students")
+    } else {
+      next();
+    }
+  }
 });
 
 app.get('/', function(req, res, next) {
