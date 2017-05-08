@@ -1,7 +1,3 @@
-if(typeof Promise === "undefined"){
-  const Promise = require('es6-promise').Promise;
-}
-
 const
   hyperdom = require('hyperdom'),
   h = hyperdom.html,
@@ -16,6 +12,8 @@ const
   dataProcessor = new (require("../includes/dataprocessor"))(),
   designers = new (require("../includes/designers"))()
 ;
+
+
 
 const routes = {
   root: router.route('/'),
