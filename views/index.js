@@ -5,6 +5,7 @@ const
   windowEvents = require('hyperdom/windowEvents'),
   api = require('../services/APIService'),
   http = require('httpism'),
+  q = require('hyperdom-router'),
   model = require('../models/model'),
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
@@ -559,75 +560,77 @@ class BackToDashboard {
 
 // todo: should this be in APIService?
 function getResults(){
-  return new Promise(function(resolve,reject){
-    api.getResults(model.user.postcode, model.user)
-      .then(function(results) {
-        helpers.updateObject(model.user, results.data.user);
-        var yourParty = "",
-            yourArea = "",
-            yourFooter = "ShareButtons",
-            extraCards;
-        if (!results.parties.length) {
-          results.parties[0] = {
-            name: "Hold up!",
-            description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
-          }
-          yourFooter = "BackToDashboard";
-          shareButtonCard = [];
-          extraCards = [];
-        } else {
-          results.parties[0].matches.plus.forEach(function(match) {
-            yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
-            + match.description + '<br>';
-          });
-          results.parties[0].chances.plus.forEach(function(chance) {
-            yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
-            + chance.description + '<br>';
-          });
-          shareButtonCard = [
-            {
-              name: "Spread the #GE2017 ❤️",
-              type: "share",
-              button1: '<i class="fa fa-facebook"></i> Share on Facebook',
-              buttonClass1: "btn-facebook",
-              buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
-              target1: "_blank",
-              button2: '<i class="fa fa-twitter"></i> Share on Twitter',
-              buttonClass2: "btn-twitter",
-              buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
-              target2: "_blank"
-            }
-          ];
-          extraCards = [
-            {
-              name: "You and your matched party",
-              description: yourParty
-            },
-            {
-              name: "You and your area",
-              description: yourArea
-            }
-          ];
+  var deferred = q.defer();
+  api.getResults(model.user.postcode, model.user)
+    .then(function(results) {
+      helpers.updateObject(model.user, results.data.user);
+      var yourParty = "",
+          yourArea = "",
+          yourFooter = "ShareButtons",
+          extraCards;
+      if (!results.parties.length) {
+        results.parties[0] = {
+          name: "Hold up!",
+          description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
         }
-        model.user.results.push([
-          [
-            {
-              image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
-              name: results.parties[0] && results.parties[0].name,
-              description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
-              footer: [
-                yourFooter
-              ],
-              type: "Organization" // Temporary
-            }
-          ],
-          shareButtonCard,
-          extraCards
-        ]);
-        resolve();
+        yourFooter = "BackToDashboard";
+        shareButtonCard = [];
+        extraCards = [];
+      } else {
+        results.parties[0].matches.plus.forEach(function(match) {
+          yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+          + match.description + '<br>';
+        });
+        results.parties[0].chances.plus.forEach(function(chance) {
+          yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+          + chance.description + '<br>';
+        });
+        shareButtonCard = [
+          {
+            name: "Spread the #GE2017 ❤️",
+            type: "share",
+            button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+            buttonClass1: "btn-facebook",
+            buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+            target1: "_blank",
+            button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+            buttonClass2: "btn-twitter",
+            buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+            target2: "_blank"
+          }
+        ];
+        extraCards = [
+          {
+            name: "You and your matched party",
+            description: yourParty
+          },
+          {
+            name: "You and your area",
+            description: yourArea
+          }
+        ];
       }
-    )
-  })
+      model.user.results.push([
+        [
+          {
+            image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
+            name: results.parties[0] && results.parties[0].name,
+            description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
+            footer: [
+              yourFooter
+            ],
+            type: "Organization" // Temporary
+          }
+        ],
+        shareButtonCard,
+        extraCards
+      ]);
+      setTimeout(function(){
+        deferred.resolve();
+      },500);
+    }
+  )
+  return deferred.promise;
 }
 
 const templatesUrl = '//explaain-api.herokuapp.com/templates';
