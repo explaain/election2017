@@ -63,7 +63,7 @@ gulp.task('css-pack', function(){
     'temp/style.css',
     'public/css/slick.css',
     'public/css/slick-theme.css',
-    'public/client.css'
+    //'public/client.css'
   ])
   .pipe(concat('production.css'))
   .pipe(CSSuglify())
