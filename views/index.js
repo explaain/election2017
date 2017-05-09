@@ -10,9 +10,11 @@ const
   CardTemplates = {},
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
   dataProcessor = new (require("../includes/dataprocessor"))(),
-  designers = new (require("../includes/designers"))()
+  designers = new (require("../includes/designers"))(),
+  eventTracker = require("../includes/event-tracker")
 ;
 
+eventTracker("TEST")
 
 
 const routes = {
