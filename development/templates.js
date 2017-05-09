@@ -333,8 +333,16 @@ module.exports = function(CardTemplates){
                         },
                         "content": [
                           {
-                            "dom": "button.btn.btn-primary",
-                            "content": "Learn more"
+                            "dom": "a.discard-card-style",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/5910fc2d116f530011093413"
+                            },
+                            "content": [
+                              {
+                                "dom": "button.btn.btn-primary",
+                                "content": "Learn more"
+                              }
+                            ]
                           }
                         ]
                       }

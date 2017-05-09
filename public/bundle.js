@@ -380,8 +380,16 @@ module.exports = function(CardTemplates){
                         },
                         "content": [
                           {
-                            "dom": "button.btn.btn-primary",
-                            "content": "Learn more"
+                            "dom": "a.discard-card-style",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/5910fc2d116f530011093413"
+                            },
+                            "content": [
+                              {
+                                "dom": "button.btn.btn-primary",
+                                "content": "Learn more"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -8346,7 +8354,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
         data.numberOfSwingSeats = "2",
         data.text = {
           heading: "Looks like you're spoilt for choice!",
-          subheading: "Both are contested seats"
+          subheading: "Both are [contested seats](http://api.explaain.com/Detail/590f6d99de7ed60011ca517f)"
         }
       } else if (data.seats[0].parties.length == 1 && data.seats[1].parties.length == 1) {
         data.numberOfSwingSeats = "0",
@@ -8358,12 +8366,12 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
         data.numberOfSwingSeats = "1",
         data.text = {
           heading: "Looks like your vote is worth more in one place than the other!",
-          subheading: "Only one of your constituencies is a contested seat."
+          subheading: "Only one of your constituencies is a [contested seat](http://api.explaain.com/Detail/590f6d99de7ed60011ca517f)."
         }
       };
       data.seats[0].uniHomeLocation = 'Home',
       data.seats[1].uniHomeLocation = 'Uni',
-      data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button';
+      data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com%2Fstudents%2F&display=popup&ref=plugin&src=share_button';
       data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at Home or at Uni in %23GE2017. How are you using your vote? ge2017.com';
       console.log(data)
       return data;

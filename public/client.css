@@ -640,10 +640,10 @@ section:not(.wide) .card section.card-media {
 }
 
 .seat .versus{
-  min-height: 74px;
+  min-height: 210px;
   border-radius: 10px;
   overflow: hidden;
-/*   height: 200px; */
+  /*   height: 200px; */
   border: 1px solid #ddd;
   padding: 10px 5px;
 }
@@ -685,6 +685,9 @@ section:not(.wide) .card section.card-media {
   vertical-align: middle;
   font-size: 1.3em;
 }
+.seat .versus.swing-true .location {
+  color: #da368f;
+}
 .seat .location
 .seat .constituency {
   font-size: 0.8em;
@@ -695,7 +698,7 @@ section:not(.wide) .card section.card-media {
 .seat .versus .swing-icon {
   font-size: 60px;
   color: #999;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 .seat .versus.swing-true .swing-icon {
   color: #da368f;
