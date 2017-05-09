@@ -23,7 +23,8 @@ gulp.task('js-prepare', function(){
 gulp.task('js-fetch', function(){
   return download([
     "http://explaain-use.herokuapp.com/explaain.js",
-    "http://explaain-app.herokuapp.com/style.css"
+    "http://explaain-app.herokuapp.com/style.css",
+    "http://explaain-api.herokuapp.com/templates"
   ])
 	.pipe(gulp.dest("temp/"));
 });
