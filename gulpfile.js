@@ -23,8 +23,6 @@ gulp.task('js-prepare', function(){
 gulp.task('js-fetch', function(){
   return download([
     "http://explaain-use.herokuapp.com/explaain.js",
-    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css",
-    "https://fonts.googleapis.com/css?family=Lato:300,400,700,900",
     "http://explaain-app.herokuapp.com/style.css"
   ])
 	.pipe(gulp.dest("temp/"));
@@ -49,8 +47,6 @@ gulp.task('js-pack', function(){
 
 gulp.task('css-pack', function(){
   return gulp.src([
-    'temp/font-awesome.css',
-    'css?family=Lato:300,400,700,900',
     'public/css/bootstrap.css',
     'temp/style.css',
     'public/css/slick.css',
@@ -62,6 +58,6 @@ gulp.task('css-pack', function(){
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('build-frontend', [ 'js-fetch','js-prepare' ],function () {
+gulp.task('build', [ 'js-fetch','js-prepare' ],function () {
   gulp.start('js-pack','css-pack');
 });

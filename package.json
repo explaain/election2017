@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha tests",
-    "build": "gulp build-frontend"
+    "build": "gulp build"
   },
   "author": "",
   "license": "ISC",
