@@ -27,6 +27,7 @@
       if (Standalone || Embed) {
         var StepName = "<%= step %>";
       }
+      const MODE = (location.href.match(/production/)?'production':'<%= process.env.NODE_ENV %>');
     </script>
     <script src="/production.js" type="text/javascript"></script>
   </body>
