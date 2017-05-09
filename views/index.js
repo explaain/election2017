@@ -108,6 +108,7 @@ class Header {
 
 class Footer {
   render() {
+    eventTrackerInitiator();
     return h("footer",
       h("a.discard-card-style",
         {

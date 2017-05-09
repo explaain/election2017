@@ -28,7 +28,7 @@ module.exports = function(trackEvent){
     // GLOBAL scope
 
     // Explaain links
-    $("a.explaain-link:not(.tracked),a.internal:not(.tracked)").on("click",function(){
+    $("a.explaain-link:not(.tracked),a.internal:not(.tracked)").on("mouseup touchend",function(){
       trackEvent("STU: Explaain Link Clicked: " + $(this).attr("href"));
     })
     $("a.explaain-link:not(.tracked),a.internal:not(.tracked)").addClass("tracked");
