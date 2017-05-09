@@ -585,7 +585,8 @@ module.exports = function(CardTemplates){
         "dom": "p",
         "condition": "!constituencyResults",
         "content": {
-          "var": "subtitle"
+          "var": "subtitle",
+          "markdown": true
         }
       }
     ]
