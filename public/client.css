@@ -84,6 +84,13 @@ header a.home.fade-hidden {
   pointer-events: none;
   cursor: default;
 }
+
+.body.standalone header a:nth-child(2) {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 div.body.backColor header a.home {
   color: #ddd;
 }

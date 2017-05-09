@@ -42,6 +42,13 @@ module.exports = class Designers {
       const mh2 = Math.max($(".versus").eq(0).height(),$(".versus").eq(1).height());
       $(".versus").height({"min-height":mh2})
     }
+    // Setting header <a> to refresh the page
+    $(".body.standalone header a").eq(1).on("click",function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      location.href = location.href;
+      return false;
+    })
   }
 
   uniqueStepLayout(step){
