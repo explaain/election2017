@@ -635,18 +635,23 @@ function getResults(){
   return deferred.promise;
 }
 
-const templatesUrl = '//explaain-api.herokuapp.com/templates';
+/*const templatesUrl = '//explaain-api.herokuapp.com/templates';
 helpers.loadTemplates(templatesUrl).then(function(templates){
   for(var key in templates){
     CardTemplates[key] = templates[key];
   };
-  //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
-    require("../development/templates.js")(CardTemplates);
-    require("../development/model.js")(model);
-  //}
-  // todo: move this to development? Is this needed for production?
-  require("../development/generatePartyStances.js")(model,partyStances)();
-  hyperdom.append(document.body, new App());
-});
+
+});*/
+
+const _templates = require("../temp/templates.js");
+for(var key in _templates){
+  CardTemplates[key] = _templates[key];
+};
+
+//if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
+require("../development/templates.js")(CardTemplates);
+require("../development/model.js")(model);
+require("../development/generatePartyStances.js")(model,partyStances)();
+hyperdom.append(document.body, new App());
 
 designers.onWindowResize();
