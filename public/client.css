@@ -414,6 +414,10 @@ section:not(.wide) .card section.card-media {
   color: white;
   border: 4px #dd2569 solid;
 }
+.card.postcode-compare .content:not(.resultsLoaded) form.postcode-form button:hover {
+  color: #dd2569;
+  background-color: white;
+}
 
 .card form.postcode-form button[type="submit"] {
   margin:0 2px;
