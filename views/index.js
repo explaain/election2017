@@ -28,7 +28,13 @@ Model = model;
 
 class App {
   constructor(data) {
-    this.header = new Header();
+    if (Standalone) {
+      var logoRoute = routes.students();
+    } else {
+      var logoRoute = routes.root();
+    }
+    this.header = new Header(logoRoute);
+    this.footer = new Footer();
   }
 
   render() {
@@ -71,7 +77,9 @@ class App {
             console.log(params);
             var step = new Step(params);
             return h('div',step);
-          })
+          }),
+
+          this.footer
         )
       )
     }
@@ -80,15 +88,35 @@ class App {
 
 
 class Header {
+  constructor(logoRoute) {
+    this.logoRoute = logoRoute;
+  }
   render() {
+    const self = this;
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
         " Home"
-      ), routes.root().a(
+      ), self.logoRoute.a(
         h("img.ge2017-logo", {"src": "/img/ge2017logo.png"})
       ),
       (new Progress())
+    )
+  }
+}
+
+
+class Footer {
+  render() {
+    return h("footer",
+      h("a.discard-card-style",
+        {
+          "href": "http://api.explaain.com/Detail/5911ba3cac223e0011e45faf"
+        },
+        h("button.btn.btn-default",
+          "Who's behind this?"
+        )
+      )
     )
   }
 }

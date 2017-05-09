@@ -54,8 +54,8 @@ header img.ge2017-logo {
 }
 .body.standalone header {
   margin-bottom: -20px;
-  pointer-events: none;
-  cursor: default;
+/*   pointer-events: none;
+  cursor: default; */
 }
 .body.standalone header a:hover img {
   opacity: 1;
@@ -94,6 +94,12 @@ header a.home:hover {
 }
 header a.home:active, header a.home:focus {
   text-decoration: none;
+}
+
+footer a.behind-this {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
 }
 
 i.fa-check {
@@ -569,6 +575,12 @@ section:not(.wide) .card section.card-media {
 
 /* igor: we want Explaain to ignore some <a> tags in the card and do not style it, temporary */
 
+a.discard-card-style,
+a.discard-card-style:hover,
+a.discard-card-style:active,
+a.explaain-link.discard-card-style,
+a.explaain-link.discard-card-style:hover,
+a.explaain-link.discard-card-style:active,
 .card .content a.discard-card-style,
 .card .content a.discard-card-style:hover,
 .card .content a.discard-card-style:active{
