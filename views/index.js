@@ -643,6 +643,11 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
 
 });*/
 
+const _templates = require("../temp/templates.js");
+for(var key in _templates){
+  CardTemplates[key] = _templates[key];
+};
+
 //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
 require("../development/templates.js")(CardTemplates);
 require("../development/model.js")(model);

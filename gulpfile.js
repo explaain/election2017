@@ -5,10 +5,12 @@ CSSuglify = require('gulp-uglifycss'),
 browserify = require('gulp-browserify'),
 concat = require('gulp-concat'),
 babel = require('gulp-babel'),
-download = require('gulp-download')
+download = require('gulp-download'),
+insert = require('gulp-insert'),
+runSequence = require('run-sequence')
 ;
 
-gulp.task('js-prepare', function(){
+gulp.task('js-build-index', function(){
   return gulp.src([
     'views/index.js'
   ])
@@ -20,7 +22,16 @@ gulp.task('js-prepare', function(){
   .pipe(gulp.dest('temp'));
 });
 
-gulp.task('js-fetch', function(){
+gulp.task('js-cache-templates', function(){
+  return gulp.src([
+    'temp/templates'
+  ])
+  .pipe(insert.prepend('module.exports = '))
+  .pipe(concat('templates.js'))
+  .pipe(gulp.dest('temp'));
+});
+
+gulp.task('js-fetch-external', function(){
   return download([
     "http://explaain-use.herokuapp.com/explaain.js",
     "http://explaain-app.herokuapp.com/style.css",
@@ -59,6 +70,15 @@ gulp.task('css-pack', function(){
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('build', [ 'js-fetch','js-prepare' ],function () {
-  gulp.start('js-pack','css-pack');
+gulp.task('build', function(done){
+  runSequence(
+    'js-fetch-external',
+    'js-cache-templates',
+    'js-build-index',
+    'js-pack',
+    'css-pack',
+    function() {
+      done();
+    }
+  )
 });

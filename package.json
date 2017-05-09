@@ -17,11 +17,13 @@
     "gulp-browserify": "^0.5.1",
     "gulp-concat": "^2.6.1",
     "gulp-download": "0.0.1",
+    "gulp-insert": "^0.5.0",
     "gulp-minify": "0.0.15",
     "gulp-uglify": "^2.1.2",
     "gulp-uglifycss": "^1.0.8",
     "gulp-watch": "^4.3.11",
     "mocha": "^3.2.0",
+    "run-sequence": "^1.2.2",
     "watchify": "^3.7.0"
   },
   "dependencies": {
