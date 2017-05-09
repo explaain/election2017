@@ -238,7 +238,7 @@ module.exports = function(CardTemplates){
   };
 
   CardTemplates.postcodeCompare = {
-    "dom": "div.content.postcode-compare.wow",
+    "dom": "div.content.postcode-compare",
     "attr": {
       "class": {
         "var": "constituencyResults.resultsClass"
@@ -278,7 +278,7 @@ module.exports = function(CardTemplates){
             }
           },
           {
-            "dom": "button.btn.btn-success",
+            "dom": "button.btn.btn-primary",
             "attr": {
               "type": "submit"
             },
@@ -309,7 +309,7 @@ module.exports = function(CardTemplates){
             }
           },
           {
-            "dom": "p",
+            "dom": "p.explaainified",
             "condition": "!isWaiting",
             "content": {
               "var": "description",
@@ -344,7 +344,7 @@ module.exports = function(CardTemplates){
         "template": "loading"
       },
       {
-        "dom": "section.divider",
+        "dom": "section.get-registered.divider",
         "content": [
           {
             "dom": "div.step-number.step-2",
@@ -360,6 +360,14 @@ module.exports = function(CardTemplates){
             "dom": "p",
             "condition": "constituencyResults",
             "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+          },
+          {
+            "dom": "p.small-link",
+            "condition": "constituencyResults",
+            "content":{
+               "var": "constituencyResults.whereIWillBeText",
+               "markdown": "true"
+             }
           },
           {
             "dom": "div.layout-table",
@@ -616,7 +624,8 @@ module.exports = function(CardTemplates){
         "condition": "!constituencyResults",
         "content": {
           "var": "name",
-          "default": "Please enter your postcode"
+          "default": "Please enter your postcode",
+          "html": true
         }
       },
       {
@@ -776,7 +785,7 @@ module.exports = function(CardTemplates){
           ]
         },
         {
-          "dom": "div.calculate",
+          "dom": "p.small-link",
           "content":{
              "var": "constituencyResults.calculateText",
              "markdown": "true"
@@ -1097,6 +1106,7 @@ module.exports = class DataProcessor {
       resultsClass: 'resultsLoaded',
       numberOfSwingSeats: 'swings-' + data.numberOfSwingSeats,
       calculateText: "[How did we calculate this?](http://api.explaain.com/Detail/59106472116f53001109340c)",
+      whereIWillBeText: "[I don't know where I'll be on election day!](http://api.explaain.com/Detail/5911b79aac223e0011e45fa9)",
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,
@@ -8854,7 +8864,7 @@ class Header {
         h("i.fa.fa-arrow-left"),
         " Home"
       ), routes.root().a(
-        h("img.ge2017-logo", {"src": "/img/logo.png"})
+        h("img.ge2017-logo", {"src": "/img/ge2017logo.png"})
       ),
       (new Progress())
     )
@@ -9008,10 +9018,10 @@ class Step {
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
           type: 'postcode-compare',
-          name: 'Student? Unsure where to vote from?',
+          name: 'Student? Unsure where to vote from? <img src="/img/thinking.png">',
           subtitle: 'Not all parties stand a chance in each constituency. Compare your two postcodes to see where your vote counts most.',
           subheading: 'Why do we need this?',
-          description: 'We need your postcode to show data relating to your constituency 👌'
+          description: 'We need your postcode to [show data](http://api.explaain.com/Detail/5911c1b2ac223e0011e45fb0) relating to your [constituency](http://api.explaain.com/Detail/588cdf6d29d97f1200703d3c) 👌'
         }])
         break;
 

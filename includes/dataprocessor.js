@@ -11,6 +11,7 @@ module.exports = class DataProcessor {
       resultsClass: 'resultsLoaded',
       numberOfSwingSeats: 'swings-' + data.numberOfSwingSeats,
       calculateText: "[How did we calculate this?](http://api.explaain.com/Detail/59106472116f53001109340c)",
+      whereIWillBeText: "[I don't know where I'll be on election day!](http://api.explaain.com/Detail/5911b79aac223e0011e45fa9)",
       constituencies: data.seats.map(function(seat){
         return {
           location: seat.location,

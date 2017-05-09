@@ -191,7 +191,7 @@ module.exports = function(CardTemplates){
   };
 
   CardTemplates.postcodeCompare = {
-    "dom": "div.content.postcode-compare.wow",
+    "dom": "div.content.postcode-compare",
     "attr": {
       "class": {
         "var": "constituencyResults.resultsClass"
@@ -231,7 +231,7 @@ module.exports = function(CardTemplates){
             }
           },
           {
-            "dom": "button.btn.btn-success",
+            "dom": "button.btn.btn-primary",
             "attr": {
               "type": "submit"
             },
@@ -262,7 +262,7 @@ module.exports = function(CardTemplates){
             }
           },
           {
-            "dom": "p",
+            "dom": "p.explaainified",
             "condition": "!isWaiting",
             "content": {
               "var": "description",
@@ -297,7 +297,7 @@ module.exports = function(CardTemplates){
         "template": "loading"
       },
       {
-        "dom": "section.divider",
+        "dom": "section.get-registered.divider",
         "content": [
           {
             "dom": "div.step-number.step-2",
@@ -313,6 +313,14 @@ module.exports = function(CardTemplates){
             "dom": "p",
             "condition": "constituencyResults",
             "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+          },
+          {
+            "dom": "p.small-link",
+            "condition": "constituencyResults",
+            "content":{
+               "var": "constituencyResults.whereIWillBeText",
+               "markdown": "true"
+             }
           },
           {
             "dom": "div.layout-table",
@@ -569,7 +577,8 @@ module.exports = function(CardTemplates){
         "condition": "!constituencyResults",
         "content": {
           "var": "name",
-          "default": "Please enter your postcode"
+          "default": "Please enter your postcode",
+          "html": true
         }
       },
       {
@@ -729,7 +738,7 @@ module.exports = function(CardTemplates){
           ]
         },
         {
-          "dom": "div.calculate",
+          "dom": "p.small-link",
           "content":{
              "var": "constituencyResults.calculateText",
              "markdown": "true"
