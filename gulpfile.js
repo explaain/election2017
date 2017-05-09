@@ -1,7 +1,7 @@
 const
 gulp = require('gulp'),
-minify = require('gulp-minify'),
-uglify = require('gulp-uglify'),
+JSuglify = require('gulp-uglify'),
+CSSuglify = require('gulp-uglifycss'),
 browserify = require('gulp-browserify'),
 concat = require('gulp-concat'),
 babel = require('gulp-babel'),
@@ -22,7 +22,10 @@ gulp.task('js-build', function(){
 
 gulp.task('js-fetch', function(){
   return download([
-    "http://explaain-use.herokuapp.com/explaain.js"
+    "http://explaain-use.herokuapp.com/explaain.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css",
+    "https://fonts.googleapis.com/css?family=Lato:300,400,700,900",
+    "http://explaain-app.herokuapp.com/style.css"
   ])
 	.pipe(gulp.dest("temp/"));
 });
@@ -39,11 +42,26 @@ gulp.task('js-pack', function(){
     'temp/explaain.js',
     'temp/bundle.js'
   ])
-  .pipe(concat('bundle.js'))
-  .pipe(uglify())
+  .pipe(concat('production.js'))
+  .pipe(JSuglify())
+  .pipe(gulp.dest('public'));
+});
+
+gulp.task('css-pack', function(){
+  return gulp.src([
+    'temp/font-awesome.css',
+    'css?family=Lato:300,400,700,900',
+    'public/css/bootstrap.css',
+    'temp/style.css',
+    'public/css/slick.css',
+    'public/css/slick-theme.css',
+    'public/client.css'
+  ])
+  .pipe(concat('production.css'))
+  .pipe(CSSuglify())
   .pipe(gulp.dest('public'));
 });
 
 gulp.task('default', [ 'js-fetch','js-build' ],function () {
-  gulp.start('js-pack');
+  gulp.start('js-pack','css-pack');
 });
