@@ -170,10 +170,27 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
+    console.log(results);
     if (results.error) {
       return results;
     } else {
       totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
+      console.log(1);
+      console.log(postcodeResults.constituency.codes.gss);
+      console.log(results);
+      return loadBettingOdds(postcodeResults.constituency.codes.gss)
+    }
+  })
+  .then(function(results) {
+    console.log('results');
+    console.log(results);
+    if (results.error) {
+      console.log('error');
+      return results;
+    } else {
+      console.log('good');
+      totalResults.results["my-constituency"]["oddChances"] = results["oddChances"];
+      console.log(totalResults);
       return loadPartyStances();
     }
   }).then(function(results) {
@@ -347,7 +364,10 @@ APIService.prototype.getPartyChances = function(data) {
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      var totalChance = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
+      var chanceFromBettingOdds = (data.results["oddChances"] && data.results["oddChances"].parties && data.results["oddChances"].parties[partyKey]) ? data.results["oddChances"].parties[partyKey] : 0;
+      console.log('chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions');
+      console.log(chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions);
+      var totalChance = (5*chanceFromBettingOdds + 3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/9;
       partyChances[partyKey] = {
         chance: totalChance
       }
@@ -440,6 +460,33 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
 }
 
 
+APIService.prototype.loadBettingOdds = function(areaKey) {
+  var result = {"oddChances": {parties:{}}};
+  console.log('loadBettingOdds');
+  console.log(areaKey);
+  var resultsTemp = constituencyOdds[areaKey] || null;
+  console.log(resultsTemp);
+  if (resultsTemp == null) {
+    result["oddChances"] = {}
+  } else {
+    resultsTemp.forEach(function(party) {
+      console.log(party);
+      var partyKey = party.party;
+      console.log(partyKey);
+      var digits = party.odds.split('/');
+      console.log(digits);
+      party.oddChances = Number(digits[1])/(Number(digits[0])+Number(digits[1]));
+      console.log(party);
+      result["oddChances"].parties[partyKey] = party.oddChances;
+      console.log(result);
+    });
+    console.log('Betting Odds');
+    console.log(result);
+  }
+  return result;
+}
+
+
 APIService.prototype.loadPartyStances = function() {
   return partyStances;
 }
@@ -461,6 +508,7 @@ var loadConstituency = APIService.prototype.loadConstituency;
 var loadEURefResults = APIService.prototype.loadEURefResults;
 var loadPartyStances = APIService.prototype.loadPartyStances;
 var loadGe2015Results = APIService.prototype.loadGe2015Results;
+var loadBettingOdds = APIService.prototype.loadBettingOdds;
 
 
 // igor: a simulation of delay for http requests :)
