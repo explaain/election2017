@@ -241,7 +241,7 @@ class Step {
         data.cardGroups.push([{
           type: 'postcode-compare',
           name: 'Student? Unsure where to vote from? <img src="/img/thinking.png">',
-          subtitle: 'Not all parties stand a chance in each constituency. Compare your two postcodes to see where your vote counts most.',
+          subtitle: 'Compare your two postcodes to see where your vote counts most.',
           subheading: 'Why do we need this?',
           description: 'We need your postcode to [show data](http://api.explaain.com/Detail/5911c1b2ac223e0011e45fb0) relating to your [constituency](http://api.explaain.com/Detail/588cdf6d29d97f1200703d3c) 👌'
         }])

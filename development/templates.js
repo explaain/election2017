@@ -722,7 +722,7 @@ module.exports = function(CardTemplates){
           }
         },
         {
-          "dom": "div.subheading",
+          "dom": "div.subheading.explaainified",
           "content": {
             "var": "constituencyResults.subheading",
             "markdown": "true"

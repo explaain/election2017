@@ -774,7 +774,7 @@ section:not(.wide) .card section.card-media {
   margin: 0 0 25px 0;
   line-height: 1.5;
 }
-.card.postcode-compare p.explaainified {
+.card.postcode-compare .explaainified {
   line-height: 1.7;
 }
 .card.postcode-compare .body-content div.bold {
