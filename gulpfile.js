@@ -53,7 +53,7 @@ gulp.task('js-pack', function(){
     'temp/bundle.js'
   ])
   .pipe(concat('production.js'))
-  //.pipe(JSuglify())
+  .pipe(JSuglify())
   .pipe(gulp.dest('public'));
 });
 
