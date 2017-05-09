@@ -3,10 +3,13 @@ var ejs = require('ejs');
 var app = express();
 var path = require('path');
 const Cookies = require('cookies');
+const compression = require('compression');
 
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/public/index.html');
 // });
+
+app.use(compression());
 
 
 app.set('view engine', 'ejs');
@@ -82,10 +85,12 @@ app.get('/:page/*', function (req, res , next) {
   }
 });
 
-app.listen(process.env.PORT || 1234, function () {
-  console.log('listening on port 1234!');
-});
-
 app.use(express.static(path.join(__dirname, 'public')));
+
+const port = process.env.PORT || 1234;
+
+app.listen(port, function () {
+  console.log('Listening on port '+port+'!');
+});
 
 module.exports = app;
