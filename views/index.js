@@ -11,9 +11,9 @@ const
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
   dataProcessor = new (require("../includes/dataprocessor"))(),
   designers = new (require("../includes/designers"))(),
-  eventTracker = require("../includes/event-tracker")
+  trackEvent = require("../includes/event-tracker"),
+  eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
-
 
 const routes = {
   root: router.route('/'),
@@ -29,6 +29,7 @@ Model = model;
 class App {
   constructor(data) {
     if (Standalone) {
+      trackEvent("Landed Students")
       var logoRoute = routes.students();
     } else {
       var logoRoute = routes.root();
@@ -74,7 +75,6 @@ class App {
             var params = {
               name: StepName
             }
-            console.log(params);
             var step = new Step(params);
             return h('div',step);
           }),
@@ -357,6 +357,7 @@ class Step {
     const self = this;
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
+      eventTrackerInitiator();
       designers.onStepLoad();
       designers.adaptLayout();
     })
@@ -490,8 +491,10 @@ class CardContent {
               }
             ];
             if (results.error) {
+              trackEvent("STU: Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
               helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
+              trackEvent("STU: Received Results");
               model.user.resultsCompare.push(results);
             }
             self.refresh();
