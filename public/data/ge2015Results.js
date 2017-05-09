@@ -31226,7 +31226,7 @@ var ge2015Results = {
    ],
    "S14000001": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24793,
          "voteMargin": 13396,
@@ -31282,7 +31282,7 @@ var ge2015Results = {
    ],
    "S14000002": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 20221,
          "voteMargin": 7230,
@@ -31347,7 +31347,7 @@ var ge2015Results = {
    ],
    "S14000003": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23887,
          "voteMargin": 8779,
@@ -31403,7 +31403,7 @@ var ge2015Results = {
    ],
    "S14000004": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24130,
          "voteMargin": 11230,
@@ -31459,7 +31459,7 @@ var ge2015Results = {
    ],
    "S14000005": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 22959,
          "voteMargin": 8473,
@@ -31506,7 +31506,7 @@ var ge2015Results = {
    ],
    "S14000006": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 25492,
          "voteMargin": 11265,
@@ -31553,7 +31553,7 @@ var ge2015Results = {
    ],
    "S14000007": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27487,
          "voteMargin": 14339,
@@ -31591,7 +31591,7 @@ var ge2015Results = {
    ],
    "S14000008": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 20145,
          "voteMargin": 328,
@@ -31656,7 +31656,7 @@ var ge2015Results = {
    ],
    "S14000009": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 15831,
          "voteMargin": 3844,
@@ -31703,7 +31703,7 @@ var ge2015Results = {
    ],
    "S14000010": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 26999,
          "voteMargin": 13589,
@@ -31750,7 +31750,7 @@ var ge2015Results = {
    ],
    "S14000011": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28696,
          "voteMargin": 11501,
@@ -31797,7 +31797,7 @@ var ge2015Results = {
    ],
    "S14000012": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 29572,
          "voteMargin": 14752,
@@ -31835,7 +31835,7 @@ var ge2015Results = {
    ],
    "S14000013": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23440,
          "voteMargin": 6514,
@@ -31891,7 +31891,7 @@ var ge2015Results = {
          "shareChange": 1.8
       },
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 2,
          "votes": 19961,
          "voteMargin": -798,
@@ -31938,7 +31938,7 @@ var ge2015Results = {
    ],
    "S14000015": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28765,
          "voteMargin": 19162,
@@ -32003,7 +32003,7 @@ var ge2015Results = {
    ],
    "S14000016": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27684,
          "voteMargin": 17092,
@@ -32059,7 +32059,7 @@ var ge2015Results = {
    ],
    "S14000017": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28096,
          "voteMargin": 10352,
@@ -32106,7 +32106,7 @@ var ge2015Results = {
    ],
    "S14000018": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 22093,
          "voteMargin": 2167,
@@ -32162,7 +32162,7 @@ var ge2015Results = {
    ],
    "S14000019": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 33678,
          "voteMargin": 16527,
@@ -32218,7 +32218,7 @@ var ge2015Results = {
    ],
    "S14000020": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 25104,
          "voteMargin": 6803,
@@ -32283,7 +32283,7 @@ var ge2015Results = {
    ],
    "S14000021": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23013,
          "voteMargin": 3718,
@@ -32330,7 +32330,7 @@ var ge2015Results = {
    ],
    "S14000022": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23188,
          "voteMargin": 9106,
@@ -32395,7 +32395,7 @@ var ge2015Results = {
    ],
    "S14000023": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23742,
          "voteMargin": 5597,
@@ -32469,7 +32469,7 @@ var ge2015Results = {
          "shareChange": 4.4
       },
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 2,
          "votes": 16656,
          "voteMargin": -2637,
@@ -32525,7 +32525,7 @@ var ge2015Results = {
    ],
    "S14000025": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 22168,
          "voteMargin": 8135,
@@ -32581,7 +32581,7 @@ var ge2015Results = {
    ],
    "S14000026": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 21378,
          "voteMargin": 3210,
@@ -32637,7 +32637,7 @@ var ge2015Results = {
    ],
    "S14000027": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 8662,
          "voteMargin": 4102,
@@ -32684,7 +32684,7 @@ var ge2015Results = {
    ],
    "S14000028": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 34831,
          "voteMargin": 19701,
@@ -32731,7 +32731,7 @@ var ge2015Results = {
    ],
    "S14000029": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 20658,
          "voteMargin": 7662,
@@ -32814,7 +32814,7 @@ var ge2015Results = {
    ],
    "S14000030": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24116,
          "voteMargin": 10387,
@@ -32879,7 +32879,7 @@ var ge2015Results = {
    ],
    "S14000031": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 19610,
          "voteMargin": 9295,
@@ -32953,7 +32953,7 @@ var ge2015Results = {
    ],
    "S14000032": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 21976,
          "voteMargin": 9222,
@@ -33018,7 +33018,7 @@ var ge2015Results = {
    ],
    "S14000033": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23908,
          "voteMargin": 10364,
@@ -33083,7 +33083,7 @@ var ge2015Results = {
    ],
    "S14000034": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 26773,
          "voteMargin": 12269,
@@ -33139,7 +33139,7 @@ var ge2015Results = {
    ],
    "S14000035": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23388,
          "voteMargin": 9950,
@@ -33204,7 +33204,7 @@ var ge2015Results = {
    ],
    "S14000036": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28459,
          "voteMargin": 13897,
@@ -33242,7 +33242,7 @@ var ge2015Results = {
    ],
    "S14000037": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27717,
          "voteMargin": 8687,
@@ -33289,7 +33289,7 @@ var ge2015Results = {
    ],
    "S14000038": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24585,
          "voteMargin": 11063,
@@ -33345,7 +33345,7 @@ var ge2015Results = {
    ],
    "S14000039": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28838,
          "voteMargin": 10809,
@@ -33410,7 +33410,7 @@ var ge2015Results = {
    ],
    "S14000040": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 30000,
          "voteMargin": 13638,
@@ -33448,7 +33448,7 @@ var ge2015Results = {
    ],
    "S14000041": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27628,
          "voteMargin": 9974,
@@ -33495,7 +33495,7 @@ var ge2015Results = {
    ],
    "S14000042": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 26976,
          "voteMargin": 10100,
@@ -33542,7 +33542,7 @@ var ge2015Results = {
    ],
    "S14000043": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 32055,
          "voteMargin": 12934,
@@ -33598,7 +33598,7 @@ var ge2015Results = {
    ],
    "S14000044": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 32736,
          "voteMargin": 16843,
@@ -33645,7 +33645,7 @@ var ge2015Results = {
    ],
    "S14000045": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24453,
          "voteMargin": 9859,
@@ -33701,7 +33701,7 @@ var ge2015Results = {
    ],
    "S14000046": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 24384,
          "voteMargin": 9065,
@@ -33757,7 +33757,7 @@ var ge2015Results = {
    ],
    "S14000047": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27275,
          "voteMargin": 11898,
@@ -33804,7 +33804,7 @@ var ge2015Results = {
    ],
    "S14000048": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 28641,
          "voteMargin": 13573,
@@ -33851,7 +33851,7 @@ var ge2015Results = {
    ],
    "S14000049": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 18523,
          "voteMargin": 4344,
@@ -33907,7 +33907,7 @@ var ge2015Results = {
    ],
    "S14000050": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 26620,
          "voteMargin": 10168,
@@ -33963,7 +33963,7 @@ var ge2015Results = {
          "shareChange": -20.6
       },
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 2,
          "votes": 8590,
          "voteMargin": -817,
@@ -34001,7 +34001,7 @@ var ge2015Results = {
    ],
    "S14000052": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 25601,
          "voteMargin": 9076,
@@ -34066,7 +34066,7 @@ var ge2015Results = {
    ],
    "S14000053": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23548,
          "voteMargin": 5684,
@@ -34113,7 +34113,7 @@ var ge2015Results = {
    ],
    "S14000054": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 27379,
          "voteMargin": 9641,
@@ -34178,7 +34178,7 @@ var ge2015Results = {
    ],
    "S14000055": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 20119,
          "voteMargin": 5124,
@@ -34243,7 +34243,7 @@ var ge2015Results = {
    ],
    "S14000056": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 30279,
          "voteMargin": 9975,
@@ -34299,7 +34299,7 @@ var ge2015Results = {
    ],
    "S14000057": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 23783,
          "voteMargin": 10480,
@@ -34346,7 +34346,7 @@ var ge2015Results = {
    ],
    "S14000058": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 22949,
          "voteMargin": 7033,
@@ -34411,7 +34411,7 @@ var ge2015Results = {
    ],
    "S14000059": [
       {
-         "party": "scottish-national-party-snp",
+         "party": "snp",
          "rank": 1,
          "votes": 30198,
          "voteMargin": 14171,

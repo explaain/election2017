@@ -24,7 +24,7 @@ const routes = {
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
-  policy: router.route('/policy') //'student' too?
+  policy: router.route('/policy')
 };
 
 router.start();

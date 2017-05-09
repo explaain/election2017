@@ -63,12 +63,18 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   return delay(500).then(function(){
     return getContenders(postcode1)
     .then(function(results) {
+      console.log('results');
+      console.log('results');
+      console.log(results);
       if (results.error) {
         return results;
       }
       data.seats.push(results);
       return getContenders(postcode2)
     }).then(function(results) {
+      console.log('results');
+      console.log('results');
+      console.log(results);
       if (results.error) {
         return results;
       }
@@ -108,6 +114,7 @@ const getContenders = function(postcode) {
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
+      console.log(0);
       return results;
     } else {
       data = results;
@@ -118,13 +125,20 @@ const getContenders = function(postcode) {
     if (results.error) {
       return results;
     } else {
-      var threshold = 0.2;
+      var threshold = 0.5;
       var partyKeys = Object.keys(results);
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         return results[partyKey].chance > threshold;
       });
       var topParties = allParties.filter(function(party) {
         return topPartyKeys.indexOf(party.key) > -1;
+      });
+      topParties.map(function(party) {
+        party.chance = results[party.key].chance;
+        return party;
+      })
+      topParties.sort(function(a, b) {
+        return parseFloat(b.chance) - parseFloat(a.chance);
       });
 
       return {
@@ -345,29 +359,56 @@ APIService.prototype.getAgreements = function(data) {
 }
 
 APIService.prototype.getPartyChances = function(data) {
+  console.log('starting getPartyChances')
   var partyChances = {};
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
 
   var currentParty = {}
+  console.log(1);
   currentParty = allParties.filter(function(party) {
     var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
+    console.log(2);
     return partyResult ? partyResult.rank == 1 : false;
   })[0];
+  console.log(3);
+  console.log(currentParty);
   currentParty.name = allParties.filter(function(party) {
+    console.log(party);
     return party.key == currentParty.key
   })[0].name;
+  console.log(4);
 
   allParties.forEach(function(party) {
     var partyKey = party.key;
     try {
+      console.log('hi');
+      console.log(data.results["my-constituency"]["oddChances"]);
+      console.log(data.results["my-constituency"]["oddChances"].parties);
+      console.log(111);
+      try {
+        console.log(data.results["my-constituency"]["oddChances"].parties[partyKey]);
+      } catch(e) {
+
+      }
+      console.log(222);
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
+      console.log(333);
       var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
+      console.log(444);
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
+      console.log(555);
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      var chanceFromBettingOdds = (data.results["oddChances"] && data.results["oddChances"].parties && data.results["oddChances"].parties[partyKey]) ? data.results["oddChances"].parties[partyKey] : 0;
-      console.log('chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions');
-      console.log(chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions);
-      var totalChance = (5*chanceFromBettingOdds + 3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/9;
+      console.log(666);
+      if (!data.results["my-constituency"]["oddChances"].parties) {
+        var chanceFromBettingOdds = -1;
+        var totalChance = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
+      } else {
+        var chanceFromBettingOdds = (data.results["my-constituency"]["oddChances"].parties[partyKey]) ? (1-(1-(data.results["my-constituency"]["oddChances"].parties[partyKey]))/2) : 0;
+        var totalChance = (8*chanceFromBettingOdds + 3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/12;
+      }
+      console.log(777);
+      console.log('partyKey, chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions, totalChance');
+      console.log(partyKey, chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions, totalChance);
       partyChances[partyKey] = {
         chance: totalChance
       }

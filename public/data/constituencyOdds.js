@@ -909,7 +909,7 @@ var constituencyOdds = {
          "odds": "100/1"
       }
    ],
-   "E14000919": [
+   "E14000922": [
       {
          "party": "lib-dem",
          "odds": "1/12"
@@ -951,7 +951,7 @@ var constituencyOdds = {
          "odds": "100/1"
       }
    ],
-   "E14000954": [
+   "E14000956": [
       {
          "party": "conservative",
          "odds": "1/4"
@@ -1007,7 +1007,7 @@ var constituencyOdds = {
          "odds": "100/1"
       }
    ],
-   "E14000971": [
+   "E14000972": [
       {
          "party": "labour",
          "odds": "8/13"
@@ -1019,7 +1019,9 @@ var constituencyOdds = {
       {
          "party": "ukip",
          "odds": "20/1"
-      },
+      }
+   ],
+   "E14000973": [
       {
          "party": "conservative",
          "odds": "4/6"
