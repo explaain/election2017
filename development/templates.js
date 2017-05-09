@@ -1044,4 +1044,14 @@ module.exports = function(CardTemplates){
     ]
   }
 
+  CardTemplates.policy = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": "H2",
+        "content": "Policy here"
+      }
+    ]
+  }
+
 }

@@ -7,20 +7,20 @@ module.exports = function(trackEvent){
     $(".postcode-compare [name=postcode]:not(.tracked)").eq(0).on("keydown",function(){
       if(!$(this).hasClass('typed')){
         $(this).addClass("typed");
-        trackEvent("STU: Home Postcode Typed")
+        trackEvent("Home Postcode Typed",{type: "Student"})
       }
     })
     $(".postcode-compare [name=postcode]:not(.tracked)").eq(1).on("keydown",function(){
       if(!$(this).hasClass('typed')){
         $(this).addClass("typed");
-        trackEvent("STU: Uni Postcode Typed")
+        trackEvent("Uni Postcode Typed",{type: "Student"})
       }
     })
     $(".postcode-compare [name=postcode]").addClass("tracked");
 
     // Submitting Postcodes
     $(".postcode-compare .postcode-form:not(.tracked)").on("submit",function(){
-      trackEvent("STU: Postcodes Submitted");
+      trackEvent("Postcodes Submitted",{type: "Student"});
     })
     $(".postcode-compare .postcode-form").addClass("tracked");
 
@@ -29,7 +29,7 @@ module.exports = function(trackEvent){
 
     // Explaain links
     $("a.explaain-link:not(.tracked),a.internal:not(.tracked)").on("mouseup touchend",function(){
-      trackEvent("STU: Explaain Link Clicked: " + $(this).attr("href"));
+      trackEvent("Explaain Link Clicked",{type: "Student", link: $(this).attr("href")});
     })
     $("a.explaain-link:not(.tracked),a.internal:not(.tracked)").addClass("tracked");
 

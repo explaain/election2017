@@ -68,6 +68,10 @@ app.get('/embed/:step', function(req, res, next) {
   res.render('index', { standalone: false, embed: true, step: req.params.step });
 });
 
+app.get('/policy', function(req, res, next) {
+  res.render('index', { standalone: true, embed: false, step: 'policy' });
+});
+
 
 /*
   This is temporary to make sure we do not see the

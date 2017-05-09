@@ -15,11 +15,16 @@ const
   eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
 
+if(StepName==='postcode-compare'){
+  trackEvent("Landed Students");
+}
+
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
-  students: router.route('/students') //'student' too?
+  students: router.route('/students'), //'student' too?
+  policy: router.route('/policy') //'student' too?
 };
 
 router.start();
@@ -29,7 +34,6 @@ Model = model;
 class App {
   constructor(data) {
     if (Standalone) {
-      trackEvent("Landed Students")
       var logoRoute = routes.students();
     } else {
       var logoRoute = routes.root();
@@ -72,6 +76,14 @@ class App {
           }),
 
           routes.students(function (params) {
+            var params = {
+              name: StepName
+            }
+            var step = new Step(params);
+            return h('div',step);
+          }),
+
+          routes.policy(function (params) {
             var params = {
               name: StepName
             }
@@ -317,6 +329,11 @@ class Step {
           debateKey: question.debate.key
         }])
         break;
+      case 'policy':
+        data.cardGroups.push([{
+          type: 'policy'
+        }])
+        break;
 
       default:
         data.cardGroups.push([{
@@ -557,6 +574,10 @@ class CardContent {
           }
         });
         return helpers.assembleCards(data, 'question');
+
+      case 'policy':
+        // Check out development/templates.js for Policy
+        return helpers.assembleCards(data, 'policy');
 
       default:
         console.log('Defaulting');
