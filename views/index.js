@@ -11,15 +11,20 @@ const
   helpers = new (require("../includes/helpers"))(model,h,CardTemplates,http, router),
   dataProcessor = new (require("../includes/dataprocessor"))(),
   designers = new (require("../includes/designers"))(),
-  eventTracker = require("../includes/event-tracker")
+  trackEvent = require("../includes/event-tracker"),
+  eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
 
+if(StepName==='postcode-compare'){
+  trackEvent("Landed Students");
+}
 
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
-  students: router.route('/students') //'student' too?
+  students: router.route('/students'), //'student' too?
+  policy: router.route('/policy') //'student' too?
 };
 
 router.start();
@@ -74,7 +79,14 @@ class App {
             var params = {
               name: StepName
             }
-            console.log(params);
+            var step = new Step(params);
+            return h('div',step);
+          }),
+
+          routes.policy(function (params) {
+            var params = {
+              name: StepName
+            }
             var step = new Step(params);
             return h('div',step);
           }),
@@ -108,6 +120,7 @@ class Header {
 
 class Footer {
   render() {
+    eventTrackerInitiator();
     return h("footer",
       h("a.discard-card-style",
         {
@@ -316,6 +329,11 @@ class Step {
           debateKey: question.debate.key
         }])
         break;
+      case 'policy':
+        data.cardGroups.push([{
+          type: 'policy'
+        }])
+        break;
 
       default:
         data.cardGroups.push([{
@@ -357,6 +375,7 @@ class Step {
     const self = this;
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
+      eventTrackerInitiator();
       designers.onStepLoad();
       designers.adaptLayout();
     })
@@ -490,8 +509,10 @@ class CardContent {
               }
             ];
             if (results.error) {
+              trackEvent("STU: Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
               helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
+              trackEvent("STU: Received Results");
               model.user.resultsCompare.push(results);
             }
             self.refresh();
@@ -553,6 +574,10 @@ class CardContent {
           }
         });
         return helpers.assembleCards(data, 'question');
+
+      case 'policy':
+        // Check out development/templates.js for Policy
+        return helpers.assembleCards(data, 'policy');
 
       default:
         console.log('Defaulting');

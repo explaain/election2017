@@ -380,6 +380,9 @@ module.exports = {
     },
     story: {
       label: "Party stories"
+    },
+    policy: {
+      label: "Privacy Policy"
     }
   },
 
