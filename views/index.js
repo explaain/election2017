@@ -14,8 +14,6 @@ const
   eventTracker = require("../includes/event-tracker")
 ;
 
-eventTracker("TEST")
-
 
 const routes = {
   root: router.route('/'),
