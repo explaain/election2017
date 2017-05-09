@@ -8,7 +8,7 @@ babel = require('gulp-babel'),
 download = require('gulp-download')
 ;
 
-gulp.task('js-build', function(){
+gulp.task('js-prepare', function(){
   return gulp.src([
     'views/index.js'
   ])
@@ -62,6 +62,6 @@ gulp.task('css-pack', function(){
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('default', [ 'js-fetch','js-build' ],function () {
+gulp.task('build-frontend', [ 'js-fetch','js-prepare' ],function () {
   gulp.start('js-pack','css-pack');
 });

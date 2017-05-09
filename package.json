@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "mocha tests",
-    "watch": "watchify views/index.js -o public/bundle.js"
+    "build": "gulp build-frontend"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "gulp-minify": "0.0.15",
     "gulp-uglify": "^2.1.2",
     "gulp-uglifycss": "^1.0.8",
+    "gulp-watch": "^4.3.11",
     "mocha": "^3.2.0",
     "watchify": "^3.7.0"
   },
