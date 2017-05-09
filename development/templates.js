@@ -343,7 +343,7 @@ module.exports = function(CardTemplates){
                           {
                             "dom": "a.discard-card-style",
                             "attr": {
-                              "href": "http://api.explaain.com/Detail/5910fc2d116f530011093413"
+                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
                             },
                             "content": [
                               {
@@ -585,7 +585,8 @@ module.exports = function(CardTemplates){
         "dom": "p",
         "condition": "!constituencyResults",
         "content": {
-          "var": "subtitle"
+          "var": "subtitle",
+          "markdown": true
         }
       }
     ]
@@ -722,7 +723,7 @@ module.exports = function(CardTemplates){
           }
         },
         {
-          "dom": "div.subheading",
+          "dom": "div.subheading.explaainified",
           "content": {
             "var": "constituencyResults.subheading",
             "markdown": "true"
