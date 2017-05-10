@@ -47,6 +47,7 @@ gulp.task('js-pack', function(){
     'public/data/euRefResults.js',
     'public/data/partyStances.js',
     'public/data/ge2015Results.js',
+    'public/data/constituencyOdds.js',
     'public/js/jquery.min.js',
     'public/js/slick.min.js',
     'temp/explaain.js',

@@ -24,7 +24,7 @@ const routes = {
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
-  policy: router.route('/policy') //'student' too?
+  policy: router.route('/policy')
 };
 
 router.start();
@@ -509,10 +509,10 @@ class CardContent {
               }
             ];
             if (results.error) {
-              trackEvent("STU: Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
+              trackEvent("Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
               helpers.throwError("Sorry, we didn't recognise that postcode!")
             } else {
-              trackEvent("STU: Received Results");
+              trackEvent("Received Results");
               model.user.resultsCompare.push(results);
             }
             self.refresh();
