@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "gulp build-production;node app.js",
+    "start": "node app",
+    "postinstall": "gulp build-production",
     "test": "mocha tests"
   },
   "author": "",
