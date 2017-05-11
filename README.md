@@ -1,10 +1,5 @@
 # Explaain Election App
 
-### Build
+### Development
 
-build production files - `npm run build`
-
-### Usage
-
-start server - `npm start`
-run tests `npm test`
+start server and watch dev files - `npm run dev`
