@@ -305,7 +305,7 @@ section.questions a.task:hover {
 .slick-container .card {
   width: 380px;
 }
-.card.postcode, .card.share, .card.vote-worth, .card.postcode-compare {
+.card.postcode, .card.share, .card.vote-worth, .card.postcode-compare, .card.more-stuff {
   text-align: center;
 }
 .card.expandable {

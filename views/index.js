@@ -680,8 +680,10 @@ function getResults(){
         ],
         [
           {
-            name: "Add more stuff!",
-            description: "[link to add more stuff]",
+            type: "more-stuff",
+            heading: "Add more stuff!",
+            buttonText: "Add more stuff",
+            buttonAction: function(){routes.root().push()},
           }
         ],
         shareButtonCard,

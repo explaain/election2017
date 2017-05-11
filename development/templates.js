@@ -1169,4 +1169,26 @@ module.exports = function(CardTemplates){
       "var":"error"
     }
   }
+  CardTemplates["more-stuff"] = {
+    "dom":"section.card-body",
+    "content":[
+      {
+        "dom": "h2",
+        "content": {
+          "var": "heading"
+        }
+      },
+      {
+        "dom": "button.btn.btn-lg.btn-primary",
+        "attr": {
+          "onclick": {
+            "var": "buttonAction"
+          }
+        },
+        "content": {
+          "var": "buttonText"
+        }
+      }
+    ]
+  }
 }
