@@ -10,8 +10,6 @@ insert = require('gulp-insert'),
 runSequence = require('run-sequence')
 ;
 
-const projectPath = process.env.NODE_ENV==="production"?"/":__dirname+"/";
-
 /* Lists and variables - feel free to modify */
 
 const filesToFetch = [
@@ -45,52 +43,46 @@ const CSSFiles = [
   //'public/client.css'
 ];
 
-/* Pre-processors - do not modify! */
-
-const JSFilesToCompile = JSFiles.map(path=>projectPath+path);
-const CSSFilesToCompile = CSSFiles.map(path=>projectPath+path);
-const JSIndexToCompile = JSIndex.map(path=>projectPath+path);
-
 /* General tasks */
 
 gulp.task('js-cache-templates', function(){
   return gulp.src([
-    projectPath+'tmp/templates'
+    'tmp/templates'
   ])
   .pipe(insert.prepend('module.exports = '))
   .pipe(concat('templates.js'))
-  .pipe(gulp.dest(projectPath+'tmp'));
+  .pipe(gulp.dest('tmp'));
 });
 
 gulp.task('js-fetch-external', function(){
   return download(filesToFetch)
-	.pipe(gulp.dest(projectPath+"tmp"));
+	.pipe(gulp.dest("tmp"));
 });
 
 /* Production only tasks */
 
 gulp.task('js-build-index-production', function(){
-  return gulp.src(JSIndexToCompile)
+  return gulp.src(JSIndex)
   .pipe(browserify())
   .pipe(babel({
     presets: ['es2015']
   }))
   .pipe(concat('index.js'))
-  .pipe(gulp.dest(projectPath+'tmp'));
+  .pipe(gulp.dest('tmp'));
 });
 
 gulp.task('js-pack-production', function(){
-  return gulp.src(JSFilesToCompile)
+  return gulp.src(JSFiles)
   .pipe(concat('compiled.js'))
   .pipe(JSuglify())
-  .pipe(gulp.dest(projectPath+'public'));
+  .pipe(gulp.dest('public'));
 });
 
 gulp.task('css-pack-production', function(){
-  return gulp.src(CSSFilesToCompile)
+  return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
   .pipe(CSSuglify())
-  .pipe(gulp.dest(projectPath+'public'));
+  .pipe(gulp.dest('public'));
 });
 
 gulp.task('build-production', function(done){
@@ -109,22 +101,22 @@ gulp.task('build-production', function(done){
 /* Development only tasks */
 
 gulp.task('js-build-index-development', function(){
-  return gulp.src(JSIndexToCompile)
+  return gulp.src(JSIndex)
   .pipe(browserify())
   .pipe(concat('index.js'))
-  .pipe(gulp.dest(projectPath+'tmp'));
+  .pipe(gulp.dest('tmp'));
 });
 
 gulp.task('js-pack-development', function(){
-  return gulp.src(JSFilesToCompile)
+  return gulp.src(JSFiles)
   .pipe(concat('compiled.js'))
-  .pipe(gulp.dest(projectPath+'public'));
+  .pipe(gulp.dest('public'));
 });
 
 gulp.task('css-pack-development', function(){
-  return gulp.src(CSSFilesToCompile)
+  return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
-  .pipe(gulp.dest(projectPath+'public'));
+  .pipe(gulp.dest('public'));
 });
 
 gulp.task('build-development', function(done){
