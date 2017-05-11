@@ -17,7 +17,10 @@ npm install gulp -g
 
 ```sh
 git checkout development
+# run dev silently
 npm run dev
+# OR run with debugging (easier to catch errors on the fly!)
+npm run debug
 # http://localhost:1234/
 ```
 When pushing local **development** branch to **origin/development** it deploys an instance at http://uk-election-2017-dev.herokuapp.com/students
