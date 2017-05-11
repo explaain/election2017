@@ -109,6 +109,10 @@ footer a.behind-this {
   border-color: #ccc;
 }
 
+footer {
+  padding-bottom:20px;
+}
+
 i.fa-check {
   font-size: 1.4em;
   display: inline-block;
