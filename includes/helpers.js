@@ -164,12 +164,15 @@ module.exports = class Helpers {
     return obj;
   }
 
-  throwError(err){
+  throwError(err,modelProp){
     const self = this;
-    self.model.user.error = err;
-    $('html, body').animate({ scrollTop: 0}, 500);
+    if(!modelProp){
+      modelProp = "error";
+      $('html, body').animate({ scrollTop: 0}, 500);
+    }
+    self.model.user[modelProp] = err;
     setTimeout(function(){
-      delete self.model.user.error;
+      delete self.model.user[modelProp];
     },500);
   }
 

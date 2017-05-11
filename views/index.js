@@ -489,6 +489,7 @@ class CardContent {
           e.stopPropagation();
           routes.root().push();
         }
+        data.postcodeError = model.user.postcodeError;
         data.postcodeSubmit = function(e){
           e.stopPropagation();
           model.user.isWaiting = "postcode-compare";
@@ -510,7 +511,7 @@ class CardContent {
             ];
             if (results.error) {
               trackEvent("Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
-              helpers.throwError("Sorry, we didn't recognise that postcode!")
+              helpers.throwError("Sorry, we didn't recognise that postcode!","postcodeError")
             } else {
               trackEvent("Received Results");
               model.user.resultsCompare.push(results);

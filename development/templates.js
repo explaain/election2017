@@ -200,6 +200,12 @@ module.exports = function(CardTemplates){
     "content": [
       { "template": "postcodeFormHeader" },
       {
+        "template":"error",
+        "mapping": [
+          ["error", "postcodeError"]
+        ]
+      },
+      {
         "dom": "form.postcode-form",
         "attr": {
           "onsubmit": {
@@ -1155,5 +1161,12 @@ module.exports = function(CardTemplates){
         ]
       }
     ]
+  }
+  CardTemplates.error = {
+    "dom":"p.error",
+    "condition": "error",
+    "content":{
+      "var":"error"
+    }
   }
 }
