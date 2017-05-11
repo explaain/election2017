@@ -24,6 +24,30 @@ module.exports = function(trackEvent){
     })
     $(".postcode-compare .postcode-form").addClass("tracked");
 
+    // Learn more
+    $(".postcode-compare .learn-more button:not(.tracked)").on("mouseup touchend",function(){
+      trackEvent("Learn More Clicked",{type: "Student"});
+    })
+    $(".postcode-compare .learn-more button").addClass("tracked");
+
+    // Register
+    $(".postcode-compare .register button:not(.tracked)").on("click",function(){
+      trackEvent("Register Clicked",{type: "Student"});
+    })
+    $(".postcode-compare .register button").addClass("tracked");
+
+    // Facebook Share
+    $(".postcode-compare .btn-facebook:not(.tracked)").on("click",function(){
+      trackEvent("Facebook Share Clicked",{type: "Student"});
+    })
+    $(".postcode-compare .btn-facebook").addClass("tracked");
+
+    // Twitter Share
+    $(".postcode-compare .btn-twitter:not(.tracked)").on("click",function(){
+      trackEvent("Twitter Share Clicked",{type: "Student"});
+    })
+    $(".postcode-compare .btn-twitter").addClass("tracked");
+
 
     // GLOBAL scope
 
