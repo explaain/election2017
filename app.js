@@ -11,6 +11,8 @@ const compression = require('compression');
 
 app.use(compression());
 
+console.log(process.env)
+
 
 app.set('view engine', 'ejs');
 app.set("views", "express")
