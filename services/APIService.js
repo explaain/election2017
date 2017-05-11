@@ -437,7 +437,7 @@ APIService.prototype.getPartyChances = function(data) {
 
 
 APIService.prototype.loadConstituency = function(postcode) {
-  // igor: todo: flush it soon!
+  // todo: flush apiKey soon!
   const apiKey = "DHSoK08gLM6tgVlJFleH4bnUiuHPE4DJkKQiSENT";
   var url = 'https://mapit.mysociety.org/postcode/' + postcode + '?api_key=' + apiKey;
   return http.get(url)
@@ -451,7 +451,13 @@ APIService.prototype.loadConstituency = function(postcode) {
     });
     return {constituency: constituency[0], refArea: refArea[0], all: res.body.areas}
   }, function (error) {
-    return {error: true};
+    if(!postcode){
+      return {error: "empty"};
+    } else if(error.message.match(/failed to connect/)){
+      return {error: "connection"};
+    } else {
+      return {error: "notfound"};
+    }
   })
 };
 

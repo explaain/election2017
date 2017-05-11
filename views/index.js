@@ -492,6 +492,8 @@ class CardContent {
         data.postcodeError = model.user.postcodeError;
         data.postcodeSubmit = function(e){
           e.stopPropagation();
+          // Flushing results, in this case this makes sense to do on click, not on load
+          model.user.resultsCompare.length = 0;
           model.user.isWaiting = "postcode-compare";
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
             delete model.user.isWaiting;
@@ -509,11 +511,15 @@ class CardContent {
                 target2: "_blank"
               }
             ];
-            // Flushing results, in this case this makes sense
-            model.user.resultsCompare.length = 0;
             if (results.error) {
               trackEvent("Wrong Postcodes",{type: "Student",data: model.user.postcode + " " + model.user.postcode_uni});
-              helpers.throwError("Sorry, we didn't recognise that postcode!","postcodeError")
+              if(results.error==="empty"){
+                helpers.throwError("Please provide both your Home and Uni postcodes","postcodeError")
+              } else if(results.error==="connection"){
+                helpers.throwError("Sorry, you are not connected to Internet. Please re-connect and try again.","postcodeError")
+              } else {
+                helpers.throwError("Sorry, we didn't recognise that postcode!","postcodeError")
+              }
             } else {
               trackEvent("Received Results",{type: "Student"});
               model.user.resultsCompare.push(results);
