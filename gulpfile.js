@@ -10,7 +10,9 @@ insert = require('gulp-insert'),
 runSequence = require('run-sequence')
 ;
 
-/* Lists and variables */
+const projectPath = process.env.NODE_ENV==="production"?"/":__dirname+"/";
+
+/* Lists and variables - feel free to modify */
 
 const filesToFetch = [
   "http://explaain-use.herokuapp.com/explaain.js",
@@ -18,7 +20,11 @@ const filesToFetch = [
   "http://explaain-api.herokuapp.com/templates"
 ];
 
-const JSFilesToCompile = [
+const JSIndex = [
+  'views/index.js'
+];
+
+const JSFiles = [
   'public/data/allParties.js',
   'public/data/partyStories.js',
   'public/data/euRefResults.js',
@@ -31,7 +37,7 @@ const JSFilesToCompile = [
   'tmp/index.js'
 ];
 
-const CSSFilesToCompile = [
+const CSSFiles = [
   'public/css/bootstrap.css',
   'tmp/style.css',
   'public/css/slick.css',
@@ -39,50 +45,52 @@ const CSSFilesToCompile = [
   //'public/client.css'
 ];
 
+/* Pre-processors - do not modify! */
+
+const JSFilesToCompile = JSFiles.map(path=>projectPath+path);
+const CSSFilesToCompile = CSSFiles.map(path=>projectPath+path);
+const JSIndexToCompile = JSIndex.map(path=>projectPath+path);
+
 /* General tasks */
-
-
 
 gulp.task('js-cache-templates', function(){
   return gulp.src([
-    'tmp/templates'
+    projectPath+'tmp/templates'
   ])
   .pipe(insert.prepend('module.exports = '))
   .pipe(concat('templates.js'))
-  .pipe(gulp.dest('tmp'));
+  .pipe(gulp.dest(projectPath+'tmp'));
 });
 
 gulp.task('js-fetch-external', function(){
   return download(filesToFetch)
-	.pipe(gulp.dest("tmp"));
+	.pipe(gulp.dest(projectPath+"tmp"));
 });
 
 /* Production only tasks */
 
 gulp.task('js-build-index-production', function(){
-  return gulp.src([
-    'views/index.js'
-  ])
+  return gulp.src(JSIndexToCompile)
   .pipe(browserify())
   .pipe(babel({
     presets: ['es2015']
   }))
   .pipe(concat('index.js'))
-  .pipe(gulp.dest('tmp'));
+  .pipe(gulp.dest(projectPath+'tmp'));
 });
 
 gulp.task('js-pack-production', function(){
   return gulp.src(JSFilesToCompile)
   .pipe(concat('compiled.js'))
   .pipe(JSuglify())
-  .pipe(gulp.dest('public'));
+  .pipe(gulp.dest(projectPath+'public'));
 });
 
 gulp.task('css-pack-production', function(){
   return gulp.src(CSSFilesToCompile)
   .pipe(concat('compiled.css'))
   .pipe(CSSuglify())
-  .pipe(gulp.dest('public'));
+  .pipe(gulp.dest(projectPath+'public'));
 });
 
 gulp.task('build-production', function(done){
@@ -101,24 +109,22 @@ gulp.task('build-production', function(done){
 /* Development only tasks */
 
 gulp.task('js-build-index-development', function(){
-  return gulp.src([
-    'views/index.js'
-  ])
+  return gulp.src(JSIndexToCompile)
   .pipe(browserify())
   .pipe(concat('index.js'))
-  .pipe(gulp.dest('tmp'));
+  .pipe(gulp.dest(projectPath+'tmp'));
 });
 
 gulp.task('js-pack-development', function(){
   return gulp.src(JSFilesToCompile)
   .pipe(concat('compiled.js'))
-  .pipe(gulp.dest('public'));
+  .pipe(gulp.dest(projectPath+'public'));
 });
 
 gulp.task('css-pack-development', function(){
   return gulp.src(CSSFilesToCompile)
   .pipe(concat('compiled.css'))
-  .pipe(gulp.dest('public'));
+  .pipe(gulp.dest(projectPath+'public'));
 });
 
 gulp.task('build-development', function(done){

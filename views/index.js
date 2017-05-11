@@ -697,7 +697,7 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
 
 });*/
 
-const _templates = require("../temp/templates.js");
+const _templates = require("../tmp/templates.js");
 for(var key in _templates){
   CardTemplates[key] = _templates[key];
 };
