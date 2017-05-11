@@ -8,20 +8,40 @@ babel = require('gulp-babel'),
 download = require('gulp-download'),
 insert = require('gulp-insert'),
 runSequence = require('run-sequence')
+watch = require('gulp-watch')
 ;
 
 /* Lists and variables - feel free to modify */
 
+// Files and folders to be watched during development
+const watchFiles = [
+  'development/*',
+  'views/*',
+  'includes/*',
+  'models/*',
+  'services/*',
+  'tests/*',
+  'package.json',
+  'public/css/*',
+  'public/data/*',
+  'public/img/*',
+  'public/js/*',
+  'public/client.css',
+];
+
+// Files to fetch from remote services
 const filesToFetch = [
   "http://explaain-use.herokuapp.com/explaain.js",
   "http://explaain-app.herokuapp.com/style.css",
-  "http://explaain-api.herokuapp.com/templates"
+  "http://explaain-api.herokuapp.com/templates",
 ];
 
+// JS Files to compile (babel, browserify)
 const JSIndex = [
   'views/index.js'
 ];
 
+// JS Files to concat and compress
 const JSFiles = [
   'public/data/allParties.js',
   'public/data/partyStories.js',
@@ -32,15 +52,16 @@ const JSFiles = [
   'public/js/jquery.min.js',
   'public/js/slick.min.js',
   'tmp/explaain.js',
-  'tmp/index.js'
+  'tmp/index.js',
 ];
 
+// CSS files to concat and compress
 const CSSFiles = [
   'public/css/bootstrap.css',
   'tmp/style.css',
   'public/css/slick.css',
   'public/css/slick-theme.css',
-  //'public/client.css'
+  //'public/client.css',
 ];
 
 /* General tasks */
@@ -119,13 +140,20 @@ gulp.task('css-pack-development', function(){
   .pipe(gulp.dest('public'));
 });
 
+gulp.task('watch-development', function () {
+  runSequence('build-development');
+  gulp.watch(watchFiles, ['build-development']);
+});
+
 gulp.task('build-development', function(done){
+  console.log("Watch: Files building... " + (new Date()))
   runSequence(
     'js-cache-templates',
     'js-build-index-development',
     'js-pack-development',
     'css-pack-development',
     function() {
+      console.log("Watch: Files built.      " + (new Date()))
       done();
     }
   )
