@@ -509,6 +509,8 @@ class CardContent {
                 target2: "_blank"
               }
             ];
+            // Flushing results, in this case this makes sense
+            model.user.resultsCompare.length = 0;
             if (results.error) {
               trackEvent("Wrong Postcodes",{type: "Student",data: model.user.postcode + " " + model.user.postcode_uni});
               helpers.throwError("Sorry, we didn't recognise that postcode!","postcodeError")
