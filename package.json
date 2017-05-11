@@ -8,6 +8,7 @@
     "postinstall": "gulp build-production",
     "build": "gulp build-production",
     "dev": "concurrently --kill-others \"npm start\" \"gulp watch-development --silent\"",
+    "debug": "concurrently --kill-others \"npm start\" \"gulp watch-development\"",
     "test": "mocha tests"
   },
   "author": "",
