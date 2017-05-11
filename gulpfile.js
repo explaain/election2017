@@ -66,7 +66,8 @@ const CSSFiles = [
 
 /* General tasks */
 
-gulp.task('js-cache-templates', function(){
+// This task adds "module.exports = " to templates file
+gulp.task('js-prepare-templates', function(){
   return gulp.src([
     'tmp/templates'
   ])
@@ -75,6 +76,7 @@ gulp.task('js-cache-templates', function(){
   .pipe(gulp.dest('tmp'));
 });
 
+// This task fetches files from external services
 gulp.task('js-fetch-external', function(){
   return download(filesToFetch)
 	.pipe(gulp.dest("tmp"));
@@ -82,6 +84,7 @@ gulp.task('js-fetch-external', function(){
 
 /* Production only tasks */
 
+// This task browserifies index.js and then transcodes it to ES5
 gulp.task('js-build-index-production', function(){
   return gulp.src(JSIndex)
   .pipe(browserify())
@@ -92,6 +95,7 @@ gulp.task('js-build-index-production', function(){
   .pipe(gulp.dest('tmp'));
 });
 
+// This task concats and compresses JS for production
 gulp.task('js-pack-production', function(){
   return gulp.src(JSFiles)
   .pipe(concat('compiled.js'))
@@ -99,6 +103,7 @@ gulp.task('js-pack-production', function(){
   .pipe(gulp.dest('public'));
 });
 
+// This task concats and compresses CSS for production
 gulp.task('css-pack-production', function(){
   return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
@@ -106,10 +111,11 @@ gulp.task('css-pack-production', function(){
   .pipe(gulp.dest('public'));
 });
 
+// This task runs a sequence of tasks for production build
 gulp.task('build-production', function(done){
   runSequence(
     'js-fetch-external',
-    'js-cache-templates',
+    'js-prepare-templates',
     'js-build-index-production',
     'js-pack-production',
     'css-pack-production',
@@ -121,6 +127,7 @@ gulp.task('build-production', function(done){
 
 /* Development only tasks */
 
+// This task browserifies index.js
 gulp.task('js-build-index-development', function(){
   return gulp.src(JSIndex)
   .pipe(browserify())
@@ -128,27 +135,31 @@ gulp.task('js-build-index-development', function(){
   .pipe(gulp.dest('tmp'));
 });
 
+// This task concats and compresses JS for production
 gulp.task('js-pack-development', function(){
   return gulp.src(JSFiles)
   .pipe(concat('compiled.js'))
   .pipe(gulp.dest('public'));
 });
 
+// This task concats and compresses CSS for production
 gulp.task('css-pack-development', function(){
   return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
   .pipe(gulp.dest('public'));
 });
 
+// This task runs the app and watches front-end files
 gulp.task('watch-development', function () {
   runSequence('build-development');
   gulp.watch(watchFiles, ['build-development']);
 });
 
+// This task runs a sequence of tasks for development build
 gulp.task('build-development', function(done){
   console.log("Watch: Files building... " + (new Date()))
   runSequence(
-    'js-cache-templates',
+    'js-prepare-templates',
     'js-build-index-development',
     'js-pack-development',
     'css-pack-development',
