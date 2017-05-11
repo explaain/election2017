@@ -1,3 +1,7 @@
+/* Some data processing function were moved there from views/index.js
+ *   to remove code duplication
+ */
+
 module.exports = class DataProcessor {
 
   constructor() {}

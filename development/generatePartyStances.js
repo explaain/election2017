@@ -1,3 +1,5 @@
+/* Generating party stances, we don't really expect to change this code soon */
+
 module.exports = function(model,partyStances){
   return function(){
     var issueKeys = Object.keys(partyStances.opinions.issues);

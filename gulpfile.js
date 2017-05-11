@@ -1,3 +1,5 @@
+/* Building front-end for both Development and Production */
+
 const
 gulp = require('gulp'),
 JSuglify = require('gulp-uglify'),

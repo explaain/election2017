@@ -1,3 +1,6 @@
+/* Master view file */
+
+/* Including dependencies */
 const
   hyperdom = require('hyperdom'),
   h = hyperdom.html,
@@ -15,10 +18,9 @@ const
   eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
 
-if(StepName==='postcode-compare'){
-  trackEvent("Landed Students");
-}
-
+// Describing different routes of app
+// warn. at the moment /dashboards and /steps are redirected to "/" in index.ejs
+//   by express routing - this was made to avoid 404 errors on page refresh
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
@@ -278,6 +280,7 @@ class Step {
         break;
 
       case 'postcode-compare':
+        trackEvent("Landed Students");
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
           type: 'postcode-compare',

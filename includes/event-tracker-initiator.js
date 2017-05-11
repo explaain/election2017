@@ -1,3 +1,8 @@
+/* This file binds tracking events (Mixpanel at the moment) with HTML elements
+ * This function is "tracking-service-agnostic"
+ * (see event-tracker.js in this folder)
+ */
+
 module.exports = function(trackEvent){
   return function() {
 

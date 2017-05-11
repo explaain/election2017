@@ -1,3 +1,5 @@
+/* Algorithm and API */
+
 var http = require('httpism')
 const q = require("q")
 

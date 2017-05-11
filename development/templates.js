@@ -1,79 +1,17 @@
+/* Most of templates are fetched from http://explaain-api.herokuapp.com/templates
+ * This file overrides loaded templates with the templates defined below
+ * This has been made in order to develop templates faster without a need
+ *   to go to build them on http://explaain-api.herokuapp.com/
+ */
+
 //NOTE: Jeremy has replaced some of these, copied from api.explaain.com
 
 module.exports = function(CardTemplates){
-  CardTemplates.card =
-  //   {
-  //     "dom": "div.card",
-  //     "attr": {
-  //       "data-uri": {
-  //         "var": "@id",
-  //       },
-  //       "style": "height: auto"
-  //     },
-  //     "content": [
-  //       {
-  //         "dom": "div.card-visible",
-  //         "content": [
-  //           {
-  //             "dom": "div.close",
-  //             "content": [
-  //               {
-  //                 "dom": "i.fa.fa-times",
-  //                 "attr": {
-  //                   "data-hidden": "true"
-  //                 }
-  //               }
-  //             ]
-  //           },
-  //           {
-  //             "dom": "div.content",
-  //             "attr": {
-  //               "class": {
-  //                 "var": "@type"
-  //               }
-  //             },
-  //             "template": {
-  //               "var": "type"
-  //             }
-  //           },
-  //           {
-  //             "dom": "a.card-icon",
-  //             "attr": {
-  //               "target": "_blank",
-  //               "tabindex": "-1"
-  //             },
-  //             "content": [
-  //               {
-  //                 "dom": "img",
-  //                 "attr": {
-  //                   "src": "http://app.explaain.com/card-logo.png"
-  //                 }
-  //               }
-  //             ]
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         "dom": "button.edit-button",
-  //         "attr": {
-  //           "tabindex": "-1"
-  //         },
-  //         "content": [
-  //           {
-  //             "dom": "i.fa.fa-pencil",
-  //             "attr": {
-  //               "aria-hidden": "true"
-  //             }
-  //           }
-  //         ]
-  //       }
-  //     ]
-  //   }
-  // ;
   CardTemplates.card = {
     "dom": "div.card",
     "attr": {
       "class": {
+        // Value will be taken from data.type
         "var": "type"
       },
       "data-uri": {
@@ -97,6 +35,7 @@ module.exports = function(CardTemplates){
             ]
           },
           {
+            // Will load template, which is specified in data.type
             "template": {
               "var": "type"
             }
@@ -134,30 +73,6 @@ module.exports = function(CardTemplates){
       }
     ]
   };
-  // CardTemplates.Person = [
-  //   {
-  //     "dom": "h2",
-  //     "content": {
-  //       "var": "name"
-  //     }
-  //   },
-  //   {
-  //     "dom": "div.card-image",
-  //     "content": [{
-  //       "dom": "img",
-  //       "attr": {"src": {
-  //         "var": "image"
-  //       }}
-  //     }]
-  //   },
-  //   {
-  //     "dom": "div.body-content",
-  //     "content": {
-  //       "var": "description",
-  //       "markdown": true
-  //     }
-  //   }
-  // ];
   CardTemplates.Person = {
     "dom": "div.content",
     "content": [
@@ -184,6 +99,7 @@ module.exports = function(CardTemplates){
         "dom": "div.body-content",
         "content": {
           "var": "description",
+          // Changes <a> in HTML to link to Explaain cards
           "markdown": true
         }
       }
@@ -194,13 +110,16 @@ module.exports = function(CardTemplates){
     "dom": "div.content.postcode-compare",
     "attr": {
       "class": {
+        // Gets value from data.constituencyResults.resultsClass
         "var": "constituencyResults.resultsClass"
       }
     },
     "content": [
+      // This loads template with postcodeFormHeader name
       { "template": "postcodeFormHeader" },
       {
         "template":"error",
+        // Mapping example
         "mapping": [
           ["error", "postcodeError"]
         ]
@@ -208,6 +127,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "form.postcode-form",
         "attr": {
+          // postcodeSubmit is a function, which will be executed on click
           "onsubmit": {
             "var": "postcodeSubmit"
           }
@@ -220,6 +140,8 @@ module.exports = function(CardTemplates){
               "type": "text",
               "name": "postcode",
               "placeholder": "Home Postcode",
+              // Two way binding with input and model through data
+              // (search for postcodeBinding in views/index.js)
               "binding": {
                 "var": "postcodeBinding"
               }
@@ -245,6 +167,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "span",
                 "content": "Compare",
+                // Simple condition
                 "condition": "!constituencyResults"
               },
               {
@@ -379,11 +302,6 @@ module.exports = function(CardTemplates){
                     "dom": "div.bold",
                     "content": "or go straight to register"
                   },
-                  // {
-                  //   "condition": "constituencyResults",
-                  //   "dom": "div.bold",
-                  //   "content": "Make your vote count"
-                  // },
                   {
                     "template": "registerButton"
                   },
@@ -419,21 +337,6 @@ module.exports = function(CardTemplates){
               ["twitterShareHref", "constituencyResults.twitterShareHref"]
             ]
           },
-          // {
-          //   "condition": "!constituencyResults",
-          //   "content": [
-          //     {
-          //       "dom": "div.bold",
-          //       "content": "or go straight to register"
-          //     },
-          //     {
-          //       "template": "registerButton"
-          //     },
-          //     {
-          //       "template": "linkToGovUKWebsiteHint"
-          //     }
-          //   ]
-          // }
         ]
       }
     ]
@@ -622,21 +525,6 @@ module.exports = function(CardTemplates){
     ]
   }
 
-  /*CardTemplates.footer =
-    {
-      "dom": ".footer",
-      "content": [
-        {
-          "dom": "div",
-          "condition": "footerContentTemplate",
-          "template": {
-            "var": "footerContentTemplate"
-          }
-        }
-      ]
-    }
-  ;*/
-
   CardTemplates.partiesTable =
     {
       "dom": "table",
@@ -737,6 +625,10 @@ module.exports = function(CardTemplates){
         },
         {
           "dom": ".seat-list",
+          // Loop example
+          //NOTE: "data.constituencyResults.constituencies.something"
+          // will turn into just "data.something" in the 'constituency' template
+          // (the scope changes similar to mapping)
           "loop": "constituencyResults.constituencies",
           "content": [
             {
@@ -915,8 +807,6 @@ module.exports = function(CardTemplates){
     }
   ;
 
-  // Usage:
-  // return h('div', getCardDom({type: "people", people: [{type: "person", name: "Sarah", age: "26"},{type: "person", name: "Chris", age: "34"}]}, CardTemplates['loopExample']));
   CardTemplates.loopExample =
     {
       "dom": ".people",
