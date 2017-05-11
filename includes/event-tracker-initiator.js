@@ -1,6 +1,8 @@
 module.exports = function(trackEvent){
   return function() {
 
+    //NOTE: for Explaain links use "mouseup touchend" events instead of "click"
+
     // STUDENTS scope (postcode-compare)
 
     // Postcodes inputs
