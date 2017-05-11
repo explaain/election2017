@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "mocha tests",
-    "build": "gulp build"
+    "start": "gulp build-production;node app.js",
+    "test": "mocha tests"
   },
   "author": "",
   "license": "ISC",

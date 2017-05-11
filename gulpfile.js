@@ -10,7 +10,56 @@ insert = require('gulp-insert'),
 runSequence = require('run-sequence')
 ;
 
-gulp.task('js-build-index', function(){
+/* Lists and variables */
+
+const filesToFetch = [
+  "http://explaain-use.herokuapp.com/explaain.js",
+  "http://explaain-app.herokuapp.com/style.css",
+  "http://explaain-api.herokuapp.com/templates"
+];
+
+const JSFilesToCompile = [
+  'public/data/allParties.js',
+  'public/data/partyStories.js',
+  'public/data/euRefResults.js',
+  'public/data/partyStances.js',
+  'public/data/ge2015Results.js',
+  'public/data/constituencyOdds.js',
+  'public/js/jquery.min.js',
+  'public/js/slick.min.js',
+  'tmp/explaain.js',
+  'tmp/index.js'
+];
+
+const CSSFilesToCompile = [
+  'public/css/bootstrap.css',
+  'tmp/style.css',
+  'public/css/slick.css',
+  'public/css/slick-theme.css',
+  //'public/client.css'
+];
+
+/* General tasks */
+
+
+
+gulp.task('js-cache-templates', function(){
+  return gulp.src([
+    'tmp/templates'
+  ])
+  .pipe(insert.prepend('module.exports = '))
+  .pipe(concat('templates.js'))
+  .pipe(gulp.dest('tmp'));
+});
+
+gulp.task('js-fetch-external', function(){
+  return download(filesToFetch)
+	.pipe(gulp.dest("tmp"));
+});
+
+/* Production only tasks */
+
+gulp.task('js-build-index-production', function(){
   return gulp.src([
     'views/index.js'
   ])
@@ -18,66 +67,66 @@ gulp.task('js-build-index', function(){
   .pipe(babel({
     presets: ['es2015']
   }))
-  .pipe(concat('bundle.js'))
-  .pipe(gulp.dest('temp'));
+  .pipe(concat('index.js'))
+  .pipe(gulp.dest('tmp'));
 });
 
-gulp.task('js-cache-templates', function(){
-  return gulp.src([
-    'temp/templates'
-  ])
-  .pipe(insert.prepend('module.exports = '))
-  .pipe(concat('templates.js'))
-  .pipe(gulp.dest('temp'));
-});
-
-gulp.task('js-fetch-external', function(){
-  return download([
-    "http://explaain-use.herokuapp.com/explaain.js",
-    "http://explaain-app.herokuapp.com/style.css",
-    "http://explaain-api.herokuapp.com/templates"
-  ])
-	.pipe(gulp.dest("temp/"));
-});
-
-gulp.task('js-pack', function(){
-  return gulp.src([
-    'public/data/allParties.js',
-    'public/data/partyStories.js',
-    'public/data/euRefResults.js',
-    'public/data/partyStances.js',
-    'public/data/ge2015Results.js',
-    'public/data/constituencyOdds.js',
-    'public/js/jquery.min.js',
-    'public/js/slick.min.js',
-    'temp/explaain.js',
-    'temp/bundle.js'
-  ])
-  .pipe(concat('production.js'))
+gulp.task('js-pack-production', function(){
+  return gulp.src(JSFilesToCompile)
+  .pipe(concat('compiled.js'))
   .pipe(JSuglify())
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('css-pack', function(){
-  return gulp.src([
-    'public/css/bootstrap.css',
-    'temp/style.css',
-    'public/css/slick.css',
-    'public/css/slick-theme.css',
-    //'public/client.css'
-  ])
-  .pipe(concat('production.css'))
+gulp.task('css-pack-production', function(){
+  return gulp.src(CSSFilesToCompile)
+  .pipe(concat('compiled.css'))
   .pipe(CSSuglify())
   .pipe(gulp.dest('public'));
 });
 
-gulp.task('build', function(done){
+gulp.task('build-production', function(done){
   runSequence(
     'js-fetch-external',
     'js-cache-templates',
-    'js-build-index',
-    'js-pack',
-    'css-pack',
+    'js-build-index-production',
+    'js-pack-production',
+    'css-pack-production',
+    function() {
+      done();
+    }
+  )
+});
+
+/* Development only tasks */
+
+gulp.task('js-build-index-development', function(){
+  return gulp.src([
+    'views/index.js'
+  ])
+  .pipe(browserify())
+  .pipe(concat('index.js'))
+  .pipe(gulp.dest('tmp'));
+});
+
+gulp.task('js-pack-development', function(){
+  return gulp.src(JSFilesToCompile)
+  .pipe(concat('compiled.js'))
+  .pipe(gulp.dest('public'));
+});
+
+gulp.task('css-pack-development', function(){
+  return gulp.src(CSSFilesToCompile)
+  .pipe(concat('compiled.css'))
+  .pipe(gulp.dest('public'));
+});
+
+gulp.task('build-development', function(done){
+  runSequence(
+    'js-cache-templates',
+    'js-build-index-development',
+    'js-pack-development',
+    'css-pack-development',
     function() {
       done();
     }
