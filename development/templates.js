@@ -12,7 +12,7 @@ module.exports = function(CardTemplates){
     "attr": {
       "class": {
         // Value will be taken from data.type
-        "var": "mainClass"
+        "var": "type"
       },
       "data-uri": {
         "var": "@id"
@@ -343,7 +343,7 @@ module.exports = function(CardTemplates){
   }
 
   CardTemplates.OrganizationResults = {
-    "dom": "div.content.postcode-compare",
+    "dom": "div.content.OrganizationResults",
     "attr": {
       "class": {
         // Gets value from data.constituencyResults.resultsClass
@@ -363,7 +363,7 @@ module.exports = function(CardTemplates){
             "content": "1"
           },
           {
-            "dom": "div",
+            "dom": "div.OrganizationContainer",
             "condition": "!isWaiting",
             "template": "Organization"
           },

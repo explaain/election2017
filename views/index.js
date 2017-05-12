@@ -417,11 +417,6 @@ class CardGroup {
 
 class Card {
   constructor(data) {
-    // Artem Klyuev: This is cards default class name override ("postode-compare" class for OrganizationResults class, fast way). Do't need after css tweaks.
-    data.mainClass = data.type;
-    if (data.type === 'OrganizationResults')
-      data.mainClass = data.type + ' ' + 'postcode-compare';
-
     this.cardContent = new CardContent(data);
     this.data = data;
   }

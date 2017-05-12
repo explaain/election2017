@@ -1,0 +1,189 @@
+.card.postcode, .card.share, .card.vote-worth, .card.OrganizationResults, .card.more-stuff {
+  text-align: center;
+}
+
+.card.OrganizationResults .card-visible, .card.OrganizationResults .content, .card.OrganizationResults .content > div, .card.OrganizationResults .content section, .card.OrganizationResults .content .body-content  {
+  overflow: visible;
+}
+
+.card.OrganizationResults .body-content {
+  padding: 10px;
+  line-height: 1.2;
+}
+.card.OrganizationResults .body-content.results {
+  padding: 0px;
+}
+.card.OrganizationResults .OrganizationResults .body-content {
+  line-height: 1.9;
+}
+.card.OrganizationResults .OrganizationContainer .card-body {
+  padding: 10px;
+  text-align: left;
+}
+.card.OrganizationResults .OrganizationContainer .card-body .body-content {
+  padding: 0px;
+}
+.card.OrganizationResults .OrganizationContainer .card-body h2 {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+.card.OrganizationResults input,
+.card.OrganizationResults button {
+  transition: height 0.5s, padding: 0.5s;
+  -webkit-transition: height 0.5s, padding: 0.5s;
+}
+.card.OrganizationResults .content:not(.resultsLoaded) form.postcode-form input {
+  height: 42px;
+  font-size: 1.02em;
+}
+.card.OrganizationResults .content:not(.resultsLoaded) form.postcode-form button {
+  padding: 6px 16px;
+  font-size: 1.02em;
+  margin-top: -3px;
+  background-color: #dd2569;
+  color: white;
+  border: 4px #dd2569 solid;
+}
+.card.OrganizationResults .content:not(.resultsLoaded) form.postcode-form button:hover {
+  color: #dd2569;
+  background-color: white;
+}
+
+.card.OrganizationResults section button {
+/*   padding: 12px 12px; */
+/*   font-size: 1.02em; */
+}
+
+.card.OrganizationResults .content.resultsLoaded .get-registered .layout-table {
+  margin-top: -20px;
+}
+.card.OrganizationResults .content.resultsLoaded .register button {
+  width: 100% !important;
+}
+
+.card.OrganizationResults .register button {
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.card.OrganizationResults .register button:hover {
+  background-color: #449d44;
+  border-color: #398439;
+}
+.card.OrganizationResults .content.resultsLoaded .learn-more button, .card.OrganizationResults .content.resultsLoaded .register button {
+  padding: 12px 12px;
+  font-size: 1.02em;
+}
+
+.card.OrganizationResults .content.resultsLoaded p.small-link {
+  margin: 20px;
+  font-size: 0.8em;
+}
+
+.card.OrganizationResults h2 {font-size: 1.4em;display: block;}
+.card.OrganizationResults h2 img {
+  height: 1.25em;
+  margin-top: -5px
+}
+.card.OrganizationResults .body-content h3 {
+  font-size: 0.95em;
+  margin: 15px 0 4px 0;
+}
+.card.OrganizationResults .body-content p {
+  font-size: 0.8em;
+  margin: 0 0 25px 0;
+  line-height: 1.5;
+}
+.card.OrganizationResults .explaainified {
+  line-height: 1.7;
+}
+.card.OrganizationResults .body-content div.bold {
+  font-size: 1.2em;
+  line-height: 1.3;
+}
+.card.OrganizationResults .body-content div.subheading {
+  font-size: 0.9em;
+  margin: 10px 0 5px;
+}
+.card.OrganizationResults .body-content .seats.swings-2 div.subheading {
+  color: #da368f;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 15px;
+}
+.card.OrganizationResults .body-content .seat-list {
+  display: table;
+  width: 100%;
+}
+.card.OrganizationResults .share-buttons {
+  margin: 10px;
+}
+.card.OrganizationResults .share-buttons .btn {
+  padding: 12px 24px;
+/*   width: calc(50% - 10px); */
+  font-size: 1.02em;
+}
+.card.OrganizationResults section {
+  width: 100%;
+}
+.card .layout-table {
+  display: table;
+  margin: auto;
+}
+.card.OrganizationResults .column {
+  display: table-cell;
+  padding: 10px;
+  vertical-align: middle;
+}
+.card.OrganizationResults .seat.column50 {
+  /* display: table-cell; */
+  width: 50%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.card.OrganizationResults .seat.column50 div.party {
+  background-size: cover;
+  background-position: center;
+/*   background-image: none !important; */
+/*   background-color: #e6e6ff; */
+}
+.card.OrganizationResults .seat.column50 img.party-image {
+  width: 50%;
+}
+
+
+body.desktop .content a.card-icon:hover, body.desktop .card .content a.card-icon:active {
+    color: inherit;
+    background: transparent;
+    border: none;
+}
+
+.card .content a.card-icon {
+    padding: 0;
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card.OrganizationResults .slick-container .card {
+    width: 355px;
+}
+
+.card.OrganizationResults .body-content.results .share-buttons .btn {
+  padding: 6px 12px;
+  width: auto;
+  font-size: 14px;
+}
+
+.card.OrganizationResults .body-content.results .card-media {
+  border-radius: 5px 5px 0 0;
+}
+
+.card.OrganizationResults .body-content.results .card-carousel.layer {
+  padding: 10px;
+}
+
+.card.OrganizationResults .body-content.results .step-number.step-1 {
+  margin-top: -21px;
+}
