@@ -29,7 +29,14 @@ module.exports = class Helpers {
     // Mapping - maps data from parent template to a child template
     if(element.mapping){
       element.mapping.forEach(function(kv){
-        params[kv[0]] = self.getObjectPathProperty(data, kv[1]);
+        if(kv.length == 2)
+          params[kv[0]] = self.getObjectPathProperty(data, kv[1]);
+        else {
+          let props = self.getObjectPathProperty(data, kv[0]);
+          for(var key in props){
+            params[key] = props[key];
+          }
+        }
       });
     } else {
       params = data;

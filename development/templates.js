@@ -12,7 +12,7 @@ module.exports = function(CardTemplates){
     "attr": {
       "class": {
         // Value will be taken from data.type
-        "var": "type"
+        "var": "mainClass"
       },
       "data-uri": {
         "var": "@id"
@@ -219,6 +219,174 @@ module.exports = function(CardTemplates){
             "condition": "!isWaiting",
             "template": "constituencyResults"
           }
+        ]
+      },
+      {
+        "condition": "isWaiting",
+        "template": "loading"
+      },
+      {
+        "dom": "section.get-registered.divider",
+        "content": [
+          {
+            "dom": "div.step-number.step-2",
+            "condition": "constituencyResults",
+            "content": "2"
+          },
+          {
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "Next, set it in stone 🎉"
+          },
+          {
+            "dom": "p",
+            "condition": "constituencyResults",
+            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+          },
+          {
+            "dom": "p.small-link",
+            "condition": "constituencyResults",
+            "content":{
+               "var": "constituencyResults.whereIWillBeText",
+               "markdown": "true"
+             }
+          },
+          {
+            "dom": "div.layout-table",
+            "content": [
+              {
+                "dom": "div.column.learn-more",
+                "condition": "constituencyResults",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "a.discard-card-style",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
+                            },
+                            "content": [
+                              {
+                                "dom": "button.btn.btn-primary",
+                                "content": "Learn more"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": "div.column",
+                "content": [
+                  {
+                    "condition": "!constituencyResults",
+                    "dom": "div.bold",
+                    "content": "or go straight to register"
+                  },
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "div.step-number.step-3",
+            "content": "3"
+          },
+          {
+            "dom": "h2",
+            "content": "Finally, multiply your vote"
+          },
+          {
+            "dom": "p",
+            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
+          },
+          {
+            "template": "shareButtons",
+            "mapping": [
+              ["facebookShareHref", "constituencyResults.facebookShareHref"],
+              ["twitterShareHref", "constituencyResults.twitterShareHref"]
+            ]
+          },
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.OrganizationResults = {
+    "dom": "div.content.postcode-compare",
+    "attr": {
+      "class": {
+        // Gets value from data.constituencyResults.resultsClass
+        "resultsLoaded": true
+      }
+    },
+    "content": [
+      // This loads template with postcodeFormHeader name
+      { "template": "postcodeFormHeader" },
+      {
+        "dom": "div.body-content.results",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "div.step-number.step-1",
+            "condition": "constituencyResults",
+            "content": "1"
+          },
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "template": "Organization"
+          },
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "template": "more-stuff",
+            "mapping": [['moreStuff']]
+          },
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "template": "share",
+            "mapping": [['shareButtonCard']]
+          },
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "content": {
+                "func": ['renderExtraCards', 'extraCards']
+            }
+          }
+
         ]
       },
       {

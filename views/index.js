@@ -417,6 +417,11 @@ class CardGroup {
 
 class Card {
   constructor(data) {
+    // Artem Klyuev: This is cards default class name override ("postode-compare" class for OrganizationResults class, fast way). Do't need after css tweaks.
+    data.mainClass = data.type;
+    if (data.type === 'OrganizationResults')
+      data.mainClass = data.type + ' ' + 'postcode-compare';
+
     this.cardContent = new CardContent(data);
     this.data = data;
   }
@@ -686,19 +691,20 @@ function getResults(){
             footer: [
               yourFooter
             ],
-            type: "Organization" // Temporary
+            type: "OrganizationResults", // Temporary,
+            constituencyResults: {},
+            moreStuff: {
+              heading: "Add more stuff!",
+              buttonText: "Add more stuff",
+              buttonAction: function(){routes.root().push()}
+            },
+            shareButtonCard: shareButtonCard[0],
+            renderExtraCards: function(cards){
+              return new CardGroup({cards: cards});
+            },
+            extraCards: extraCards
           }
-        ],
-        [
-          {
-            type: "more-stuff",
-            heading: "Add more stuff!",
-            buttonText: "Add more stuff",
-            buttonAction: function(){routes.root().push()},
-          }
-        ],
-        shareButtonCard,
-        extraCards
+        ]
       ]);
       setTimeout(function(){
         deferred.resolve();
