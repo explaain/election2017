@@ -103,7 +103,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       data.seats[0].uniHomeLocation = 'Home',
       data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com%2Fstudents%2F&display=popup&ref=plugin&src=share_button';
-      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at Home or at Uni in %23GE2017. How are you using your vote? ge2017.com';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'Students! Are you trying to decide which is the more powerful vote at home or at uni for %23GE2017? Try out this tool! ge2017.com';
       console.log(data)
       return data;
     })
@@ -113,6 +113,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
 const getContenders = function(postcode) {
   var user = {};
   var data = {};
+  var forceSwing = false;
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -121,6 +122,12 @@ const getContenders = function(postcode) {
     } else {
       data = results;
       user = {constituency: results.user.constituency};
+      console.log('forceSwing: ' + forceSwing);
+      console.log(results.user.constituency.id);
+      console.log(swingSeatsToForce);
+      console.log(swingSeatsToForce.indexOf(results.user.constituency.id));
+      forceSwing = swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
+      console.log('forceSwing: ' + forceSwing);
       return getPartyChances(data);
     }
   }).then(function(results) {
@@ -128,6 +135,9 @@ const getContenders = function(postcode) {
       return results;
     } else {
       var threshold = 0.5;
+      if (forceSwing) {
+        threshold = 0;
+      }
       var partyKeys = Object.keys(results);
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         return results[partyKey].chance > threshold;
@@ -142,6 +152,9 @@ const getContenders = function(postcode) {
       topParties.sort(function(a, b) {
         return parseFloat(b.chance) - parseFloat(a.chance);
       });
+      if (forceSwing) {
+        topParties = topParties.slice(0,3);
+      }
 
       return {
         location: user.constituency.name,
@@ -213,6 +226,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (results.error) {
       return results;
     } else {
+      console.log(results);
       totalResults.parties = results;
       return totalResults;
     }

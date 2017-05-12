@@ -324,11 +324,11 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "h2",
-            "content": "Finally, multiply your vote"
+            "content": "Finally, share and spread the power"
           },
           {
             "dom": "p",
-            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
+            "content": "Let friends know where their vote is most effective this election by sharing this tool."
           },
           {
             "template": "shareButtons",
