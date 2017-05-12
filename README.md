@@ -17,6 +17,8 @@ npm install gulp -g
 
 ```sh
 git checkout development
+# build and cache external libraries (once per day or when those libraries are updated)
+npm run build
 # run dev silently
 npm run dev
 # OR run with debugging (easier to catch errors on the fly!)
