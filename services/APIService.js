@@ -132,8 +132,8 @@ const getContenders = function(postcode) {
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         return results[partyKey].chance > threshold;
       });
-      var topParties = allParties.filter(function(party) {
-        return topPartyKeys.indexOf(party.key) > -1;
+      var topParties = topPartyKeys.map(function(partyKey) {
+        return getFullParty(partyKey);
       });
       topParties.map(function(party) {
         party.chance = results[party.key].chance;
@@ -363,22 +363,29 @@ APIService.prototype.getAgreements = function(data) {
 APIService.prototype.getPartyChances = function(data) {
   console.log('starting getPartyChances')
   var partyChances = {};
+  console.log(-1);
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
+  console.log(0);
+  console.log(euRefLeavePercent);
 
-  var currentParty = {}
   console.log(1);
-  currentParty = allParties.filter(function(party) {
-    var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
-    console.log(2);
-    return partyResult ? partyResult.rank == 1 : false;
-  })[0];
+  var resultParties = data.results["my-constituency"]["ge2015"].parties;
+  console.log(2);
+  console.log(resultParties);
+  var currentPartyKey = getWinningPartyKey(resultParties);
   console.log(3);
-  console.log(currentParty);
-  currentParty.name = getFullParty(currentParty.key).name;
+  console.log(currentPartyKey);
+  var currentParty = getFullParty(currentPartyKey);
   console.log(4);
+  console.log(currentParty);
 
-  allParties.forEach(function(party) {
-    var partyKey = party.key;
+  var resultPartyKeys = Object.keys(resultParties);
+  resultPartyKeys.forEach(function(partyKey) {
+    console.log(resultPartyKeys);
+    console.log(partyKey);
+
+    var party = resultParties[partyKey];
+    console.log(party);
     try {
       console.log('hi');
       console.log(data.results["my-constituency"]["oddChances"]);
@@ -392,7 +399,11 @@ APIService.prototype.getPartyChances = function(data) {
       console.log(222);
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
       console.log(333);
-      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
+      try {
+        var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
+      } catch(e) {
+        var partyBrexitStance = 0.5;
+      }
       console.log(444);
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       console.log(555);
@@ -487,26 +498,9 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
     var partyKey = party.party;
     var partyKey = reconcilePartyKeys(party.party);
     console.log(partyKey);
+    party.party = partyKey;
     result["ge2015"].parties[partyKey] = party;
   })
-  // var result = {
-  //   "ge2015": {
-  //     parties: {
-  //       "labour": {
-  //         share: 34,
-  //         votes: 33145,
-  //         shareMargin: 6,
-  //         voteMargin: 5492
-  //       },
-  //       "conservative": {
-  //         share: 29,
-  //         votes: 27653,
-  //         shareMargin: -6,
-  //         voteMargin: -5492
-  //       }
-  //     }
-  //   }
-  // };
   console.log('loadGe2015Results');
   console.log(result);
   return result;
@@ -559,13 +553,30 @@ var getFullParty = function(partyKey) {
   return fullParty;
 }
 
+//This function requires ranks in the party results
+var getWinningPartyKey = function(resultParties) {
+  var resultPartyKeys = Object.keys(resultParties);
+  console.log(resultPartyKeys);
+  var winningPartyKey = resultPartyKeys.filter(function(resultPartyKey) {
+    console.log(resultPartyKey);
+    if (resultParties[resultPartyKey].rank == 1) {
+      console.log('done');
+      console.log(resultParties[resultPartyKey]);
+      return resultPartyKey;
+    }
+  })[0];
+  console.log(winningPartyKey);
+  return winningPartyKey;
+}
+
 var reconcilePartyKeys = function(suppliedKey) {
   console.log(suppliedKey);
   var properKey = partyReconciliationValues[suppliedKey];
+  console.log(properKey);
   if (properKey === undefined) {
     console.log('Undefined!!');
+    properKey = suppliedKey;
   }
-  console.log(properKey);
   return properKey;
 }
 

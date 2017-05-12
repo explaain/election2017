@@ -41,4 +41,13 @@ var partyReconciliationValues = {
   "welsh-conservative-party-candidate": "conservative",
   "welsh-liberal-democrats": "lib-dem",
   "green-party-/-plaid-werdd": "green",
+  "health-action": "health ",
+  "democratic-unionist-party---d.u.p.": "dup",
+  "alliance-party": "alliance",
+  "sinn-féin": "sinn-fein",
+  "sinn-fein": "sinn-fein",
+  "sdlp-social-democratic-&-labour-party": "sdlp",
+  "alliance": "alliance",
+  "plaid-cymru---the-party-of-wales": "plaid",
+  "plaid-cymru---carmarthenshire's-voice": "plaid",
 }
