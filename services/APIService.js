@@ -244,7 +244,7 @@ APIService.prototype.resultAlgorithm = function(data) {
     if (!partyScores[partyKey]) {
       delete partyScores[partyKey];
     } else {
-      var party = allParties.filter(function(p) {return p.key == partyKey})[0];
+      var party = getFullParty(partyKey);
       party.score = partyScores[partyKey];
       party.matches = {
         plus: partyMatches[partyKey].matches.filter(function(match) {
@@ -374,10 +374,7 @@ APIService.prototype.getPartyChances = function(data) {
   })[0];
   console.log(3);
   console.log(currentParty);
-  currentParty.name = allParties.filter(function(party) {
-    console.log(party);
-    return party.key == currentParty.key
-  })[0].name;
+  currentParty.name = getFullParty(currentParty.key).name;
   console.log(4);
 
   allParties.forEach(function(party) {
@@ -477,6 +474,8 @@ APIService.prototype.loadEURefResults = function(areaName) {
       return res.area.indexOf(areaName.split(" ")[0]);
     });
   }
+  console.log('loadEURefResults');
+  console.log(results);
   return results;
 }
 
@@ -484,7 +483,10 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
   var result = {"ge2015": {parties:{}}};
   var resultsTemp = ge2015Results[areaKey];
   resultsTemp.forEach(function(party) {
+    console.log(party.party);
     var partyKey = party.party;
+    var partyKey = reconcilePartyKeys(party.party);
+    console.log(partyKey);
     result["ge2015"].parties[partyKey] = party;
   })
   // var result = {
@@ -505,6 +507,8 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
   //     }
   //   }
   // };
+  console.log('loadGe2015Results');
+  console.log(result);
   return result;
 }
 
@@ -538,6 +542,31 @@ APIService.prototype.loadBettingOdds = function(areaKey) {
 
 APIService.prototype.loadPartyStances = function() {
   return partyStances;
+}
+
+
+var getFullParty = function(partyKey) {
+  var fullParty = allParties.filter(function(party) {
+    return party.key == partyKey;
+  })[0];
+  if (fullParty === undefined) {
+    fullParty = {
+      key: partyKey,
+      name: partyKey
+    }
+    console.log('Created a party as we didn\'t have one stored that we recognised')
+  }
+  return fullParty;
+}
+
+var reconcilePartyKeys = function(suppliedKey) {
+  console.log(suppliedKey);
+  var properKey = partyReconciliationValues[suppliedKey];
+  if (properKey === undefined) {
+    console.log('Undefined!!');
+  }
+  console.log(properKey);
+  return properKey;
 }
 
 
