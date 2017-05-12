@@ -90,7 +90,7 @@ var constituencyOdds = {
       },
       {
          "party": "labour",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -412,7 +412,7 @@ var constituencyOdds = {
       },
       {
          "party": "labour",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "ukip",
@@ -482,7 +482,7 @@ var constituencyOdds = {
       },
       {
          "party": "conservative",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -622,7 +622,7 @@ var constituencyOdds = {
       },
       {
          "party": "lib-dem",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -664,7 +664,7 @@ var constituencyOdds = {
       },
       {
          "party": "conservative",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -692,7 +692,7 @@ var constituencyOdds = {
       },
       {
          "party": "lib-dem",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -720,7 +720,7 @@ var constituencyOdds = {
       },
       {
          "party": "conservative",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -818,7 +818,7 @@ var constituencyOdds = {
       },
       {
          "party": "conservative",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -986,7 +986,7 @@ var constituencyOdds = {
       },
       {
          "party": "lib-dem",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -1154,7 +1154,7 @@ var constituencyOdds = {
       },
       {
          "party": "labour",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",
@@ -1168,7 +1168,7 @@ var constituencyOdds = {
       },
       {
          "party": "conservative",
-         "odds": "Evens"
+         "odds": "1/1"
       },
       {
          "party": "green",

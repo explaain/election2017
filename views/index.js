@@ -1,3 +1,6 @@
+/* Master view file */
+
+/* Including dependencies */
 const
   hyperdom = require('hyperdom'),
   h = hyperdom.html,
@@ -15,10 +18,9 @@ const
   eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
 
-if(StepName==='postcode-compare'){
-  trackEvent("Landed Students");
-}
-
+// Describing different routes of app
+// warn. at the moment /dashboards and /steps are redirected to "/" in index.ejs
+//   by express routing - this was made to avoid 404 errors on page refresh
 const routes = {
   root: router.route('/'),
   dashboard: router.route('/dashboards/:name'),
@@ -278,6 +280,7 @@ class Step {
         break;
 
       case 'postcode-compare':
+        trackEvent("Landed Students");
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
           type: 'postcode-compare',
@@ -489,8 +492,11 @@ class CardContent {
           e.stopPropagation();
           routes.root().push();
         }
+        data.postcodeError = model.user.postcodeError;
         data.postcodeSubmit = function(e){
           e.stopPropagation();
+          // Flushing results, in this case this makes sense to do on click, not on load
+          model.user.resultsCompare.length = 0;
           model.user.isWaiting = "postcode-compare";
           api.comparePostcodes(model.user.postcode, model.user.postcode_uni).then(function(results){
             delete model.user.isWaiting;
@@ -509,10 +515,16 @@ class CardContent {
               }
             ];
             if (results.error) {
-              trackEvent("Wrong Postcodes: " + model.user.postcode + " " + model.user.postcode_uni);
-              helpers.throwError("Sorry, we didn't recognise that postcode!")
+              trackEvent("Wrong Postcodes",{type: "Student",data: model.user.postcode + " " + model.user.postcode_uni});
+              if(results.error==="empty"){
+                helpers.throwError("Please provide both your Home and Uni postcodes","postcodeError")
+              } else if(results.error==="connection"){
+                helpers.throwError("Sorry, you are not connected to Internet. Please re-connect and try again.","postcodeError")
+              } else {
+                helpers.throwError("Sorry, we didn't recognise that postcode!","postcodeError")
+              }
             } else {
-              trackEvent("Received Results");
+              trackEvent("Received Results",{type: "Student"});
               model.user.resultsCompare.push(results);
             }
             self.refresh();
@@ -677,6 +689,14 @@ function getResults(){
             type: "Organization" // Temporary
           }
         ],
+        [
+          {
+            type: "more-stuff",
+            heading: "Add more stuff!",
+            buttonText: "Add more stuff",
+            buttonAction: function(){routes.root().push()},
+          }
+        ],
         shareButtonCard,
         extraCards
       ]);
@@ -696,7 +716,7 @@ helpers.loadTemplates(templatesUrl).then(function(templates){
 
 });*/
 
-const _templates = require("../temp/templates.js");
+const _templates = require("../tmp/templates.js");
 for(var key in _templates){
   CardTemplates[key] = _templates[key];
 };

@@ -1,3 +1,5 @@
+/* This function actually calls the event tracker (Mixpanel at the moment) */
+
 module.exports = function(eventName,props){
   if(!props||typeof(props)!=='object'){
     props = {};

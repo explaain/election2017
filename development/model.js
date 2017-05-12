@@ -1,3 +1,7 @@
+/* This code populates some test entries to Model.
+ * We made it like that so we separate test model entries from real entries
+ */
+
 module.exports = function(model){
   model.dashboards.home.tasks.push("!TEST-postcode-compare");
   model.tasks["!TEST-postcode-compare"] = {

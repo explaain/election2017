@@ -109,6 +109,10 @@ footer a.behind-this {
   border-color: #ccc;
 }
 
+footer {
+  padding-bottom:20px;
+}
+
 i.fa-check {
   font-size: 1.4em;
   display: inline-block;
@@ -305,7 +309,7 @@ section.questions a.task:hover {
 .slick-container .card {
   width: 380px;
 }
-.card.postcode, .card.share, .card.vote-worth, .card.postcode-compare {
+.card.postcode, .card.share, .card.vote-worth, .card.postcode-compare, .card.more-stuff {
   text-align: center;
 }
 .card.expandable {

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
+<% const NOCACHE = (process.env.HEROKU_RELEASE_VERSION?process.env.HEROKU_RELEASE_VERSION:Math.random()) %>
 <html>
   <head>
     <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" crossorigin="anonymous" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Lato:400,600,700,900" rel="stylesheet" type="text/css" />
-    <link href="/production.css" rel="stylesheet" type="text/css" />
-    <link href="/client.css" rel="stylesheet" type="text/css" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link href="/compiled.css?v=<%=NOCACHE%>" rel="stylesheet" type="text/css" />
+    <link href="/client.css?v=<%=NOCACHE%>" rel="stylesheet" type="text/css" />
+
+    <%- include partials/favicons.ejs %>
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
@@ -16,6 +18,7 @@
     <% } %>
 
     <%- include partials/event-tracking.ejs %>
+    <%- include partials/hotjar.ejs %>
 
   </head>
   <body class='desktop'>
@@ -30,6 +33,6 @@
       }
       const MODE = (location.href.match(/production/)?'production':'<%= process.env.NODE_ENV %>');
     </script>
-    <script src="/production.js" type="text/javascript"></script>
+    <script src="/compiled.js?v=<%=NOCACHE%>" type="text/javascript"></script>
   </body>
 </html>

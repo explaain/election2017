@@ -1,3 +1,5 @@
+/* Master model */
+
 module.exports = {
   step: -1,
   // todo: those are temporary here, refactor

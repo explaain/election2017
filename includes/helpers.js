@@ -1,7 +1,12 @@
+/* This file is used widely in views/index.js
+ * Please read annotations to each function in this class for more info
+ */
+
 const q = require("q");
 
 module.exports = class Helpers {
 
+  // Dependencies
   constructor(model, h, cardTemplates,http, router) {
     this.model = model;
     this.h = h;
@@ -10,13 +15,18 @@ module.exports = class Helpers {
     this.router = router;
   }
 
+  // The template engine (script), wrapping Hyperdom
+  // See development/templates.js for sample templating format
   assembleCards(data, template) {
     // todo: resolve issue with global and local scopes (remember the problem with passing function)
     const self = this;
+    // Defining a type of the template
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
+    // You can pass either this or that
     if (typeof template === 'string') { template = self.cardTemplates[template]; }
     const element = template;
     var params = {};
+    // Mapping - maps data from parent template to a child template
     if(element.mapping){
       element.mapping.forEach(function(kv){
         params[kv[0]] = self.getObjectPathProperty(data, kv[1]);
@@ -26,6 +36,7 @@ module.exports = class Helpers {
     }
     var content,
       attr = {};
+    // Condition in templates is a boolean checker, if false - the content is ignored
     if(
       element.condition
       &&
@@ -36,21 +47,29 @@ module.exports = class Helpers {
       )
     )
       return undefined;
+    // If a content is a template
     else if (element.template)
       content = self.assembleCards(params, element.template.var ? self.getObjectPathProperty(params, element.template.var) : element.template)
+    // If no content
     else if (!element.content)
       content = '';
+    // Loops
     else if (element.loop)
       content = self.getObjectPathProperty(params, element.loop).map(function(_params){return element.content.map(function(_element){return self.assembleCards(_params, _element);})});
+    // If content is Array - that means it contains children templates or other data
     else if (element.content.constructor === Array)
       content = element.content.map(function(el){return self.assembleCards(params, el); });
+    // If content has "var", it will take it from the variable
     else if (element.content.var)
       content = self.getObjectPathProperty(params, element.content.var) || ''; //'var' MUST use dot notation, not []
+    // You can execute a function and pass params inside that function from a template
     else if (element.content.func)
       content = self.getObjectPathProperty(params, element.content.func[0]).apply(null,element.content.func.slice(1).map(function(p){return self.getObjectPathProperty(params, p)}));
+    // Default value
     else
       content = element.default ? element.default : element.content;
 
+    // Processing "attr", see development/templates.js for sample templating format
     if (element.attr) {
       var attrKeys = Object.keys(element.attr);
       attrKeys.forEach(function(attrKey) {
@@ -89,10 +108,15 @@ module.exports = class Helpers {
     }
   }
 
+  // Gets a model by path, not used a lot
   getModel(path){
     const self = this;
     return self.getObjectPathProperty(self.model, path);  // a moving reference to internal objects within model
   }
+
+  // Gets a value from object from a "dot" notation path
+  // if there is an object model={a:{b:{c:"hello!"}}}, then
+  // getObjectPathProperty(model, "a.b.c") returns "hello!"
 
   getObjectPathProperty(object, path){
     const self = this;
@@ -107,7 +131,7 @@ module.exports = class Helpers {
     return schema[pList[len-1]];
   }
 
-  loadTemplates(templateUrl){
+  /*loadTemplates(templateUrl){
     const self = this;
     var deferred = q.defer();
     self.http.get(templateUrl)
@@ -115,8 +139,10 @@ module.exports = class Helpers {
       deferred.resolve(res.body);
     });
     return deferred.promise;
-  }
+  }*/
 
+  // A simple function to turn Exmplain markdown into links
+  // Explain markdown looks like [Text](URL)
   markdownToHtml(text) {
     const self = this;
     return text.replace(
@@ -125,6 +151,7 @@ module.exports = class Helpers {
     );
   }
 
+  // Updates data in model
   updateData(dataUpdates) {
     const self = this;
     dataUpdates.forEach(function(update) {
@@ -132,6 +159,7 @@ module.exports = class Helpers {
     });
   }
 
+  // Updates model
   updateModel(path, value, action) {
     const self = this;
     var schema = self.model;  // a moving reference to internal objects within model
@@ -155,6 +183,7 @@ module.exports = class Helpers {
     }
   }
 
+  // Updates a single object
   updateObject(obj, objUpdates) {
     const self = this;
     var objKeys = Object.keys(objUpdates);
@@ -164,12 +193,20 @@ module.exports = class Helpers {
     return obj;
   }
 
-  throwError(err){
+  /* Throws error
+   * @err - text of error
+   * @modelProp - property for the error - saves to model.user.<ErrorProperty>
+   * defaults to model.user.error
+   */
+  throwError(err,modelProp){
     const self = this;
-    self.model.user.error = err;
-    $('html, body').animate({ scrollTop: 0}, 500);
+    if(!modelProp){
+      modelProp = "error";
+      $('html, body').animate({ scrollTop: 0}, 500);
+    }
+    self.model.user[modelProp] = err;
     setTimeout(function(){
-      delete self.model.user.error;
+      delete self.model.user[modelProp];
     },500);
   }
 
