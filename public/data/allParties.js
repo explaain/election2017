@@ -66,25 +66,30 @@ var allParties = [
     key: "dup",
     name: "Democratic Unionist Party",
     color: "#d66a48",
+    colorLight: "#d66a48",
   },
   {
     key: "sinn-fein",
     name: "Sinn-Féin",
     color: "#03823f",
+    colorLight: "#03823f",
   },
   {
     key: "plaid",
     name: "Plaid Cymru",
     color: "#03823f",
+    colorLight: "#03823f",
   },
   {
     key: "sdlp",
     name: "Social Democratic and Labour Party",
     color: "#96fa5c",
+    colorLight: "#96fa5c",
   },
   {
     key: "uup",
     name: "Ulster Unionist Party",
     color: "#9796ff",
+    colorLight: "#9796ff",
   }
 ];
