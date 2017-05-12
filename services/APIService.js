@@ -103,7 +103,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       data.seats[0].uniHomeLocation = 'Home',
       data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com%2Fstudents%2F&display=popup&ref=plugin&src=share_button';
-      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'I know how to choose between voting at Home or at Uni in %23GE2017. How are you using your vote? ge2017.com';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'Students! Are you trying to decide which is the more powerful vote at home or at uni for %23GE2017? Try out this tool! ge2017.com';
       console.log(data)
       return data;
     })
@@ -113,6 +113,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
 const getContenders = function(postcode) {
   var user = {};
   var data = {};
+  var forceSwing = false;
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -121,6 +122,12 @@ const getContenders = function(postcode) {
     } else {
       data = results;
       user = {constituency: results.user.constituency};
+      console.log('forceSwing: ' + forceSwing);
+      console.log(results.user.constituency.id);
+      console.log(swingSeatsToForce);
+      console.log(swingSeatsToForce.indexOf(results.user.constituency.id));
+      forceSwing = swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
+      console.log('forceSwing: ' + forceSwing);
       return getPartyChances(data);
     }
   }).then(function(results) {
@@ -128,12 +135,15 @@ const getContenders = function(postcode) {
       return results;
     } else {
       var threshold = 0.5;
+      if (forceSwing) {
+        threshold = 0;
+      }
       var partyKeys = Object.keys(results);
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         return results[partyKey].chance > threshold;
       });
-      var topParties = allParties.filter(function(party) {
-        return topPartyKeys.indexOf(party.key) > -1;
+      var topParties = topPartyKeys.map(function(partyKey) {
+        return getFullParty(partyKey);
       });
       topParties.map(function(party) {
         party.chance = results[party.key].chance;
@@ -142,6 +152,9 @@ const getContenders = function(postcode) {
       topParties.sort(function(a, b) {
         return parseFloat(b.chance) - parseFloat(a.chance);
       });
+      if (forceSwing) {
+        topParties = topParties.slice(0,3);
+      }
 
       return {
         location: user.constituency.name,
@@ -213,6 +226,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (results.error) {
       return results;
     } else {
+      console.log(results);
       totalResults.parties = results;
       return totalResults;
     }
@@ -244,7 +258,7 @@ APIService.prototype.resultAlgorithm = function(data) {
     if (!partyScores[partyKey]) {
       delete partyScores[partyKey];
     } else {
-      var party = allParties.filter(function(p) {return p.key == partyKey})[0];
+      var party = getFullParty(partyKey);
       party.score = partyScores[partyKey];
       party.matches = {
         plus: partyMatches[partyKey].matches.filter(function(match) {
@@ -363,25 +377,29 @@ APIService.prototype.getAgreements = function(data) {
 APIService.prototype.getPartyChances = function(data) {
   console.log('starting getPartyChances')
   var partyChances = {};
+  console.log(-1);
   var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
+  console.log(0);
+  console.log(euRefLeavePercent);
 
-  var currentParty = {}
   console.log(1);
-  currentParty = allParties.filter(function(party) {
-    var partyResult = data.results["my-constituency"]["ge2015"].parties[party.key];
-    console.log(2);
-    return partyResult ? partyResult.rank == 1 : false;
-  })[0];
+  var resultParties = data.results["my-constituency"]["ge2015"].parties;
+  console.log(2);
+  console.log(resultParties);
+  var currentPartyKey = getWinningPartyKey(resultParties);
   console.log(3);
-  console.log(currentParty);
-  currentParty.name = allParties.filter(function(party) {
-    console.log(party);
-    return party.key == currentParty.key
-  })[0].name;
+  console.log(currentPartyKey);
+  var currentParty = getFullParty(currentPartyKey);
   console.log(4);
+  console.log(currentParty);
 
-  allParties.forEach(function(party) {
-    var partyKey = party.key;
+  var resultPartyKeys = Object.keys(resultParties);
+  resultPartyKeys.forEach(function(partyKey) {
+    console.log(resultPartyKeys);
+    console.log(partyKey);
+
+    var party = resultParties[partyKey];
+    console.log(party);
     try {
       console.log('hi');
       console.log(data.results["my-constituency"]["oddChances"]);
@@ -395,7 +413,11 @@ APIService.prototype.getPartyChances = function(data) {
       console.log(222);
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
       console.log(333);
-      var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
+      try {
+        var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
+      } catch(e) {
+        var partyBrexitStance = 0.5;
+      }
       console.log(444);
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
       console.log(555);
@@ -477,6 +499,8 @@ APIService.prototype.loadEURefResults = function(areaName) {
       return res.area.indexOf(areaName.split(" ")[0]);
     });
   }
+  console.log('loadEURefResults');
+  console.log(results);
   return results;
 }
 
@@ -484,27 +508,15 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
   var result = {"ge2015": {parties:{}}};
   var resultsTemp = ge2015Results[areaKey];
   resultsTemp.forEach(function(party) {
+    console.log(party.party);
     var partyKey = party.party;
+    var partyKey = reconcilePartyKeys(party.party);
+    console.log(partyKey);
+    party.party = partyKey;
     result["ge2015"].parties[partyKey] = party;
   })
-  // var result = {
-  //   "ge2015": {
-  //     parties: {
-  //       "labour": {
-  //         share: 34,
-  //         votes: 33145,
-  //         shareMargin: 6,
-  //         voteMargin: 5492
-  //       },
-  //       "conservative": {
-  //         share: 29,
-  //         votes: 27653,
-  //         shareMargin: -6,
-  //         voteMargin: -5492
-  //       }
-  //     }
-  //   }
-  // };
+  console.log('loadGe2015Results');
+  console.log(result);
   return result;
 }
 
@@ -538,6 +550,48 @@ APIService.prototype.loadBettingOdds = function(areaKey) {
 
 APIService.prototype.loadPartyStances = function() {
   return partyStances;
+}
+
+
+var getFullParty = function(partyKey) {
+  var fullParty = allParties.filter(function(party) {
+    return party.key == partyKey;
+  })[0];
+  if (fullParty === undefined) {
+    fullParty = {
+      key: partyKey,
+      name: partyKey
+    }
+    console.log('Created a party as we didn\'t have one stored that we recognised')
+  }
+  return fullParty;
+}
+
+//This function requires ranks in the party results
+var getWinningPartyKey = function(resultParties) {
+  var resultPartyKeys = Object.keys(resultParties);
+  console.log(resultPartyKeys);
+  var winningPartyKey = resultPartyKeys.filter(function(resultPartyKey) {
+    console.log(resultPartyKey);
+    if (resultParties[resultPartyKey].rank == 1) {
+      console.log('done');
+      console.log(resultParties[resultPartyKey]);
+      return resultPartyKey;
+    }
+  })[0];
+  console.log(winningPartyKey);
+  return winningPartyKey;
+}
+
+var reconcilePartyKeys = function(suppliedKey) {
+  console.log(suppliedKey);
+  var properKey = partyReconciliationValues[suppliedKey];
+  console.log(properKey);
+  if (properKey === undefined) {
+    console.log('Undefined!!');
+    properKey = suppliedKey;
+  }
+  return properKey;
 }
 
 
