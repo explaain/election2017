@@ -369,11 +369,13 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "div",
-            "template": "explainButton",
-            "mapping": [['onWhy']]
+            "condition": "!isWaiting",
+            "content": {
+              "func": ['renderPercentages']
+            }
           },
           {
-            "dom": "div#carousel",
+            "dom": "div",
             "condition": "!isWaiting",
             "content": {
                 "func": ['renderExtraCards', 'extraCards']
@@ -1250,21 +1252,6 @@ module.exports = function(CardTemplates){
         "content": {
           "var": "buttonText"
         }
-      }
-    ]
-  }
-  CardTemplates.explainButton =
-  {
-    "dom": "div.explain-button",
-    "content": [
-      {
-        "dom": ".btn.btn-default",
-        "attr": {
-          "onclick": {
-            "var": "toggleWhy"
-          }
-        },
-        "content": "Show me why"
       }
     ]
   }

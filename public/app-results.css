@@ -187,3 +187,8 @@ body.desktop .content a.card-icon:hover, body.desktop .card .content a.card-icon
 .card.OrganizationResults .body-content.results .step-number.step-1 {
   margin-top: -21px;
 }
+
+#matches {
+  text-align: left;
+  padding: 10px;
+}

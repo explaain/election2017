@@ -170,7 +170,6 @@ class Progress {
   }
 }
 
-
 class Dashboard {
 
   constructor(params) {
@@ -415,6 +414,25 @@ class CardGroup {
 
 }
 
+class Percentages {
+  constructor(data) {
+    this.data = data;
+  }
+
+  render() {
+    return h('div#matches',
+      h('h3', 'How closely you match: ' + Math.round(this.data.matchPercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.matchPercentage +"%;"})
+      ),
+      h('h3', 'Chances of success: ' + Math.round(this.data.chancePercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.chancePercentage +"%;"})
+      )
+    )
+  }
+}
+
 class Card {
   constructor(data) {
     this.cardContent = new CardContent(data);
@@ -646,6 +664,7 @@ function getResults(){
         shareButtonCard = [];
         extraCards = [];
       } else {
+        console.log('results', results);
         results.parties[0].matches.plus.forEach(function(match) {
           yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
           + match.description + '<br>';
@@ -715,11 +734,11 @@ function getResults(){
               buttonText: "Add more stuff",
               buttonAction: function(){routes.root().push()}
             },
-            onWhy: {
-              toggleWhy: function () {
-                $('#carousel').toggle();
-                // $('.explain-button').hide();
-              }
+            renderPercentages: function () {
+              return new Percentages({
+                matchPercentage: results.parties[0].matchPercentage,
+                chancePercentage: results.parties[0].chancePercentage
+              })
             },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
