@@ -7,6 +7,10 @@ module.exports = {
   landedOnPostcode: 0,
   landedOnResult: 0,
 
+  showProgressBar: false,
+  progressBarCurrent: 0,
+  progressBarTotal: 2,
+
   user: {
     postcode: '',
     postcode_uni: '',
@@ -18,6 +22,43 @@ module.exports = {
     resultsOptions: [],
     quizFlow: [],
     isWaiting: false
+  },
+
+  phrases: {
+    home: {
+      title: "What do you want to do?",
+      text: "I want to ${doSomething}",
+      options: {
+        doSomething: {
+          "Know what I can do about Brexit?": {
+            goto: {
+              type: 'dashboard',
+              name: 'brexit',
+              task: 'brexit',
+            },
+          },
+          "Decide who to vote for": {
+            goto: {
+              type: 'dashboard',
+              name: 'decide',
+              task: 'decide',
+            },
+          },
+          "Learn about the parties": {
+            goto: {
+              type: 'step',
+              name: 'story'
+            },
+          },
+         "Know how much my vote counts for": {
+            goto: {
+              type: 'step',
+              name: 'vote-worth'
+            },
+         },
+        },
+      },
+    },
   },
 
   //Dashboards are collections of tasks
