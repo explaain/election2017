@@ -391,8 +391,12 @@ class Step {
         })
         break;
 
-      case 'story':
+      case 'partyStories':
         data.cardGroups.push(partyStories)
+        break;
+
+      case 'sampleStory':
+        data.cardGroups.push(self.step.cardUrls)
         break;
 
       case 'question':
@@ -441,15 +445,17 @@ class Step {
     }
     this.cardGroups = data.cardGroups.map(function(cards){
       cards.forEach(function(card, i) {
-        if(!cards[i].nextStep){
-          cards[i].nextStep = params.next;
+        if (typeof card !== 'string') {
+          if(!cards[i].nextStep){
+            cards[i].nextStep = params.next;
+          }
+          cards[i].type = cards[i].type || params.name;
         }
-        cards[i].type = cards[i].type || params.name;
       });
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0])]);
       } else {
-        return (new CardGroup({cards:cards,nextStep:params.next}));
+        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}));
       }
     })
 
@@ -494,11 +500,23 @@ class CardGroup {
     this.data = data;
   }
 
+  onload() {
+    designers.onCardGroupReady();
+  }
+
   render() {
     const self = this;
-    const cards = self.data.cards.map(function(card){
-      return (new Card(card));
+    var readyPromises = [];
+    const cards = self.data.cards.map(function(card, i){
+      var promise;
+      readyPromises.push(promise);
+      return (new Card(card, promise));
     })
+    q.allSettled(readyPromises)
+    .then(function() {
+      console.log('all done');
+      designers.reinitSlick();
+    });
 
     return h('.card-carousel.layer',
       h('div',
@@ -510,9 +528,13 @@ class CardGroup {
 }
 
 class Card {
-  constructor(data) {
-    this.cardContent = new CardContent(data);
-    this.data = data;
+  constructor(data, readyPromise) {
+    const self = this;
+    self.data = data;
+    const onReady = function() {
+      designers.reinitSlick();
+    }
+    self.cardContent = new CardContent(self.data, onReady, readyPromise);
   }
 
   render() {
@@ -525,14 +547,32 @@ class Card {
 
 class CardContent {
 
-  constructor(data) {
-    this.data = data;
+  constructor(data, onReady, readyPromise) {
+    const self = this;
+    self.data = data;
+    self.onReady = onReady;
+    self.readyPromise = readyPromise;
   }
 
   render() {
     const self = this;
-    const data = self.data;
 
+    if (typeof self.data === 'string') {
+      var cardKey = self.data;
+      if (model.cards[cardKey]) {
+        self.data = model.cards[cardKey];
+      } else {
+        self.readyPromise = http.get(cardKey)
+        .then(function (res) {
+          model.cards[cardKey] = res.body;
+          self.refreshComponent();
+          self.onReady();
+          return h('div.hello', 'Hello');
+        });
+      }
+    }
+
+    const data = self.data;
     switch (data.type) {
 
       case 'postcode':
@@ -659,7 +699,12 @@ class CardContent {
         )
         break;
 
-      case 'story':
+      case 'partyStories':
+        data.name = data.header;
+        data.description = data.content;
+        return helpers.assembleCards(data, 'Organization');
+
+      case 'sampleStory':
         data.name = data.header;
         data.description = data.content;
         return helpers.assembleCards(data, 'Organization');
@@ -691,7 +736,6 @@ class CardContent {
       default:
         console.log('Defaulting');
         return helpers.assembleCards(data, data.type);
-
     }
 
   }
