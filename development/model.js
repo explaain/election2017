@@ -15,4 +15,16 @@ module.exports = function(model){
     },
     dataUpdates: []
   };
+  model.dashboards.home.tasks.push("!TEST-generic-story");
+  model.tasks["!TEST-generic-story"] = {
+    subtype: "multi-submit",
+    color: "#00a2e5",
+    label: "TEST Generic Story",
+    goto: {
+      type: 'step',
+      name: 'sampleStory',
+      next: 'result'
+    },
+    dataUpdates: []
+  };
 }

@@ -7,6 +7,10 @@ module.exports = {
   landedOnPostcode: 0,
   landedOnResult: 0,
 
+  cards: {
+
+  },
+
   showProgressBar: false,
   progressBarCurrent: 0,
   progressBarTotal: 2,
@@ -47,7 +51,7 @@ module.exports = {
           "Learn about the parties": {
             goto: {
               type: 'step',
-              name: 'story'
+              name: 'partyStories'
             },
           },
          "Know how much my vote counts for": {
@@ -130,7 +134,7 @@ module.exports = {
       color: "#c042de",
       goto: {
         type: 'step',
-        name: 'story'
+        name: 'partyStories'
       }
     },
     "vote-worth": {
@@ -421,8 +425,17 @@ module.exports = {
     question: {
 
     },
-    story: {
+    partyStories: {
       label: "Party stories"
+    },
+    sampleStory: {
+      label: "Generic example story",
+      cardUrls: [
+        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+      ]
     },
     policy: {
       label: "Privacy Policy"
