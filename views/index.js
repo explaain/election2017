@@ -516,7 +516,6 @@ class CardGroup {
     })
     q.allSettled(readyPromises)
     .then(function() {
-      console.log('all done');
       designers.reinitSlick();
     });
 
@@ -736,8 +735,6 @@ class CardContent {
         return helpers.assembleCards(data, 'policy');
 
       default:
-        console.log('Defaulting');
-        console.log(data, data.type);
         return helpers.assembleCards(data, data.type);
     }
 
