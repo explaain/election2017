@@ -6,10 +6,13 @@ module.exports = {
   question: '',
   landedOnPostcode: 0,
   landedOnResult: 0,
+  landedOnQuizPriority: 0,
 
   showProgressBar: false,
   progressBarCurrent: 0,
   progressBarTotal: 2,
+
+  featuredTopics: [],
 
   user: {
     postcode: '',
@@ -271,8 +274,8 @@ module.exports = {
         // igor: "final" means the step name where you will be redirected after quiz
         // igor: the "next" here is where you will be redirected *after* the quiz
         // igor: note: you may interrupt the quiz by injecting any task with any route!
-        final: 'postcode',
-        next: 'result'
+        final: 'quiz-priority',
+        next: 'postcode'
       },
       conditions: [
         "user.quizFlow.1",
@@ -287,8 +290,8 @@ module.exports = {
       label: "Jump straight to postcodes",
       goto: {
         type: 'step',
-        name: 'postcode',
-        next: 'result'
+        name: 'quiz-priority',
+        next: 'postcode'
       },
       dataUpdates: []
     },
@@ -370,6 +373,9 @@ module.exports = {
   steps: {
     postcode: {
       label: "Where are you voting from?"
+    },
+    'quiz-priority': {
+      label: "Select priority"
     },
     "vote-worth": {
 

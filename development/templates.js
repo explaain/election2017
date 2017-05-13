@@ -1249,4 +1249,89 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+
+  CardTemplates.quizPriority = {
+    "dom":"div.content",
+    "content":[
+      {
+        "dom":"div.body-content",
+        "content":[
+          {
+            "dom": "h2.q-high-priority",
+            "content": "HIGHER PRIORITY"
+          },
+          {
+            "dom": "div.high-priority",
+            "loop": "quizTopicsHigher",
+            "content": [{"template": "quizTopicPlate"}]
+          },
+          {
+            "dom": "div.divider",
+            "content": ""
+          },
+          {
+            "dom": "div.low-priority",
+            "loop": "quizTopicsLower",
+            "content": [{"template": "quizTopicPlate"}]
+          },
+          {
+            "dom": "h2.q-low-priority",
+            "content": "LOWER PRIORITY"
+          }
+        ]
+      }
+    ]
+  }
+
+  CardTemplates.quizTopicPlate = {
+    "dom": "a.quiz-topic-plate",
+    "attr": {
+      "style": {
+        "background-color": {
+          "var": "color"
+        }
+      },
+      "onclick": {
+        "var": "onTopicClick"
+      },
+      "data-label": {
+        "var": "label"
+      },
+      "class": {
+        "var": "isNewClass"
+      }
+    },
+    "content": [
+      {
+        "dom": "span",
+        "content": {
+          "var": "label"
+        }
+      },
+      {
+        "dom": "span.t-featured",
+        "content": "🌟",
+        "condition": "highPriority"
+      },
+    ]
+  }
+
+  CardTemplates.gotoPostcodeButton = {
+    "dom":"section.card-body",
+    "content":[
+      {
+        "dom": "button.btn.btn-lg.btn-primary",
+        "attr": {
+          "onclick": {
+            "var": "buttonAction"
+          }
+        },
+        "content": {
+          "var": "buttonText"
+        }
+      }
+    ]
+  }
+
+
 }
