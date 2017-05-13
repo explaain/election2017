@@ -369,6 +369,18 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "div",
+            "template": "explainButton",
+            "mapping": [['onWhy']]
+          },
+          {
+            "dom": "div#carousel",
+            "condition": "!isWaiting",
+            "content": {
+                "func": ['renderExtraCards', 'extraCards']
+            }
+          },
+          {
+            "dom": "div",
             "condition": "!isWaiting",
             "template": "more-stuff",
             "mapping": [['moreStuff']]
@@ -378,15 +390,7 @@ module.exports = function(CardTemplates){
             "condition": "!isWaiting",
             "template": "share",
             "mapping": [['shareButtonCard']]
-          },
-          {
-            "dom": "div",
-            "condition": "!isWaiting",
-            "content": {
-                "func": ['renderExtraCards', 'extraCards']
-            }
           }
-
         ]
       },
       {
@@ -1246,6 +1250,21 @@ module.exports = function(CardTemplates){
         "content": {
           "var": "buttonText"
         }
+      }
+    ]
+  }
+  CardTemplates.explainButton =
+  {
+    "dom": "div.explain-button",
+    "content": [
+      {
+        "dom": ".btn.btn-default",
+        "attr": {
+          "onclick": {
+            "var": "toggleWhy"
+          }
+        },
+        "content": "Show me why"
       }
     ]
   }

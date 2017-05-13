@@ -439,6 +439,8 @@ class CardContent {
     const self = this;
     const data = self.data;
 
+    console.log('data', data);
+
     switch (data.type) {
 
       case 'postcode':
@@ -666,16 +668,36 @@ function getResults(){
             target2: "_blank"
           }
         ];
-        extraCards = [
-          {
-            name: "You and your matched party",
-            description: yourParty
-          },
-          {
-            name: "You and your area",
-            description: yourArea
+
+        // So sorry for this but this handles cards
+        if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
+          extraCards = [
+            {
+              name: "You and your matched party",
+              description: yourParty
+            },
+            {
+              name: "You and your area",
+              description: yourArea
+            }
+          ];
+        } else {
+          if (results.parties[0].matches.plus.length > 0) {
+            extraCards = [
+              {
+                name: "You and your matched party",
+                description: yourParty
+              }
+            ];
+          } else {
+            extraCards = [
+              {
+                name: "You and your area",
+                description: yourArea
+              }
+            ];
           }
-        ];
+        }
       }
       model.user.results.push([
         [
@@ -693,8 +715,15 @@ function getResults(){
               buttonText: "Add more stuff",
               buttonAction: function(){routes.root().push()}
             },
+            onWhy: {
+              toggleWhy: function () {
+                $('#carousel').toggle();
+                // $('.explain-button').hide();
+              }
+            },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
+              console.log('cards', cards);
               return new CardGroup({cards: cards});
             },
             extraCards: extraCards
