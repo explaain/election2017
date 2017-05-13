@@ -10,7 +10,7 @@ module.exports = {
   cards: {
 
   },
-  
+
   showProgressBar: false,
   progressBarCurrent: 0,
   progressBarTotal: 2,
@@ -51,7 +51,7 @@ module.exports = {
           "Learn about the parties": {
             goto: {
               type: 'step',
-              name: 'story'
+              name: 'partyStories'
             },
           },
          "Know how much my vote counts for": {

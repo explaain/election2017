@@ -66,6 +66,8 @@ class App {
           routes.root(function () {
             var phrase = new Phrase({phrase: 'home'});
             return h("div", phrase)
+            // var dashboard = new Dashboard({dashboard: 'home'});
+            // return h("div", dashboard)
           }),
 
           routes.dashboard(function (params) {
