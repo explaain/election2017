@@ -63,6 +63,7 @@ module.exports = class Designers {
     $(".slick-container").hide();
     setTimeout(function(){
       $(".slick-container").show();
+      console.log('readying again');
       $(".slick-container:not(.slick-initialized)").slick({
         dots: false,
         infinite: false,
@@ -73,6 +74,13 @@ module.exports = class Designers {
         variableWidth: true
       });
     })
+  }
+
+  reinitSlick() {
+    console.log('ini')
+    $('.slick-container.slick-initialized').slick('setPosition');
+    // $('.slick-container').slick('unslick').slick('reinit');
+    // $('.slick-container').slick('init');
   }
 
 }

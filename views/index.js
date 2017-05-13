@@ -406,14 +406,23 @@ class CardGroup {
     this.data = data;
   }
 
+  onload() {
+    designers.onCardGroupReady();
+  }
+
   render() {
     const self = this;
-    const onReady = function() {
-      designers.onCardGroupReady();
-    }
-    const cards = self.data.cards.map(function(card){
-      return (new Card(card, onReady));
+    var readyPromises = [];
+    const cards = self.data.cards.map(function(card, i){
+      var promise;
+      readyPromises.push(promise);
+      return (new Card(card, promise));
     })
+    q.allSettled(readyPromises)
+    .then(function() {
+      console.log('all done');
+      designers.reinitSlick();
+    });
 
     return h('.card-carousel.layer',
       h('div',
@@ -425,10 +434,13 @@ class CardGroup {
 }
 
 class Card {
-  constructor(data, onReady) {
+  constructor(data, readyPromise) {
     const self = this;
     self.data = data;
-    self.cardContent = new CardContent(self.data, onReady);
+    const onReady = function() {
+      designers.reinitSlick();
+    }
+    self.cardContent = new CardContent(self.data, onReady, readyPromise);
   }
 
   render() {
@@ -441,10 +453,11 @@ class Card {
 
 class CardContent {
 
-  constructor(data, onReady) {
+  constructor(data, onReady, readyPromise) {
     const self = this;
     self.data = data;
     self.onReady = onReady;
+    self.readyPromise = readyPromise;
   }
 
   render() {
@@ -455,15 +468,13 @@ class CardContent {
       if (model.cards[cardKey]) {
         self.data = model.cards[cardKey];
       } else {
-        http.get(cardKey)
+        self.readyPromise = http.get(cardKey)
         .then(function (res) {
           model.cards[cardKey] = res.body;
-          self.refresh();
+          self.refreshComponent();
           self.onReady();
-          // self.cardContent.refresh();
-          // deferred.resolve(res.body);
+          return h('div.hello', 'Hello');
         });
-        // return h('div.hello', 'Hello');
       }
     }
 

@@ -390,8 +390,8 @@ module.exports = {
     sampleStory: {
       label: "Generic example story",
       cardUrls: [
-        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
         "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
         "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
         "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
       ]
