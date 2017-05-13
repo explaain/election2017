@@ -260,6 +260,8 @@ APIService.prototype.resultAlgorithm = function(data) {
     } else {
       var party = getFullParty(partyKey);
       party.score = partyScores[partyKey];
+      party.matchPercentage = partyMatches[partyKey].match*100;
+      party.chancePercentage = partyChances[partyKey].chance*100;
       party.matches = {
         plus: partyMatches[partyKey].matches.filter(function(match) {
           return match.agreement > 0.5;

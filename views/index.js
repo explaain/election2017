@@ -514,18 +514,40 @@ class CardGroup {
       readyPromises.push(promise);
       return (new Card(card, promise));
     })
+
+    const extraAttributes = self.data.extraAttributes || ''
+
     q.allSettled(readyPromises)
     .then(function() {
       designers.reinitSlick();
     });
 
-    return h('.card-carousel.layer',
+    return h('.card-carousel.layer' + extraAttributes,
       h('div',
         h("div.slick-container",{role: "listbox"},cards)
       )
     )
   }
 
+}
+
+class Percentages {
+  constructor(data) {
+    this.data = data;
+  }
+
+  render() {
+    return h('div#matches',
+      h('h3', 'How closely you match: ' + Math.round(this.data.matchPercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.matchPercentage +"%;"})
+      ),
+      h('h3', 'Chances of success: ' + Math.round(this.data.chancePercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.chancePercentage +"%;"})
+      )
+    )
+  }
 }
 
 class Card {
@@ -807,16 +829,37 @@ function getResults(){
             target2: "_blank"
           }
         ];
-        extraCards = [
-          {
-            name: "You and your matched party",
-            description: yourParty
-          },
-          {
-            name: "You and your area",
-            description: yourArea
+
+        // So sorry for this but this handles cards
+        // Pushing didn't work for some reason
+        if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
+          extraCards = [
+            {
+              name: "You and your matched party",
+              description: yourParty
+            },
+            {
+              name: "You and your area",
+              description: yourArea
+            }
+          ];
+        } else {
+          if (results.parties[0].matches.plus.length > 0) {
+            extraCards = [
+              {
+                name: "You and your matched party",
+                description: yourParty
+              }
+            ];
+          } else {
+            extraCards = [
+              {
+                name: "You and your area",
+                description: yourArea
+              }
+            ];
           }
-        ];
+        }
       }
       model.user.results.push([
         [
@@ -834,9 +877,30 @@ function getResults(){
               buttonText: "Add more stuff",
               buttonAction: function(){routes.root().push()}
             },
+            renderPercentages: function () {
+              return new Percentages({
+                matchPercentage: results.parties[0].matchPercentage,
+                chancePercentage: results.parties[0].chancePercentage
+              })
+            },
+            toggleDetailsButton: {
+              toggle: function () {
+                // Toggle the extra cards
+                $('#more-details').toggleClass('hide');
+
+                // Reset slick after hiding it
+                $('.slick-container').slick('unslick').slick('reinit');
+
+                // Change button text
+                $('#toggle-details-btn').text($('#toggle-details-btn').text() == 'More details' ? 'Fewer details' : 'More details');
+              }
+            },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
-              return new CardGroup({cards: cards});
+              return new CardGroup({
+                cards: cards,
+                extraAttributes: '#more-details.hide'
+              });
             },
             extraCards: extraCards
           }
