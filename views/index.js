@@ -64,10 +64,10 @@ class App {
           this.header,
 
           routes.root(function () {
-            var phrase = new Phrase({phrase: 'home'});
-            return h("div", phrase)
-            // var dashboard = new Dashboard({dashboard: 'home'});
-            // return h("div", dashboard)
+            // var phrase = new Phrase({phrase: 'home'});
+            // return h("div", phrase)
+            var dashboard = new Dashboard({dashboard: 'home'});
+            return h("div", dashboard)
           }),
 
           routes.dashboard(function (params) {
@@ -737,6 +737,7 @@ class CardContent {
 
       default:
         console.log('Defaulting');
+        console.log(data, data.type);
         return helpers.assembleCards(data, data.type);
     }
 

@@ -66,8 +66,8 @@ const CSSFiles = [
   'tmp/style.css',
   'public/css/slick.css',
   'public/css/slick-theme.css',
-  'public/app-results.css'
-  //'public/client.css',
+  'public/app-results.css',
+  'public/client.css',
 ];
 
 /* General tasks */
