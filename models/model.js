@@ -7,6 +7,10 @@ module.exports = {
   landedOnPostcode: 0,
   landedOnResult: 0,
 
+  showProgressBar: false,
+  progressBarCurrent: 0,
+  progressBarTotal: 2,
+
   user: {
     postcode: '',
     postcode_uni: '',
