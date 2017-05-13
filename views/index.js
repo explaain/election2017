@@ -404,8 +404,9 @@ class CardGroup {
     const cards = self.data.cards.map(function(card){
       return (new Card(card));
     })
+    const extraAttributes = self.data.extraAttributes || ''
 
-    return h('.card-carousel.layer#more-details.hide',
+    return h('.card-carousel.layer' + extraAttributes,
       h('div',
         h("div.slick-container",{role: "listbox"},cards)
       )
@@ -689,6 +690,7 @@ function getResults(){
         ];
 
         // So sorry for this but this handles cards
+        // Pushing didn't work for some reason
         if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
           extraCards = [
             {
@@ -754,8 +756,10 @@ function getResults(){
             },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
-              console.log('cards', cards);
-              return new CardGroup({cards: cards});
+              return new CardGroup({
+                cards: cards,
+                extraAttributes: '#more-details.hide'
+              });
             },
             extraCards: extraCards
           }
