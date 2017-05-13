@@ -192,3 +192,7 @@ body.desktop .content a.card-icon:hover, body.desktop .card .content a.card-icon
   text-align: left;
   padding: 10px;
 }
+
+#toggle-details-btn {
+  margin-top: 20px;
+}

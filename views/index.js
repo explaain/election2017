@@ -405,7 +405,7 @@ class CardGroup {
       return (new Card(card));
     })
 
-    return h('.card-carousel.layer',
+    return h('.card-carousel.layer#more-details.hide',
       h('div',
         h("div.slick-container",{role: "listbox"},cards)
       )
@@ -739,6 +739,18 @@ function getResults(){
                 matchPercentage: results.parties[0].matchPercentage,
                 chancePercentage: results.parties[0].chancePercentage
               })
+            },
+            toggleDetailsButton: {
+              toggle: function () {
+                // Toggle the extra cards
+                $('#more-details').toggleClass('hide');
+
+                // Reset slick after hiding it
+                $('.slick-container').slick('unslick').slick('reinit');
+
+                // Change button text
+                $('#toggle-details-btn').text($('#toggle-details-btn').text() == 'More details' ? 'Fewer details' : 'More details');
+              }
             },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
