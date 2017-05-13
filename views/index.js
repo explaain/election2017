@@ -23,6 +23,7 @@ const
 //   by express routing - this was made to avoid 404 errors on page refresh
 const routes = {
   root: router.route('/'),
+  phrase: router.route('/phrase/:name'),
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
@@ -63,13 +64,18 @@ class App {
           this.header,
 
           routes.root(function () {
-            var dashboard = new Dashboard({dashboard: 'home'});
-            return h("div", dashboard)
+            var phrase = new Phrase({phrase: 'home'});
+            return h("div", phrase)
           }),
 
           routes.dashboard(function (params) {
             var dashboard = new Dashboard({dashboard: params.name});
             return h("div", dashboard)
+          }),
+
+          routes.phrase(function (params) {
+            var phrase = new Phrase({phrase: params.name});
+            return h("div", phrase)
           }),
 
           routes.step(function (params) {
@@ -139,24 +145,27 @@ class Footer {
 class Progress {
   render() {
     const self = this;
-    var progress_total = 2;
-    var progress_current = 0;
+
+    if(!model.showProgressBar) return null;
+
+    model.progressBarCurrent = 0;
+    model.progressBarTotal = 2;
     var quizFlow = [];
     model.user.quizFlow.forEach(function(quiz){
       quizFlow = quizFlow.concat(quiz);
     });
     if(quizFlow.length>0){
-      progress_total += quizFlow.length;
+      model.progressBarTotal += quizFlow.length;
       var progress_quiz = 0;
       if(model.landedOnPostcode||model.landedOnResult){
         progress_quiz=quizFlow.length;
       } else {
         progress_quiz=quizFlow.indexOf(model.question)!==-1?quizFlow.indexOf(model.question)+1:0;
       }
-      progress_current += progress_quiz;
+      model.progressBarCurrent += progress_quiz;
     }
-    progress_current+=model.landedOnPostcode;
-    progress_current+=model.landedOnResult;
+    model.progressBarCurrent+=model.landedOnPostcode;
+    model.progressBarCurrent+=model.landedOnResult;
     // todo: why does it lead you to postdode-compare?
     // Answer (from Jeremy) - currently it's just a shortcut so we can demo it to people without having a button on the dashboard!
     return routes.step({
@@ -164,17 +173,99 @@ class Progress {
       type: 'step',
       next: 'result'}).a(
       h(".progress",
-        h(".progress-inner",{style: {width: ((progress_current/progress_total)*100)+"%"}})
+        h(".progress-inner",{style: {width: ((model.progressBarCurrent/model.progressBarTotal)*100)+"%"}})
       )
     )
   }
 }
 
+class Phrase {
+
+  constructor(params) {
+    this.phrase = model.phrases[params.phrase] || { title: "This is a phrase", text: "I should buy ${thing}", options: { thing: { boat: "a boat", cat: "a cat" } } }
+    model.showProgressBar = false;
+  }
+
+  onload() {
+    $('div.body').removeClass('backColor');
+  }
+
+  render() {
+    var phraseDOM = [];
+
+    if (!Object.keys(this.phrase.options).length) {
+      phraseDOM.push(h("p", "No options to display"))
+    } else {
+      const phrase = this.phrase
+      const replacements = Object.keys(phrase.options)
+        .map(function(opt) {
+          const optionSet = phrase.options[opt]
+          const options = Object.keys(optionSet).map(function(optName){
+            const value = phrase.options[opt][optName]
+            return h('option', {
+              value: JSON.stringify(value),
+            }, optName );
+          })
+          options.unshift(h('option', {
+            value: null,
+          }, '' ))
+
+          const select = h('select', {
+            onchange: function(e){
+              const value = JSON.parse(e.target.value)
+              if(value.goto){
+                routes[value.goto.type](value.goto).push()
+              } else {
+                 helpers.updateData(value.dataUpdates);
+              }
+            }
+          }, options)
+
+          return {
+            replace: '${'+opt+'}',
+            with: select
+          }
+        })
+
+      this.phrase.text.split(' ')
+        .map(function(repl) {
+          var match
+          replacements.forEach(function(replacement){
+            if (repl === replacement.replace) {
+              match = replacement.with
+            }
+          })
+
+          return match || repl+' '
+        })
+        .forEach(function(wordOrOption) {
+          phraseDOM.push(wordOrOption)
+        })
+    }
+
+    return h("section.phrase",
+      h("h1", this.phrase.title),
+      h("h2", this.phrase.subtitle),
+      h("section.text", phraseDOM)
+    )
+  }
+
+
+
+}
 
 class Dashboard {
 
   constructor(params) {
     this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
+    model.showProgressBar = false;
+    if(params.dashboard === 'home') {
+      model.progressBarCurrent = 0;
+      model.progressBarTotal = 2;
+      model.landedOnPostcode = 0;
+      model.landedOnResult = 0;
+      model.user.quizFlow = [];
+    }
   }
 
   onload() {
@@ -263,6 +354,7 @@ class Step {
 
       case 'postcode':
         model.landedOnPostcode = 1; // todo: temporary, refactor
+        model.showProgressBar = true;
         data.cardGroups.push([{
           type: 'postcode',
           name: 'Please enter your postcode:',
@@ -293,6 +385,7 @@ class Step {
 
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
+        model.showProgressBar = false;
         model.user.results[model.user.results.length-1].forEach(function(cards){
           data.cardGroups.push(cards);
         })
@@ -307,6 +400,7 @@ class Step {
         break;
 
       case 'question':
+        model.showProgressBar = true;
         var quizFlow = [];
         model.user.quizFlow.forEach(function(quiz){
           quizFlow = quizFlow.concat(quiz);
@@ -486,6 +580,7 @@ class CardContent {
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
+          model.landedOnResult = 1;
           model.user.isWaiting = "postcode-input";
           self.refresh();
           getResults().then(function(){
@@ -505,6 +600,7 @@ class CardContent {
         }
         data.postcodeSubmit = function(e) {
           e.stopPropagation();
+          model.landedOnResult = 1;
           model.user.isWaiting = "vote-worth";
           self.refresh();
           api.getPostcodeOptions(model.user.postcode).then(function(results){
@@ -534,6 +630,7 @@ class CardContent {
         }
         data.postcodeError = model.user.postcodeError;
         data.postcodeSubmit = function(e){
+          model.landedOnResult = 1;
           e.stopPropagation();
           // Flushing results, in this case this makes sense to do on click, not on load
           model.user.resultsCompare.length = 0;
