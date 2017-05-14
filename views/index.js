@@ -1091,6 +1091,9 @@ function getResults(){
                     })
                   },
                   showDetailsButton: {
+                    toggle: function() {
+
+                    },
                     cardKey: '//api.explaain.com/Detail/partymatch'
                   },
                 }
