@@ -989,10 +989,11 @@ class BackToDashboard {
 }
 
 // todo: should this be in APIService?
-function getResults(){
+function getResults(resultsType){
   var deferred = q.defer();
-  api.getResults(model.user.postcode, model.user)
+  api.getResults(model.user.postcode, model.user, resultsType)
     .then(function(results) {
+      console.log(results);
       helpers.updateObject(model.user, results.data.user);
       var yourParty = "",
           yourArea = "",

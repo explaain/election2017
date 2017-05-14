@@ -105,7 +105,7 @@ module.exports = {
     know: {
       text: "know",
       options: [
-        "myConstituency",
+        // "myConstituency",
         "howTo",
         "why",
         "who",

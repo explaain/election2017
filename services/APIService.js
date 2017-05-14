@@ -7,7 +7,17 @@ function APIService() {
 
 }
 
-APIService.prototype.getResults = function(postcode, userData) {
+APIService.prototype.getResults = function(postcode, userData, resultType) {
+  switch (resultType) {
+    case 'partyResults':
+      return getPartyResults(postcode, userData);
+      break;
+    default:
+      return getPartyResults(postcode, userData);
+  }
+}
+
+APIService.prototype.getPartyResults = function(postcode, userData) {
 
   var data = {};
 
@@ -526,6 +536,7 @@ function objectAsArray(obj) {
 }
 
 var getResults = APIService.prototype.getResults;
+var getPartyResults = APIService.prototype.getPartyResults;
 var comparePostcodes = APIService.prototype.comparePostcodes;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
