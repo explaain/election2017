@@ -380,13 +380,13 @@ module.exports = function(CardTemplates){
           //   //   }
           //   // ]
           // },
-          {
-            "dom": "div",
-            "condition": "!isWaiting",
-            "content": {
-              "func": ['renderPercentages']
-            }
-          },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isWaiting",
+          //   "content": {
+          //     "func": ['renderPercentages']
+          //   }
+          // },
           {
             "dom": "div",
             "condition": "!isWaiting",
@@ -668,7 +668,46 @@ module.exports = function(CardTemplates){
         ]
       }
     ]
+  };
+
+  CardTemplates.resultParty = {
+    "dom": "div.content",
+    "content": [
+      {
+        "dom": "h2",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": "div.card-image",
+        "content": [
+          {
+            "dom": "img",
+            "attr": {
+              "src": {
+                "var": "image"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "dom": "div.body-content",
+        "content": {
+          "var": "description",
+          "markdown": true
+        }
+      },
+      {
+        "dom": "div",
+        "content": {
+          "func": ['renderPercentages']
+        }
+      }
+    ]
   }
+
 
   CardTemplates.postcodeFormHeader = {
     "dom": "div",

@@ -85,9 +85,10 @@ class App {
             })
             var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
             var goto = model.myPhrases[params.name].goto;
-            var goButton = goto ? routes[goto.type]({name: goto.name}).a({class: 'btn btn-success'}, 'Let\'s go!') : '';
-            var quizButton = routes.dashboard({name: 'decide', task: 'decide'}).a({class: 'btn btn-primary'}, 'Just take me to the Quiz');
-            return h("div", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton, h('div', {class: 'quiz-btn-container'}, quizButton));
+            var goButton = goto ? routes[goto.type]({name: goto.name}).a({class: 'btn btn-success discard-card-style'}, 'Let\'s go!') : '';
+            var quizButton = routes.dashboard({name: 'decide', task: 'decide'}).a({class: 'btn btn-primary discard-card-style'}, 'Just take me to the Quiz');
+            var phraseDom = h("div.content.text-center", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton, h('div', {class: 'quiz-btn-container'}, quizButton));
+            return h('section.step', h('div.cards', new Card({},function(){}, phraseDom) ) );
           }),
 
           routes.step(function (params) {
@@ -224,14 +225,11 @@ class PhraseSelect {
         })
       }
       const optionKeys = optionListsJoined || model.phraseOptionLists[phrase.optionList] || phrase.options;
-      console.log(optionKeys);
       const options = optionKeys.map(function(optKey){
-        console.log(optKey);
         const value = {
           key: optKey,
           phrase: model.myPhrases[optKey]
         };
-        console.log(value);
         return h('option', {
           value: JSON.stringify(value),
         }, value.phrase.text );
@@ -250,7 +248,6 @@ class PhraseSelect {
 
       phraseDOM.push(select)
     } else if (this.phrase.input) {
-      console.log('input!')
       const inputForm = h('form',
         {
           onsubmit: function(e) {
@@ -274,7 +271,6 @@ class PhraseSelect {
     }
 
     function submitPhrase(eventValue) {
-      console.log(eventValue)
       const value = JSON.parse(eventValue)
       if (value.dataUpdates) {
         helpers.updateData([value.dataUpdates]);
@@ -709,24 +705,28 @@ class Percentages {
     return h('div#matches',
       h('h3', 'How closely you match: ' + Math.round(this.data.matchPercentage) + '%'),
       h('.progress',
-        h('.progress-inner',{style: "width: " + this.data.matchPercentage +"%;"})
+        h('.progress-inner', {style: "width: " + this.data.matchPercentage +"%;"})
       ),
       h('h3', 'Chances of success: ' + Math.round(this.data.chancePercentage) + '%'),
       h('.progress',
-        h('.progress-inner',{style: "width: " + this.data.chancePercentage +"%;"})
+        h('.progress-inner', {style: "width: " + this.data.chancePercentage +"%;"})
+      ),
+      h('h3', 'Total score: ' + Math.round(this.data.scorePercentage) + '%'),
+      h('.progress.large',
+        h('.progress-inner', {style: "width: " + this.data.scorePercentage +"%;"})
       )
     )
   }
 }
 
 class Card {
-  constructor(data, readyPromise) {
+  constructor(data, readyPromise, customContent) {
     const self = this;
     self.data = data;
     const onReady = function() {
       designers.reinitSlick();
     }
-    self.cardContent = new CardContent(self.data, onReady, readyPromise);
+    self.cardContent = customContent || new CardContent(self.data, onReady, readyPromise);
   }
 
   render() {
@@ -1073,28 +1073,22 @@ function getResults(){
             renderParties: function () {
               var data = results.parties.map(function(party) {
                 return {
+                  type: 'resultParty',
                   image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
                   name: party.name,
                   description: party.description || "We don't have a description for this party yet!",
+                  renderPercentages: function () {
+                    return new Percentages({
+                      matchPercentage: party.matchPercentage,
+                      chancePercentage: party.chancePercentage,
+                      scorePercentage: party.score*100
+                    })
+                  }
                 }
-              })
+              });
 
               return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
             },
-            resultParties: [
-              {
-                image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
-                name: results.parties[0] && results.parties[0].name,
-                description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
-                // footer: [
-                //   yourFooter
-                // ],
-                type: "Organization", // Temporary,
-              }
-            ],
-            image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
-            name: results.parties[0] && results.parties[0].name,
-            description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
             footer: [
               yourFooter
             ],
@@ -1104,12 +1098,6 @@ function getResults(){
               heading: "Add more stuff!",
               buttonText: "Add more stuff",
               buttonAction: function(){routes.root().push()}
-            },
-            renderPercentages: function () {
-              return new Percentages({
-                matchPercentage: results.parties[0].matchPercentage,
-                chancePercentage: results.parties[0].chancePercentage
-              })
             },
             toggleDetailsButton: {
               toggle: function () {

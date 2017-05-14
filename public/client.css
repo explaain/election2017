@@ -403,6 +403,9 @@ section:not(.wide) .card section.card-media {
 .card .content.text-left {
   text-align: left;
 }
+.card .content.text-center {
+  text-align: center;
+}
 
 /* igor: styling a form in the card */
 
