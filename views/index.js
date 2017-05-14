@@ -47,6 +47,8 @@ class App {
 
   render() {
 
+    const self = this;
+
     if (Embed) {
 
       var params = {
@@ -66,8 +68,10 @@ class App {
           routes.root(function () {
             // var phrase = new Phrase({phrase: 'home'});
             // return h("div", phrase)
-            var dashboard = new Dashboard({dashboard: 'home'});
-            return h("div", dashboard)
+            // var dashboard = new Dashboard({dashboard: 'home'});
+            model.selectedPhrases = ["iWantTo"];
+            routes.phrase({name: 'iWantTo'}).push();
+            // return h("div", dashboard)
           }),
 
           routes.dashboard(function (params) {
@@ -76,8 +80,13 @@ class App {
           }),
 
           routes.phrase(function (params) {
-            var phrase = new Phrase({phrase: params.name});
-            return h("div", phrase)
+            var hPhrases = model.selectedPhrases.map(function(phrase) {
+              return h('span.phrase', model.myPhrases[phrase] ? model.myPhrases[phrase].text : phrase);
+            })
+            var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
+            var goto = model.myPhrases[params.name].goto;
+            var goButton = goto ? routes[goto.type]({name: goto.name}).a({class: '.btn.btn-success'}, 'Let\'s go!') : '';
+            return h("div", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton);
           }),
 
           routes.step(function (params) {
@@ -184,6 +193,108 @@ class Progress {
   }
 }
 
+class PhraseSelect {
+
+  constructor(params) {
+    this.params = params;
+    this.phrase = model.myPhrases[params.phrase] || { text: "something", options: [] }
+    model.showProgressBar = false;
+  }
+
+  onload() {
+    $('div.body').removeClass('backColor');
+  }
+
+  render() {
+    const self = this;
+    var phraseDOM = [];
+
+    if (self.params.next) {
+      routes.phrase({ name: self.params.next }).push();
+      self.refresh();
+    }
+
+    if (this.phrase.optionList || (this.phrase.options && Object.keys(this.phrase.options).length)) {
+      const phrase = this.phrase;
+      const optionKeys = model.phraseOptionLists[phrase.optionList] || phrase.options;
+      console.log(optionKeys);
+      const options = optionKeys.map(function(optKey){
+        console.log(optKey);
+        const value = {
+          key: optKey,
+          phrase: model.myPhrases[optKey]
+        };
+        console.log(value);
+        return h('option', {
+          value: JSON.stringify(value),
+        }, value.phrase.text );
+      });
+      //Is this the correct structure?
+      var defaultPhrase = phrase.defaultPhrase || { text: '' };
+      options.unshift(h('option', {
+        value: JSON.stringify(defaultPhrase),
+      }, defaultPhrase.text ))
+
+      const select = h('select', {
+        onchange: function(e) {
+          submitPhrase(e.target.value)
+        }
+      }, options);
+
+      phraseDOM.push(select)
+    } else if (this.phrase.input) {
+      console.log('input!')
+      const inputForm = h('form',
+        {
+          onsubmit: function(e) {
+            e.preventDefault();
+            submitPhrase(JSON.stringify({
+              key: "finish",
+              text: e.target.children[0].value,
+              phrase: {
+                dataUpdates: [],
+              }
+            }));
+          }
+        },
+        h('input')
+      );
+      phraseDOM.push(inputForm)
+    } else {
+      // phraseDOM.push(h("p", "No options to display"))
+    }
+
+    function submitPhrase(eventValue) {
+      console.log(eventValue)
+      const value = JSON.parse(eventValue)
+      if (value.dataUpdates) {
+        helpers.updateData([value.dataUpdates]);
+      }
+      if(value.goto) {
+        routes[value.goto.type](value.goto).push()
+      } else {
+        if (value.text)
+          model.selectedPhrases.push(value.text);
+        model.selectedPhrases.push(value.key);
+        if (self.phrase.next)
+          model.selectedPhrases.push(self.phrase.next);
+        routes.phrase( {name: self.phrase.next || value.key } ).push();
+      }
+    }
+
+    return h("span.phrase",
+      // h("h1", this.phrase.title),
+      // h("h2", this.phrase.subtitle),
+      // h("section.text",
+        phraseDOM
+      // )
+    )
+  }
+
+
+
+}
+
 class Phrase {
 
   constructor(params) {
@@ -248,10 +359,12 @@ class Phrase {
         })
     }
 
-    return h("section.phrase",
-      h("h1", this.phrase.title),
-      h("h2", this.phrase.subtitle),
-      h("section.text", phraseDOM)
+    return h("span.phrase",
+      // h("h1", this.phrase.title),
+      // h("h2", this.phrase.subtitle),
+      // h("section.text",
+        phraseDOM
+      // )
     )
   }
 

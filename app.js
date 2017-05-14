@@ -82,6 +82,8 @@ app.get('/:page/*', function (req, res , next) {
     req.params.page==="dashboards"
     ||
     req.params.page==="steps"
+    ||
+    req.params.page==="phrase"
   ){
     res.redirect("/",301);
   } else {

@@ -180,6 +180,10 @@ a.task {
   cursor: pointer;
 }
 
+span.phrase {
+  margin-right: 0.2em;
+}
+
 section.tasks a.task {
   display: inline-block;
   width: 160px;
