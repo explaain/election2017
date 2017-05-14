@@ -364,10 +364,30 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "div",
-            "condition": "!isWaiting",
-            "content": {
-              "func": ['mainResults']
-            }
+            "condition": "!isLocalCandidates",
+            "content": [{
+              "dom": "div",
+              "condition": "!isWaiting",
+              "content": {
+                "func": ['mainResults']
+              }
+            }],
+          },
+          {
+            "dom": "div",
+            "condition": "isLocalCandidates",
+            "content": [
+              {
+                "dom": "div.local-candidates-container",
+                "condition": "!isWaiting",
+                "loop": "mainResults",
+                "content": [{"template": "localCandidatePlate"}]
+              },
+              {
+                "dom": "div.clearfix",
+                "content": ""
+              }
+            ],
           },
           // {
           //   "dom": "div.OrganizationContainer",
@@ -1409,6 +1429,40 @@ module.exports = function(CardTemplates){
     ]
   }
 
+
+
+  CardTemplates.localCandidatePlate = {
+    "dom": "a.local-candidate-plate.internal",
+    "attr":{
+      "href": {
+        "var": "cardHref"
+      }
+    },
+    "content": [
+      {
+        "dom": "div.lc-image",
+        "attr": {
+          "style": {
+            "background-image": {
+              "var": "image_url"
+            }
+          },
+        },
+      },
+      {
+        "dom": "h3.lc-name",
+        "content": {
+          "var": "name"
+        }
+      },
+      {
+        "dom": "h4.lc-party-name",
+        "content": {
+          "var": "party_name"
+        }
+      }
+    ]
+  }
 
   CardTemplates.showMore = {
     "dom": "div",

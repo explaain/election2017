@@ -38,4 +38,16 @@ module.exports = function(model){
     },
     dataUpdates: []
   };
+  model.dashboards.home.tasks.push("!TEST-local-candidates");
+  model.tasks["!TEST-local-candidates"] = {
+    subtype: "multi-submit",
+    color: "#00a2e5",
+    label: "TEST Local Candidates",
+    goto: {
+      type: 'step',
+      name: 'local-candidates-test',
+      next: 'result'
+    },
+    dataUpdates: []
+  };
 }
