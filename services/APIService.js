@@ -8,13 +8,16 @@ function APIService() {
 }
 
 APIService.prototype.getResults = function(postcode, userData, resultType) {
+  var results;
   switch (resultType) {
     case 'partyResults':
-      return getPartyResults(postcode, userData);
+       results = getPartyResults(postcode, userData);
       break;
     default:
-      return getPartyResults(postcode, userData);
+      results = getPartyResults(postcode, userData);
   }
+  results.resultType = resultType;
+  return results;
 }
 
 APIService.prototype.getPartyResults = function(postcode, userData) {

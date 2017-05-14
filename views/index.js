@@ -771,7 +771,7 @@ class CardContent {
           model.landedOnResult = 1;
           model.user.isWaiting = "postcode-input";
           self.refresh();
-          getResults().then(function(){
+          getResults('partyResults').then(function(){
             delete model.user.isWaiting;
             routes.step({ name: data.nextStep, type: data.type }).push();
           });
@@ -991,9 +991,9 @@ class BackToDashboard {
 // todo: should this be in APIService?
 function getResults(resultsType){
   var deferred = q.defer();
+
   api.getResults(model.user.postcode, model.user, resultsType)
     .then(function(results) {
-      console.log(results);
       helpers.updateObject(model.user, results.data.user);
       var yourParty = "",
           yourArea = "",
@@ -1067,11 +1067,12 @@ function getResults(resultsType){
           name: "You and your matched party",
           description: yourParty,
         }]);
-      }
-      model.user.results.push([
-        [
-          {
-            renderParties: function () {
+
+        var mainResults;
+
+        switch (resultsType) {
+          case 'partyResults':
+            mainResults = function () {
               var data = results.parties.map(function(party) {
                 return {
                   type: 'resultParty',
@@ -1092,7 +1093,18 @@ function getResults(resultsType){
               });
 
               return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
-            },
+            }
+            break;
+          default:
+
+        }
+      };
+
+
+      model.user.results.push([
+        [
+          {
+            mainResults: mainResults,
             footer: [
               yourFooter
             ],

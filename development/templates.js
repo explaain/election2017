@@ -366,7 +366,7 @@ module.exports = function(CardTemplates){
             "dom": "div",
             "condition": "!isWaiting",
             "content": {
-              "func": ['renderParties']
+              "func": ['mainResults']
             }
           },
           // {
