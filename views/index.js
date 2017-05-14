@@ -382,7 +382,6 @@ class Dashboard {
   constructor(params) {
     this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
     model.showProgressBar = false;
-    console.log('MODEL', model);
     if(params.dashboard === 'home') {
       model.progressBarCurrent = 0;
       model.progressBarTotal = 2;
@@ -512,7 +511,6 @@ class Step {
           issue.isNewClass = ~currentTopics.indexOf(issueName) ? 'new' : '';
           issue._key = issueName;
         });
-        //console.log('quizTopics', quizTopicsLower, quizTopicsHigher, model.featuredTopics);
 
         data.cardGroups.push([{
           type: 'quiz-priority',
@@ -663,8 +661,6 @@ class CardGroup {
 
   constructor(data) {
     this.data = data;
-    console.log('data');
-    console.log(data);
   }
 
   onload() {
@@ -742,7 +738,6 @@ class CardContent {
   constructor(data, onReady, readyPromise) {
     const self = this;
     self.data = data;
-    console.log(self.data)
     self.onReady = onReady;
     self.readyPromise = readyPromise;
   }
@@ -899,7 +894,6 @@ class CardContent {
         return helpers.assembleCards(data, 'postcodeCompare');
 
       case 'result': // todo: refactor
-        console.log(data);
         const description = helpers.markdownToHtml(data.description);
         return h('div.content.text-left',
           h('img', {'src': data.image, 'class': 'party-logo'}),
@@ -1122,7 +1116,6 @@ function getResults(){
             },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
-              console.log(1111111111);
               return new CardGroup({
                 cards: cards,
                 extraAttributes: '#more-details.hide'

@@ -34,12 +34,9 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
   return delay(500).then(function(){
     return getContenders(postcode)
     .then(function(results) {
-      console.log('contenders')
-      console.log(results)
       if (results.error) {
         return results;
       } else {
-        console.log(results)
         data.seats.push(results);
         if (data.seats[0].parties.length > 1) {
           data.text = {
@@ -52,7 +49,6 @@ APIService.prototype.getPostcodeOptions = function(postcode) {
             subheading: "You're in a safe seat, so it's unlikely the sitting MP will be booted out."
           }
         }
-        console.log(data);
         return data;
       }
     });
@@ -65,18 +61,12 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   return delay(500).then(function(){
     return getContenders(postcode1)
     .then(function(results) {
-      console.log('results');
-      console.log('results');
-      console.log(results);
       if (results.error) {
         return results;
       }
       data.seats.push(results);
       return getContenders(postcode2)
     }).then(function(results) {
-      console.log('results');
-      console.log('results');
-      console.log(results);
       if (results.error) {
         return results;
       }
@@ -104,7 +94,6 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com%2Fstudents%2F&display=popup&ref=plugin&src=share_button';
       data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'Students! Are you trying to decide which is the more powerful vote at home or at uni for %23GE2017? Try out this tool! ge2017.com';
-      console.log(data)
       return data;
     })
   })
@@ -117,17 +106,11 @@ const getContenders = function(postcode) {
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
-      console.log(0);
       return results;
     } else {
       data = results;
       user = {constituency: results.user.constituency};
-      console.log('forceSwing: ' + forceSwing);
-      console.log(results.user.constituency.id);
-      console.log(swingSeatsToForce);
-      console.log(swingSeatsToForce.indexOf(results.user.constituency.id));
       forceSwing = swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
-      console.log('forceSwing: ' + forceSwing);
       return getPartyChances(data);
     }
   }).then(function(results) {
@@ -172,7 +155,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
 
   return loadConstituency(postcode)
   .then(function(results) {
-    console.log(results)
     if (results.error) {
       return results;
     } else {
@@ -189,7 +171,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
-    console.log(results);
     if (results.error) {
       return results;
     } else {
@@ -199,34 +180,24 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
-    console.log(results);
     if (results.error) {
       return results;
     } else {
       totalResults.results["my-constituency"]["ge2015"] = results["ge2015"];
-      console.log(1);
-      console.log(postcodeResults.constituency.codes.gss);
-      console.log(results);
       return loadBettingOdds(postcodeResults.constituency.codes.gss)
     }
   })
   .then(function(results) {
-    console.log('results');
-    console.log(results);
     if (results.error) {
-      console.log('error');
       return results;
     } else {
-      console.log('good');
       totalResults.results["my-constituency"]["oddChances"] = results["oddChances"];
-      console.log(totalResults);
       return loadPartyStances();
     }
   }).then(function(results) {
     if (results.error) {
       return results;
     } else {
-      console.log(results);
       totalResults.parties = results;
       return totalResults;
     }
@@ -379,52 +350,30 @@ APIService.prototype.getAgreements = function(data) {
 APIService.prototype.getPartyChances = function(data) {
   console.log('starting getPartyChances')
   var partyChances = {};
-  console.log(-1);
-  var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
-  console.log(0);
-  console.log(euRefLeavePercent);
 
-  console.log(1);
+  var euRefLeavePercent = data.results["my-constituency"]["euRef2016"].choices["leave"].share;
+
   var resultParties = data.results["my-constituency"]["ge2015"].parties;
-  console.log(2);
-  console.log(resultParties);
   var currentPartyKey = getWinningPartyKey(resultParties);
-  console.log(3);
-  console.log(currentPartyKey);
   var currentParty = getFullParty(currentPartyKey);
-  console.log(4);
-  console.log(currentParty);
 
   var resultPartyKeys = Object.keys(resultParties);
   resultPartyKeys.forEach(function(partyKey) {
-    console.log(resultPartyKeys);
-    console.log(partyKey);
 
     var party = resultParties[partyKey];
-    console.log(party);
     try {
-      console.log('hi');
-      console.log(data.results["my-constituency"]["oddChances"]);
-      console.log(data.results["my-constituency"]["oddChances"].parties);
-      console.log(111);
       try {
-        console.log(data.results["my-constituency"]["oddChances"].parties[partyKey]);
       } catch(e) {
 
       }
-      console.log(222);
       var ge2015MarginPercent = data.results["my-constituency"]["ge2015"].parties[partyKey].shareMargin;
-      console.log(333);
       try {
         var partyBrexitStance = data.parties.opinions.issues["brexit"].debates["brexit-1"].parties[partyKey].opinion;
       } catch(e) {
         var partyBrexitStance = 0.5;
       }
-      console.log(444);
       var chanceFromGe2015MarginPercent = ge2015MarginPercent ? 0.5+(Math.sign(ge2015MarginPercent))*(Math.pow(Math.abs(ge2015MarginPercent),(1/4)))/(2*Math.pow(100,(1/4))) : 0; // Quite crude, ranges from 0.5 to 100 for positive input (should range from below 0.5 to below 100)
-      console.log(555);
       var chanceFromEuOpinions = 1-Math.abs(partyBrexitStance - (1+euRefLeavePercent/25))/4; //Works best when 100% of people voted
-      console.log(666);
       if (!data.results["my-constituency"]["oddChances"].parties) {
         var chanceFromBettingOdds = -1;
         var totalChance = (3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/4;
@@ -432,9 +381,6 @@ APIService.prototype.getPartyChances = function(data) {
         var chanceFromBettingOdds = (data.results["my-constituency"]["oddChances"].parties[partyKey]) ? (1-(1-(data.results["my-constituency"]["oddChances"].parties[partyKey]))/2) : 0;
         var totalChance = (8*chanceFromBettingOdds + 3*chanceFromGe2015MarginPercent + chanceFromEuOpinions)/12;
       }
-      console.log(777);
-      console.log('partyKey, chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions, totalChance');
-      console.log(partyKey, chanceFromBettingOdds, chanceFromGe2015MarginPercent, chanceFromEuOpinions, totalChance);
       partyChances[partyKey] = {
         chance: totalChance
       }
@@ -501,8 +447,6 @@ APIService.prototype.loadEURefResults = function(areaName) {
       return res.area.indexOf(areaName.split(" ")[0]);
     });
   }
-  console.log('loadEURefResults');
-  console.log(results);
   return results;
 }
 
@@ -510,41 +454,27 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
   var result = {"ge2015": {parties:{}}};
   var resultsTemp = ge2015Results[areaKey];
   resultsTemp.forEach(function(party) {
-    console.log(party.party);
     var partyKey = party.party;
     var partyKey = reconcilePartyKeys(party.party);
-    console.log(partyKey);
     party.party = partyKey;
     result["ge2015"].parties[partyKey] = party;
   })
-  console.log('loadGe2015Results');
-  console.log(result);
   return result;
 }
 
 
 APIService.prototype.loadBettingOdds = function(areaKey) {
   var result = {"oddChances": {parties:{}}};
-  console.log('loadBettingOdds');
-  console.log(areaKey);
   var resultsTemp = constituencyOdds[areaKey] || null;
-  console.log(resultsTemp);
   if (resultsTemp == null) {
     result["oddChances"] = {}
   } else {
     resultsTemp.forEach(function(party) {
-      console.log(party);
       var partyKey = party.party;
-      console.log(partyKey);
       var digits = party.odds.split('/');
-      console.log(digits);
       party.oddChances = Number(digits[1])/(Number(digits[0])+Number(digits[1]));
-      console.log(party);
       result["oddChances"].parties[partyKey] = party.oddChances;
-      console.log(result);
     });
-    console.log('Betting Odds');
-    console.log(result);
   }
   return result;
 }
@@ -572,23 +502,16 @@ var getFullParty = function(partyKey) {
 //This function requires ranks in the party results
 var getWinningPartyKey = function(resultParties) {
   var resultPartyKeys = Object.keys(resultParties);
-  console.log(resultPartyKeys);
   var winningPartyKey = resultPartyKeys.filter(function(resultPartyKey) {
-    console.log(resultPartyKey);
     if (resultParties[resultPartyKey].rank == 1) {
-      console.log('done');
-      console.log(resultParties[resultPartyKey]);
       return resultPartyKey;
     }
   })[0];
-  console.log(winningPartyKey);
   return winningPartyKey;
 }
 
 var reconcilePartyKeys = function(suppliedKey) {
-  console.log(suppliedKey);
   var properKey = partyReconciliationValues[suppliedKey];
-  console.log(properKey);
   if (properKey === undefined) {
     console.log('Undefined!!');
     properKey = suppliedKey;
