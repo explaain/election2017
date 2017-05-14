@@ -86,7 +86,8 @@ class App {
             var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
             var goto = model.myPhrases[params.name].goto;
             var goButton = goto ? routes[goto.type]({name: goto.name}).a({class: '.btn.btn-success'}, 'Let\'s go!') : '';
-            return h("div", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton);
+            var quizButton = routes.dashboard({name: 'decide', task: 'decide'}).a({class: '.btn.btn-primary'}, 'Just take me to the Quiz');
+            return h("div", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton, h('div', quizButton));
           }),
 
           routes.step(function (params) {
