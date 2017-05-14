@@ -20,9 +20,16 @@ module.exports = class Helpers {
   assembleCards(data, template) {
     // todo: resolve issue with global and local scopes (remember the problem with passing function)
     const self = this;
+
+    if (typeof data === 'string') {
+      data = {
+        "@id": data
+      }
+    }
     // Defining a type of the template
     data.type = data.type || (data["@type"] ? data["@type"].split('/')[data["@type"].split('/').length-1] : 'Detail');
     // You can pass either this or that
+    if (template === undefined) { template = data.type }
     if (typeof template === 'string') { template = self.cardTemplates[template]; }
     const element = template;
     var params = {};

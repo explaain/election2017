@@ -8,6 +8,10 @@ module.exports = {
   landedOnResult: 0,
   landedOnQuizPriority: 0,
 
+  cards: {
+
+  },
+
   showProgressBar: false,
   progressBarCurrent: 0,
   progressBarTotal: 2,
@@ -25,6 +29,43 @@ module.exports = {
     resultsOptions: [],
     quizFlow: [],
     isWaiting: false
+  },
+
+  phrases: {
+    home: {
+      title: "What do you want to do?",
+      text: "I want to ${doSomething}",
+      options: {
+        doSomething: {
+          "Know what I can do about Brexit?": {
+            goto: {
+              type: 'dashboard',
+              name: 'brexit',
+              task: 'brexit',
+            },
+          },
+          "Decide who to vote for": {
+            goto: {
+              type: 'dashboard',
+              name: 'decide',
+              task: 'decide',
+            },
+          },
+          "Learn about the parties": {
+            goto: {
+              type: 'step',
+              name: 'partyStories'
+            },
+          },
+         "Know how much my vote counts for": {
+            goto: {
+              type: 'step',
+              name: 'vote-worth'
+            },
+         },
+        },
+      },
+    },
   },
 
   //Dashboards are collections of tasks
@@ -96,7 +137,7 @@ module.exports = {
       color: "#c042de",
       goto: {
         type: 'step',
-        name: 'story'
+        name: 'partyStories'
       }
     },
     "vote-worth": {
@@ -390,8 +431,17 @@ module.exports = {
     question: {
 
     },
-    story: {
+    partyStories: {
       label: "Party stories"
+    },
+    sampleStory: {
+      label: "Generic example story",
+      cardUrls: [
+        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+      ]
     },
     policy: {
       label: "Privacy Policy"

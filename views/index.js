@@ -23,6 +23,7 @@ const
 //   by express routing - this was made to avoid 404 errors on page refresh
 const routes = {
   root: router.route('/'),
+  phrase: router.route('/phrase/:name'),
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
@@ -63,6 +64,8 @@ class App {
           this.header,
 
           routes.root(function () {
+            // var phrase = new Phrase({phrase: 'home'});
+            // return h("div", phrase)
             var dashboard = new Dashboard({dashboard: 'home'});
             return h("div", dashboard)
           }),
@@ -70,6 +73,11 @@ class App {
           routes.dashboard(function (params) {
             var dashboard = new Dashboard({dashboard: params.name});
             return h("div", dashboard)
+          }),
+
+          routes.phrase(function (params) {
+            var phrase = new Phrase({phrase: params.name});
+            return h("div", phrase)
           }),
 
           routes.step(function (params) {
@@ -176,6 +184,80 @@ class Progress {
   }
 }
 
+class Phrase {
+
+  constructor(params) {
+    this.phrase = model.phrases[params.phrase] || { title: "This is a phrase", text: "I should buy ${thing}", options: { thing: { boat: "a boat", cat: "a cat" } } }
+    model.showProgressBar = false;
+  }
+
+  onload() {
+    $('div.body').removeClass('backColor');
+  }
+
+  render() {
+    var phraseDOM = [];
+
+    if (!Object.keys(this.phrase.options).length) {
+      phraseDOM.push(h("p", "No options to display"))
+    } else {
+      const phrase = this.phrase
+      const replacements = Object.keys(phrase.options)
+        .map(function(opt) {
+          const optionSet = phrase.options[opt]
+          const options = Object.keys(optionSet).map(function(optName){
+            const value = phrase.options[opt][optName]
+            return h('option', {
+              value: JSON.stringify(value),
+            }, optName );
+          })
+          options.unshift(h('option', {
+            value: null,
+          }, '' ))
+
+          const select = h('select', {
+            onchange: function(e){
+              const value = JSON.parse(e.target.value)
+              if(value.goto){
+                routes[value.goto.type](value.goto).push()
+              } else {
+                 helpers.updateData(value.dataUpdates);
+              }
+            }
+          }, options)
+
+          return {
+            replace: '${'+opt+'}',
+            with: select
+          }
+        })
+
+      this.phrase.text.split(' ')
+        .map(function(repl) {
+          var match
+          replacements.forEach(function(replacement){
+            if (repl === replacement.replace) {
+              match = replacement.with
+            }
+          })
+
+          return match || repl+' '
+        })
+        .forEach(function(wordOrOption) {
+          phraseDOM.push(wordOrOption)
+        })
+    }
+
+    return h("section.phrase",
+      h("h1", this.phrase.title),
+      h("h2", this.phrase.subtitle),
+      h("section.text", phraseDOM)
+    )
+  }
+
+
+
+}
 
 class Dashboard {
 
@@ -356,8 +438,12 @@ class Step {
         })
         break;
 
-      case 'story':
+      case 'partyStories':
         data.cardGroups.push(partyStories)
+        break;
+
+      case 'sampleStory':
+        data.cardGroups.push(self.step.cardUrls)
         break;
 
       case 'question':
@@ -406,15 +492,17 @@ class Step {
     }
     this.cardGroups = data.cardGroups.map(function(cards){
       cards.forEach(function(card, i) {
-        if(!cards[i].nextStep){
-          cards[i].nextStep = params.next;
+        if (typeof card !== 'string') {
+          if(!cards[i].nextStep){
+            cards[i].nextStep = params.next;
+          }
+          cards[i].type = cards[i].type || params.name;
         }
-        cards[i].type = cards[i].type || params.name;
       });
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0])]);
       } else {
-        return (new CardGroup({cards:cards,nextStep:params.next}));
+        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}));
       }
     })
 
@@ -459,13 +547,27 @@ class CardGroup {
     this.data = data;
   }
 
+  onload() {
+    designers.onCardGroupReady();
+  }
+
   render() {
     const self = this;
-    const cards = self.data.cards.map(function(card){
-      return (new Card(card));
+    var readyPromises = [];
+    const cards = self.data.cards.map(function(card, i){
+      var promise;
+      readyPromises.push(promise);
+      return (new Card(card, promise));
     })
 
-    return h('.card-carousel.layer',
+    const extraAttributes = self.data.extraAttributes || ''
+
+    q.allSettled(readyPromises)
+    .then(function() {
+      designers.reinitSlick();
+    });
+
+    return h('.card-carousel.layer' + extraAttributes,
       h('div',
         h("div.slick-container",{role: "listbox"},cards)
       )
@@ -474,10 +576,33 @@ class CardGroup {
 
 }
 
-class Card {
+class Percentages {
   constructor(data) {
-    this.cardContent = new CardContent(data);
     this.data = data;
+  }
+
+  render() {
+    return h('div#matches',
+      h('h3', 'How closely you match: ' + Math.round(this.data.matchPercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.matchPercentage +"%;"})
+      ),
+      h('h3', 'Chances of success: ' + Math.round(this.data.chancePercentage) + '%'),
+      h('.progress',
+        h('.progress-inner',{style: "width: " + this.data.chancePercentage +"%;"})
+      )
+    )
+  }
+}
+
+class Card {
+  constructor(data, readyPromise) {
+    const self = this;
+    self.data = data;
+    const onReady = function() {
+      designers.reinitSlick();
+    }
+    self.cardContent = new CardContent(self.data, onReady, readyPromise);
   }
 
   render() {
@@ -490,14 +615,32 @@ class Card {
 
 class CardContent {
 
-  constructor(data) {
-    this.data = data;
+  constructor(data, onReady, readyPromise) {
+    const self = this;
+    self.data = data;
+    self.onReady = onReady;
+    self.readyPromise = readyPromise;
   }
 
   render() {
     const self = this;
-    const data = self.data;
 
+    if (typeof self.data === 'string') {
+      var cardKey = self.data;
+      if (model.cards[cardKey]) {
+        self.data = model.cards[cardKey];
+      } else {
+        self.readyPromise = http.get(cardKey)
+        .then(function (res) {
+          model.cards[cardKey] = res.body;
+          self.refreshComponent();
+          self.onReady();
+          return h('div.hello', 'Hello');
+        });
+      }
+    }
+
+    const data = self.data;
     switch (data.type) {
 
       case 'postcode':
@@ -659,7 +802,12 @@ class CardContent {
         )
         break;
 
-      case 'story':
+      case 'partyStories':
+        data.name = data.header;
+        data.description = data.content;
+        return helpers.assembleCards(data, 'Organization');
+
+      case 'sampleStory':
         data.name = data.header;
         data.description = data.content;
         return helpers.assembleCards(data, 'Organization');
@@ -689,9 +837,7 @@ class CardContent {
         return helpers.assembleCards(data, 'policy');
 
       default:
-        console.log('Defaulting');
         return helpers.assembleCards(data, data.type);
-
     }
 
   }
@@ -763,16 +909,37 @@ function getResults(){
             target2: "_blank"
           }
         ];
-        extraCards = [
-          {
-            name: "You and your matched party",
-            description: yourParty
-          },
-          {
-            name: "You and your area",
-            description: yourArea
+
+        // So sorry for this but this handles cards
+        // Pushing didn't work for some reason
+        if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
+          extraCards = [
+            {
+              name: "You and your matched party",
+              description: yourParty
+            },
+            {
+              name: "You and your area",
+              description: yourArea
+            }
+          ];
+        } else {
+          if (results.parties[0].matches.plus.length > 0) {
+            extraCards = [
+              {
+                name: "You and your matched party",
+                description: yourParty
+              }
+            ];
+          } else {
+            extraCards = [
+              {
+                name: "You and your area",
+                description: yourArea
+              }
+            ];
           }
-        ];
+        }
       }
       model.user.results.push([
         [
@@ -790,9 +957,30 @@ function getResults(){
               buttonText: "Add more stuff",
               buttonAction: function(){routes.root().push()}
             },
+            renderPercentages: function () {
+              return new Percentages({
+                matchPercentage: results.parties[0].matchPercentage,
+                chancePercentage: results.parties[0].chancePercentage
+              })
+            },
+            toggleDetailsButton: {
+              toggle: function () {
+                // Toggle the extra cards
+                $('#more-details').toggleClass('hide');
+
+                // Reset slick after hiding it
+                $('.slick-container').slick('unslick').slick('reinit');
+
+                // Change button text
+                $('#toggle-details-btn').text($('#toggle-details-btn').text() == 'More details' ? 'Fewer details' : 'More details');
+              }
+            },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
-              return new CardGroup({cards: cards});
+              return new CardGroup({
+                cards: cards,
+                extraAttributes: '#more-details.hide'
+              });
             },
             extraCards: extraCards
           }
