@@ -363,16 +363,23 @@ module.exports = function(CardTemplates){
             "content": "1"
           },
           {
-            "dom": "div.OrganizationContainer",
+            "dom": "div",
             "condition": "!isWaiting",
-            "template": "Organization"
-            // "loop": "resultParties",
-            // "content": [
-            //   {
-            //     "template": "cell"
-            //   }
-            // ]
+            "content": {
+              "func": ['renderParties']
+            }
           },
+          // {
+          //   "dom": "div.OrganizationContainer",
+          //   "condition": "!isWaiting",
+          //   "template": "Organization"
+          //   // "loop": "resultParties",
+          //   // "content": [
+          //   //   {
+          //   //     "template": "cell"
+          //   //   }
+          //   // ]
+          // },
           {
             "dom": "div",
             "condition": "!isWaiting",

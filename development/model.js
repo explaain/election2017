@@ -27,4 +27,15 @@ module.exports = function(model){
     },
     dataUpdates: []
   };
+  model.dashboards.home.tasks.push("!TEST-sentence");
+  model.tasks["!TEST-sentence"] = {
+    subtype: "multi-submit",
+    color: "#00a2e5",
+    label: "TEST Sentence",
+    goto: {
+      type: 'phrase',
+      name: 'iWantTo'
+    },
+    dataUpdates: []
+  };
 }

@@ -44,7 +44,16 @@ module.exports = {
       // "ukip",
       // "snp"
     ],
-    issues: [
+    topics: [
+      "brexit",
+      //"education",
+     //"transport",
+    //"economy",
+        //"housing",
+        //"defence",
+        //"health",
+        //"environment",
+        //"immigration"
 
     ]
   },
@@ -56,60 +65,239 @@ module.exports = {
         "voteFor",
         "voteAgainst",
         "voteOn",
-        // "registerToVote"
+        "registerToVote",
+        "know",
+        "learnAbout",
+        "beRemindedTo"
       ]
     },
-    // voteFor: {
-    //   text: "vote for",
-    //   options: ["phrase1","phrase2"],
-    //   next: "postcode"
-    // },
-    // voteAgainst: {
-    //   text: "vote against",
-    //   options: ["phrase1","phrase2"],
-    //   next: "postcode"
-    // },
-    // voteOn: {
-    //   text: "vote on",
-    //   options: ["phrase1","phrase2"],
-    //   next: "postcode"
-    // },
-    // phrase1: {
-    //   text: "last phrase 1",
-    //   goto: {
-    //     type: 'step',
-    //     name: 'vote-worth'
-    //   }
-    // },
-    // phrase2: {
-    //   text: "last phrase 2",
-    //   goto: {
-    //     type: 'step',
-    //     name: 'partyStories'
-    //   }
-    // },
     voteFor: {
       text: "vote for",
-      optionList: "parties",
+      optionList: [
+        "parties",
+        "topics"
+      ],
       next: "postcode"
     },
     voteAgainst: {
       text: "vote against",
-      optionList: "parties",
+      optionList: [
+        "parties",
+        "topics"
+      ],
       next: "postcode"
     },
     voteOn: {
       text: "vote on",
-      optionList: "parties",
+      optionList: [
+        "parties",
+        "topics"
+      ],
       next: "postcode"
     },
-    labour: {
-      text: "Labour",
-      dataUpdates: []
+    registerToVote: {
+      text: "Register to Vote",
+      goto: {
+        type: '',
+        name: ''
+      }
     },
-    conservative: {
-      text: "Conservatives",
-      dataUpdates: []
+    know: {
+      text: "know",
+      options: [
+        "myConstituency",
+        "howTo",
+        "why",
+        "who",
+        "where",
+        "what",
+        "whether"
+      ]
+    },
+    myConstituency: {
+      text: "what my constituency is",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    howTo: {
+      text: "how to",
+      options: [
+        "support",
+        "oppose",
+        "spoilMyBallot",
+        "votePersonProxyPostal",
+        "registerToVote",
+        "voteSwap"
+      ],
+      next: ""
+    },
+    support: {
+      text: "support a Party",
+      optionList: [
+        "parties",
+        "topics"
+      ],
+      next: "postcode"
+    },
+    oppose: {
+      text: "support a Topic",
+      optionList: [
+        "parties",
+        "topics"
+      ],
+      next: "postcode"
+    },
+    spoilMyBallot: {
+      text: "spoil my ballot",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    voteSwap: {
+      text: "vote swap",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    why: {
+      text: "why",
+      optionList: [
+        "whyElection"
+      ]
+    },
+    whyElection: {
+      text: "we are having an election",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    who: {
+      text: "who",
+      options: [
+        "areCandidates",
+        "myMP",
+        "winLocal",
+        "areParties",
+        "areLeaders",
+        "winNational",
+        "shouldVoteFor"
+      ],
+      next: "postcode"
+    },
+    areCandidates: {
+      text: "are the candidates in",
+      next: "postcode"
+    },
+    myMP: {
+      text: "is my MP",
+      next: "postcode"
+    },
+    winLocal: {
+      text: "is winning in my area",
+      next: "postcode"
+    },
+    areParties: {
+      text: "are the parties I can vote for?",
+      next: "postcode"
+    },
+    areLeaders: {
+      text: "are the main party leaders?",
+      next: "postcode"
+    },
+    winNational: {
+      text: "is winning overall",
+      options: "",
+      next: ""
+    },
+    shouldVoteFor: {
+      text: "should I vote for",
+      next: "postcode"
+    },
+    where: {
+      text: "where",
+      options: [
+        "shouldRegister"
+      ]
+    },
+    shouldRegister: {
+      text: "should I register to vote",
+      options: "",
+      next: "postcode"
+    },
+    what: {
+      text: "what",
+      options: [
+        ""
+      ]
+    },
+    beRemindedTo: {
+      text: "be reminded to",
+      optionList: "register",
+      next: ""
+    },
+    learnAbout: {
+      text: "learn about",
+      options: [
+        "registeringToVote",
+        "voteSwapping",
+        "votingSystems",
+        "voting",
+        "votingInPerson",
+        "votingByProxy",
+        "votingByPost"
+      ],
+      next: ""
+    },
+    registeringToVote: {
+      text: "registering to vote",
+      options: "",
+      next: ""
+    },
+    voteSwapping: {
+      text: "vote swapping",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    votingSystems: {
+      text: "how our voting system works",
+      options: "",
+      next: ""
+    },
+    voting: {
+      text: "voting",
+      options: "",
+      next: ""
+    },
+    votePersonProxyPostal: { //Skipping?
+      text: "different ways of voting",
+      options: [
+        "voteInPerson",
+        "voteByProxy",
+        "voteByPost"
+      ],
+      next: ""
+    },
+    votingInPerson: {
+      text: "voting in person",
+      options: "",
+      next: ""
+    },
+    votingByProxy: {
+      text: "voting by proxy",
+      options: "",
+      next: ""
+    },
+    votingByPost: {
+      text: "voting by post",
+      options: "",
+      next: ""
     },
     postcode: {
       text: "and my postcode is",
@@ -122,7 +310,35 @@ module.exports = {
         type: 'step',
         name: 'partyStories'
       }
-    }
+    },
+    labour: {
+      text: "Labour",
+      dataUpdates: []
+    },
+    conservative: {
+      text: "Conservatives",
+      dataUpdates: []
+    },
+    "lib-dem": {
+      text: "Lib Dem",
+      dataUpdates: []
+    },
+    snp: {
+      text: "SNP",
+      dataUpdates: []
+    },
+    green: {
+      text: "Green",
+      dataUpdates: []
+    },
+    ukip: {
+      text: "Ukip",
+      dataUpdates: []
+    },
+    brexit: {
+      text: "Brexit",
+      dataUpdates: []
+    },
   },
 
   phrases: {

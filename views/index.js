@@ -68,10 +68,10 @@ class App {
           routes.root(function () {
             // var phrase = new Phrase({phrase: 'home'});
             // return h("div", phrase)
-            // var dashboard = new Dashboard({dashboard: 'home'});
-            model.selectedPhrases = ["iWantTo"];
-            routes.phrase({name: 'iWantTo'}).push();
-            // return h("div", dashboard)
+            var dashboard = new Dashboard({dashboard: 'home'});
+            return h("div", dashboard)
+            // model.selectedPhrases = ["iWantTo"];
+            // routes.phrase({name: 'iWantTo'}).push();
           }),
 
           routes.dashboard(function (params) {
@@ -217,7 +217,13 @@ class PhraseSelect {
 
     if (this.phrase.optionList || (this.phrase.options && Object.keys(this.phrase.options).length)) {
       const phrase = this.phrase;
-      const optionKeys = model.phraseOptionLists[phrase.optionList] || phrase.options;
+      if (phrase.optionList && phrase.optionList.constructor === Array) {
+        var optionListsJoined = [];
+        phrase.optionList.forEach(function(list) {
+          optionListsJoined = optionListsJoined.concat(model.phraseOptionLists[list]);
+        })
+      }
+      const optionKeys = optionListsJoined || model.phraseOptionLists[phrase.optionList] || phrase.options;
       console.log(optionKeys);
       const options = optionKeys.map(function(optKey){
         console.log(optKey);
@@ -661,6 +667,8 @@ class CardGroup {
 
   constructor(data) {
     this.data = data;
+    console.log('data');
+    console.log(data);
   }
 
   onload() {
@@ -1062,12 +1070,17 @@ function getResults(){
       model.user.results.push([
         [
           {
-            // renderTopCard: function () {
-            //   return new Percentages({
-            //     matchPercentage: results.parties[0].matchPercentage,
-            //     chancePercentage: results.parties[0].chancePercentage
-            //   })
-            // },
+            renderParties: function () {
+              var data = results.parties.map(function(party) {
+                return {
+                  image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
+                  name: party.name,
+                  description: party.description || "We don't have a description for this party yet!",
+                }
+              })
+
+              return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
+            },
             resultParties: [
               {
                 image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
