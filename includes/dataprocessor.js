@@ -24,25 +24,88 @@ module.exports = class DataProcessor {
           }
           break;
 
+        case 'allIssues':
+          dataUpdates.push({
+              data: 'user.quizFlow.3',
+              // value: ["nhs-1","nhs-2","nhs-3","immigration-1","immigration-2","immigration-3""education-1","brexit-1","brexit-2","brexit-3","brexit-4","education-2","education-3"],
+              value: ["brexit-1", "education-1", "transport-1", "economy-1", "housing-1", "trident-1", "NHS-1", "environment-1", "immigration-1", "economy-2"],
+              action: "toggle"
+            })
+          break;
+
+          case 'nhs':
+          dataUpdates.push({
+            data: 'user.quizFlow.3',
+            value: ["nhs-1","nhs-2","nhs-3"],
+            action: "toggle"
+          })
+          break;
+
+          case 'immigration':
+          dataUpdates.push({
+            data: 'user.quizFlow.3',
+            value: ["immigration-1","immigration-2","immigration-3"],
+            action: "toggle"
+          })
+          break;
+
         case 'brexit':
           dataUpdates.push({
               data: 'user.quizFlow.3',
               value: ["brexit-1","brexit-2","brexit-3","brexit-4"],
               action: "toggle"
             })
+          break;
+
+        case 'education':
+          dataUpdates.push({
+              data: 'user.quizFlow.3',
+              value: ["education-1","education-2","education-3"],
+              action: "toggle"
+            })
+          break;
+
+        case 'registerToVote':
           goto = {
-            type: 'step',
+            type: 'postcode',
             route: 'step',
-            name: 'question',
-            final: 'quiz-priority',
-            next: 'postcode',
-            task: 'issue-$apply'
-            // http://localhost:1234/steps/result?type=postcode&resultsType=partyResults
+            name: 'goToResults',
+            resultsType: 'getRegistered',
+            next: 'result'
+          }
+          break;
+
+        case 'areCandidates':
+          goto = {
+            type: 'postcode',
+            route: 'step',
+            name: 'goToResults',
+            resultsType: 'localCandidates',
+            next: 'result'
+          }
+          break;
+
+        case 'shouldRegister':
+          goto = {
+            type: 'postcode',
+            route: 'step',
+            name: 'postcode-compare',
+            next: 'result'
           }
           break;
 
         default:
 
+      }
+      if (phrase.key == 'allIssues' || phrase.key == 'brexit' || phrase.key == 'nhs' || phrase.key == 'education' || phrase.key == 'immigration') {
+        goto = {
+          type: 'step',
+          route: 'step',
+          name: 'question',
+          final: 'quiz-priority',
+          next: 'postcode',
+          task: 'issue-$apply'
+        }
       }
     })
     helpers.updateData(dataUpdates);

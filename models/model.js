@@ -48,7 +48,10 @@ module.exports = {
     ],
     topics: [
       "allIssues",
-      "brexit",
+      // "brexit",
+      // "nhs",
+      // "education",
+      // "economy",
       //"education",
      //"transport",
     //"economy",
@@ -194,7 +197,7 @@ module.exports = {
       next: "postcode"
     },
     areCandidates: {
-      text: "are the candidates in",
+      text: "are my candidates",
       next: "postcode"
     },
     myMP: {
@@ -231,7 +234,10 @@ module.exports = {
     shouldRegister: {
       text: "should I register to vote",
       options: "",
-      next: "postcode"
+      goto: {
+        type: '',
+        name: ''
+      }
     },
     what: {
       text: "what",
@@ -686,6 +692,96 @@ module.exports = {
       ]
 
     },
+    "issue-transport": {
+      subtype: "multi-choice",
+      icon: 'graduation-cap',
+      label: "Transport",
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["Transport-1"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      // conditions: [
+      //   "user.quizFlow.4"
+      // ]
+    },
+    "issue-economy": {
+      subtype: "multi-choice",
+      icon: 'graduation-cap',
+      label: "Economy",
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["economy-1"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      // conditions: [
+      //   "user.quizFlow.4"
+      // ]
+    },
+    "issue-housing": {
+      subtype: "multi-choice",
+      icon: 'graduation-cap',
+      label: "Housing",
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["housing-1"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      // conditions: [
+      //   "user.quizFlow.4"
+      // ]
+    },
+    "issue-defence": {
+      subtype: "multi-choice",
+      icon: 'graduation-cap',
+      label: "Defence",
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["defence-1"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      // conditions: [
+      //   "user.quizFlow.4"
+      // ]
+    },
+    "issue-environment": {
+      subtype: "multi-choice",
+      icon: 'graduation-cap',
+      label: "Environment",
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.quizFlow.4',
+          value: ["environment-1"],
+          // igor: see "toggle" usage here: we make this task to
+          // behave like a checkbox
+          action: "toggle"
+        }
+      ],
+      // conditions: [
+      //   "user.quizFlow.4"
+      // ]
+    },
     "issue-$apply": {
       subtype: "multi-submit",
       label: "Start quiz!",
@@ -793,6 +889,9 @@ module.exports = {
 
   // Steps are essentially pages
   steps: {
+    goToResults: {
+      label: "Loading your results..."
+    },
     postcode: {
       label: "Where are you voting from?"
     },

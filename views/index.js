@@ -68,10 +68,10 @@ class App {
           routes.root(function () {
             // var phrase = new Phrase({phrase: 'home'});
             // return h("div", phrase)
-            var dashboard = new Dashboard({dashboard: 'home'});
-            return h("div", dashboard)
-            // model.selectedPhrases = ["iWantTo"];
-            // routes.phrase({name: 'iWantTo'}).push();
+            // var dashboard = new Dashboard({dashboard: 'home'});
+            // return h("div", dashboard)
+            model.selectedPhrases = ["iWantTo"];
+            routes.phrase({name: 'iWantTo'}).push();
           }),
 
           routes.dashboard(function (params) {
@@ -80,23 +80,28 @@ class App {
           }),
 
           routes.phrase(function (params) {
+            if (params.name == "iWantTo") {
+              model.selectedPhrases = [{key: "iWantTo"}];
+            }
             var hPhrases = model.selectedPhrases.map(function(phrase) {
-              return h('span.phrase', model.myPhrases[phrase.key] ? model.myPhrases[phrase.key].text : phrase.key);
+              return h('div.phrase.popup', model.myPhrases[phrase.key] ? model.myPhrases[phrase.key].text : phrase.key);
             })
             var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
             var goto = model.myPhrases[params.name].goto;
 
             var submitData = function(e) {
-              console.log('hi')
               var goto = dataProcessor.processSentenceData(model, helpers);
-              console.log(goto.route);
-              console.log(routes.dashboard);
               routes[goto.route](goto).push();
             }
 
-            var goButton = goto ? h('button',{class: 'btn btn-success discard-card-style', onclick: submitData }, 'Let\'s go!') : '';
-            var quizButton = routes.dashboard({name: 'decide', task: 'decide'}).a({class: 'btn btn-primary discard-card-style'}, 'Just take me to the Quiz');
-            var phraseDom = h("div.content.text-center", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton, h('div', {class: 'quiz-btn-container'}, quizButton));
+            var quizButtonClick = function(e) {
+              model.selectedPhrases.push({key: 'allIssues'});
+              submitData(e);
+            }
+
+            var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
+            var quizButton = h('button.btn.btn-primary', {onclick: quizButtonClick}, 'Just take me to the Quiz');
+            var phraseDom = h("div.content.text-center.padded", h("div.body-content", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
             return h('section.step', h('div.cards', new Card({},function(){}, phraseDom) ) );
           }),
 
@@ -239,7 +244,7 @@ class PhraseSelect {
           key: optKey,
           phrase: model.myPhrases[optKey]
         };
-        return h('button', {
+        return h('button.btn.btn-default.popup', {
           value: JSON.stringify(value),
           onclick: function(e) {
             submitPhrase(e.target.value)
@@ -509,7 +514,9 @@ class Step {
 
         var quizTopicsLower = [], quizTopicsHigher = [];
         Object.keys(model.user.opinions.issues).forEach(function(issueName){
+          console.log(issueName);
           let issue = model.tasks['issue-' + issueName];
+          console.log(issue);
           if(~model.featuredTopics.indexOf(issueName)){
             issue.highPriority = true;
             quizTopicsHigher.push(issue);
@@ -568,9 +575,12 @@ class Step {
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.showProgressBar = false;
-        model.user.results[model.user.results.length-1].forEach(function(cards){
+        var resultCards = model.user.results[model.user.results.length-1] ? model.user.results[model.user.results.length-1] : [[{name: 'hi', description: 'yo'}]];
+        console.log('resultCards');
+        console.log(resultCards);
+        resultCards.forEach(function(cards){
           data.cardGroups.push(cards);
-        })
+        });
         break;
 
       case 'partyStories':
@@ -629,6 +639,7 @@ class Step {
 
     }
     this.cardGroups = data.cardGroups.map(function(cards){
+      console.log(cards)
       cards.forEach(function(card, i) {
         if (typeof card !== 'string') {
           if(!cards[i].nextStep){
@@ -638,9 +649,9 @@ class Step {
         }
       });
       if (cards.constructor !== Array || cards.length == 1) {
-        return ([new Card(cards[0])]);
+        return ([new Card(cards[0], null, null, self.params.resultsType)]);
       } else {
-        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}));
+        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}, resultsType));
       }
     })
 
@@ -661,6 +672,7 @@ class Step {
 
   onload() {
     const self = this;
+    console.log(self);
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
       eventTrackerInitiator();
@@ -681,8 +693,9 @@ class Step {
 
 class CardGroup {
 
-  constructor(data) {
+  constructor(data, resultsType) {
     this.data = data;
+    this.resultsType = resultsType;
   }
 
   onload() {
@@ -695,7 +708,7 @@ class CardGroup {
     const cards = self.data.cards.map(function(card, i){
       var promise;
       readyPromises.push(promise);
-      return (new Card(card, promise));
+      return (new Card(card, promise, null, self.resultsType));
     })
 
     const extraAttributes = self.data.extraAttributes || ''
@@ -738,13 +751,14 @@ class Percentages {
 }
 
 class Card {
-  constructor(data, readyPromise, customContent) {
+  constructor(data, readyPromise, customContent, resultsType) {
     const self = this;
     self.data = data;
+    self.resultsType = resultsType;
     const onReady = function() {
       designers.reinitSlick();
     }
-    self.cardContent = customContent || new CardContent(self.data, onReady, readyPromise);
+    self.cardContent = customContent || new CardContent(self.data, onReady, readyPromise, self.resultsType);
   }
 
   render() {
@@ -757,15 +771,17 @@ class Card {
 
 class CardContent {
 
-  constructor(data, onReady, readyPromise) {
+  constructor(data, onReady, readyPromise, resultsType) {
     const self = this;
     self.data = data;
     self.onReady = onReady;
     self.readyPromise = readyPromise;
+    self.resultsType = resultsType;
   }
 
   render() {
     const self = this;
+    const postcodeAlreadyEntered = model.user.postcode ? true : false;
 
     if (typeof self.data === 'string') {
       var cardKey = self.data;
@@ -785,8 +801,27 @@ class CardContent {
     const data = self.data;
     switch (data.type) {
 
+      case 'goToResults':
+        data.name = "";
+        data.description = "";
+        model.landedOnResult = 1;
+        model.user.isWaiting = "goToResults";
+        console.log('1234567890')
+        self.refresh();
+        getResults(self.resultsType).then(function(){
+          console.log('szfdgfhgjhklj')
+          delete model.user.isWaiting;
+          routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
+        });
+        return helpers.assembleCards(data, 'Detail');
+
       case 'postcode':
-        if (model.user.postcode) {
+        if (postcodeAlreadyEntered) {
+          console.log('postcodeAlreadyEntered')
+          console.log(postcodeAlreadyEntered)
+          //Doesn't ask for postcode again
+          data.name = "Loading your results...";
+          data.description = "";
           model.landedOnResult = 1;
           model.user.isWaiting = "postcode-input";
           self.refresh();
@@ -1026,13 +1061,23 @@ function getResults(resultsType){
 
   api.getResults(model.user.postcode, model.user, resultsType)
     .then(function(results) {
-      helpers.updateObject(model.user, results.data.user);
-      var yourParty = "",
-          yourArea = "",
-          yourFooter = "ShareButtons",
-          extraCards;
+      console.log('results');
+      console.log('results');
+      console.log('results');
+      console.log(results);
+      console.log(resultsType);
+      results.data.user ? helpers.updateObject(model.user, results.data.user) : null;
+      console.log(123);
+
+      var mainResults;
+
       switch (resultsType) {
         case 'partyResults':
+          var yourParty = "",
+              yourArea = "",
+              yourFooter = "ShareButtons",
+              extraCards;
+          console.log(1)
           if (!results.parties.length) {
             results.parties[0] = {
               name: "Hold up!",
@@ -1102,40 +1147,33 @@ function getResults(resultsType){
               description: yourParty,
             }]);
 
-            var mainResults;
-
-            switch (resultsType) {
-              case 'partyResults':
-                mainResults = function () {
-                  var data = results.parties.map(function(party) {
-                    return {
-                      type: 'resultParty',
-                      image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
-                      name: party.name,
-                      description: party.description || "We don't have a description for this party yet!",
-                      renderPercentages: function () {
-                        return new Percentages({
-                          matchPercentage: party.matchPercentage,
-                          chancePercentage: party.chancePercentage,
-                          scorePercentage: party.score*100
-                        })
-                      },
-                      showDetailsButton: {
-                        cardKey: '//api.explaain.com/Detail/partymatch'
-                      },
-                    }
-                  });
-
-                  return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
+            mainResults = function () {
+              var data = results.parties.map(function(party) {
+                return {
+                  type: 'resultParty',
+                  image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
+                  name: party.name,
+                  description: party.description || "We don't have a description for this party yet!",
+                  renderPercentages: function () {
+                    return new Percentages({
+                      matchPercentage: party.matchPercentage,
+                      chancePercentage: party.chancePercentage,
+                      scorePercentage: party.score*100
+                    })
+                  },
+                  showDetailsButton: {
+                    cardKey: '//api.explaain.com/Detail/partymatch'
+                  },
                 }
-                break;
-              default:
+              });
 
+              return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
             }
-          };
+          }
           break;
-          
+
         case 'localCandidates':
+          console.log(2)
           shareButtonCard = [];
           extraCards = [];
 
@@ -1156,22 +1194,26 @@ function getResults(resultsType){
           break;
 
         case 'getRegistered':
+          shareButtonCard = [];
+          extraCards = [];
+          console.log('hiii')
           mainResults = function() {
-            var data = {
+            var data = [{
               type: 'Detail',
               name: 'Get registered!',
               description: 'Go to [this site](https://www.gov.uk/register-to-vote)'
-            };
-            return new Card(data)
+            }];
+            return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
           }
           break;
 
         default:
-
+          console.log(10)
           break;
       }
 
-
+      console.log('mainResults');
+      console.log(mainResults);
       model.user.results.push([
         [
           {
@@ -1210,6 +1252,7 @@ function getResults(resultsType){
           }
         ]
       ]);
+      console.log('lalallala');
       setTimeout(function(){
         deferred.resolve();
       },500);

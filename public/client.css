@@ -180,8 +180,9 @@ a.task {
   cursor: pointer;
 }
 
-span.phrase {
+div.phrase {
   margin-right: 0.2em;
+  display: inline-block;
 }
 
 section.tasks a.task {
@@ -866,6 +867,95 @@ a.explaain-link.discard-card-style:active,
   width: 50%;
 }
 
+
+.card .content button.btn,
+.card .content a.btn {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  border-width: 1px;
+}
+.card .content button.btn:hover,
+.card .content a.btn:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+  border-width: 1px;
+}
+
+.card .content button.btn.btn-primary,
+.card .content a.btn.btn-primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+.card .content button.btn.btn-primary:hover,
+.card .content a.btn.btn-primary:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+.card .content button.btn.btn-success,
+.card .content a.btn.btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.card .content button.btn.btn-success:hover,
+.card .content a.btn.btn-success:hover {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
+
+
+.card .content.padded .body-content {
+  margin-top: 0;
+  padding: 20px;
+}
+.card .content.padded section {
+  padding: 20px;
+}
+.card .content.padded button {
+  margin: 5px;
+}
+
+
+.popup {
+  animation-name: taskpop;
+  animation-duration: .2s;
+  transform: scale(0,0) rotate(-5deg);
+  animation-fill-mode: forwards;
+}
+
+.popup:nth-child(1){animation-delay: 0.1s}
+.popup:nth-child(2){animation-delay: 0.2s}
+.popup:nth-child(3){animation-delay: 0.3s}
+.popup:nth-child(4){animation-delay: 0.4s}
+.popup:nth-child(5){animation-delay: 0.5s}
+.popup:nth-child(6){animation-delay: 0.6s}
+.popup:nth-child(7){animation-delay: 0.7s}
+.popup:nth-child(8){animation-delay: 0.8s}
+.popup:nth-child(9){animation-delay: 0.9s}
+.popup:nth-child(10){animation-delay: 1.0s}
+.popup:nth-child(11){animation-delay: 1.1s}
+.popup:nth-child(12){animation-delay: 1.2s}
+
+
+
 /* Progress bar */
 
 .progress {
@@ -918,7 +1008,7 @@ input:focus::-webkit-contacts-auto-fill-button {
 }
 
 .quiz-btn-container {
-  margin-top: 25px;
+  margin: 10px 0;
 }
 
 .phrase-input {

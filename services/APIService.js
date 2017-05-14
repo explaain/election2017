@@ -16,11 +16,23 @@ APIService.prototype.getResults = function(postcode, userData, resultType) {
     case 'localCandidates':
       results = getLocalCandidatesResults(postcode, userData);
       break;
+    case 'getRegistered':
+      results = getGenericResults({
+        // name: "Registering to Vote takes no time at all",
+        // description: "hi"
+      })
+      break;
     default:
-      results = getPartyResults(postcode, userData);
+      results = getGenericResults({})
   }
   results.resultType = resultType;
   return results;
+}
+
+var getGenericResults = function(data) {
+  return delay(500).then(function(){
+    return {data: data};
+  })
 }
 
 APIService.prototype.getPartyResults = function(postcode, userData) {
@@ -66,6 +78,9 @@ APIService.prototype.getLocalCandidatesResults = function(postcode, userData) {
       });
       return {data: data};
     }).then(function(results) {
+      console.log('results');
+      console.log('results');
+      console.log(results);
       return results;
     })
   })
