@@ -773,7 +773,7 @@ class CardContent {
           self.refresh();
           getResults('partyResults').then(function(){
             delete model.user.isWaiting;
-            routes.step({ name: data.nextStep, type: data.type }).push();
+            routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
           });
           return false;
         }
@@ -1095,6 +1095,18 @@ function getResults(resultsType){
               return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
             }
             break;
+
+          case 'getRegistered':
+            mainResults = function() {
+              var data = {
+                type: 'Detail',
+                name: 'Get registered!',
+                description: 'Go to [this site](https://www.gov.uk/register-to-vote)'
+              };
+              return new Card(data)
+            }
+            break;
+
           default:
 
         }
