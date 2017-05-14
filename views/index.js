@@ -556,6 +556,15 @@ class Step {
         }])
         break;
 
+      case 'local-candidates-test':
+        model.landedOnResult = 1;
+        model.user.postcode = 'N79GS';
+        getResults('localCandidates').then(function(){
+          routes.step({ name: 'result', type: 'result' }).push();
+        });
+        return;
+        break;
+
       case 'result':
         model.landedOnResult = 1; // todo: temporary, refactor
         model.showProgressBar = false;
@@ -1022,124 +1031,152 @@ function getResults(resultsType){
           yourArea = "",
           yourFooter = "ShareButtons",
           extraCards;
-      if (!results.parties.length) {
-        results.parties[0] = {
-          name: "Hold up!",
-          description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
-        }
-        yourFooter = "BackToDashboard";
-        shareButtonCard = [];
-        extraCards = [];
-      } else {
-        results.parties[0].matches.plus.forEach(function(match) {
-          yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
-          + match.description + '<br>';
-        });
-        results.parties[0].chances.plus.forEach(function(chance) {
-          yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
-          + chance.description + '<br>';
-        });
-        shareButtonCard = [
-          {
-            name: "Spread the #GE2017 ❤️",
-            type: "share",
-            button1: '<i class="fa fa-facebook"></i> Share on Facebook',
-            buttonClass1: "btn-facebook",
-            buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
-            target1: "_blank",
-            button2: '<i class="fa fa-twitter"></i> Share on Twitter',
-            buttonClass2: "btn-twitter",
-            buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
-            target2: "_blank"
-          }
-        ];
-
-        // So sorry for this but this handles cards
-        // Pushing didn't work for some reason
-        if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
-          extraCards = [
-            {
-              name: "You and your matched party",
-              description: yourParty
-            },
-            {
-              name: "You and your area",
-              description: yourArea
+      switch (resultsType) {
+        case 'partyResults':
+          if (!results.parties.length) {
+            results.parties[0] = {
+              name: "Hold up!",
+              description: "Looks like there isn’t a match for what you’re looking for as no party is offering to do what you want."
             }
-          ];
-        } else {
-          if (results.parties[0].matches.plus.length > 0) {
-            extraCards = [
-              {
-                name: "You and your matched party",
-                description: yourParty
-              }
-            ];
+            yourFooter = "BackToDashboard";
+            shareButtonCard = [];
+            extraCards = [];
           } else {
-            extraCards = [
+            results.parties[0].matches.plus.forEach(function(match) {
+              yourParty += '<i class="fa fa-check" aria-hidden="true"></i> '
+              + match.description + '<br>';
+            });
+            results.parties[0].chances.plus.forEach(function(chance) {
+              yourArea += '<i class="fa fa-check" aria-hidden="true"></i> '
+              + chance.description + '<br>';
+            });
+            shareButtonCard = [
               {
-                name: "You and your area",
-                description: yourArea
+                name: "Spread the #GE2017 ❤️",
+                type: "share",
+                button1: '<i class="fa fa-facebook"></i> Share on Facebook',
+                buttonClass1: "btn-facebook",
+                buttonHref1: 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fuk-election-2017.herokuapp.com%2F&display=popup&ref=plugin&src=share_button',
+                target1: "_blank",
+                button2: '<i class="fa fa-twitter"></i> Share on Twitter',
+                buttonClass2: "btn-twitter",
+                buttonHref2: 'https://twitter.com/intent/tweet?text='+'I know how to use my %23GE2017 vote' + (model.user.constituency ? ' in %23' + model.user.constituency.name.replace(/\s/g, '') : '') + '. How are you using your vote? ge2017.com',
+                target2: "_blank"
               }
             ];
-          }
-        }
 
-        explaain.addClientCards([{
-          "@id": "//api.explaain.com/Detail/partymatch",
-          name: "You and your matched party",
-          description: yourParty,
-        }]);
-
-        var mainResults;
-
-        switch (resultsType) {
-          case 'partyResults':
-            mainResults = function () {
-              var data = results.parties.map(function(party) {
-                return {
-                  type: 'resultParty',
-                  image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
-                  name: party.name,
-                  description: party.description || "We don't have a description for this party yet!",
-                  renderPercentages: function () {
-                    return new Percentages({
-                      matchPercentage: party.matchPercentage,
-                      chancePercentage: party.chancePercentage,
-                      scorePercentage: party.score*100
-                    })
-                  },
-                  showDetailsButton: {
-                    cardKey: '//api.explaain.com/Detail/partymatch'
-                  },
+            // So sorry for this but this handles cards
+            // Pushing didn't work for some reason
+            if (results.parties[0].matches.plus.length > 0 && results.parties[0].chances.plus.length > 0) {
+              extraCards = [
+                {
+                  name: "You and your matched party",
+                  description: yourParty
+                },
+                {
+                  name: "You and your area",
+                  description: yourArea
                 }
-              });
-
-              return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
+              ];
+            } else {
+              if (results.parties[0].matches.plus.length > 0) {
+                extraCards = [
+                  {
+                    name: "You and your matched party",
+                    description: yourParty
+                  }
+                ];
+              } else {
+                extraCards = [
+                  {
+                    name: "You and your area",
+                    description: yourArea
+                  }
+                ];
+              }
             }
-            break;
 
-          case 'getRegistered':
-            mainResults = function() {
-              var data = {
-                type: 'Detail',
-                name: 'Get registered!',
-                description: 'Go to [this site](https://www.gov.uk/register-to-vote)'
-              };
-              return new Card(data)
+            explaain.addClientCards([{
+              "@id": "//api.explaain.com/Detail/partymatch",
+              name: "You and your matched party",
+              description: yourParty,
+            }]);
+
+            var mainResults;
+
+            switch (resultsType) {
+              case 'partyResults':
+                mainResults = function () {
+                  var data = results.parties.map(function(party) {
+                    return {
+                      type: 'resultParty',
+                      image: party.image && ("/img/party-thumbnails/" + party.image) || '/img/party-logos/party.jpg',
+                      name: party.name,
+                      description: party.description || "We don't have a description for this party yet!",
+                      renderPercentages: function () {
+                        return new Percentages({
+                          matchPercentage: party.matchPercentage,
+                          chancePercentage: party.chancePercentage,
+                          scorePercentage: party.score*100
+                        })
+                      },
+                      showDetailsButton: {
+                        cardKey: '//api.explaain.com/Detail/partymatch'
+                      },
+                    }
+                  });
+
+                  return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
+                }
+                break;
+              default:
+
             }
-            break;
+          };
+          break;
+          
+        case 'localCandidates':
+          shareButtonCard = [];
+          extraCards = [];
 
-          default:
 
-        }
-      };
+          var mainResults = results.data.candidates;
+          var clientCards = [];
+
+          mainResults.forEach(function(localCandidate){
+            clientCards.push({
+              "@id": "//api.explaain.com/Detail/localCandidate_"+localCandidate.id,
+              image: localCandidate.image_url,
+              name: localCandidate.name,
+              description: localCandidate.party_name + ' [Twitter](https://twitter.com/intent/user?user_id='+localCandidate.twitter_user_id+')  \r\n # TEST',
+            });
+            localCandidate.cardHref = "//api.explaain.com/Detail/localCandidate_"+localCandidate.id;
+          });
+          explaain.addClientCards(clientCards);
+          break;
+
+        case 'getRegistered':
+          mainResults = function() {
+            var data = {
+              type: 'Detail',
+              name: 'Get registered!',
+              description: 'Go to [this site](https://www.gov.uk/register-to-vote)'
+            };
+            return new Card(data)
+          }
+          break;
+
+        default:
+
+          break;
+      }
 
 
       model.user.results.push([
         [
           {
-            mainResults: mainResults,
+            mainResults: mainResults ? mainResults : function(){},
+            isLocalCandidates: resultsType == 'localCandidates',
             footer: [
               yourFooter
             ],

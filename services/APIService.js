@@ -13,6 +13,9 @@ APIService.prototype.getResults = function(postcode, userData, resultType) {
     case 'partyResults':
        results = getPartyResults(postcode, userData);
       break;
+    case 'localCandidates':
+      results = getLocalCandidatesResults(postcode, userData);
+      break;
     default:
       results = getPartyResults(postcode, userData);
   }
@@ -35,6 +38,33 @@ APIService.prototype.getPartyResults = function(postcode, userData) {
       data.user = userData || {};
       data.user.constituency = constituency;
       return resultAlgorithm(data);
+    }).then(function(results) {
+      return results;
+    })
+  })
+}
+
+APIService.prototype.getLocalCandidatesResults = function(postcode, userData) {
+
+  var data = {};
+
+  return delay(500).then(function(){
+    return loadPostcodeData(postcode)
+    .then(function(results) {
+      if (results.error) {
+        return results;
+      }
+      data = results;
+      var constituency = results.user.constituency
+      data.user = userData || {};
+      data.user.constituency = constituency;
+      data.candidates = [];
+      localCandidates.forEach(function(localCandidate){
+        if(localCandidate.gss_code === constituency.id){
+          data.candidates.push(localCandidate);
+        }
+      });
+      return {data: data};
     }).then(function(results) {
       return results;
     })
@@ -540,6 +570,7 @@ function objectAsArray(obj) {
 
 var getResults = APIService.prototype.getResults;
 var getPartyResults = APIService.prototype.getPartyResults;
+var getLocalCandidatesResults = APIService.prototype.getLocalCandidatesResults;
 var comparePostcodes = APIService.prototype.comparePostcodes;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;

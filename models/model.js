@@ -767,6 +767,9 @@ module.exports = {
     'quiz-priority': {
       label: "Select priority"
     },
+    'local-candidates-test': {
+
+    },
     "vote-worth": {
 
     },
