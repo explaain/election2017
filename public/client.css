@@ -887,8 +887,6 @@ a.explaain-link.discard-card-style:active,
   -ms-transition: width .5s;
   transition: width .5s;
 }
-idth .5s;
-}
 
 /* Fixing specific browsers */
 
@@ -908,4 +906,18 @@ input:focus::-webkit-contacts-auto-fill-button {
   pointer-events: none;
   position: absolute;
   right: 0;
+}
+
+/* phrases dropdowns */
+
+.phrase, .phrase select, .phrase select option {
+  font-size: 21px;
+}
+
+.quiz-btn-container {
+  margin-top: 25px;
+}
+
+footer {
+  margin-top: 25px;
 }
