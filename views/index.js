@@ -1186,7 +1186,7 @@ function getResults(resultsType){
               "@id": "//api.explaain.com/Detail/localCandidate_"+localCandidate.id,
               image: localCandidate.image_url,
               name: localCandidate.name,
-              description: localCandidate.party_name + ' [Twitter](https://twitter.com/intent/user?user_id='+localCandidate.twitter_user_id+')  \r\n # TEST',
+              description: localCandidate.party_name + ' <a href="https://twitter.com/intent/user?user_id='+localCandidate.twitter_user_id+'">Twitter</a>  \r\n # TEST',
             });
             localCandidate.cardHref = "//api.explaain.com/Detail/localCandidate_"+localCandidate.id;
           });
