@@ -31,9 +31,135 @@ module.exports = {
     isWaiting: false
   },
 
+  selectedPhrases: [
+    "iWantTo"
+  ],
+
+  phraseOptionLists: {
+    parties: [
+      "labour",
+      "conservative",
+      // "lib-dem",
+      // "green",
+      // "ukip",
+      // "snp"
+    ],
+    issues: [
+
+    ]
+  },
+
+  myPhrases: {
+    iWantTo: {
+      text: "I want to",
+      options: [
+        "voteFor",
+        "voteAgainst",
+        "voteOn",
+        // "registerToVote"
+      ]
+    },
+    // voteFor: {
+    //   text: "vote for",
+    //   options: ["phrase1","phrase2"],
+    //   next: "postcode"
+    // },
+    // voteAgainst: {
+    //   text: "vote against",
+    //   options: ["phrase1","phrase2"],
+    //   next: "postcode"
+    // },
+    // voteOn: {
+    //   text: "vote on",
+    //   options: ["phrase1","phrase2"],
+    //   next: "postcode"
+    // },
+    // phrase1: {
+    //   text: "last phrase 1",
+    //   goto: {
+    //     type: 'step',
+    //     name: 'vote-worth'
+    //   }
+    // },
+    // phrase2: {
+    //   text: "last phrase 2",
+    //   goto: {
+    //     type: 'step',
+    //     name: 'partyStories'
+    //   }
+    // },
+    voteFor: {
+      text: "vote for",
+      optionList: "parties",
+      next: "postcode"
+    },
+    voteAgainst: {
+      text: "vote against",
+      optionList: "parties",
+      next: "postcode"
+    },
+    voteOn: {
+      text: "vote on",
+      optionList: "parties",
+      next: "postcode"
+    },
+    labour: {
+      text: "Labour",
+      dataUpdates: []
+    },
+    conservative: {
+      text: "Conservatives",
+      dataUpdates: []
+    },
+    postcode: {
+      text: "and my postcode is",
+      input: true,
+      dataUpdates: []
+    },
+    finish: {
+      text: ".",
+      goto: {
+        type: 'step',
+        name: 'partyStories'
+      }
+    }
+  },
+
   phrases: {
     home: {
-      title: "What do you want to do?",
+      // title: "What do you want to do?",
+      text: "I want to ${doSomething}",
+      options: {
+        doSomething: {
+          "know what I can do about Brexit": {
+            goto: {
+              type: 'phrase',
+              name: 'brexit',
+            },
+          },
+          "decide who to vote for": {
+            goto: {
+              type: 'phrase',
+              name: 'decide',
+            },
+          },
+          "learn about the parties": {
+            goto: {
+              type: 'phrase',
+              name: 'partyStories'
+            },
+          },
+         "know how much my vote counts for": {
+            goto: {
+              type: 'phrase',
+              name: 'vote-worth'
+            },
+         },
+        },
+      },
+    },
+    home1: {
+      // title: "What do you want to do1?",
       text: "I want to ${doSomething}",
       options: {
         doSomething: {
