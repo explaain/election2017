@@ -32,7 +32,9 @@ module.exports = {
   },
 
   selectedPhrases: [
-    "iWantTo"
+    {
+      key: "iWantTo"
+    }
   ],
 
   phraseOptionLists: {
@@ -45,6 +47,7 @@ module.exports = {
       // "snp"
     ],
     topics: [
+      "allIssues",
       "brexit",
       //"education",
      //"transport",
@@ -90,7 +93,7 @@ module.exports = {
     voteOn: {
       text: "vote on",
       optionList: [
-        "parties",
+        // "parties",
         "topics"
       ],
       next: "postcode"
@@ -307,8 +310,8 @@ module.exports = {
     finish: {
       text: ".",
       goto: {
-        type: 'step',
-        name: 'partyStories'
+        type: '',
+        name: ''
       }
     },
     labour: {
@@ -335,80 +338,84 @@ module.exports = {
       text: "Ukip",
       dataUpdates: []
     },
+    allIssues: {
+      text: "all issues",
+      dataUpdates: []
+    },
     brexit: {
       text: "Brexit",
       dataUpdates: []
     },
   },
 
-  phrases: {
-    home: {
-      // title: "What do you want to do?",
-      text: "I want to ${doSomething}",
-      options: {
-        doSomething: {
-          "know what I can do about Brexit": {
-            goto: {
-              type: 'phrase',
-              name: 'brexit',
-            },
-          },
-          "decide who to vote for": {
-            goto: {
-              type: 'phrase',
-              name: 'decide',
-            },
-          },
-          "learn about the parties": {
-            goto: {
-              type: 'phrase',
-              name: 'partyStories'
-            },
-          },
-         "know how much my vote counts for": {
-            goto: {
-              type: 'phrase',
-              name: 'vote-worth'
-            },
-         },
-        },
-      },
-    },
-    home1: {
-      // title: "What do you want to do1?",
-      text: "I want to ${doSomething}",
-      options: {
-        doSomething: {
-          "Know what I can do about Brexit?": {
-            goto: {
-              type: 'dashboard',
-              name: 'brexit',
-              task: 'brexit',
-            },
-          },
-          "Decide who to vote for": {
-            goto: {
-              type: 'dashboard',
-              name: 'decide',
-              task: 'decide',
-            },
-          },
-          "Learn about the parties": {
-            goto: {
-              type: 'step',
-              name: 'partyStories'
-            },
-          },
-         "Know how much my vote counts for": {
-            goto: {
-              type: 'step',
-              name: 'vote-worth'
-            },
-         },
-        },
-      },
-    },
-  },
+  // phrases: {
+  //   home: {
+  //     // title: "What do you want to do?",
+  //     text: "I want to ${doSomething}",
+  //     options: {
+  //       doSomething: {
+  //         "know what I can do about Brexit": {
+  //           goto: {
+  //             type: 'phrase',
+  //             name: 'brexit',
+  //           },
+  //         },
+  //         "decide who to vote for": {
+  //           goto: {
+  //             type: 'phrase',
+  //             name: 'decide',
+  //           },
+  //         },
+  //         "learn about the parties": {
+  //           goto: {
+  //             type: 'phrase',
+  //             name: 'partyStories'
+  //           },
+  //         },
+  //        "know how much my vote counts for": {
+  //           goto: {
+  //             type: 'phrase',
+  //             name: 'vote-worth'
+  //           },
+  //        },
+  //       },
+  //     },
+  //   },
+  //   home1: {
+  //     // title: "What do you want to do1?",
+  //     text: "I want to ${doSomething}",
+  //     options: {
+  //       doSomething: {
+  //         "Know what I can do about Brexit?": {
+  //           goto: {
+  //             type: 'dashboard',
+  //             name: 'brexit',
+  //             task: 'brexit',
+  //           },
+  //         },
+  //         "Decide who to vote for": {
+  //           goto: {
+  //             type: 'dashboard',
+  //             name: 'decide',
+  //             task: 'decide',
+  //           },
+  //         },
+  //         "Learn about the parties": {
+  //           goto: {
+  //             type: 'step',
+  //             name: 'partyStories'
+  //           },
+  //         },
+  //        "Know how much my vote counts for": {
+  //           goto: {
+  //             type: 'step',
+  //             name: 'vote-worth'
+  //           },
+  //        },
+  //       },
+  //     },
+  //   },
+  // },
 
   //Dashboards are collections of tasks
   dashboards: {

@@ -81,11 +81,20 @@ class App {
 
           routes.phrase(function (params) {
             var hPhrases = model.selectedPhrases.map(function(phrase) {
-              return h('span.phrase', model.myPhrases[phrase] ? model.myPhrases[phrase].text : phrase);
+              return h('span.phrase', model.myPhrases[phrase.key] ? model.myPhrases[phrase.key].text : phrase.key);
             })
             var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
             var goto = model.myPhrases[params.name].goto;
-            var goButton = goto ? routes[goto.type]({name: goto.name}).a({class: 'btn btn-success discard-card-style'}, 'Let\'s go!') : '';
+
+            var submitData = function(e) {
+              console.log('hi')
+              var goto = dataProcessor.processSentenceData(model, helpers);
+              console.log(goto.route);
+              console.log(routes.dashboard);
+              routes[goto.route](goto).push();
+            }
+
+            var goButton = goto ? h('button',{class: 'btn btn-success discard-card-style', onclick: submitData }, 'Let\'s go!') : '';
             var quizButton = routes.dashboard({name: 'decide', task: 'decide'}).a({class: 'btn btn-primary discard-card-style'}, 'Just take me to the Quiz');
             var phraseDom = h("div.content.text-center", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton, h('div', {class: 'quiz-btn-container'}, quizButton));
             return h('section.step', h('div.cards', new Card({},function(){}, phraseDom) ) );
@@ -230,20 +239,17 @@ class PhraseSelect {
           key: optKey,
           phrase: model.myPhrases[optKey]
         };
-        return h('option', {
+        return h('button', {
           value: JSON.stringify(value),
+          onclick: function(e) {
+            submitPhrase(e.target.value)
+          }
         }, value.phrase.text );
       });
       //Is this the correct structure?
       var defaultPhrase = phrase.defaultPhrase || { text: '' };
-      options.unshift(h('option', {
-        value: JSON.stringify(defaultPhrase),
-      }, defaultPhrase.text ))
 
-      const select = h('select', {
-        onchange: function(e) {
-          submitPhrase(e.target.value)
-        }
+      const select = h('div', {
       }, options);
 
       phraseDOM.push(select)
@@ -272,17 +278,20 @@ class PhraseSelect {
 
     function submitPhrase(eventValue) {
       const value = JSON.parse(eventValue)
+      console.log(value);
       if (value.dataUpdates) {
         helpers.updateData([value.dataUpdates]);
       }
       if(value.goto) {
         routes[value.goto.type](value.goto).push()
       } else {
-        if (value.text)
-          model.selectedPhrases.push(value.text);
-        model.selectedPhrases.push(value.key);
+        if (value.text) {
+          model.selectedPhrases[model.selectedPhrases.length-1].data = value.text;
+          model.selectedPhrases.push({key: value.text});
+        }
+        model.selectedPhrases.push(value);
         if (self.phrase.next)
-          model.selectedPhrases.push(self.phrase.next);
+          model.selectedPhrases.push({key: self.phrase.next});
         routes.phrase( {name: self.phrase.next || value.key } ).push();
       }
     }
@@ -462,6 +471,7 @@ class Dashboard {
 
 class Step {
   constructor(params) {
+    console.log(params);
     const self = this;
     this.step = model.steps[params.name];
     this.error = model.user.error;
@@ -568,6 +578,7 @@ class Step {
         model.user.quizFlow.forEach(function(quiz){
           quizFlow = quizFlow.concat(quiz);
         })
+        console.log(params);
         const questionName = params.nextQuestion?params.nextQuestion:quizFlow[0];
         model.question = questionName;
         const question = model.questions[questionName];
@@ -578,6 +589,8 @@ class Step {
           nextQuestion = null;
         }
         var finalStep;
+        console.log(params);
+        console.log(model.tasks);
         if(model.tasks[params.task].goto.final){
           finalStep = model.tasks[params.task].goto.final;
         } else {
@@ -764,6 +777,16 @@ class CardContent {
     switch (data.type) {
 
       case 'postcode':
+        if (model.user.postcode) {
+          model.landedOnResult = 1;
+          model.user.isWaiting = "postcode-input";
+          self.refresh();
+          getResults('partyResults').then(function(){
+            delete model.user.isWaiting;
+            routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+          });
+          // return false;
+        }
         data.isWaiting = model.user.isWaiting === "postcode-input";
         data.postcodeBinding = [model.user, 'postcode'];
         data.postcodeSubmit = function(e) {

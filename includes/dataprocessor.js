@@ -6,6 +6,50 @@ module.exports = class DataProcessor {
 
   constructor() {}
 
+  processSentenceData(model, helpers) {
+    var dataUpdates = [];
+    var goto = {};
+    model.selectedPhrases.forEach(function(phrase) {
+      switch (phrase.key) {
+        case 'postcode':
+          model.user.postcode = phrase.data;
+          break;
+
+        case 'voteOn':
+          goto = {
+            type: 'dashboards',
+            route: 'dashboard',
+            name: 'decide',
+            task: 'decide'
+          }
+          break;
+
+        case 'brexit':
+          dataUpdates.push({
+              data: 'user.quizFlow.3',
+              value: ["brexit-1","brexit-2","brexit-3","brexit-4"],
+              action: "toggle"
+            })
+          goto = {
+            type: 'step',
+            route: 'step',
+            name: 'question',
+            final: 'quiz-priority',
+            next: 'postcode',
+            task: 'issue-$apply'
+            // http://localhost:1234/steps/result?type=postcode&resultsType=partyResults
+          }
+          break;
+
+        default:
+
+      }
+    })
+    helpers.updateData(dataUpdates);
+    console.log(goto)
+    return goto;
+  }
+
   processConstituencySeats(data) {
     return {
       heading: data.text.heading,
