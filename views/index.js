@@ -573,6 +573,7 @@ class CardContent {
   constructor(data, onReady, readyPromise) {
     const self = this;
     self.data = data;
+    console.log(self.data)
     self.onReady = onReady;
     self.readyPromise = readyPromise;
   }
@@ -694,6 +695,7 @@ class CardContent {
         return helpers.assembleCards(data, 'postcodeCompare');
 
       case 'result': // todo: refactor
+        console.log(data);
         const description = helpers.markdownToHtml(data.description);
         return h('div.content.text-left',
           h('img', {'src': data.image, 'class': 'party-logo'}),
@@ -864,6 +866,23 @@ function getResults(){
       model.user.results.push([
         [
           {
+            // renderTopCard: function () {
+            //   return new Percentages({
+            //     matchPercentage: results.parties[0].matchPercentage,
+            //     chancePercentage: results.parties[0].chancePercentage
+            //   })
+            // },
+            resultParties: [
+              {
+                image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
+                name: results.parties[0] && results.parties[0].name,
+                description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",
+                // footer: [
+                //   yourFooter
+                // ],
+                type: "Organization", // Temporary,
+              }
+            ],
             image: results.parties[0] && results.parties[0].image && ("/img/party-thumbnails/" + results.parties[0].image) || '/img/party-logos/party.jpg',
             name: results.parties[0] && results.parties[0].name,
             description: results.parties[0] && results.parties[0].description || "We don't have a description for this party yet!",

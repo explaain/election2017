@@ -366,6 +366,12 @@ module.exports = function(CardTemplates){
             "dom": "div.OrganizationContainer",
             "condition": "!isWaiting",
             "template": "Organization"
+            // "loop": "resultParties",
+            // "content": [
+            //   {
+            //     "template": "cell"
+            //   }
+            // ]
           },
           {
             "dom": "div",
@@ -393,12 +399,12 @@ module.exports = function(CardTemplates){
             "template": "more-stuff",
             "mapping": [['moreStuff']]
           },
-          {
-            "dom": "div",
-            "condition": "!isWaiting",
-            "template": "share",
-            "mapping": [['shareButtonCard']]
-          }
+          // {
+          //   "dom": "div",
+          //   "condition": "!isWaiting",
+          //   "template": "share",
+          //   "mapping": [['shareButtonCard']]
+          // }
         ]
       },
       {
