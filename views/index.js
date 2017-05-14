@@ -256,9 +256,11 @@ class PhraseSelect {
                 dataUpdates: [],
               }
             }));
-          }
+          },
+          class: 'form phrase-form'
         },
-        h('input')
+        h('input', { class: 'form-control phrase-input' }),
+        h('button', { class: 'btn btn-primary', type: 'submit' }, 'Go')
       );
       phraseDOM.push(inputForm)
     } else {

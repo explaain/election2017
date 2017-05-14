@@ -918,6 +918,18 @@ input:focus::-webkit-contacts-auto-fill-button {
   margin-top: 25px;
 }
 
+.phrase-input {
+  max-width: 150px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.phrase-form {
+  max-width: 250px;
+  margin: auto;
+  margin-top: 15px;
+}
+
 footer {
   margin-top: 25px;
 }
