@@ -114,7 +114,8 @@ module.exports = {
         "who",
         "where",
         "what",
-        "whether"
+        // "whether",
+        "learnAbout"
       ]
     },
     myConstituency: {
@@ -184,10 +185,10 @@ module.exports = {
       options: [
         "areCandidates",
         "myMP",
-        "winLocal",
-        "areParties",
-        "areLeaders",
-        "winNational",
+        // "winLocal",
+        // "areParties",
+        // "areLeaders",
+        // "winNational",
         "shouldVoteFor"
       ],
       next: "postcode"
@@ -235,13 +236,39 @@ module.exports = {
     what: {
       text: "what",
       options: [
-        ""
+        "isBallotSpoiling",
+        "pointOfVoting",
+        "safeSwingSeat",
+        "voteWorth"
       ]
     },
-    beRemindedTo: {
-      text: "be reminded to",
-      optionList: "register",
-      next: ""
+    isBallotSpoiling: {
+      text: "is spoiling my ballot",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    pointOfVoting: {
+      text: "is the point of voting",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    safeSwingSeat: {
+      text: "are safe and swing seats",
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    voteWorth: {
+      text: "is my vote worth",
+      goto: {
+        type: '',
+        name: ''
+      }
     },
     learnAbout: {
       text: "learn about",
@@ -300,6 +327,11 @@ module.exports = {
     votingByPost: {
       text: "voting by post",
       options: "",
+      next: ""
+    },
+    beRemindedTo: {
+      text: "be reminded to",
+      optionList: "register",
       next: ""
     },
     postcode: {
