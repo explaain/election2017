@@ -387,19 +387,25 @@ module.exports = function(CardTemplates){
           //     "func": ['renderPercentages']
           //   }
           // },
-          {
-            "dom": "div",
-            "condition": "!isWaiting",
-            "template": "showMore",
-            "mapping" : [["toggleDetailsButton"]]
-          },
-          {
-            "dom": "div",
-            "condition": "!isWaiting",
-            "content": {
-                "func": ['renderExtraCards', 'extraCards']
-            }
-          },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isWaiting",
+          //   "template": "showMoreOverlay",
+          //   "mapping" : [["showDetailsButton"]]
+          // },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isWaiting",
+          //   "template": "showMore",
+          //   "mapping" : [["toggleDetailsButton"]]
+          // },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isWaiting",
+          //   "content": {
+          //       "func": ['renderExtraCards', 'extraCards']
+          //   }
+          // },
           {
             "dom": "div",
             "condition": "!isWaiting",
@@ -704,6 +710,11 @@ module.exports = function(CardTemplates){
         "content": {
           "func": ['renderPercentages']
         }
+      },
+      {
+        "dom": "div",
+        "template": "showMoreOverlay",
+        "mapping" : [["showDetailsButton"]]
       }
     ]
   }
@@ -1407,6 +1418,20 @@ module.exports = function(CardTemplates){
         "attr": {
           "onclick": {
             "var": "toggle"
+          }
+        },
+        "content": "More details"
+      }
+    ]
+  }
+  CardTemplates.showMoreOverlay = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": "a.btn.btn-default#toggle-details-btn",
+        "attr": {
+          "href": {
+            "var": "cardKey"
           }
         },
         "content": "More details"

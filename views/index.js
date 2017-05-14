@@ -1066,6 +1066,12 @@ function getResults(){
             ];
           }
         }
+
+        explaain.addClientCards([{
+          "@id": "//api.explaain.com/Detail/partymatch",
+          name: "You and your matched party",
+          description: yourParty,
+        }]);
       }
       model.user.results.push([
         [
@@ -1083,7 +1089,10 @@ function getResults(){
                       chancePercentage: party.chancePercentage,
                       scorePercentage: party.score*100
                     })
-                  }
+                  },
+                  showDetailsButton: {
+                    cardKey: '//api.explaain.com/Detail/partymatch'
+                  },
                 }
               });
 
@@ -1113,6 +1122,7 @@ function getResults(){
             },
             shareButtonCard: shareButtonCard[0],
             renderExtraCards: function(cards){
+              console.log(1111111111);
               return new CardGroup({
                 cards: cards,
                 extraAttributes: '#more-details.hide'
