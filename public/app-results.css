@@ -188,6 +188,61 @@ body.desktop .content a.card-icon:hover, body.desktop .card .content a.card-icon
   margin-top: -21px;
 }
 
+
+
+/* quiz priority */
+.card.quiz-priority{
+
+}
+
+.card.quiz-priority .card-visible > .content > .body-content{
+  margin:auto;
+}
+
+.card.quiz-priority .divider{
+  border-top: 1px dashed #ddd;
+  margin: 20px -20px;
+}
+
+.card.quiz-priority h2.q-high-priority, .card.quiz-priority h2.q-low-priority{
+  text-align: center;
+}
+
+.card.quiz-priority .high-priority, .card.quiz-priority .low-priority{
+  min-height: 50px;
+}
+
+.card.quiz-priority .quiz-topic-plate{
+  display: inline-block;
+  padding: 0 5px;
+  color: white;
+  border-radius: 5px;
+  margin: 5px 5px 0 0;
+  cursor: pointer;
+  position: relative;
+}
+.card.quiz-priority .quiz-topic-plate:not(.new){
+  opacity: .5;
+}
+
+.card.quiz-priority .quiz-topic-plate .t-featured{
+  position: absolute;
+  right: -11px;
+  top: -15px;
+  font-size: 17px;
+}
+
+.card.goto-postcode-button{
+
+}
+.card.goto-postcode-button .card-visible{
+  border: none;
+  text-align: center;
+  min-height: 0;
+}
+.card.goto-postcode-button .card-visible .card-body{
+  padding: 0;
+
 #matches {
   text-align: left;
   padding: 10px;
@@ -195,4 +250,5 @@ body.desktop .content a.card-icon:hover, body.desktop .card .content a.card-icon
 
 #toggle-details-btn {
   margin-top: 20px;
+
 }

@@ -168,6 +168,9 @@ class Progress {
     }
     model.progressBarCurrent+=model.landedOnPostcode;
     model.progressBarCurrent+=model.landedOnResult;
+    model.progressBarCurrent+=model.landedOnQuizPriority;
+    if(model.landedOnQuizPriority)
+      model.progressBarTotal++;
     // todo: why does it lead you to postdode-compare?
     // Answer (from Jeremy) - currently it's just a shortcut so we can demo it to people without having a button on the dashboard!
     return routes.step({
@@ -261,11 +264,13 @@ class Dashboard {
   constructor(params) {
     this.dashboard = model.dashboards[params.dashboard] || { title: "Goodness me, you're early! 😳", subtitle: "This feature is coming soon...! 👻", tasks: []};
     model.showProgressBar = false;
+    console.log('MODEL', model);
     if(params.dashboard === 'home') {
       model.progressBarCurrent = 0;
       model.progressBarTotal = 2;
       model.landedOnPostcode = 0;
       model.landedOnResult = 0;
+      model.landedOnQuizPriority = 0;
       model.user.quizFlow = [];
     }
   }
@@ -361,6 +366,46 @@ class Step {
           type: 'postcode',
           name: 'Please enter your postcode:',
           description: 'Why do we need this? We need your postcode to show data relating to your constituency 👌'
+        }])
+        break;
+
+      case 'quiz-priority':
+        model.landedOnQuizPriority = 1; // todo: temporary, refactor
+        model.showProgressBar = true;
+
+        var currentTopics = [];
+        model.user.quizFlow.forEach(function(flow){
+          flow.forEach(function(issueName){
+            currentTopics.push(issueName.split('-')[0]);
+          });
+        });
+
+        var quizTopicsLower = [], quizTopicsHigher = [];
+        Object.keys(model.user.opinions.issues).forEach(function(issueName){
+          let issue = model.tasks['issue-' + issueName];
+          if(~model.featuredTopics.indexOf(issueName)){
+            issue.highPriority = true;
+            quizTopicsHigher.push(issue);
+          }
+          else{
+            issue.highPriority = false;
+            quizTopicsLower.push(issue);
+          }
+          issue.isNewClass = ~currentTopics.indexOf(issueName) ? 'new' : '';
+          issue._key = issueName;
+        });
+        //console.log('quizTopics', quizTopicsLower, quizTopicsHigher, model.featuredTopics);
+
+        data.cardGroups.push([{
+          type: 'quiz-priority',
+          name: 'Please select priority:',
+          description: 'Please select priority 👌',
+          quizTopicsLower: quizTopicsLower,
+          quizTopicsHigher: quizTopicsHigher
+        }], [{
+          type: "goto-postcode-button",
+          heading: "Next!",
+          buttonText: "Next"
         }])
         break;
 
@@ -614,6 +659,41 @@ class CardContent {
           return false;
         }
         return helpers.assembleCards(data, 'postcodeInput');
+
+      case 'quiz-priority':
+        var onTopicClick = function(topicKey){
+          let topicNameIndex = model.featuredTopics.indexOf(topicKey);
+          if(~topicNameIndex){
+            model.user.opinions.issues[topicKey].highPriority = false;
+            model.featuredTopics.splice(topicNameIndex, 1);
+          }
+          else{
+            model.user.opinions.issues[topicKey].highPriority = true;
+            model.featuredTopics.push(topicKey);
+          }
+          return false;
+        };
+
+        ['quizTopicsLower', 'quizTopicsHigher'].forEach(function(varName){
+          data[varName].map(function(topic){
+            topic.onTopicClick = function(e){
+              e.stopPropagation();
+              return onTopicClick(topic._key);
+            };
+            return topic;
+          });
+        });
+
+        return helpers.assembleCards(data, 'quizPriority');
+
+      case 'goto-postcode-button':
+        data.buttonAction = function(e){
+          e.stopPropagation();
+          routes.step({ name: data.nextStep, type: data.nextStep, next: 'result' }).push();
+
+          return false;
+        }
+        return helpers.assembleCards(data, 'gotoPostcodeButton');
 
       case 'vote-worth':
         data.isWaiting = model.user.isWaiting === "vote-worth";
