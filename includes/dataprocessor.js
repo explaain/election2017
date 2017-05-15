@@ -213,20 +213,44 @@ module.exports = class DataProcessor {
     });
 
     var learnStories = {
-      "voteInPerson": "voteInPersonStory",
-      "votingInPerson": "voteInPersonStory",
-      "votingByProxy": "proxyVotingStory",
-      "voteByProxy": "proxyVotingStory",
-      "pointOfVoting": "pointOfVotingStory",
-    };
+      voteInPerson: [
+          "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+          "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+          "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+          "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+        ],
+      votingInPerson: [
+          "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+          "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+          "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+          "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+        ],
+      voteByProxy: [
+          "http://api.explaain.com/Detail/59172171a1f5940011a03b63",
+          "http://api.explaain.com/Detail/59172231a1f5940011a03b65",
+          "http://api.explaain.com/Detail/591722fba1f5940011a03b66",
+        ],
+      voteBvotingByProxyyProxy: [
+          "http://api.explaain.com/Detail/59172171a1f5940011a03b63",
+          "http://api.explaain.com/Detail/59172231a1f5940011a03b65",
+          "http://api.explaain.com/Detail/591722fba1f5940011a03b66",
+        ],
+      pointOfVoting: [
+        "http://api.explaain.com/Detail/59172710a1f5940011a03b6a",
+        "http://api.explaain.com/Detail/59172751a1f5940011a03b6b",
+        "http://api.explaain.com/Detail/591728bca1f5940011a03b6e"
+      ]
+    }
 
     Object.keys(learnStories).forEach(function(learnStoryKey) {
       if (phrasesIncluded(learnStoryKey).length) {
+        model.user.currentlyLearning = learnStories[learnStoryKey];
         goto = {
-          type: 'step',
+          type: 'postcode',
           route: 'step',
-          name: learnStories[learnStoryKey],
-          next: 'result',
+          name: 'goToResults',
+          resultsType: 'learnResult',
+          next: 'result'
         }
       }
     });
@@ -234,6 +258,13 @@ module.exports = class DataProcessor {
     var learnCards = {
       "voteByPost": "http://api.explaain.com/Detail/59170e19a1f5940011a03b5e",
       "votingByPost": "http://api.explaain.com/Detail/59170e19a1f5940011a03b5e",
+      "voteSwap": "http://api.explaain.com/Detail/5917181da1f5940011a03b62",
+      "voteSwapping": "http://api.explaain.com/Detail/5917181da1f5940011a03b62",
+      "whyElection": "http://api.explaain.com/Detail/591725c2a1f5940011a03b69",
+      "spoilMyBallot": "http://api.explaain.com/Detail/591723e8a1f5940011a03b67",
+      "safeSwingSeat": "http://api.explaain.com/Detail/590f6d99de7ed60011ca517f",
+      "votingSystems": "http://api.explaain.com/Detail/59172a0ca1f5940011a03b70",
+      "voting": "http://api.explaain.com/Detail/59172995a1f5940011a03b6f",
     };
 
     Object.keys(learnCards).forEach(function(learnCardsKey) {

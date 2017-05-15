@@ -205,17 +205,11 @@ module.exports = {
     },
     spoilMyBallot: {
       text: "spoil my ballot",
-      goto: {
-        type: '',
-        name: ''
-      }
+      finish: true
     },
     voteSwap: {
       text: "vote swap",
-      goto: {
-        type: '',
-        name: ''
-      }
+      finish: true
     },
     why: {
       text: "why",
@@ -225,10 +219,7 @@ module.exports = {
     },
     whyElection: {
       text: "we are having an election",
-      goto: {
-        type: '',
-        name: ''
-      }
+      finish: true
     },
     who: {
       text: "who",
@@ -310,10 +301,7 @@ module.exports = {
     },
     safeSwingSeat: {
       text: "are safe and swing seats",
-      goto: {
-        type: '',
-        name: ''
-      }
+      finish: true
     },
     voteWorth: {
       text: "is my vote worth",
@@ -340,10 +328,7 @@ module.exports = {
     },
     voteSwapping: {
       text: "vote swapping",
-      goto: {
-        type: '',
-        name: ''
-      }
+      finish: true
     },
     votingSystems: {
       text: "how our voting system works",

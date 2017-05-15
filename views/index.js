@@ -1315,7 +1315,7 @@ function getResults(resultsType){
           extraCards = [];
           console.log('hiii1')
           mainResults = function() {
-            return new CardGroup({cards: [model.user.currentlyLearning], nextStep: 'result', stepParams: {}})
+            return new CardGroup({cards: model.user.currentlyLearning, nextStep: 'result', stepParams: {}})
           }
           break;
 
