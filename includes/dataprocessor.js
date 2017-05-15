@@ -262,6 +262,7 @@ module.exports = class DataProcessor {
       "voteSwapping": "http://api.explaain.com/Detail/5917181da1f5940011a03b62",
       "whyElection": "http://api.explaain.com/Detail/591725c2a1f5940011a03b69",
       "spoilMyBallot": "http://api.explaain.com/Detail/591723e8a1f5940011a03b67",
+      "isBallotSpoiling": "http://api.explaain.com/Detail/591723e8a1f5940011a03b67",
       "safeSwingSeat": "http://api.explaain.com/Detail/590f6d99de7ed60011ca517f",
       "votingSystems": "http://api.explaain.com/Detail/59172a0ca1f5940011a03b70",
       "voting": "http://api.explaain.com/Detail/59172995a1f5940011a03b6f",

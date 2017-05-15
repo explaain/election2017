@@ -8,7 +8,7 @@ body > div.body {
   font-size:16px;
   padding-top:10px;
   background-color: none;
-  background-image: url('/img/background.jpg');
+  background-image: url('/img/background1.jpg');
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -87,6 +87,7 @@ div.body.backColor header img.ge2017-logo {
   filter: brightness(100) !important;
 }
 header a.home {
+  display: none;
   font-size: 1.1em;
   color: #999;
   position: absolute;
@@ -1138,4 +1139,16 @@ div.card div.content.single-sentence > div.body-content {
 
 footer {
   margin-top: 25px;
+}
+
+
+
+.cards.sentence section.divider {
+  background: rgba(225,225,225, 0.1);
+  display: none;
+}
+
+.card.resultParty .body-content {
+  margin-top: 10px;
+  display: none;
 }

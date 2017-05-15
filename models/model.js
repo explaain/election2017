@@ -86,7 +86,7 @@ module.exports = {
         "findOut",
         "registerToVote",
         "learnAbout",
-        "beRemindedTo"
+        // "beRemindedTo"
       ]
     },
     voteFor: {

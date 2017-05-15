@@ -141,7 +141,28 @@ class App {
 
               var quizButtonClick = function(e) {
                 model.selectedPhrases.push({key: 'allIssues'});
-                submitData(e);
+                goto = {
+                  type: 'step',
+                  route: 'step',
+                  name: 'question',
+                  final: 'quiz-priority',
+                  next: 'postcode',
+                  task: 'issue-$apply'
+                }
+                dataUpdates.push({
+                    data: 'user.quizFlow.3',
+                    // value: ["nhs-1","nhs-2","nhs-3","immigration-1","immigration-2","immigration-3""education-1","brexit-1","brexit-2","brexit-3","brexit-4","education-2","education-3"],
+                    value: ["brexit-1", "education-1", "transport-1", "economy-1", "housing-1", "trident-1", "NHS-1", "environment-1", "immigration-1", "economy-2"],
+                    action: "toggle"
+                  })
+                routes.step({
+                  type: 'step',
+                  route: 'step',
+                  name: 'question',
+                  final: 'quiz-priority',
+                  next: 'postcode',
+                  task: 'issue-$apply'}).push();
+                // submitData(e);
               }
 
               function beginPhraseChoosing() {
@@ -157,9 +178,9 @@ class App {
               }
 
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
-              var quizButton = h('button.btn.btn-default', {onclick: quizButtonClick}, 'Just take me to the Quiz');
+              var quizButton = h('button.btn.btn-default', {onclick: quizButtonClick}, 'Or go straight to a 10-question quiz');
               var phraseDom = h("div.content.text-center.single-sentence", h("div.body-content.hoverClick", {onclick: beginPhraseChoosing}, hPhrases, currentPhrase, goButton, h('div.help', h('i.fa.fa-hand-pointer-o', {style: 'margin-right:0.2em;'}), 'Tap here to begin') ), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
-              return h('section.step', h("h1", "Hi, what do you want to do?"), h('div.cards', new Card({},function(){}, phraseDom) ) );
+              return h('section.step', h("h1", "Hi, what do you want to do?"), h('div.cards.sentence', new Card({},function(){}, phraseDom) ) );
             }),
 
             routes.step(function (params) {
