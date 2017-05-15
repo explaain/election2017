@@ -459,10 +459,10 @@ section:not(.wide) .card section.card-media {
 
 /* igor: on result cards we want text to be alighed left, temporary */
 
-.card .content.text-left {
+.text-left {
   text-align: left;
 }
-.card .content.text-center {
+.text-center {
   text-align: center;
 }
 
@@ -475,6 +475,12 @@ section:not(.wide) .card section.card-media {
 .card.postcode-compare .card-visible, .card.postcode-compare .content, .card.postcode-compare .content > div, .card.postcode-compare .content section, .card.postcode-compare .content .body-content  {
   overflow: visible;
 }
+
+/* hack */
+.card.no-card-overflow .card-visible, .card.no-card-overflow .content, .card.no-card-overflow .content > div, .card.no-card-overflow .content section, .card.no-card-overflow .content .body-content {
+  overflow: visible;
+}
+/* end hack */
 
 .card.postcode-compare .body-content {
   padding: 10px;
@@ -853,6 +859,10 @@ a.explaain-link.discard-card-style:active,
   border-top: 1px solid #ddd;
   margin: auto;
 }
+.body-content.no-top-border {
+  border-top: none;
+}
+.body-content.contains-cards {padding: 5px 5px 20px 5px}
 .card.postcode-compare h2 {font-size: 1.4em;display: block;}
 .card.postcode-compare h2 img {
   height: 1.25em;

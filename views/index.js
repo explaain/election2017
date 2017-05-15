@@ -45,6 +45,7 @@ class App {
     this.footer = new Footer();
     this.phraseSample = 0;
     this.choosingPhrases = false;
+    this.phraseRotationTimeout;
   }
 
   render() {
@@ -75,7 +76,11 @@ class App {
               // var dashboard = new Dashboard({dashboard: 'home'});
               // return h("div", dashboard)
               model.selectedPhrases = ["iWantTo"];
-              routes.phrase({name: 'iWantTo'}).push();
+              /* todo: yet another hack, fix it later :( */
+              self.choosingPhrases = false;
+              window.setTimeout(function(){
+                routes.phrase({name: 'iWantTo'}).push();
+              },10)
             }),
 
             routes.dashboard(function (params) {
@@ -116,7 +121,10 @@ class App {
                   $('div.phrase-buttons').css('display','block');
                 }, 1)
               } else {
-                setTimeout(function() {
+                if(self.phraseRotationTimeout){
+                  clearTimeout(self.phraseRotationTimeout)
+                }
+                self.phraseRotationTimeout = setTimeout(function() {
                   self.phraseSample = ((self.phraseSample+0.5) == phraseSamples.length) ? 0 : self.phraseSample+0.5;
                   self.refresh();
                 },(0.5 - (self.phraseSample % 1))*7000 * (self.choosingPhrases ? 3 : 1));
@@ -1296,6 +1304,13 @@ function getResults(resultsType){
 
       console.log('mainResults');
       console.log(mainResults);
+      /* hack */
+      var template;
+      switch(resultsType){
+        case "getRegistered": template = "OrganizationResultsGetRegistered"; break;
+        default: template = "OrganizationResults"; break;
+      }
+      /* end hack */
       model.user.results.push([
         [
           {
@@ -1304,7 +1319,7 @@ function getResults(resultsType){
             footer: [
               yourFooter
             ],
-            type: "OrganizationResults", // Temporary,
+            type: template, // Temporary, /* hack */
             constituencyResults: {},
             moreStuff: {
               heading: "Add more stuff!",
