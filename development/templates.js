@@ -880,7 +880,7 @@ module.exports = function(CardTemplates){
         },
         "content": [
           {
-            "dom": "button.btn.btn-primary",
+            "dom": "button.btn.btn-success",
             "content": "Register To Vote  >"
           }
         ]

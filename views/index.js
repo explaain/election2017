@@ -112,7 +112,6 @@ class App {
               }
 
               if (self.choosingPhrases) {
-                console.log('block')
                 setTimeout(function() {
                   $('div.phrase-buttons').css('display','block');
                 }, 1)
@@ -343,6 +342,7 @@ class PhraseSelect {
       if (value.dataUpdates) {
         helpers.updateData([value.dataUpdates]);
       }
+      console.log(self.phrase);
       if(value.goto) {
         routes[value.goto.type](value.goto).push()
       } else {
@@ -351,9 +351,13 @@ class PhraseSelect {
           model.selectedPhrases.push({key: value.text});
         }
         model.selectedPhrases.push(value);
-        if (self.phrase.next)
+        if (self.phrase.next) {
           model.selectedPhrases.push({key: self.phrase.next});
-        routes.phrase( {name: self.phrase.next || value.key } ).push();
+        }
+        else if (value.phrase.finish) {
+          model.selectedPhrases.push({key: 'finish'});
+        }
+        routes.phrase( {name: value.phrase.finish ? 'finish' : self.phrase.next || self.phrase.next || value.key } ).push();
       }
     }
 
@@ -1046,6 +1050,11 @@ class CardContent {
         break;
 
       case 'partyStories':
+        data.name = data.header;
+        data.description = data.content;
+        return helpers.assembleCards(data, 'Organization');
+
+      case 'proxyVotingStory':
         data.name = data.header;
         data.description = data.content;
         return helpers.assembleCards(data, 'Organization');

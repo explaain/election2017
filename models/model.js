@@ -82,9 +82,9 @@ module.exports = {
       options: [
         "voteFor",
         "voteAgainst",
-        "voteOn",
+        "decide",
+        "findOut",
         "registerToVote",
-        "know",
         "learnAbout",
         "beRemindedTo"
       ]
@@ -107,6 +107,34 @@ module.exports = {
       ],
       next: "postcode"
     },
+    decide: {
+      text: "decide",
+      options: [
+        "whoToVoteFor",
+        "whereToRegisterToVote"
+      ],
+      // optionList: [
+      //   // "parties",
+      //   "topics"
+      // ],
+      next: "postcode"
+    },
+    whoToVoteFor: {
+      text: "who to vote for",
+      options: '',
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
+    whereToRegisterToVote: {
+      text: "where to register to vote",
+      options: '',
+      goto: {
+        type: '',
+        name: ''
+      }
+    },
     voteOn: {
       text: "vote on",
       options: [
@@ -125,8 +153,8 @@ module.exports = {
         name: ''
       }
     },
-    know: {
-      text: "know",
+    findOut: {
+      text: "find out",
       options: [
         // "myConstituency",
         "howTo",
@@ -135,7 +163,7 @@ module.exports = {
         "where",
         "what",
         // "whether",
-        "learnAbout"
+        // "learnAbout"
       ]
     },
     myConstituency: {
@@ -155,7 +183,6 @@ module.exports = {
         "registerToVote",
         "voteSwap"
       ],
-      next: ""
     },
     support: {
       text: "support a Party",
@@ -236,7 +263,6 @@ module.exports = {
     winNational: {
       text: "is winning overall",
       options: "",
-      next: ""
     },
     shouldVoteFor: {
       text: "I should vote for",
@@ -304,12 +330,10 @@ module.exports = {
         "votingByProxy",
         "votingByPost"
       ],
-      next: ""
     },
     registeringToVote: {
       text: "registering to vote",
       options: "",
-      next: ""
     },
     voteSwapping: {
       text: "vote swapping",
@@ -321,12 +345,10 @@ module.exports = {
     votingSystems: {
       text: "how our voting system works",
       options: "",
-      next: ""
     },
     voting: {
       text: "voting",
       options: "",
-      next: ""
     },
     votePersonProxyPostal: { //Skipping?
       text: "different ways of voting",
@@ -335,27 +357,23 @@ module.exports = {
         "voteByProxy",
         "voteByPost"
       ],
-      next: ""
     },
     votingInPerson: {
       text: "voting in person",
       options: "",
-      next: ""
     },
     votingByProxy: {
       text: "voting by proxy",
       options: "",
-      next: ""
+      finish: true
     },
     votingByPost: {
       text: "voting by post",
       options: "",
-      next: ""
     },
     beRemindedTo: {
       text: "be reminded to",
       optionList: "register",
-      next: ""
     },
     postcode: {
       text: "and my postcode is",
@@ -984,6 +1002,14 @@ module.exports = {
     },
     partyStories: {
       label: "Party stories"
+    },
+    proxyVotingStory: {
+      label: "Proxy Voting",
+      cardUrls: [
+        "http://api.explaain.com/Detail/59172171a1f5940011a03b63",
+        "http://api.explaain.com/Detail/59172231a1f5940011a03b65",
+        "http://api.explaain.com/Detail/591722fba1f5940011a03b66",
+      ]
     },
     sampleStory: {
       label: "Generic example story",
