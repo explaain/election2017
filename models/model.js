@@ -179,7 +179,10 @@ module.exports = {
         "support",
         "oppose",
         "spoilMyBallot",
-        "votePersonProxyPostal",
+        // "votePersonProxyPostal",
+        "voteInPerson",
+        "voteByPost",
+        "voteByProxy",
         "registerToVote",
         "voteSwap"
       ],
@@ -216,7 +219,7 @@ module.exports = {
     },
     why: {
       text: "why",
-      optionList: [
+      options: [
         "whyElection"
       ]
     },
@@ -231,7 +234,7 @@ module.exports = {
       text: "who",
       options: [
         "areCandidates",
-        "myMP",
+        // "myMP",
         // "winLocal",
         // "areParties",
         // "areLeaders",
@@ -351,12 +354,25 @@ module.exports = {
       options: "",
     },
     votePersonProxyPostal: { //Skipping?
-      text: "different ways of voting",
+      text: "vote using",
       options: [
         "voteInPerson",
         "voteByProxy",
         "voteByPost"
       ],
+    },
+    voteInPerson: {
+      text: "vote in person",
+      options: "",
+    },
+    voteByProxy: {
+      text: "vote by proxy",
+      options: "",
+      finish: true
+    },
+    voteByPost: {
+      text: "vote by post",
+      options: "",
     },
     votingInPerson: {
       text: "voting in person",
@@ -381,7 +397,7 @@ module.exports = {
       dataUpdates: []
     },
     finish: {
-      text: ".",
+      text: "",
       goto: {
         type: '',
         name: ''
@@ -443,7 +459,7 @@ module.exports = {
       text: "hard Brexit"
     },
     tuitionFees: {
-      text: "tuition fees"
+      text: "scrapping tuition fees"
     },
     nationalisingRailways: {
       text: "nationalising railways"
@@ -1002,6 +1018,14 @@ module.exports = {
     },
     partyStories: {
       label: "Party stories"
+    },
+    pointOfVoting: {
+      label: "What's the point of voting?",
+      cardUrls: [
+        "http://api.explaain.com/Detail/59172710a1f5940011a03b6a",
+        "http://api.explaain.com/Detail/59172751a1f5940011a03b6b",
+        "http://api.explaain.com/Detail/591728bca1f5940011a03b6e"
+      ]
     },
     proxyVotingStory: {
       label: "Proxy Voting",

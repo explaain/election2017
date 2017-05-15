@@ -157,7 +157,7 @@ class App {
               }
 
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
-              var quizButton = h('button.btn.btn-primary', {onclick: quizButtonClick}, 'Just take me to the Quiz');
+              var quizButton = h('button.btn.btn-default', {onclick: quizButtonClick}, 'Just take me to the Quiz');
               var phraseDom = h("div.content.text-center.single-sentence", h("div.body-content.hoverClick", {onclick: beginPhraseChoosing}, hPhrases, currentPhrase, goButton, h('div.help', h('i.fa.fa-hand-pointer-o', {style: 'margin-right:0.2em;'}), 'Tap here to begin') ), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
               return h('section.step', h("h1", "Hi, what do you want to do?"), h('div.cards', new Card({},function(){}, phraseDom) ) );
             }),
@@ -332,8 +332,8 @@ class PhraseSelect {
           },
           class: 'form phrase-form'
         },
-        h('input', { class: 'form-control phrase-input' }),
-        h('button', { class: 'btn btn-primary', type: 'submit' }, 'Go')
+        h('input', { class: 'form-control phrase-input', placeholder: "Posctode" }),
+        h('button', { class: 'btn btn-primary', type: 'submit' }, 'Add')
       );
       phraseDOM.push(inputForm)
     } else {

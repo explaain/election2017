@@ -343,7 +343,7 @@ module.exports = function(CardTemplates){
   }
 
   CardTemplates.OrganizationResults = {
-    "dom": "div.content.OrganizationResults",
+    "dom": "div.content.OrganizationResults.results",
     "attr": {
       "class": {
         // Gets value from data.constituencyResults.resultsClass
@@ -563,7 +563,7 @@ module.exports = function(CardTemplates){
 
   /* hack */
   CardTemplates.OrganizationResultsGetRegistered = {
-    "dom": "div.content.OrganizationResults.no-overflow",
+    "dom": "div.content.OrganizationResults.no-overflow.results",
     "attr": {
       "class": {
         // Gets value from data.constituencyResults.resultsClass
@@ -574,25 +574,104 @@ module.exports = function(CardTemplates){
       // This loads template with postcodeFormHeader name
       { "template": "postcodeFormHeader" },
       {
-        "dom": "div.body-content.results.no-top-border.contains-cards",
+        "dom": "div.body-content.results.no-top-border.contains-cards.get-registered",
         "condition": "constituencyResults",
         "content": [
           {
-            "dom": "div.step-number.step-1",
+            "dom": "div.step-number.step-2",
             "condition": "constituencyResults",
             "content": "1"
           },
           {
-            "dom": "div",
-            "condition": "!isLocalCandidates",
-            "content": [{
-              "dom": "div",
-              "condition": "!isWaiting",
-              "content": {
-                "func": ['mainResults']
-              }
-            }],
+            "dom": "h2",
+            "condition": "constituencyResults",
+            "content": "Here's how you register 🎉"
           },
+          {
+            "dom": "p",
+            "condition": "constituencyResults",
+            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+          },
+          {
+            "dom": "p.small-link",
+            "condition": "constituencyResults",
+            "content":{
+               "var": "constituencyResults.whereIWillBeText",
+               "markdown": "true"
+             }
+          },
+          {
+            "dom": "div.layout-table",
+            "content": [
+              {
+                "dom": "div.column.learn-more",
+                "condition": "constituencyResults",
+                "content": [
+                  {
+                    "dom": "p",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "attr": {
+                          "onclick": {
+                            "var": "onLearnMore"
+                          }
+                        },
+                        "content": [
+                          {
+                            "dom": "a.discard-card-style",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
+                            },
+                            "content": [
+                              {
+                                "dom": "button.btn.btn-primary",
+                                "content": "Learn more"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p.small",
+                    "content": [
+                      { "dom": "br" },
+                      { "dom": "br" }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dom": "div.column",
+                "content": [
+                  {
+                    "condition": "!constituencyResults",
+                    "dom": "div.bold",
+                    "content": "or go straight to register"
+                  },
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "template": "linkToGovUKWebsiteHint"
+                  }
+                ]
+              }
+            ]
+          },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isLocalCandidates",
+          //   "content": [{
+          //     "dom": "div",
+          //     "condition": "!isWaiting",
+          //     "content": {
+          //       "func": ['mainResults']
+          //     }
+          //   }],
+          // },
           {
             "dom": "div",
             "condition": "isLocalCandidates",
