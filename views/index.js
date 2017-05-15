@@ -77,6 +77,7 @@ class App {
               // return h("div", dashboard)
               model.selectedPhrases = ["iWantTo"];
               /* todo: yet another hack, fix it later :( */
+              self.choosingPhrases = false;
               window.setTimeout(function(){
                 routes.phrase({name: 'iWantTo'}).push();
               },10)
