@@ -561,6 +561,106 @@ module.exports = function(CardTemplates){
     ]
   }
 
+  /* hack */
+  CardTemplates.OrganizationResultsGetRegistered = {
+    "dom": "div.content.OrganizationResults.no-overflow",
+    "attr": {
+      "class": {
+        // Gets value from data.constituencyResults.resultsClass
+        "resultsLoaded": true
+      }
+    },
+    "content": [
+      // This loads template with postcodeFormHeader name
+      { "template": "postcodeFormHeader" },
+      {
+        "dom": "div.body-content.results.no-top-border.contains-cards",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "div.step-number.step-1",
+            "condition": "constituencyResults",
+            "content": "1"
+          },
+          {
+            "dom": "div",
+            "condition": "!isLocalCandidates",
+            "content": [{
+              "dom": "div",
+              "condition": "!isWaiting",
+              "content": {
+                "func": ['mainResults']
+              }
+            }],
+          },
+          {
+            "dom": "div",
+            "condition": "isLocalCandidates",
+            "content": [
+              {
+                "dom": "div.local-candidates-container",
+                "condition": "!isWaiting",
+                "loop": "mainResults",
+                "content": [{"template": "localCandidatePlate"}]
+              },
+              {
+                "dom": "div.clearfix",
+                "content": ""
+              }
+            ],
+          },
+        ]
+      },
+      {
+        "condition": "isWaiting",
+        "template": "loading"
+      },
+      {
+        "dom": "section.get-registered.divider",
+        "content": [
+          {
+            "dom": "div.step-number.step-2",
+            "condition": "constituencyResults",
+            "content": "2"
+          },
+
+          {
+            "dom": "div",
+            "condition": "!isWaiting",
+            "template": "more-stuff",
+            "mapping": [['moreStuff']]
+          }
+        ]
+      },
+      {
+        "dom": "div.footer",
+        "condition": "constituencyResults",
+        "content": [
+          {
+            "dom": "div.step-number.step-3",
+            "content": "3"
+          },
+          {
+            "dom": "h2",
+            "content": "Finally, multiply your vote"
+          },
+          {
+            "dom": "p",
+            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
+          },
+          {
+            "template": "shareButtons",
+            "mapping": [
+              ["facebookShareHref", "constituencyResults.facebookShareHref"],
+              ["twitterShareHref", "constituencyResults.twitterShareHref"]
+            ]
+          },
+        ]
+      }
+    ]
+  }
+  /* end hack */
+
   CardTemplates.voteWorth = {
     "dom": "div",
     "content": [
@@ -1323,7 +1423,7 @@ module.exports = function(CardTemplates){
     }
   }
   CardTemplates["more-stuff"] = {
-    "dom":"section.card-body",
+    "dom":"section.card-body.text-center",
     "content":[
       {
         "dom": "h2",
