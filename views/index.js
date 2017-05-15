@@ -659,6 +659,10 @@ class Step {
         data.cardGroups.push(self.step.cardUrls)
         break;
 
+      case 'proxyVotingStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
       case 'question':
         model.showProgressBar = true;
         var quizFlow = [];
@@ -719,7 +723,7 @@ class Step {
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0], null, null, self.params.resultsType)]);
       } else {
-        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}, resultsType));
+        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}, self.resultsType));
       }
     })
 
