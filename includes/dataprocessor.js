@@ -205,9 +205,11 @@ module.exports = class DataProcessor {
       }
       if (phrasesIncluded(outcomeKey).length && phrasesIncluded(['voteAgainst']).length) {
         console.log('user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion');
+        console.log(outcomeKey);
+        var value = (outcomeKey=='hardBrexit') ? 0.5 : 1;
         dataUpdates.push({
           data: 'user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion',
-          value: 0
+          value: value
         });
       }
     });
