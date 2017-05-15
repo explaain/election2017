@@ -26,7 +26,7 @@ app.use(function(req, res, next) {
 // Temporary forcing all visitors to be redirected to /students
 // except those who visited /beta
 
-/*app.get('/beta', function (req, res , next) {
+app.get('/beta', function (req, res , next) {
   const cookies = new Cookies( req, res );
   const dn = new Date();
   cookies.set("access","all",{expires:new Date(dn.setDate(dn.getDate()+1))}); // 1 day expiration
@@ -50,7 +50,7 @@ app.use(function(req, res, next) {
       next();
     }
   }
-});*/
+});
 
 app.get('/', function(req, res, next) {
   res.render('index', { standalone: false, embed: false,  step: '' });
