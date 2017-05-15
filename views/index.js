@@ -157,7 +157,7 @@ class App {
               }
 
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
-              var quizButton = h('button.btn.btn-primary', {onclick: quizButtonClick}, 'Just take me to the Quiz');
+              var quizButton = h('button.btn.btn-default', {onclick: quizButtonClick}, 'Just take me to the Quiz');
               var phraseDom = h("div.content.text-center.single-sentence", h("div.body-content.hoverClick", {onclick: beginPhraseChoosing}, hPhrases, currentPhrase, goButton, h('div.help', h('i.fa.fa-hand-pointer-o', {style: 'margin-right:0.2em;'}), 'Tap here to begin') ), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
               return h('section.step', h("h1", "Hi, what do you want to do?"), h('div.cards', new Card({},function(){}, phraseDom) ) );
             }),
@@ -332,8 +332,8 @@ class PhraseSelect {
           },
           class: 'form phrase-form'
         },
-        h('input', { class: 'form-control phrase-input' }),
-        h('button', { class: 'btn btn-primary', type: 'submit' }, 'Go')
+        h('input', { class: 'form-control phrase-input', placeholder: "Posctode" }),
+        h('button', { class: 'btn btn-primary', type: 'submit' }, 'Add')
       );
       phraseDOM.push(inputForm)
     } else {
@@ -659,6 +659,19 @@ class Step {
         data.cardGroups.push(self.step.cardUrls)
         break;
 
+      case 'voteInPersonStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
+      case 'proxyVotingStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
+      case 'pointOfVotingStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
+
       case 'question':
         model.showProgressBar = true;
         var quizFlow = [];
@@ -719,7 +732,7 @@ class Step {
       if (cards.constructor !== Array || cards.length == 1) {
         return ([new Card(cards[0], null, null, self.params.resultsType)]);
       } else {
-        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}, resultsType));
+        return (new CardGroup({cards:cards,nextStep:params.next, stepParams: self.step}, self.resultsType));
       }
     })
 
@@ -881,7 +894,7 @@ class CardContent {
           delete model.user.isWaiting;
           routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
         });
-        return helpers.assembleCards(data, 'Detail');
+        return helpers.assembleCards(data, 'loading');
 
       case 'postcode':
         if (postcodeAlreadyEntered) {
@@ -1294,6 +1307,15 @@ function getResults(resultsType){
               description: 'Go to [this site](https://www.gov.uk/register-to-vote)'
             }];
             return new CardGroup({cards: data, nextStep: 'result', stepParams: {}})
+          }
+          break;
+
+        case 'learnResult':
+          shareButtonCard = [];
+          extraCards = [];
+          console.log('hiii1')
+          mainResults = function() {
+            return new CardGroup({cards: [model.user.currentlyLearning], nextStep: 'result', stepParams: {}})
           }
           break;
 

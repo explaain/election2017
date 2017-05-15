@@ -179,7 +179,10 @@ module.exports = {
         "support",
         "oppose",
         "spoilMyBallot",
-        "votePersonProxyPostal",
+        // "votePersonProxyPostal",
+        "voteInPerson",
+        "voteByPost",
+        "voteByProxy",
         "registerToVote",
         "voteSwap"
       ],
@@ -216,7 +219,7 @@ module.exports = {
     },
     why: {
       text: "why",
-      optionList: [
+      options: [
         "whyElection"
       ]
     },
@@ -231,7 +234,7 @@ module.exports = {
       text: "who",
       options: [
         "areCandidates",
-        "myMP",
+        // "myMP",
         // "winLocal",
         // "areParties",
         // "areLeaders",
@@ -351,16 +354,32 @@ module.exports = {
       options: "",
     },
     votePersonProxyPostal: { //Skipping?
-      text: "different ways of voting",
+      text: "vote using",
       options: [
         "voteInPerson",
         "voteByProxy",
         "voteByPost"
       ],
     },
+    voteInPerson: {
+      text: "vote in person",
+      options: "",
+      finish: true
+    },
+    voteByProxy: {
+      text: "vote by proxy",
+      options: "",
+      finish: true
+    },
+    voteByPost: {
+      text: "vote by post",
+      options: "",
+      finish: true
+    },
     votingInPerson: {
       text: "voting in person",
       options: "",
+      finish: true
     },
     votingByProxy: {
       text: "voting by proxy",
@@ -370,6 +389,7 @@ module.exports = {
     votingByPost: {
       text: "voting by post",
       options: "",
+      finish: true
     },
     beRemindedTo: {
       text: "be reminded to",
@@ -381,7 +401,7 @@ module.exports = {
       dataUpdates: []
     },
     finish: {
-      text: ".",
+      text: "",
       goto: {
         type: '',
         name: ''
@@ -443,7 +463,7 @@ module.exports = {
       text: "hard Brexit"
     },
     tuitionFees: {
-      text: "tuition fees"
+      text: "scrapping tuition fees"
     },
     nationalisingRailways: {
       text: "nationalising railways"
@@ -1002,6 +1022,23 @@ module.exports = {
     },
     partyStories: {
       label: "Party stories"
+    },
+    voteInPersonStory: {
+      label: "How do I vote in person?",
+      cardUrls: [
+        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+      ]
+    },
+    pointOfVotingStory: {
+      label: "What's the point of voting?",
+      cardUrls: [
+        "http://api.explaain.com/Detail/59172710a1f5940011a03b6a",
+        "http://api.explaain.com/Detail/59172751a1f5940011a03b6b",
+        "http://api.explaain.com/Detail/591728bca1f5940011a03b6e"
+      ]
     },
     proxyVotingStory: {
       label: "Proxy Voting",
