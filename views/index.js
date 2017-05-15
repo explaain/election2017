@@ -1310,6 +1310,15 @@ function getResults(resultsType){
           }
           break;
 
+        case 'learnResult':
+          shareButtonCard = [];
+          extraCards = [];
+          console.log('hiii1')
+          mainResults = function() {
+            return new CardGroup({cards: [model.user.currentlyLearning], nextStep: 'result', stepParams: {}})
+          }
+          break;
+
         default:
           console.log(10)
           break;

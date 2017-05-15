@@ -231,6 +231,24 @@ module.exports = class DataProcessor {
       }
     });
 
+    var learnCards = {
+      "voteByPost": "http://api.explaain.com/Detail/59170e19a1f5940011a03b5e",
+      "votingByPost": "http://api.explaain.com/Detail/59170e19a1f5940011a03b5e",
+    };
+
+    Object.keys(learnCards).forEach(function(learnCardsKey) {
+      if (phrasesIncluded(learnCardsKey).length) {
+        model.user.currentlyLearning = [learnCards[learnCardsKey]];
+        goto = {
+          type: 'postcode',
+          route: 'step',
+          name: 'goToResults',
+          resultsType: 'learnResult',
+          next: 'result'
+        }
+      }
+    });
+
     // if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteFor']).length) {
     //   dataUpdates.push({
     //     data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',

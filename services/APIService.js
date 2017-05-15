@@ -22,6 +22,9 @@ APIService.prototype.getResults = function(postcode, userData, resultType) {
         // description: "hi"
       })
       break;
+    case 'learnResult':
+      results = getGenericResults({})
+      break;
     default:
       results = getGenericResults({})
   }

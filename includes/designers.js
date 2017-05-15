@@ -82,6 +82,9 @@ module.exports = class Designers {
   reinitSlick() {
     console.log('ini')
     $('.slick-container.slick-initialized').slick('setPosition');
+    // setTimeout(function() {
+      // $('.slick-container.slick-initialized').slick('setPosition');
+    // },1000)
     // $('.slick-container').slick('unslick').slick('reinit');
     // $('.slick-container').slick('init');
   }
