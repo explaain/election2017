@@ -49,6 +49,9 @@ module.exports = class Designers {
       location.href = location.href;
       return false;
     })
+    /* hack */
+    $(".no-overflow").closest(".card").addClass("no-card-overflow");
+    /* end hack*/
   }
 
   uniqueStepLayout(step){

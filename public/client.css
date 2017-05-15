@@ -477,7 +477,7 @@ section:not(.wide) .card section.card-media {
 }
 
 /* hack */
-.card.OrganizationResultsGetRegistered .card-visible, .card.OrganizationResultsGetRegistered .content, .card.OrganizationResultsGetRegistered .content > div, .card.OrganizationResultsGetRegistered .content section, .card.OrganizationResultsGetRegistered .content .body-content {
+.card.no-card-overflow .card-visible, .card.no-card-overflow .content, .card.no-card-overflow .content > div, .card.no-card-overflow .content section, .card.no-card-overflow .content .body-content {
   overflow: visible;
 }
 /* end hack */
