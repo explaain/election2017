@@ -84,6 +84,11 @@ class App {
             }),
 
             routes.phrase(function (params) {
+              // $('.phrase').removeClass('popup');
+              // setTimeout(function() {
+              //   $('.phrase').addClass('popup');
+              // },1);
+
               if (params.name == "iWantTo") {
                 model.selectedPhrases = [{key: "iWantTo"}];
               }
@@ -105,17 +110,17 @@ class App {
                   hPhrases[1] = h('div.phraseSamples');
                 }
               }
-              if (!self.choosingPhrases) {
-
-              }
 
               if (self.choosingPhrases) {
-                $('div.phrase-buttons').css('display','block');
+                console.log('block')
+                setTimeout(function() {
+                  $('div.phrase-buttons').css('display','block');
+                }, 1)
               } else {
                 setTimeout(function() {
                   self.phraseSample = ((self.phraseSample+0.5) == phraseSamples.length) ? 0 : self.phraseSample+0.5;
                   self.refresh();
-                },(0.5 - (self.phraseSample % 1))*10000 * (self.choosingPhrases ? 3 : 1));
+                },(0.5 - (self.phraseSample % 1))*7000 * (self.choosingPhrases ? 3 : 1));
               }
 
 
@@ -133,6 +138,7 @@ class App {
               }
 
               function beginPhraseChoosing() {
+                console.log('beginning');
                 if (!self.choosingPhrases) {
                   self.choosingPhrases = true;
                   $('div.body-content').removeClass('hoverClick');
@@ -140,6 +146,7 @@ class App {
                   $('div.body-content div.help').addClass('choosingPhrases');
                   self.refresh();
                 }
+                console.log(self.choosingPhrases);
               }
 
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
@@ -329,6 +336,10 @@ class PhraseSelect {
     function submitPhrase(eventValue) {
       const value = JSON.parse(eventValue)
       console.log(value);
+      $('.phrase-button').removeClass('popup');
+      setTimeout(function() {
+        $('.phrase-button').addClass('popup');
+      },1);
       if (value.dataUpdates) {
         helpers.updateData([value.dataUpdates]);
       }

@@ -1011,6 +1011,9 @@ input:focus::-webkit-contacts-auto-fill-button {
 /* phrases dropdowns */
 
 
+div.phraseSamples {
+  min-height: 20vh;
+}
 div.phrase {
   margin-right: 0.3em;
   display: inline-block;

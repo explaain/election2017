@@ -61,6 +61,18 @@ module.exports = {
         //"environment",
         //"immigration"
 
+    ],
+    outcomes: [
+      "hardBrexit",
+      "tuitionFees",
+      "nationalisingRailways",
+      "increasingTax",
+      "moreHouses",
+      "nuclearWeapons",
+      "nhsFunding",
+      "protectingEnvironment",
+      "immigration",
+      "minimumWage"
     ]
   },
 
@@ -80,16 +92,18 @@ module.exports = {
     voteFor: {
       text: "vote for",
       optionList: [
-        "parties",
-        "topics"
+        // "parties",
+        // "topics",
+        "outcomes"
       ],
       next: "postcode"
     },
     voteAgainst: {
       text: "vote against",
       optionList: [
-        "parties",
-        "topics"
+        // "parties",
+        // "topics",
+        "outcomes"
       ],
       next: "postcode"
     },
@@ -200,11 +214,11 @@ module.exports = {
       next: "postcode"
     },
     areCandidates: {
-      text: "are my candidates",
+      text: "my candidates are",
       next: "postcode"
     },
     myMP: {
-      text: "is my MP",
+      text: "my MP is",
       next: "postcode"
     },
     winLocal: {
@@ -225,7 +239,7 @@ module.exports = {
       next: ""
     },
     shouldVoteFor: {
-      text: "should I vote for",
+      text: "I should vote for",
       next: "postcode"
     },
     where: {
@@ -407,6 +421,37 @@ module.exports = {
       text: "transport",
       dataUpdates: []
     },
+    hardBrexit: {
+      text: "hard Brexit"
+    },
+    tuitionFees: {
+      text: "tuition fees"
+    },
+    nationalisingRailways: {
+      text: "nationalising railways"
+    },
+    increasingTax: {
+      text: "increasing tax"
+    },
+    moreHouses: {
+      text: "more houses"
+    },
+    nuclearWeapons: {
+      text: "nuclear weapons"
+    },
+    nhsFunding: {
+      text: "NHS funding"
+    },
+    protectingEnvironment: {
+      text: "protecting environment"
+    },
+    immigration: {
+      text: "immigration"
+    },
+    minimumWage: {
+      text: "minimum wage"
+    },
+
   },
 
   // phrases: {

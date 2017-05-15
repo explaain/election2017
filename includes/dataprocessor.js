@@ -139,19 +139,49 @@ module.exports = class DataProcessor {
       }
     }
 
-    if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteFor']).length) {
-      dataUpdates.push({
-        data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
-        value: 1
-      });
+    var outcomes = {
+      "hardBrexit": "brexit-1",
+      "tuitionFees": "education-1",
+      "nationalisingRailways": "transport-1",
+      "increasingTax": "economy-1",
+      "moreHouses": "housing-1",
+      "nuclearWeapons": "trident-1",
+      "nhsFunding": "NHS-1",
+      "protectingEnvironment": "environment-1",
+      "immigration": "immigration-1",
+      "minimumWage": "economy-2",
     }
 
-    if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteAgainst']).length) {
-      dataUpdates.push({
-        data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
-        value: 0
-      });
-    }
+    Object.keys(outcomes).forEach(function(outcomeKey) {
+      if (phrasesIncluded(outcomeKey).length && phrasesIncluded(['voteFor']).length) {
+        console.log('user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion');
+        dataUpdates.push({
+          data: 'user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion',
+          value: 1
+        });
+      }
+      if (phrasesIncluded(outcomeKey).length && phrasesIncluded(['voteAgainst']).length) {
+        console.log('user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion');
+        dataUpdates.push({
+          data: 'user.opinions.issues.' + outcomes[outcomeKey].substring(0, outcomes[outcomeKey].length - 2) + '.debates.' + outcomes[outcomeKey] + '.opinion',
+          value: 0
+        });
+      }
+    });
+
+    // if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteFor']).length) {
+    //   dataUpdates.push({
+    //     data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+    //     value: 1
+    //   });
+    // }
+    //
+    // if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteAgainst']).length) {
+    //   dataUpdates.push({
+    //     data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+    //     value: 0
+    //   });
+    // }
 
     if (phrasesIncluded(['voteFor']).length || phrasesIncluded(['voteAgainst']).length) {
       goto = {

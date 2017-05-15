@@ -33,7 +33,7 @@ var allParties = [
     colorLight: "#9c347c",
     description: "Want to ‘hold government to account on Brexit’ which to them means not giving naitonals [guaranteed rights](http://api.explaain.com/Detail/5901bfd2fcb4070011e4de52), leaving the [single market](http://api.explaain.com/Organization/58987dc975ce1100114b63ed) and no [second public vote](http://api.explaain.com/Detail/5901c186fcb4070011e4de55) on the terms of the Brexit deal.",
     logo: "ukip.png",
-    image: "ukip.png"
+    image: "ukip.jpg"
   },
   {
     key: "snp",
