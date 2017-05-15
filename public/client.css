@@ -1134,7 +1134,7 @@ div.card div.content.single-sentence > div.body-content {
   font-size: 1.1em;
   color: #dd2569;
   font-weight: 600;
-  font-family: Rubik;
+  font-family: Rubik, Lato, Helvetica, sans-serif;
 }
 
 footer {
