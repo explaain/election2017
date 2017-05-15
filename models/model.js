@@ -216,7 +216,7 @@ module.exports = {
     },
     why: {
       text: "why",
-      optionList: [
+      options: [
         "whyElection"
       ]
     },

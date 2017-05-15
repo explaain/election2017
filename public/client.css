@@ -1012,7 +1012,7 @@ input:focus::-webkit-contacts-auto-fill-button {
 
 
 div.phraseSamples {
-  min-height: 20vh;
+  min-height: 8em;
 }
 div.phrase {
   margin-right: 0.3em;
@@ -1033,6 +1033,19 @@ button.phrase-button {
 
 div.phrase-buttons {
   display: none;
+}
+
+span.quote-mark {
+  display: block;
+  margin-right: 0.2em;
+  margin-top: -0.5em;
+  margin-bottom: -0.8em;
+  font-size: 5.8em;
+  opacity: 0;
+  font-family: serif;
+}
+.hoverClick span.quote-mark {
+  opacity: 1;
 }
 
 div.body-content.hoverClick:hover {
@@ -1068,8 +1081,8 @@ div.body-content.hoverClick:hover {
   color: #555;
 }
 .phrase.phraseHighlight {
-  color: #dd2569;
-  background: rgba(221, 37, 105, 0.1);
+  /*color: #dd2569;
+  background: rgba(221, 37, 105, 0.1);*/
 }
 
 .card button.btn.highlightButton {
@@ -1095,6 +1108,9 @@ div.card div.content.single-sentence > div.body-content {
 
 .card .content .help {
   font-size: 1.1em;
+  color: #dd2569;
+  font-weight: 600;
+  font-family: Rubik;
 }
 
 footer {
