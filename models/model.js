@@ -995,7 +995,7 @@ module.exports = {
     },
     result: {
       label: "Here are your results",
-      sublabel: "Generated from over 68,520 possible combinations..."
+      sublabel: "Based on what you want and where you are..."
     },
     question: {
 

@@ -547,7 +547,7 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "p",
-            "content": "You never know who else might vote the same way. Share with 10 friends and make everyone's vote count #GE2017"
+            "content": "If everyone who used this site today shared it with 4 friends, we'd inform over 500,000 voters a week."
           },
           {
             "template": "shareButtons",
