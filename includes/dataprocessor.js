@@ -213,8 +213,11 @@ module.exports = class DataProcessor {
     });
 
     var learnStories = {
+      "voteInPerson": "voteInPersonStory",
+      "votingInPerson": "voteInPersonStory",
       "votingByProxy": "proxyVotingStory",
       "voteByProxy": "proxyVotingStory",
+      "pointOfVoting": "pointOfVotingStory",
     };
 
     Object.keys(learnStories).forEach(function(learnStoryKey) {
