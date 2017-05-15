@@ -102,7 +102,7 @@ module.exports = {
       next: "postcode"
     },
     registerToVote: {
-      text: "Register to Vote",
+      text: "register to vote",
       goto: {
         type: '',
         name: ''
