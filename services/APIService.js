@@ -151,7 +151,7 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
       data.seats[0].uniHomeLocation = 'Home',
       data.seats[1].uniHomeLocation = 'Uni',
       data.facebookShareHref = 'https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com%2Fstudents%2F&display=popup&ref=plugin&src=share_button';
-      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'Students! Are you trying to decide which is the more powerful vote at home or at uni for %23GE2017? Try out this tool! ge2017.com';
+      data.twitterShareHref = 'https://twitter.com/intent/tweet?text='+'Students! Should you vote @ home or uni? Try out this 👉 ge2017.com/students and make sure you get your voice heard%23GE2017! ';
       return data;
     })
   })

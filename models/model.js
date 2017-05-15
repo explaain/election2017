@@ -982,7 +982,7 @@ module.exports = {
       label: "Where are you voting from?"
     },
     'quiz-priority': {
-      label: "Select priority"
+      label: "Finally, what matters most to you?"
     },
     'local-candidates-test': {
 

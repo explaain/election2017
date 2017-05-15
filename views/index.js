@@ -1322,8 +1322,8 @@ function getResults(resultsType){
             type: template, // Temporary, /* hack */
             constituencyResults: {},
             moreStuff: {
-              heading: "Add more stuff!",
-              buttonText: "Add more stuff",
+              heading: "Have another question?",
+              buttonText: "Get your answer",
               buttonAction: function(){routes.root().push()}
             },
             toggleDetailsButton: {

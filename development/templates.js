@@ -236,7 +236,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Next, set it in stone 🎉"
+            "content": "Next, here's how to make the most of your vote ✊"
           },
           {
             "dom": "p",
@@ -455,7 +455,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "h2",
             "condition": "constituencyResults",
-            "content": "Next, set it in stone 🎉"
+            "content": "Next, here's how to make the most of your vote ✊"
           },
           {
             "dom": "p",
@@ -1454,7 +1454,7 @@ module.exports = function(CardTemplates){
         "content":[
           {
             "dom": "h2.q-high-priority",
-            "content": "HIGHER PRIORITY"
+            "content": "These things really matter"
           },
           {
             "dom": "div.high-priority",
