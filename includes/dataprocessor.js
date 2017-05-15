@@ -61,6 +61,23 @@ module.exports = class DataProcessor {
             })
           break;
 
+        case 'shouldVoteFor':
+          goto = {
+            type: 'step',
+            route: 'step',
+            name: 'question',
+            final: 'quiz-priority',
+            next: 'postcode',
+            task: 'issue-$apply'
+          }
+          dataUpdates.push({
+              data: 'user.quizFlow.3',
+              // value: ["nhs-1","nhs-2","nhs-3","immigration-1","immigration-2","immigration-3""education-1","brexit-1","brexit-2","brexit-3","brexit-4","education-2","education-3"],
+              value: ["brexit-1", "education-1", "transport-1", "economy-1", "housing-1", "trident-1", "NHS-1", "environment-1", "immigration-1", "economy-2"],
+              action: "toggle"
+            })
+          break;
+
         case 'allIssues':
           dataUpdates.push({
               data: 'user.quizFlow.3',
@@ -196,7 +213,8 @@ module.exports = class DataProcessor {
     });
 
     var learnStories = {
-      "votingByProxy": "proxyVotingStory"
+      "votingByProxy": "proxyVotingStory",
+      "voteByProxy": "proxyVotingStory",
     };
 
     Object.keys(learnStories).forEach(function(learnStoryKey) {

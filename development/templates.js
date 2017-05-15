@@ -580,7 +580,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "div.step-number.step-2",
             "condition": "constituencyResults",
-            "content": "2"
+            "content": "1"
           },
           {
             "dom": "h2",
@@ -661,17 +661,17 @@ module.exports = function(CardTemplates){
               }
             ]
           },
-          {
-            "dom": "div",
-            "condition": "!isLocalCandidates",
-            "content": [{
-              "dom": "div",
-              "condition": "!isWaiting",
-              "content": {
-                "func": ['mainResults']
-              }
-            }],
-          },
+          // {
+          //   "dom": "div",
+          //   "condition": "!isLocalCandidates",
+          //   "content": [{
+          //     "dom": "div",
+          //     "condition": "!isWaiting",
+          //     "content": {
+          //       "func": ['mainResults']
+          //     }
+          //   }],
+          // },
           {
             "dom": "div",
             "condition": "isLocalCandidates",
