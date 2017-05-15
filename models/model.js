@@ -364,6 +364,7 @@ module.exports = {
     voteInPerson: {
       text: "vote in person",
       options: "",
+      finish: true
     },
     voteByProxy: {
       text: "vote by proxy",
@@ -373,10 +374,12 @@ module.exports = {
     voteByPost: {
       text: "vote by post",
       options: "",
+      finish: true
     },
     votingInPerson: {
       text: "voting in person",
       options: "",
+      finish: true
     },
     votingByProxy: {
       text: "voting by proxy",
@@ -386,6 +389,7 @@ module.exports = {
     votingByPost: {
       text: "voting by post",
       options: "",
+      finish: true
     },
     beRemindedTo: {
       text: "be reminded to",
@@ -1019,7 +1023,16 @@ module.exports = {
     partyStories: {
       label: "Party stories"
     },
-    pointOfVoting: {
+    voteInPersonStory: {
+      label: "How do I vote in person?",
+      cardUrls: [
+        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+      ]
+    },
+    pointOfVotingStory: {
       label: "What's the point of voting?",
       cardUrls: [
         "http://api.explaain.com/Detail/59172710a1f5940011a03b6a",

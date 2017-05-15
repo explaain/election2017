@@ -659,9 +659,18 @@ class Step {
         data.cardGroups.push(self.step.cardUrls)
         break;
 
+      case 'voteInPersonStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
       case 'proxyVotingStory':
         data.cardGroups.push(self.step.cardUrls)
         break;
+
+      case 'pointOfVotingStory':
+        data.cardGroups.push(self.step.cardUrls)
+        break;
+
 
       case 'question':
         model.showProgressBar = true;
