@@ -1296,6 +1296,13 @@ function getResults(resultsType){
 
       console.log('mainResults');
       console.log(mainResults);
+      /* hack */
+      var template;
+      switch(resultsType){
+        case "getRegistered": template = "OrganizationResultsGetRegistered"; break;
+        default: template = "OrganizationResults"; break;
+      }
+      /* end hack */
       model.user.results.push([
         [
           {
@@ -1304,7 +1311,7 @@ function getResults(resultsType){
             footer: [
               yourFooter
             ],
-            type: "OrganizationResults", // Temporary,
+            type: template, // Temporary, /* hack */
             constituencyResults: {},
             moreStuff: {
               heading: "Add more stuff!",
