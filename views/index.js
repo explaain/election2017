@@ -43,6 +43,8 @@ class App {
     }
     this.header = new Header(logoRoute);
     this.footer = new Footer();
+    this.phraseSample = 0;
+    this.choosingPhrases = false;
   }
 
   render() {
@@ -65,66 +67,109 @@ class App {
 
           this.header,
 
-          routes.root(function () {
-            // var phrase = new Phrase({phrase: 'home'});
-            // return h("div", phrase)
-            // var dashboard = new Dashboard({dashboard: 'home'});
-            // return h("div", dashboard)
-            model.selectedPhrases = ["iWantTo"];
-            routes.phrase({name: 'iWantTo'}).push();
-          }),
+          h('div.page-content',
 
-          routes.dashboard(function (params) {
-            var dashboard = new Dashboard({dashboard: params.name});
-            return h("div", dashboard)
-          }),
+            routes.root(function () {
+              // var phrase = new Phrase({phrase: 'home'});
+              // return h("div", phrase)
+              // var dashboard = new Dashboard({dashboard: 'home'});
+              // return h("div", dashboard)
+              model.selectedPhrases = ["iWantTo"];
+              routes.phrase({name: 'iWantTo'}).push();
+            }),
 
-          routes.phrase(function (params) {
-            if (params.name == "iWantTo") {
-              model.selectedPhrases = [{key: "iWantTo"}];
-            }
-            var hPhrases = model.selectedPhrases.map(function(phrase) {
-              return h('div.phrase.popup', model.myPhrases[phrase.key] ? model.myPhrases[phrase.key].text : phrase.key);
+            routes.dashboard(function (params) {
+              var dashboard = new Dashboard({dashboard: params.name});
+              return h("div", dashboard)
+            }),
+
+            routes.phrase(function (params) {
+              if (params.name == "iWantTo") {
+                model.selectedPhrases = [{key: "iWantTo"}];
+              }
+              var hPhrases = model.selectedPhrases.map(function(phrase) {
+                return h('div.phrase.popup', model.myPhrases[phrase.key] ? model.myPhrases[phrase.key].text : phrase.key);
+              })
+
+              var phraseSamples = [
+                h('div.phrases', h('div.phrase.popup.phraseBold.phraseHighlight', 'decide'), h('div.phrase.popup.phraseBold', 'who to vote for'), h('div.phrase.popup', 'in'), h('div.phrase.popup.phraseBold', 'E2 7DG') ),
+                h('div.phrases', h('div.phrase.popup.phraseBold.phraseHighlight', 'learn'), h('div.phrase.popup', 'how to'), h('div.phrase.popup.phraseBold', 'register to vote') ),
+                h('div.phrases', h('div.phrase.popup.phraseBold.phraseHighlight', 'find out'), h('div.phrase.popup', 'who my'), h('div.phrase.popup.phraseBold', 'local candidates'), h('div.phrase.popup', 'are in'), h('div.phrase.popup.phraseBold', 'SW1A 0AA') ),
+                h('div.phrases', h('div.phrase.popup.phraseBold.phraseHighlight', 'vote against'), h('div.phrase.popup', 'a'), h('div.phrase.popup.phraseBold', 'Hard Brexit'), h('div.phrase.popup', 'in'), h('div.phrase.popup.phraseBold', 'SW1A 0AA') ),
+              ];
+
+              if (hPhrases.length == 1) {
+                if (self.phraseSample % 1 === 0) {
+                  hPhrases[1] = h('div.phraseSamples', phraseSamples[self.phraseSample]);
+                } else {
+                  hPhrases[1] = h('div.phraseSamples');
+                }
+              }
+              if (!self.choosingPhrases) {
+
+              }
+
+              if (self.choosingPhrases) {
+                $('div.phrase-buttons').css('display','block');
+              } else {
+                setTimeout(function() {
+                  self.phraseSample = ((self.phraseSample+0.5) == phraseSamples.length) ? 0 : self.phraseSample+0.5;
+                  self.refresh();
+                },(0.5 - (self.phraseSample % 1))*10000 * (self.choosingPhrases ? 3 : 1));
+              }
+
+
+              var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
+              var goto = model.myPhrases[params.name].goto;
+
+              var submitData = function(e) {
+                var goto = dataProcessor.processSentenceData(model, helpers);
+                routes[goto.route](goto).push();
+              }
+
+              var quizButtonClick = function(e) {
+                model.selectedPhrases.push({key: 'allIssues'});
+                submitData(e);
+              }
+
+              function beginPhraseChoosing() {
+                if (!self.choosingPhrases) {
+                  self.choosingPhrases = true;
+                  $('div.body-content').removeClass('hoverClick');
+                  $('div.phraseSamples').addClass('choosingPhrases');
+                  $('div.body-content div.help').addClass('choosingPhrases');
+                  self.refresh();
+                }
+              }
+
+              var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
+              var quizButton = h('button.btn.btn-primary', {onclick: quizButtonClick}, 'Just take me to the Quiz');
+              var phraseDom = h("div.content.text-center.single-sentence", h("div.body-content.hoverClick", {onclick: beginPhraseChoosing}, hPhrases, currentPhrase, goButton, h('div.help', h('i.fa.fa-hand-pointer-o', {style: 'margin-right:0.2em;'}), 'Tap here to begin') ), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
+              return h('section.step', h("h1", "What do you want to do?"), h('div.cards', new Card({},function(){}, phraseDom) ) );
+            }),
+
+            routes.step(function (params) {
+              var step = new Step(params);
+              return h('div',step);
+            }),
+
+            routes.students(function (params) {
+              var params = {
+                name: StepName
+              }
+              var step = new Step(params);
+              return h('div',step);
+            }),
+
+            routes.policy(function (params) {
+              var params = {
+                name: StepName
+              }
+              var step = new Step(params);
+              return h('div',step);
             })
-            var currentPhrase = new PhraseSelect({phrase: params.name, next: params.next});
-            var goto = model.myPhrases[params.name].goto;
 
-            var submitData = function(e) {
-              var goto = dataProcessor.processSentenceData(model, helpers);
-              routes[goto.route](goto).push();
-            }
-
-            var quizButtonClick = function(e) {
-              model.selectedPhrases.push({key: 'allIssues'});
-              submitData(e);
-            }
-
-            var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
-            var quizButton = h('button.btn.btn-primary', {onclick: quizButtonClick}, 'Just take me to the Quiz');
-            var phraseDom = h("div.content.text-center.padded", h("div.body-content", h("h1", "What do you want to do?"), hPhrases, currentPhrase, goButton), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
-            return h('section.step', h('div.cards', new Card({},function(){}, phraseDom) ) );
-          }),
-
-          routes.step(function (params) {
-            var step = new Step(params);
-            return h('div',step);
-          }),
-
-          routes.students(function (params) {
-            var params = {
-              name: StepName
-            }
-            var step = new Step(params);
-            return h('div',step);
-          }),
-
-          routes.policy(function (params) {
-            var params = {
-              name: StepName
-            }
-            var step = new Step(params);
-            return h('div',step);
-          }),
+          ),
 
           this.footer
         )
@@ -244,7 +289,7 @@ class PhraseSelect {
           key: optKey,
           phrase: model.myPhrases[optKey]
         };
-        return h('button.btn.btn-default.popup', {
+        return h('button.btn.btn-default.phrase-button.popup.highlightButton', {
           value: JSON.stringify(value),
           onclick: function(e) {
             submitPhrase(e.target.value)
@@ -254,7 +299,7 @@ class PhraseSelect {
       //Is this the correct structure?
       var defaultPhrase = phrase.defaultPhrase || { text: '' };
 
-      const select = h('div', {
+      const select = h('div.phrase-buttons', {
       }, options);
 
       phraseDOM.push(select)
@@ -301,7 +346,7 @@ class PhraseSelect {
       }
     }
 
-    return h("span.phrase",
+    return h("div.phrase",
       // h("h1", this.phrase.title),
       // h("h2", this.phrase.subtitle),
       // h("section.text",
@@ -1073,7 +1118,7 @@ class LocalCandidateDetails {
               (self.data.homepage_url ? "<div><a href='" + self.data.homepage_url + "'>Homepage</a></div>" : "") +
               (self.data.wikipedia_url ? "<div><a href='" + self.data.wikipedia_url + "'>Wikipedia</a></div>" : "") +
               (self.data.likedin_url ? "<div><a href='" + self.data.likedin_url + "'>LinkedIn</a></div>" : "") +
-              (self.data.mapit_url ? "<div><a href='" + self.data.mapit_url + "'>MapIt</a></div>" : "") +
+              // (self.data.mapit_url ? "<div><a href='" + self.data.mapit_url + "'>MapIt</a></div>" : "") +
             "</div>";
   }
 }
@@ -1084,13 +1129,7 @@ function getResults(resultsType){
 
   api.getResults(model.user.postcode, model.user, resultsType)
     .then(function(results) {
-      console.log('results');
-      console.log('results');
-      console.log('results');
-      console.log(results);
-      console.log(resultsType);
       results.data.user ? helpers.updateObject(model.user, results.data.user) : null;
-      console.log(123);
 
       var mainResults;
 
@@ -1100,7 +1139,6 @@ function getResults(resultsType){
               yourArea = "",
               yourFooter = "ShareButtons",
               extraCards;
-          console.log(1)
           if (!results.parties.length) {
             results.parties[0] = {
               name: "Hold up!",
@@ -1206,12 +1244,13 @@ function getResults(resultsType){
 
           mainResults.forEach(function(localCandidate){
             clientCards.push({
-              "@id": "//api.explaain.com/Detail/localCandidate_"+localCandidate.id,
+              "@id": "//api.explaain.com/Headline/localCandidate_"+localCandidate.id,
+              "@type": "http://api.explaain.com/Headline",
               image: localCandidate.image_url,
               name: localCandidate.name,
               description: (new LocalCandidateDetails(localCandidate)).render()
             });
-            localCandidate.cardHref = "//api.explaain.com/Detail/localCandidate_"+localCandidate.id;
+            localCandidate.cardHref = "//api.explaain.com/Headline/localCandidate_"+localCandidate.id;
           });
           explaain.addClientCards(clientCards);
           break;

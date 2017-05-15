@@ -19,6 +19,11 @@ body > div.body {
   transition: background-color 1s;
 }
 
+h1, h2, h3, h4, h5, button {
+  font-family: Rubik, Lato, Helvetica, sans-serif;
+}
+
+
 body > div.body.backColor {
   background-color: #6296ff;
   background-image: none;
@@ -40,6 +45,10 @@ button.btn i.fa {
 body > div.body > div.main {
   /*max-width: 800px;*/
   margin: 0 10px;
+}
+
+body > div.body > div.main > div.page-content {
+  min-height: 70vh;
 }
 
 header {
@@ -140,6 +149,59 @@ img.loading.showing {
   display: block;
 }
 
+
+.card .content button.btn,
+.card .content a.btn {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  border-width: 1px;
+}
+.card .content button.btn:hover,
+.card .content a.btn:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+  border-width: 1px;
+}
+
+.card .content button.btn.btn-primary,
+.card .content a.btn.btn-primary {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4;
+}
+.card .content button.btn.btn-primary:hover,
+.card .content a.btn.btn-primary:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
+}
+.card .content button.btn.btn-success,
+.card .content a.btn.btn-success {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
+.card .content button.btn.btn-success:hover,
+.card .content a.btn.btn-success:hover {
+  color: #fff;
+  background-color: #449d44;
+  border-color: #398439;
+}
+
 @keyframes loading {
   0% {transform: scale(.8,.8); opacity:0}
   60%  {transform: scale(1.1,1.1);opacity:1}
@@ -180,10 +242,6 @@ a.task {
   cursor: pointer;
 }
 
-div.phrase {
-  margin-right: 0.2em;
-  display: inline-block;
-}
 
 section.tasks a.task {
   display: inline-block;
@@ -868,57 +926,6 @@ a.explaain-link.discard-card-style:active,
 }
 
 
-.card .content button.btn,
-.card .content a.btn {
-  color: #333;
-  background-color: #fff;
-  border-color: #ccc;
-  font-weight: normal;
-  text-align: center;
-  vertical-align: middle;
-  touch-action: manipulation;
-  cursor: pointer;
-  background-image: none;
-  border: 1px solid #ccc;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  border-radius: 4px;
-  border-width: 1px;
-}
-.card .content button.btn:hover,
-.card .content a.btn:hover {
-  color: #333;
-  background-color: #e6e6e6;
-  border-color: #adadad;
-  border-width: 1px;
-}
-
-.card .content button.btn.btn-primary,
-.card .content a.btn.btn-primary {
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-.card .content button.btn.btn-primary:hover,
-.card .content a.btn.btn-primary:hover {
-  color: #fff;
-  background-color: #286090;
-  border-color: #204d74;
-}
-.card .content button.btn.btn-success,
-.card .content a.btn.btn-success {
-  color: #fff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
-}
-.card .content button.btn.btn-success:hover,
-.card .content a.btn.btn-success:hover {
-  color: #fff;
-  background-color: #449d44;
-  border-color: #398439;
-}
 
 
 
@@ -1003,13 +1010,33 @@ input:focus::-webkit-contacts-auto-fill-button {
 
 /* phrases dropdowns */
 
+
+div.phrase {
+  margin-right: 0.3em;
+  display: inline-block;
+}
+
 .phrase, .phrase select, .phrase select option {
-  font-size: 21px;
+  font-size: 1.8em;
+}
+
+button.phrase-button {
+  text-transform: capitalize;
 }
 
 .quiz-btn-container {
   margin: 10px 0;
 }
+
+div.phrase-buttons {
+  display: none;
+}
+
+div.body-content.hoverClick:hover {
+  cursor: pointer;
+  background-color: rgba(200,200,200,0.2)
+}
+
 
 .phrase-input {
   max-width: 150px;
@@ -1021,6 +1048,50 @@ input:focus::-webkit-contacts-auto-fill-button {
   max-width: 250px;
   margin: auto;
   margin-top: 15px;
+}
+
+.phraseSamples, .help {
+  display: none;
+}
+.hoverClick .phraseSamples, .hoverClick .help {
+  display: block;
+}
+
+.phrase.phraseBold {
+  font-family: Rubik, Lato, Helvetica, sans-serif;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  color: #555;
+}
+.phrase.phraseHighlight {
+  color: #dd2569;
+  background: rgba(221, 37, 105, 0.1);
+}
+
+.card button.btn.highlightButton {
+  margin: 5px;
+  background: rgba(95, 95, 95, 0.1);
+  border: none;
+  border-radius: 0;
+  font-weight: 500;
+  color: #dd2569;
+  font-size: 0.6em;
+  color: #555;
+}
+.card button.btn.highlightButton:hover {
+  background: rgba(221, 37, 105, 0.1);
+  color: #dd2569;
+}
+
+
+div.card div.content.single-sentence > div.body-content {
+  margin: 0;
+  padding: 40px 20px;
+}
+
+.card .content .help {
+  font-size: 1.1em;
 }
 
 footer {

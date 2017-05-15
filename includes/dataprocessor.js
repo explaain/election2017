@@ -9,10 +9,30 @@ module.exports = class DataProcessor {
   processSentenceData(model, helpers) {
     var dataUpdates = [];
     var goto = {};
+    var forAgainst = false;
+
+    function phrasesIncluded(phrases) {
+      return model.selectedPhrases
+      .filter(function(phrase) {
+        return phrases.indexOf(phrase.key) > -1
+      }).map(function(phrase) {
+        return phrase.key
+      });
+    }
+
+
     model.selectedPhrases.forEach(function(phrase) {
       switch (phrase.key) {
         case 'postcode':
           model.user.postcode = phrase.data;
+          break;
+
+        case 'voteFor':
+          forAgainst = 'for';
+          break;
+
+        case 'voteAgainst':
+          forAgainst = 'against';
           break;
 
         case 'voteOn':
@@ -97,17 +117,52 @@ module.exports = class DataProcessor {
         default:
 
       }
-      if (phrase.key == 'allIssues' || phrase.key == 'brexit' || phrase.key == 'nhs' || phrase.key == 'education' || phrase.key == 'immigration') {
-        goto = {
-          type: 'step',
-          route: 'step',
-          name: 'question',
-          final: 'quiz-priority',
-          next: 'postcode',
-          task: 'issue-$apply'
-        }
-      }
     })
+
+    var quizKeys = [
+      "allIssues",
+      "brexit",
+      "nhs",
+      "education",
+      "economy",
+      "transport"
+    ];
+
+    if (phrasesIncluded(quizKeys).length && phrasesIncluded(['voteOn']).length) {
+      goto = {
+        type: 'step',
+        route: 'step',
+        name: 'question',
+        final: 'quiz-priority',
+        next: 'postcode',
+        task: 'issue-$apply'
+      }
+    }
+
+    if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteFor']).length) {
+      dataUpdates.push({
+        data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+        value: 1
+      });
+    }
+
+    if (phrasesIncluded(['brexit']).length && phrasesIncluded(['voteAgainst']).length) {
+      dataUpdates.push({
+        data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+        value: 0
+      });
+    }
+
+    if (phrasesIncluded(['voteFor']).length || phrasesIncluded(['voteAgainst']).length) {
+      goto = {
+        type: 'postcode',
+        route: 'step',
+        name: 'goToResults',
+        resultsType: 'partyResults',
+        next: 'result'
+      }
+    }
+
     helpers.updateData(dataUpdates);
     console.log(goto)
     return goto;

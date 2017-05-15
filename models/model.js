@@ -47,13 +47,13 @@ module.exports = {
       // "snp"
     ],
     topics: [
-      "allIssues",
-      // "brexit",
-      // "nhs",
-      // "education",
-      // "economy",
-      //"education",
-     //"transport",
+      // "allIssues",
+      "brexit",
+      "nhs",
+      "education",
+      "economy",
+      "education",
+      "transport",
     //"economy",
         //"housing",
         //"defence",
@@ -95,10 +95,13 @@ module.exports = {
     },
     voteOn: {
       text: "vote on",
-      optionList: [
-        // "parties",
-        "topics"
+      options: [
+        "allIssues"
       ],
+      // optionList: [
+      //   // "parties",
+      //   "topics"
+      // ],
       next: "postcode"
     },
     registerToVote: {
@@ -382,6 +385,26 @@ module.exports = {
     },
     brexit: {
       text: "Brexit",
+      dataUpdates: []
+    },
+    immigration: {
+      text: "immigration",
+      dataUpdates: []
+    },
+    nhs: {
+      text: "NHS",
+      dataUpdates: []
+    },
+    education: {
+      text: "education",
+      dataUpdates: []
+    },
+    economy: {
+      text: "economy",
+      dataUpdates: []
+    },
+    transport: {
+      text: "transport",
       dataUpdates: []
     },
   },
