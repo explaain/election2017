@@ -885,7 +885,7 @@ class CardContent {
           delete model.user.isWaiting;
           routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
         });
-        return helpers.assembleCards(data, 'Detail');
+        return helpers.assembleCards(data, 'loading');
 
       case 'postcode':
         if (postcodeAlreadyEntered) {
