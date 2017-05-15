@@ -1055,6 +1055,29 @@ class BackToDashboard {
   }
 }
 
+class LocalCandidateDetails {
+  constructor(data) {
+    const self = this;
+    self.data = data;
+  }
+
+  render() {
+    var self = this;
+    return  "<div class='local-candidate-details'>" +
+              "<div>" + self.data.party_name + "</div>" +
+              "<div>" + self.data.birth_date + "</div>" +
+              "<div>" + self.data.post_label + "</div>" +
+              (self.data.email ? "<div><a href='mailto:" + self.data.email + "'>" + self.data.email + "</a></div>" : "") +
+              (self.data.twitter_username ? "<div><a href='https://twitter.com/" + self.data.twitter_username + "'>@" + self.data.twitter_username + "</a></div>" : "") +
+              (self.data.facebook_page_url ? "<div><a href='" + self.data.facebook_page_url + "'>Facebook</a></div>" : "") +
+              (self.data.homepage_url ? "<div><a href='" + self.data.homepage_url + "'>Homepage</a></div>" : "") +
+              (self.data.wikipedia_url ? "<div><a href='" + self.data.wikipedia_url + "'>Wikipedia</a></div>" : "") +
+              (self.data.likedin_url ? "<div><a href='" + self.data.likedin_url + "'>LinkedIn</a></div>" : "") +
+              (self.data.mapit_url ? "<div><a href='" + self.data.mapit_url + "'>MapIt</a></div>" : "") +
+            "</div>";
+  }
+}
+
 // todo: should this be in APIService?
 function getResults(resultsType){
   var deferred = q.defer();
@@ -1186,7 +1209,7 @@ function getResults(resultsType){
               "@id": "//api.explaain.com/Detail/localCandidate_"+localCandidate.id,
               image: localCandidate.image_url,
               name: localCandidate.name,
-              description: localCandidate.party_name + ' <a href="https://twitter.com/intent/user?user_id='+localCandidate.twitter_user_id+'">Twitter</a>  \r\n # TEST',
+              description: (new LocalCandidateDetails(localCandidate)).render()
             });
             localCandidate.cardHref = "//api.explaain.com/Detail/localCandidate_"+localCandidate.id;
           });
