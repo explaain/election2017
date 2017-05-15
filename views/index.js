@@ -225,7 +225,7 @@ class Header {
         h("i.fa.fa-arrow-left"),
         " Home"
       ), self.logoRoute.a(
-        h("img.ge2017-logo", {"src": "/img/ge2017logo.png"})
+        h("img.ge2017-logo", {"src": "/img/ge2017logobeta.png"})
       ),
       (new Progress())
     )
