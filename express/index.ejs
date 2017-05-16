@@ -34,5 +34,6 @@
       const MODE = (location.href.match(/production/)?'production':'<%= process.env.NODE_ENV %>');
     </script>
     <script src="/compiled.js?v=<%=NOCACHE%>" type="text/javascript"></script>
+    <%- include partials/addthis.ejs %>
   </body>
 </html>
