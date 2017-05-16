@@ -18,6 +18,8 @@ const
   eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
 ;
 
+trackEvent("Landed",{page: location.pathname});
+
 // Describing different routes of app
 // warn. at the moment /dashboards and /steps are redirected to "/" in index.ejs
 //   by express routing - this was made to avoid 404 errors on page refresh
@@ -641,7 +643,6 @@ class Step {
         break;
 
       case 'postcode-compare':
-        trackEvent("Landed Students");
         model.landedOnPostcode = 1; // todo: temporary, refactor
         data.cardGroups.push([{
           type: 'postcode-compare',
