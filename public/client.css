@@ -20,7 +20,7 @@ body > div.body {
 }
 
 h1, h2, h3, h4, h5, button.phrase-button {
-  font-family: Rubik, Lato, Helvetica, sans-serif;
+  font-family: Lato, Helvetica, sans-serif;
 }
 
 
@@ -1098,7 +1098,7 @@ div.body-content.hoverClick:hover {
 }
 
 .phrase.phraseBold {
-  font-family: Rubik, Lato, Helvetica, sans-serif;
+  font-family: Lato, Helvetica, sans-serif;
   font-weight: 600;
   text-decoration: underline;
   text-decoration-style: dotted;
@@ -1134,7 +1134,7 @@ div.card div.content.single-sentence > div.body-content {
   font-size: 1.1em;
   color: #dd2569;
   font-weight: 600;
-  font-family: Rubik, Lato, Helvetica, sans-serif;
+  font-family: Lato, Helvetica, sans-serif;
 }
 
 footer {
