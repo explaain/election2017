@@ -1054,6 +1054,8 @@ class CardContent {
               }
             } else {
               trackEvent("Received Results",{type: "Student"});
+              trackEvent("Constituency checked",{type: "Student", constituency: results.seats[0].location });
+              trackEvent("Constituency checked",{type: "Student", constituency: results.seats[1].location });
               model.user.resultsCompare.push(results);
             }
             self.refresh();
