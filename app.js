@@ -72,6 +72,11 @@ app.get('/policy', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, step: 'policy' });
 });
 
+//Teporary because AddThis was sending people to the wrong place!
+app.get('/ge2017.com', function(req, res, next) {
+  res.redirect(301,"/students");
+});
+
 
 /*
   This is temporary to make sure we do not see the
