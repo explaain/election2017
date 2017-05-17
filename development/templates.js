@@ -1683,6 +1683,7 @@ module.exports = function(CardTemplates){
       {
         "template": "quizQuestions",
         "mapping": [
+          ["progress", "progress"],
           ["questions", "questions"]
         ]
       },
