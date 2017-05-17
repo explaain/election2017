@@ -55,6 +55,7 @@ const JSFiles = [
   'public/data/partyReconciliation.js',
   'public/data/swingSeatsToForce.js',
   'public/data/localCandidates.js',
+  'public/data/quizQuestions.js',
   'public/js/jquery.min.js',
   'public/js/slick.min.js',
   'tmp/explaain.js',
