@@ -1682,7 +1682,7 @@ module.exports = function(CardTemplates){
         ]
       },
       {
-        "template": "quizQuestions",
+        "template": "quizQuestion",
         "mapping": [
           ["question", "currentQuestion"],
           ["yesAnswered","currentQuestionYes"],
@@ -1701,9 +1701,31 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": "Progress..."
   }
-  CardTemplates.quizQuestions = {
+  CardTemplates.quizQuestion = {
     "dom": "div",
-    "content": "Questions..."
+    "content": [
+      {
+        "dom": "section.step",
+        "content": [
+          {
+            "dom": ".card",
+            "content": [
+              {
+                "dom": ".card-visible",
+                "content": [
+                  {
+                    "dom": "h2",
+                    "content": {
+                      "var": "question.question"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
   CardTemplates.quizPercentages = {
     "dom": "div",
