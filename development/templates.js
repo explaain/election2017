@@ -201,7 +201,7 @@ module.exports = function(CardTemplates){
         ]
       },
       {
-        "dom": "div.body-content.results",
+        "dom": "div.body-content.results.no-top-border",
         "condition": "constituencyResults",
         "content": [
           {
@@ -354,7 +354,7 @@ module.exports = function(CardTemplates){
       // This loads template with postcodeFormHeader name
       { "template": "postcodeFormHeader" },
       {
-        "dom": "div.body-content.results",
+        "dom": "div.body-content.results.no-top-border",
         "condition": "constituencyResults",
         "content": [
           {
