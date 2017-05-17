@@ -805,14 +805,7 @@ class Step {
         h("div.cards",self.headers,self.cardGroups)
       )
     } else {
-      return helpers.assembleCards({
-        currentQuestion: quizQuestions[model.user.quizProgress.opinions.length],
-        currentQuestionAnswered: model.user.quizProgress.answers[model.user.quizProgress.opinions.length],
-        currentQuestionYes: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="yes",
-        currentQuestionNo: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="no",
-        progressBarTotal: quizQuestions.length,
-        progressBarStatus: model.user.quizProgress.answers.length
-      }, CardTemplates.quizMaster);
+      return (new Quiz())
     }
 
   }
@@ -1426,6 +1419,31 @@ function getResults(resultsType){
     }
   )
   return deferred.promise;
+}
+
+class Quiz {
+  constructor(){
+    const self = this;
+    self.answerYes = function(){self.answer("yes")}
+    self.answerNo = function(){self.answer("no")}
+    self.answer = function(answer){
+      model.user.quizProgress.answers.push(answer);
+      self.refresh();
+    }
+  }
+  render(){
+    const self = this;
+    return helpers.assembleCards({
+      currentQuestion: quizQuestions[model.user.quizProgress.opinions.length],
+      currentQuestionAnswered: model.user.quizProgress.answers[model.user.quizProgress.opinions.length],
+      currentQuestionYes: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="yes",
+      currentQuestionNo: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="no",
+      progressBarTotal: quizQuestions.length,
+      progressBarStatus: model.user.quizProgress.answers.length,
+      answerYes: self.answerYes,
+      answerNo: self.answerNo
+    }, CardTemplates.quizMaster);
+  }
 }
 
 /*const templatesUrl = '//explaain-api.herokuapp.com/templates';
