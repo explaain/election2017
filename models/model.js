@@ -29,7 +29,10 @@ module.exports = {
     resultsOptions: [],
     quizFlow: [],
     isWaiting: false,
-    quizProgress: []
+    quizProgress: {
+      answers: [],
+      opinions: []
+    }
   },
 
   selectedPhrases: [

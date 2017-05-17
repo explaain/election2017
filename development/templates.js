@@ -1677,14 +1677,16 @@ module.exports = function(CardTemplates){
       {
         "template": "quizProgress",
         "mapping": [
-          ["progress", "progress"]
+          ["progressBarTotal", "progressBarTotal"],
+          ["progressBarStatus", "progressBarStatus"]
         ]
       },
       {
         "template": "quizQuestions",
         "mapping": [
-          ["progress", "progress"],
-          ["questions", "questions"]
+          ["question", "currentQuestion"],
+          ["yesAnswered","currentQuestionYes"],
+          ["noAnswered","currentQuestionNo"]
         ]
       },
       {

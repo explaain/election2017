@@ -806,8 +806,11 @@ class Step {
       )
     } else {
       return helpers.assembleCards({
-        quizQuestions:quizQuestions,
-        progress: model.user.quizProgress
+        currentQuestion: quizQuestions[model.user.quizProgress.opinions.length],
+        currentQuestionYes: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="yes",
+        currentQuestionNo: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="no",
+        progressBarTotal: quizQuestions.length,
+        progressBarStatus: model.user.quizProgress.answers.length
       }, CardTemplates.quizMaster);
     }
 
