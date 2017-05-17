@@ -133,6 +133,16 @@ footer {
   padding-bottom:20px;
 }
 
+/* Because of social media panel and Share button */
+@media only screen and (max-width: 980px) {
+  footer {
+    padding-bottom:70px;
+  }
+  .at-expanding-share-button-toggle-bg {
+    bottom:60px;
+  }
+}
+
 i.fa-check {
   font-size: 1.4em;
   display: inline-block;
