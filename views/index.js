@@ -1433,13 +1433,15 @@ class Quiz {
   }
   render(){
     const self = this;
+    const qp = model.user.quizProgress;
     return helpers.assembleCards({
-      currentQuestion: quizQuestions[model.user.quizProgress.opinions.length],
-      currentQuestionAnswered: model.user.quizProgress.answers[model.user.quizProgress.opinions.length],
-      currentQuestionYes: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="yes",
-      currentQuestionNo: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="no",
+      currentQuestion: quizQuestions[qp.opinions.length],
+      currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
+      currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
+      currentQuestionNo: qp.answers[qp.opinions.length]==="no",
+      currentSubquestion: quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]],
       progressBarTotal: quizQuestions.length,
-      progressBarStatus: model.user.quizProgress.answers.length,
+      progressBarStatus: qp.answers.length,
       answerYes: self.answerYes,
       answerNo: self.answerNo
     }, CardTemplates.quizMaster);

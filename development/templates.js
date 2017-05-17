@@ -1688,6 +1688,7 @@ module.exports = function(CardTemplates){
             "template": "quizQuestion",
             "mapping": [
               ["question", "currentQuestion"],
+              ["subquestion", "currentSubquestion"],
               ["answered", "currentQuestionAnswered"],
               ["yesAnswered","currentQuestionYes"],
               ["noAnswered","currentQuestionNo"],
@@ -1730,7 +1731,11 @@ module.exports = function(CardTemplates){
               },
               {
                 "template": "quizSubquestion",
-                "condition": "answered"
+                "condition": "answered",
+                "mapping": [
+                  ["subanswers","subquestion"],
+                  ["answered","answered"]
+                ]
               }
             ]
           }
@@ -1763,7 +1768,18 @@ module.exports = function(CardTemplates){
   }
   CardTemplates.quizSubquestion = {
     "dom": ".quizSubquestion",
-    "content": "Subquestion..."
+    "content": [
+      {
+        "loop": "subanswers",
+        "content": [{"template": "quizSubquestionAnswer"}]
+      }
+    ]
+  }
+  CardTemplates.quizSubquestionAnswer = {
+    "dom": ".quizSubquestionAnswer",
+    "content": {
+      "var": "label"
+    }
   }
   CardTemplates.quizPercentages = {
     "dom": "div",
