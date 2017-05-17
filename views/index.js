@@ -1440,9 +1440,37 @@ class Quiz {
     }
     self.skip = function(){
       //TODO: not sure what to push if you skip the subquestion!
-      model.user.quizProgress.opinions.push(null/*<--- no sure*/);
+      model.user.quizProgress.opinions.push(null/*<--- not sure*/);
       self.next();
     }
+    //TODO: this is a sample data
+    self.partiesChartData = [
+      {
+        color: "red",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: (Math.random()*100)+"%"
+      },
+      {
+        color: "green",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: (Math.random()*100)+"%"
+      },
+      {
+        color: "blue",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: (Math.random()*100)+"%"
+      },
+      {
+        color: "purple",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: (Math.random()*100)+"%"
+      },
+      {
+        color: "orange",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: (Math.random()*100)+"%"
+      },
+    ];
   }
   render(){
     const self = this;
@@ -1466,6 +1494,7 @@ class Quiz {
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
+      partiesChartData: self.partiesChartData
     }, CardTemplates.quizMaster);
   }
 }

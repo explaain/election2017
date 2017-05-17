@@ -1699,7 +1699,7 @@ module.exports = function(CardTemplates){
           {
             "template": "quizPercentages",
             "mapping": [
-              ["progress", "progress"]
+              ["data", "partiesChartData"]
             ]
           }
         ]
@@ -1828,6 +1828,60 @@ module.exports = function(CardTemplates){
   }
   CardTemplates.quizPercentages = {
     "dom": "div",
-    "content": "Percentages..."
+    "content": [
+      {
+        "dom": ".card",
+        "content": [
+          {
+            "dom": ".card-visible.text-center",
+            "content": [
+              {
+                "dom": ".quizPercentages",
+                "content": [
+                  {
+                    "loop": "data",
+                    "content": [{"template": "quizPercentagesParty"}]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  CardTemplates.quizPercentagesParty = {
+    "dom": ".quizPercentagesParty",
+    "content": [
+      {
+        "dom": ".quizPercentagesPartyPodium",
+        "attr": {
+          "style": {
+            "height": {
+              "var": "percentage"
+            },
+            "background-color": {
+              "var": "color"
+            },
+          }
+        }
+      },
+      {
+        "dom": ".quizPercentagesPartyFace",
+        "attr": {
+          "style": {
+            "bottom": {
+              "var": "percentage"
+            },
+            "background-image": {
+              "var": "photo"
+            },
+            "background-color": {
+              "var": "color"
+            },
+          }
+        }
+      }
+    ]
   }
 }
