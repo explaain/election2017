@@ -1162,3 +1162,34 @@ footer {
   margin-top: 10px;
   display: none;
 }
+
+/* Quiz for 18 May 2017 */
+
+.quizAnswersYesNo {
+  margin-top:20px;
+  text-align: center;
+}
+
+.quizAnswerYesNo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 3px grey;
+  border-radius: 6px;
+  font-size:24px;
+  height:80px;
+  width:115px;
+  line-height: 24px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+.quizAnswerYesNo.no {
+  border-color: red;
+  color: red;
+}
+
+.quizAnswerYesNo.yes {
+  border-color: green;
+  color: green;
+}

@@ -1675,24 +1675,30 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": [
       {
-        "template": "quizProgress",
-        "mapping": [
-          ["progressBarTotal", "progressBarTotal"],
-          ["progressBarStatus", "progressBarStatus"]
-        ]
-      },
-      {
-        "template": "quizQuestion",
-        "mapping": [
-          ["question", "currentQuestion"],
-          ["yesAnswered","currentQuestionYes"],
-          ["noAnswered","currentQuestionNo"]
-        ]
-      },
-      {
-        "template": "quizPercentages",
-        "mapping": [
-          ["progress", "progress"]
+        "dom": "section.step",
+        "content": [
+          {
+            "template": "quizProgress",
+            "mapping": [
+              ["progressBarTotal", "progressBarTotal"],
+              ["progressBarStatus", "progressBarStatus"]
+            ]
+          },
+          {
+            "template": "quizQuestion",
+            "mapping": [
+              ["question", "currentQuestion"],
+              ["answered", "currentQuestionAnswered"],
+              ["yesAnswered","currentQuestionYes"],
+              ["noAnswered","currentQuestionNo"]
+            ]
+          },
+          {
+            "template": "quizPercentages",
+            "mapping": [
+              ["progress", "progress"]
+            ]
+          }
         ]
       }
     ]
@@ -1705,25 +1711,37 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": [
       {
-        "dom": "section.step",
+        "dom": ".card",
         "content": [
           {
-            "dom": ".card",
+            "dom": ".card-visible",
             "content": [
               {
-                "dom": ".card-visible",
-                "content": [
-                  {
-                    "dom": "h2",
-                    "content": {
-                      "var": "question.question"
-                    }
-                  }
-                ]
+                "dom": "h2",
+                "content": {
+                  "var": "question.question"
+                }
+              },
+              {
+                "template": "quizQuestionYesNo",
+                "condition": "!answered"
               }
             ]
           }
         ]
+      }
+    ]
+  }
+  CardTemplates.quizQuestionYesNo = {
+    "dom": ".quizAnswersYesNo",
+    "content": [
+      {
+        "dom": ".quizAnswerYesNo.no",
+        "content": "No"
+      },
+      {
+        "dom": ".quizAnswerYesNo.yes",
+        "content": "Yes"
       }
     ]
   }

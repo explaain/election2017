@@ -807,6 +807,7 @@ class Step {
     } else {
       return helpers.assembleCards({
         currentQuestion: quizQuestions[model.user.quizProgress.opinions.length],
+        currentQuestionAnswered: model.user.quizProgress.answers[model.user.quizProgress.opinions.length],
         currentQuestionYes: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="yes",
         currentQuestionNo: model.user.quizProgress.answers[model.user.quizProgress.opinions.length]==="no",
         progressBarTotal: quizQuestions.length,
