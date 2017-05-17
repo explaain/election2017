@@ -1182,6 +1182,7 @@ footer {
   line-height: 24px;
   font-weight: bold;
   margin: 5px;
+  cursor: pointer;
 }
 
 .quizAnswerYesNo.no {
@@ -1189,9 +1190,28 @@ footer {
   color: red;
 }
 
+.quizAnswerYesNo.no:hover {
+  color: white;
+  background-color: red;
+}
+
 .quizAnswerYesNo.yes {
   border-color: green;
   color: green;
+}
+
+.quizAnswerYesNo.yes:hover {
+  color: white;
+  background-color: green;
+}
+
+.quizSubquestionLabel {
+  display: inline-block;
+  background-color: gray;
+  color: white;
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin: 20px 0;
 }
 
 .quizSubquestionAnswer {
@@ -1209,4 +1229,26 @@ footer {
   text-decoration: none;
   border-radius: 10px;
   border: solid 3px #00a2e5;
+  cursor: pointer
+}
+
+.quizSubquestionAnswer:hover {
+  color: white;
+  background-color: #00a2e5;
+}
+
+.quizSubquestionSkip {
+  display: inline-block;
+  font-size:20px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #dd2569;
+  color: white;
+  border-radius:6px;
+  margin: 20px 0;
+  cursor: pointer;
+}
+
+.quizSubquestionSkip:hover {
+  background-color: #cd1559;
 }

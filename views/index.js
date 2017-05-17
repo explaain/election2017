@@ -1424,26 +1424,48 @@ function getResults(resultsType){
 class Quiz {
   constructor(){
     const self = this;
+    self.next = function(){
+      if(model.user.quizProgress.opinions.length<quizQuestions.length){
+        self.refresh();
+      } else {
+        //TODO: Jeremy, you might want to change this :)
+        routes.step({ name: 'result', type: 'result' }).push();
+      }
+    }
     self.answerYes = function(){self.answer("yes")}
     self.answerNo = function(){self.answer("no")}
     self.answer = function(answer){
       model.user.quizProgress.answers.push(answer);
-      self.refresh();
+      self.next();
+    }
+    self.skip = function(){
+      //TODO: not sure what to push if you skip the subquestion!
+      model.user.quizProgress.opinions.push(null/*<--- no sure*/);
+      self.next();
     }
   }
   render(){
     const self = this;
     const qp = model.user.quizProgress;
+    const subquestions = quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]];
+    if(subquestions){
+      subquestions.forEach(function(subanswer){
+        subanswer.answer = function(){
+          model.user.quizProgress.opinions.push(subanswer.opinion);
+          self.next();
+        }
+      })
+    }
     return helpers.assembleCards({
       currentQuestion: quizQuestions[qp.opinions.length],
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
       currentQuestionNo: qp.answers[qp.opinions.length]==="no",
       currentSubquestion: quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]],
-      progressBarTotal: quizQuestions.length,
-      progressBarStatus: qp.answers.length,
+      progressBarWidth: ((qp.opinions.length/quizQuestions.length)*100) + "%",
       answerYes: self.answerYes,
-      answerNo: self.answerNo
+      answerNo: self.answerNo,
+      skipSubquestion: self.skip,
     }, CardTemplates.quizMaster);
   }
 }

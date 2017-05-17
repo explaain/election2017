@@ -1680,8 +1680,7 @@ module.exports = function(CardTemplates){
           {
             "template": "quizProgress",
             "mapping": [
-              ["progressBarTotal", "progressBarTotal"],
-              ["progressBarStatus", "progressBarStatus"]
+              ["progressBarWidth", "progressBarWidth"]
             ]
           },
           {
@@ -1693,7 +1692,8 @@ module.exports = function(CardTemplates){
               ["yesAnswered","currentQuestionYes"],
               ["noAnswered","currentQuestionNo"],
               ["answerYes","answerYes"],
-              ["answerNo","answerNo"]
+              ["answerNo","answerNo"],
+              ["skip", "skipSubquestion"]
             ]
           },
           {
@@ -1708,7 +1708,23 @@ module.exports = function(CardTemplates){
   }
   CardTemplates.quizProgress = {
     "dom": "div",
-    "content": "Progress..."
+    "content": [
+      {
+        "dom":".progress",
+        "content": [
+          {
+            "dom": ".progress-inner",
+            "attr": {
+              "style": {
+                "width": {
+                  "var": "progressBarWidth"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
   }
   CardTemplates.quizQuestion = {
     "dom": "div",
@@ -1717,7 +1733,7 @@ module.exports = function(CardTemplates){
         "dom": ".card",
         "content": [
           {
-            "dom": ".card-visible",
+            "dom": ".card-visible.text-center",
             "content": [
               {
                 "dom": "h2",
@@ -1730,11 +1746,22 @@ module.exports = function(CardTemplates){
                 "condition": "!answered"
               },
               {
+                "dom": ".quizSubquestionLabel",
+                "condition": "yesAnswered",
+                "content": "Yes"
+              },
+              {
+                "dom": ".quizSubquestionLabel",
+                "condition": "noAnswered",
+                "content": "No"
+              },
+              {
                 "template": "quizSubquestion",
                 "condition": "answered",
                 "mapping": [
                   ["subanswers","subquestion"],
-                  ["answered","answered"]
+                  ["answered","answered"],
+                  ["skip","skip"]
                 ]
               }
             ]
@@ -1772,6 +1799,19 @@ module.exports = function(CardTemplates){
       {
         "loop": "subanswers",
         "content": [{"template": "quizSubquestionAnswer"}]
+      },
+      {
+        "dom": ".quizSubquestionOr",
+        "content": "or"
+      },
+      {
+        "dom": ".quizSubquestionSkip",
+        "content": "Next Question >",
+        "attr": {
+          "onclick": {
+            "var": "skip"
+          }
+        }
       }
     ]
   }
@@ -1779,6 +1819,11 @@ module.exports = function(CardTemplates){
     "dom": ".quizSubquestionAnswer",
     "content": {
       "var": "label"
+    },
+    "attr": {
+      "onclick": {
+        "var": "answer"
+      }
     }
   }
   CardTemplates.quizPercentages = {
