@@ -28,7 +28,8 @@ module.exports = {
     resultsCompare: [],
     resultsOptions: [],
     quizFlow: [],
-    isWaiting: false
+    isWaiting: false,
+    quizProgress: []
   },
 
   selectedPhrases: [
@@ -1044,6 +1045,8 @@ module.exports = {
     },
     policy: {
       label: "Privacy Policy"
+    },
+    quiz: {
     }
   },
 

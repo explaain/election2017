@@ -29,6 +29,7 @@ const routes = {
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
+  quiz: router.route('/quiz'),
   policy: router.route('/policy')
 };
 
@@ -199,6 +200,14 @@ class App {
             }),
 
             routes.policy(function (params) {
+              var params = {
+                name: StepName
+              }
+              var step = new Step(params);
+              return h('div',step);
+            }),
+
+            routes.quiz(function (params) {
               var params = {
                 name: StepName
               }
@@ -582,6 +591,9 @@ class Step {
 
     switch (params.name) {
 
+      case 'quiz':
+        break;
+
       case 'postcode':
         model.landedOnPostcode = 1; // todo: temporary, refactor
         model.showProgressBar = true;
@@ -787,10 +799,18 @@ class Step {
 
   render() {
     const self = this;
-    return h("section.step",
-      (self.error?h('p.error', self.error):null),
-      h("div.cards",self.headers,self.cardGroups)
-    )
+    if(self.params.name!=="quiz"){ // Sorry, but the Quiz layout is a bit unique
+      return h("section.step",
+        (self.error?h('p.error', self.error):null),
+        h("div.cards",self.headers,self.cardGroups)
+      )
+    } else {
+      return helpers.assembleCards({
+        quizQuestions:quizQuestions,
+        progress: model.user.quizProgress
+      }, CardTemplates.quizMaster);
+    }
+
   }
 }
 

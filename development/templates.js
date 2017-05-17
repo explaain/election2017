@@ -1671,4 +1671,16 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+  CardTemplates.quizMaster = {
+    "dom": "div",
+    "content": "Quiz Master..."
+  }
+  CardTemplates.quizQuestions = {
+    "dom": "div",
+    "content": "Questions..."
+  }
+  CardTemplates.quizPercentages = {
+    "dom": "div",
+    "content": "Percentages..."
+  }
 }
