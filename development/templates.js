@@ -1675,24 +1675,34 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": [
       {
+        "template": "quizProgress",
+        "mapping": [
+          ["progress", "progress"]
+        ]
+      },
+      {
         "template": "quizQuestions",
         "mapping": [
           ["questions", "questions"]
         ]
       },
       {
-        "template": "quizProgress",
+        "template": "quizPercentages",
         "mapping": [
           ["progress", "progress"]
         ]
       }
     ]
   }
+  CardTemplates.quizProgress = {
+    "dom": "div",
+    "content": "Progress..."
+  }
   CardTemplates.quizQuestions = {
     "dom": "div",
     "content": "Questions..."
   }
-  CardTemplates.quizProgress = {
+  CardTemplates.quizPercentages = {
     "dom": "div",
     "content": "Percentages..."
   }
