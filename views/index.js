@@ -1674,47 +1674,6 @@ class Quiz {
         name: "Lib Dem"
       },
     ];
-// <<<<<<< HEAD
-//     // this is for real data
-//     self.partiesChartData = [
-//       {
-//         color: "red",
-//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-//         percentage: "0%",
-//         key: "labour",
-//         name: "Lab"
-//       },
-//       {
-//         color: "green",
-//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-//         percentage: "0%",
-//         key: "green",
-//         name: "Green"
-//       },
-//       {
-//         color: "blue",
-//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-//         percentage: "50%",
-//         key: "conservative",
-//         name: "Con"
-//       },
-//       {
-//         color: "purple",
-//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-//         percentage: "0%",
-//         key: "ukip",
-//         name: "Ukip"
-//       },
-//       {
-//         color: "orange",
-//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-//         percentage: "0%",
-//         key: "lib-dem",
-//         name: "Lib Dem"
-//       },
-//     ];
-// =======
-// >>>>>>> a4b92727103545a6bfdd0984c6e5129b8d820248
   }
   render(){
     const self = this;
