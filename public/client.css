@@ -1324,13 +1324,13 @@ footer {
 }
 
 .quizPercentagesPartyPodium{
-  -webkit-transition: height .2s;
-  transition: height .2s;
+  -webkit-transition: height .4s;
+  transition: height .4s;
 }
 
 .quizPercentagesPartyFace{
-  -webkit-transition: bottom .2s;
-  transition: bottom .2s;
+  -webkit-transition: bottom .4s;
+  transition: bottom .4s;
 }
 
 .quizPop {

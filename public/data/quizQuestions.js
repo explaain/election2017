@@ -29,8 +29,8 @@ var quizQuestions = [
   },
   {
     question: "Do you like the second question?",
-    issue: "brexit",
-    debate: "brexit-2",
+    issue: "economy",
+    debate: "economy-1",
     answers: {
       yes: [
         {

@@ -169,7 +169,6 @@ class App {
               }
 
               function beginPhraseChoosing() {
-                console.log('beginning');
                 if (!self.choosingPhrases) {
                   self.choosingPhrases = true;
                   $('div.body-content').removeClass('hoverClick');
@@ -177,7 +176,6 @@ class App {
                   $('div.body-content div.help').addClass('choosingPhrases');
                   self.refresh();
                 }
-                console.log(self.choosingPhrases);
               }
 
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
@@ -374,7 +372,6 @@ class PhraseSelect {
 
     function submitPhrase(eventValue) {
       const value = JSON.parse(eventValue)
-      console.log(value);
       $('.phrase-button').removeClass('popup');
       setTimeout(function() {
         $('.phrase-button').addClass('popup');
@@ -382,7 +379,6 @@ class PhraseSelect {
       if (value.dataUpdates) {
         helpers.updateData([value.dataUpdates]);
       }
-      console.log(self.phrase);
       if(value.goto) {
         routes[value.goto.type](value.goto).push()
       } else {
@@ -616,9 +612,7 @@ class Step {
 
         var quizTopicsLower = [], quizTopicsHigher = [];
         Object.keys(model.user.opinions.issues).forEach(function(issueName){
-          console.log(issueName);
           let issue = model.tasks['issue-' + issueName];
-          console.log(issue);
           if(~model.featuredTopics.indexOf(issueName)){
             issue.highPriority = true;
             quizTopicsHigher.push(issue);
@@ -677,8 +671,6 @@ class Step {
         model.landedOnResult = 1; // todo: temporary, refactor
         model.showProgressBar = false;
         var resultCards = model.user.results[model.user.results.length-1] ? model.user.results[model.user.results.length-1] : [[{name: 'hi', description: 'yo'}]];
-        console.log('resultCards');
-        console.log(resultCards);
         resultCards.forEach(function(cards){
           data.cardGroups.push(cards);
         });
@@ -711,7 +703,6 @@ class Step {
         model.user.quizFlow.forEach(function(quiz){
           quizFlow = quizFlow.concat(quiz);
         })
-        console.log(params);
         const questionName = params.nextQuestion?params.nextQuestion:quizFlow[0];
         model.question = questionName;
         const question = model.questions[questionName];
@@ -722,8 +713,6 @@ class Step {
           nextQuestion = null;
         }
         var finalStep;
-        console.log(params);
-        console.log(model.tasks);
         if(model.tasks[params.task].goto.final){
           finalStep = model.tasks[params.task].goto.final;
         } else {
@@ -753,7 +742,6 @@ class Step {
 
     }
     this.cardGroups = data.cardGroups.map(function(cards){
-      console.log(cards)
       cards.forEach(function(card, i) {
         if (typeof card !== 'string') {
           if(!cards[i].nextStep){
@@ -924,10 +912,8 @@ class CardContent {
         data.description = "";
         model.landedOnResult = 1;
         model.user.isWaiting = "goToResults";
-        console.log('1234567890')
         self.refresh();
         getResults(self.resultsType).then(function(){
-          console.log('szfdgfhgjhklj')
           delete model.user.isWaiting;
           routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
         });
@@ -935,8 +921,6 @@ class CardContent {
 
       case 'postcode':
         if (postcodeAlreadyEntered) {
-          console.log('postcodeAlreadyEntered')
-          console.log(postcodeAlreadyEntered)
           //Doesn't ask for postcode again
           data.name = "Loading your results...";
           data.description = "";
@@ -1314,7 +1298,6 @@ function getResults(resultsType){
           break;
 
         case 'localCandidates':
-          console.log(2)
           shareButtonCard = [];
           extraCards = [];
 
@@ -1338,7 +1321,6 @@ function getResults(resultsType){
         case 'getRegistered':
           shareButtonCard = [];
           extraCards = [];
-          console.log('hiii')
           mainResults = function() {
             var data = [{
               type: 'Detail',
@@ -1449,7 +1431,7 @@ class Quiz {
     self.submitOpinion = function(opinion) {
       model.user.quizProgress.opinions.push(opinion);
       const qp = model.user.quizProgress;
-      if (quizQuestions && qp && quizQuestions[qp.opinions.length]) { //Maybe this isn't a proper fix?
+      if (quizQuestions && qp && quizQuestions[qp.opinions.length-1]) { //Maybe this isn't a proper fix?
         var issue = quizQuestions[qp.opinions.length-1].issue;
         var debate = quizQuestions[qp.opinions.length-1].debate;
         model.user.opinions.issues = model.user.opinions.issues || {};
@@ -1460,8 +1442,6 @@ class Quiz {
         // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
       }
       model.parties = partyStances;
-      console.log('api.getPartyMatches(model)')
-      console.log(api.getPartyMatches(model))
       var partyMatches = api.getPartyMatches(model);
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
@@ -1470,7 +1450,6 @@ class Quiz {
           percentage: parseInt(party.match*100)
         }
       });
-      console.log(newScores);
       self.updatePartyPercentages(newScores);
       self.updatePartyPercentages([{key: "labour",percentage: 50}])
       self.next();
