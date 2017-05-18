@@ -1680,12 +1680,40 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom":"div",
-            "content": "click to start quiz",
-            "attr": {
-              "onclick": {
-                "var": "startQuiz"
+            "content": [
+              {
+                "dom": ".card",
+                "content": [
+                  {
+                    "dom": ".card-visible.text-center",
+                    "content": [
+                      {
+                        "dom": "h1",
+                        "content": "Hello there"
+                      },
+                      {
+                        "dom": "p",
+                        "content": "Paragraph of text"
+                      },
+                      {
+                        "template": "quizPercentages",
+                        "mapping": [
+                          ["data", "partiesRandomChartData"]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }, {
+                "dom": ".startQuiz",
+                "content": "Find your match >",
+                "attr": {
+                  "onclick": {
+                    "var": "startQuiz"
+                  }
+                }
               }
-            }
+            ]
           }
         ]
       },
@@ -1714,7 +1742,7 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "template": "quizPercentages",
+            "template": "quizPercentagesWrapper",
             "mapping": [
               ["data", "partiesChartData"]
             ]
@@ -1851,7 +1879,7 @@ module.exports = function(CardTemplates){
       }
     }
   }
-  CardTemplates.quizPercentages = {
+  CardTemplates.quizPercentagesWrapper = {
     "dom": "div",
     "content": [
       {
@@ -1861,17 +1889,20 @@ module.exports = function(CardTemplates){
             "dom": ".card-visible.text-center",
             "content": [
               {
-                "dom": ".quizPercentages",
-                "content": [
-                  {
-                    "loop": "data",
-                    "content": [{"template": "quizPercentagesParty"}]
-                  }
-                ]
+                "template": "quizPercentages"
               }
             ]
           }
         ]
+      }
+    ]
+  }
+  CardTemplates.quizPercentages = {
+    "dom": ".quizPercentages",
+    "content": [
+      {
+        "loop": "data",
+        "content": [{"template": "quizPercentagesParty"}]
       }
     ]
   }

@@ -1424,6 +1424,7 @@ function getResults(resultsType){
 class Quiz {
   constructor(){
     const self = this;
+    self.quizStarted = model.user.quizProgress.quizStarted;
     self.quizResults = model.user.quizProgress.quizRezults;
     self.next = function(){
       if(model.user.quizProgress.opinions.length<quizQuestions.length){
@@ -1433,6 +1434,13 @@ class Quiz {
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
         // routes.step({ name: 'result', type: 'result' }).push();
+      }
+    }
+    self.launchRandomRefresh = function(){
+      if(!self.quizStarted){
+        setTimeout(function(){
+          self.refresh();
+        },1000);
       }
     }
     self.answerYes = function(){self.answer("yes")}
@@ -1453,8 +1461,8 @@ class Quiz {
       model.user.quizProgress.quizStarted = true;
       self.next();
     }
-    //TODO: this is a sample data
-    self.partiesChartData = [
+    // this is for random data
+    self.partiesRandomChartData = [
       {
         color: "red",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
@@ -1486,9 +1494,43 @@ class Quiz {
         name: "Lib Dem"
       },
     ];
+    // this is for real data
+    self.partiesChartData = [
+      {
+        color: "red",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: "0%",
+        name: "Lab"
+      },
+      {
+        color: "green",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: "0%",
+        name: "Green"
+      },
+      {
+        color: "blue",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: "0%",
+        name: "Con"
+      },
+      {
+        color: "purple",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: "0%",
+        name: "Ukip"
+      },
+      {
+        color: "orange",
+        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+        percentage: "0%",
+        name: "Lib Dem"
+      },
+    ];
   }
   render(){
     const self = this;
+    self.launchRandomRefresh();
     const qp = model.user.quizProgress;
     console.log('self.quizResults');
     console.log(self.quizResults);
@@ -1514,7 +1556,8 @@ class Quiz {
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
       partiesChartData: self.partiesChartData,
-      quizStarted: qp.quizStarted,
+      partiesRandomChartData: self.partiesRandomChartData,
+      quizStarted: self.quizStarted,
       startQuiz: self.startQuiz,
     }, CardTemplates.quizMaster);
   }
