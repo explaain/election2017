@@ -1767,7 +1767,7 @@ module.exports = function(CardTemplates){
             "mapping": [
               ["quizResults", "quizResults"]
             ]
-          },
+          }/*,
           {
             "template": "quizCountrySelector",
             "condition": "!quizResults",
@@ -1777,7 +1777,7 @@ module.exports = function(CardTemplates){
               ["selected", "countrySelected"],
               ["quizResults","quizResults"]
             ]
-          }
+          }*/
         ]
       }
     ]

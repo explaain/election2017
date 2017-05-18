@@ -1462,6 +1462,9 @@ class Quiz {
       helpers.updateModel('model.user.opinions.issues.' + issue + '.debates' + debate + '.opinion', subanswer.opinion);
       self.next();
     }
+    self.back = function(){
+      
+    }
     self.startQuiz = function(){
       trackEvent("Quiz Started",{type: "Quiz"});
       model.user.quizProgress.quizStarted = true;
