@@ -1467,9 +1467,6 @@ class Quiz {
       model.user.quizProgress.quizStarted = true;
       self.next();
     }
-    self.maybeAddMoreSymbol = function(text){
-      return text + " >";
-    }
     self.countriesData = [
       {
         label: "England",
@@ -1635,7 +1632,6 @@ class Quiz {
       startQuiz: self.startQuiz,
       countrySelected: self.countrySelected,
       countriesData: self.countriesData,
-      maybeAddMoreSymbol: self.maybeAddMoreSymbol,
       selectedCountry: self.selectedCountry,
     }, CardTemplates.quizMaster);
   }
