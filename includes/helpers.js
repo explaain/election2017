@@ -69,7 +69,6 @@ module.exports = class Helpers {
       content = '';
     // Loops
     else if (element.loop) {
-      console.log(element)
       content = self.getObjectPathProperty(params, element.loop).map(function(_params){return element.content.map(function(_element){return self.assembleCards(_params, _element);})});
     }
     // If content is Array - that means it contains children templates or other data

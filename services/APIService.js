@@ -376,6 +376,7 @@ APIService.prototype.getAgreements = function(data) {
   var agreementMatrix = {};
 
   var issues = data.user.opinions.issues;
+  console.log(issues);
   var issueKeys = Object.keys(issues);
   issueKeys.forEach(function(issueKey) {
     var issue = issues[issueKey];
@@ -405,6 +406,8 @@ APIService.prototype.getAgreements = function(data) {
 
     }
   })
+  console.log('agreementMatrix');
+  console.log(agreementMatrix);
   return agreementMatrix;
 }
 

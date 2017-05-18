@@ -1,7 +1,7 @@
 /* Sample data for Quiz for 18 May 2017 */
 var quizQuestions = [
   {
-    question: "Do you like the first question?",
+    question: "Do you agree with the UKs decision to leave the EU?",
     issue: "brexit",
     debate: "brexit-1",
     answers: {

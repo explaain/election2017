@@ -576,7 +576,6 @@ class Dashboard {
 
 class Step {
   constructor(params) {
-    console.log(params);
     const self = this;
     this.step = model.steps[params.name];
     this.error = model.user.error;
@@ -787,7 +786,6 @@ class Step {
 
   onload() {
     const self = this;
-    console.log(self);
     // todo: this might not be 100% stable, we should consider moving it
     setTimeout(function(){
       eventTrackerInitiator();
@@ -1354,19 +1352,15 @@ function getResults(resultsType){
         case 'learnResult':
           shareButtonCard = [];
           extraCards = [];
-          console.log('hiii1')
           mainResults = function() {
             return new CardGroup({cards: model.user.currentlyLearning, nextStep: 'result', stepParams: {}})
           }
           break;
 
         default:
-          console.log(10)
           break;
       }
 
-      console.log('mainResults');
-      console.log(mainResults);
       /* hack */
       var template;
       switch(resultsType){
@@ -1412,7 +1406,6 @@ function getResults(resultsType){
           }
         ]
       ]);
-      console.log('lalallala');
       setTimeout(function(){
         deferred.resolve();
       },500);
@@ -1453,19 +1446,35 @@ class Quiz {
       qp.answers.push(answer);
       self.next();
     }
+    self.submitOpinion = function(opinion) {
+      model.user.quizProgress.opinions.push(opinion);
+      const qp = model.user.quizProgress;
+      if (quizQuestions && qp && quizQuestions[qp.opinions.length]) { //Maybe this isn't a proper fix?
+        var issue = quizQuestions[qp.opinions.length-1].issue;
+        var debate = quizQuestions[qp.opinions.length-1].debate;
+        model.user.opinions.issues = model.user.opinions.issues || {};
+        model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
+        model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
+        model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
+        model.user.opinions.issues[issue].debates[debate].opinion = opinion;
+        // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
+      }
+      model.parties = partyStances;
+      console.log('api.getPartyMatches(model)')
+      console.log(api.getPartyMatches(model))
+      self.partiesChartData = self.partiesChartData.map(function(party) {
+        party.percentage = parseInt(api.getPartyMatches(model)[party.key].match*100)+'%';
+        console.log(party);
+        return party;
+      });
+      console.log(self.partiesChartData);
+      self.next();
+    }
     self.skip = function(){
       var answers = qp.answers;
       //This doesn't work if the answer hasn't been given yet
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
-      model.user.quizProgress.opinions.push(opinion);
-      var issue = quizQuestions[model.user.quizProgress.opinions.length-1].issue;
-      var debate = quizQuestions[model.user.quizProgress.opinions.length-1].debate;
-      model.user.opinions.issues = model.user.opinions.issues || {};
-      model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
-      model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
-      model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
-      model.user.opinions.issues[issue].debates[debate].opinion = opinion;
-      // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', opinion);
+      self.submitOpinion(opinion);
       self.next();
     }
     self.back = function(){
@@ -1585,30 +1594,35 @@ class Quiz {
         color: "red",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
         percentage: "0%",
+        key: "labour",
         name: "Lab"
       },
       {
         color: "green",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
         percentage: "0%",
+        key: "green",
         name: "Green"
       },
       {
         color: "blue",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
+        percentage: "50%",
+        key: "conservative",
         name: "Con"
       },
       {
         color: "purple",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
         percentage: "0%",
+        key: "ukip",
         name: "Ukip"
       },
       {
         color: "orange",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
         percentage: "0%",
+        key: "lib-dem",
         name: "Lib Dem"
       },
     ];
@@ -1621,18 +1635,7 @@ class Quiz {
     if(subquestions){
       subquestions.forEach(function(subanswer){
         subanswer.answer = function(){
-          model.user.quizProgress.opinions.push(subanswer.opinion);
-          if (quizQuestions && qp && quizQuestions[qp.opinions.length]) { //Maybe this isn't a proper fix?
-            var issue = quizQuestions[qp.opinions.length-1].issue;
-            var debate = quizQuestions[qp.opinions.length-1].debate;
-            model.user.opinions.issues = model.user.opinions.issues || {};
-            model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
-            model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
-            model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
-            model.user.opinions.issues[issue].debates[debate].opinion = subanswer.opinion;
-            // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
-          }
-          self.next();
+          self.submitOpinion(subanswer.opinion);
         }
       })
     }
