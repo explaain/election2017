@@ -1485,6 +1485,22 @@ class Quiz {
       qp.quizStarted = true;
       self.next();
     }
+    //NOTE: Jeremy, 'map' param is [{name:"Green", percentage: 10}, {name: "Con", percentage: 90}]
+    self.updatePartyPercentages = function(map){
+      if(qp.country){
+        map.forEach(function(party){
+          qp.country.parties.forEach(function(_party){
+            if(party.name===_party.name){
+              _party.percentage = party.percentage + "%";
+            }
+          })
+
+        })
+      }
+    }
+    //self.updatePartyPercentages([{name: "Con",percentage: 50}]) <-- THIS IS EXAMPLE!!
+    self.partiesChartData = qp.country?qp.country.parties:[];
+
     self.countriesData = [
       {
         label: "England",
@@ -1493,14 +1509,17 @@ class Quiz {
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con"
           }
         ]
       },
@@ -1511,14 +1530,17 @@ class Quiz {
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con"
           }
         ]
       },
@@ -1529,14 +1551,17 @@ class Quiz {
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con"
           }
         ]
       }
@@ -1574,39 +1599,6 @@ class Quiz {
         name: "Lib Dem"
       },
     ];
-    // this is for real data
-    self.partiesChartData = [
-      {
-        color: "red",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        name: "Lab"
-      },
-      {
-        color: "green",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        name: "Green"
-      },
-      {
-        color: "blue",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        name: "Con"
-      },
-      {
-        color: "purple",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        name: "Ukip"
-      },
-      {
-        color: "orange",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        name: "Lib Dem"
-      },
-    ];
   }
   render(){
     const self = this;
@@ -1629,7 +1621,10 @@ class Quiz {
     self.countriesData.forEach(function(country){
       country.select = function(){
         trackEvent("Country Selected",{type: "Quiz", code: country.code});
-        model.user.quizProgress.country = country; // we set the whole country object here
+        qp.country = country; // we set the whole country object here
+        qp.country.parties.forEach(function(party){
+          party.percentage = "0%";
+        })
         self.next();
       }
     })
