@@ -1462,12 +1462,17 @@ class Quiz {
       model.parties = partyStances;
       console.log('api.getPartyMatches(model)')
       console.log(api.getPartyMatches(model))
-      self.partiesChartData = self.partiesChartData.map(function(party) {
-        party.percentage = parseInt(api.getPartyMatches(model)[party.key].match*100)+'%';
-        console.log(party);
-        return party;
+      var partyMatches = api.getPartyMatches(model);
+      var newScores = Object.keys(partyMatches).map(function(partyKey) {
+        var party = partyMatches[partyKey];
+        return {
+          key: partyKey,
+          percentage: parseInt(party.match*100)
+        }
       });
-      console.log(self.partiesChartData);
+      console.log(newScores);
+      self.updatePartyPercentages(newScores);
+      self.updatePartyPercentages([{key: "labour",percentage: 50}])
       self.next();
     }
     self.skip = function(){
@@ -1499,23 +1504,56 @@ class Quiz {
       qp.quizStarted = true;
       self.next();
     }
+    //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
+    self.updatePartyPercentages = function(map){
+      if(qp.country){
+        map.forEach(function(party){
+          qp.country.parties.forEach(function(_party){
+            if(party.key===_party.key){
+              _party.percentage = party.percentage + "%";
+            }
+          })
+        })
+      }
+    }
+    //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
+    self.partiesChartData = qp.country?qp.country.parties:[];
+
     self.countriesData = [
       {
         label: "England",
         code: "england",
         parties: [
           {
-            color: "red",
+            color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con",
+            key: "conservative"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab",
+            key: "labour"
           },
           {
-            color: "red",
+            color: "orange",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-          }
+            name: "Lib Dem",
+            key: "lib-dem"
+          },
+          {
+            color: "purple",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Ukip",
+            key: "ukip"
+          },
+          {
+            color: "green",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green",
+            key: "green"
+          },
         ]
       },
       {
@@ -1523,17 +1561,41 @@ class Quiz {
         code: "wales",
         parties: [
           {
-            color: "red",
+            color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con",
+            key: "conservative"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab",
+            key: "labour"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-          }
+            name: "Plaid",
+            key: "plaid-cymru"
+          },
+          {
+            color: "orange",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lib Dem",
+            key: "lib-dem"
+          },
+          {
+            color: "purple",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Ukip",
+            key: "ukip"
+          },
+          {
+            color: "green",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green",
+            key: "green"
+          },
         ]
       },
       {
@@ -1541,17 +1603,41 @@ class Quiz {
         code: "scotland",
         parties: [
           {
-            color: "red",
+            color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Con",
+            key: "conservative"
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lab",
+            key: "labour"
           },
           {
-            color: "red",
+            color: "yellow",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-          }
+            name: "SNP",
+            key: "snp"
+          },
+          {
+            color: "orange",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Lib Dem",
+            key: "lib-dem"
+          },
+          {
+            color: "purple",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Ukip",
+            key: "ukip"
+          },
+          {
+            color: "green",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            name: "Green",
+            key: "green"
+          },
         ]
       }
     ]
@@ -1588,44 +1674,47 @@ class Quiz {
         name: "Lib Dem"
       },
     ];
-    // this is for real data
-    self.partiesChartData = [
-      {
-        color: "red",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        key: "labour",
-        name: "Lab"
-      },
-      {
-        color: "green",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        key: "green",
-        name: "Green"
-      },
-      {
-        color: "blue",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "50%",
-        key: "conservative",
-        name: "Con"
-      },
-      {
-        color: "purple",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        key: "ukip",
-        name: "Ukip"
-      },
-      {
-        color: "orange",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: "0%",
-        key: "lib-dem",
-        name: "Lib Dem"
-      },
-    ];
+// <<<<<<< HEAD
+//     // this is for real data
+//     self.partiesChartData = [
+//       {
+//         color: "red",
+//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+//         percentage: "0%",
+//         key: "labour",
+//         name: "Lab"
+//       },
+//       {
+//         color: "green",
+//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+//         percentage: "0%",
+//         key: "green",
+//         name: "Green"
+//       },
+//       {
+//         color: "blue",
+//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+//         percentage: "50%",
+//         key: "conservative",
+//         name: "Con"
+//       },
+//       {
+//         color: "purple",
+//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+//         percentage: "0%",
+//         key: "ukip",
+//         name: "Ukip"
+//       },
+//       {
+//         color: "orange",
+//         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+//         percentage: "0%",
+//         key: "lib-dem",
+//         name: "Lib Dem"
+//       },
+//     ];
+// =======
+// >>>>>>> a4b92727103545a6bfdd0984c6e5129b8d820248
   }
   render(){
     const self = this;
@@ -1642,7 +1731,10 @@ class Quiz {
     self.countriesData.forEach(function(country){
       country.select = function(){
         trackEvent("Country Selected",{type: "Quiz", code: country.code});
-        model.user.quizProgress.country = country; // we set the whole country object here
+        qp.country = country; // we set the whole country object here
+        qp.country.parties.forEach(function(party){
+          party.percentage = "0%";
+        })
         self.next();
       }
     })

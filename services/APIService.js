@@ -360,7 +360,7 @@ APIService.prototype.getPartyMatches = function(data) {
           partyMatchesByIssue[partyKey].push(agreements[partyKey][issueKey][debateKey])
         });
       });
-      partyMatches[partyKey] = { matches: partyMatchesByIssue[partyKey], match: 0 };
+      partyMatches[partyKey] = { key: partyKey, matches: partyMatchesByIssue[partyKey], match: 0 };
       partyMatchesByIssue[partyKey].forEach(function(match) {
         partyMatches[partyKey].match += match.agreement*match.weight;
       })
