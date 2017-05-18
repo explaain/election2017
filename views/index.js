@@ -1432,6 +1432,7 @@ class Quiz {
       if(model.user.quizProgress.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
+        trackEvent("Results Got",{type: "Quiz"});
         model.user.quizProgress.quizRezults = true;
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
@@ -1462,6 +1463,7 @@ class Quiz {
       self.next();
     }
     self.startQuiz = function(){
+      trackEvent("Quiz Started",{type: "Quiz"});
       model.user.quizProgress.quizStarted = true;
       self.next();
     }
@@ -1611,6 +1613,7 @@ class Quiz {
     }
     self.countriesData.forEach(function(country){
       country.select = function(){
+        trackEvent("Country Selected",{type: "Quiz", code: country.code});
         model.user.quizProgress.country = country; // we set the whole country object here
         self.next();
       }

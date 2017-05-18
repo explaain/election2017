@@ -1972,6 +1972,9 @@ module.exports = function(CardTemplates){
             "attr": {
               "onclick": {
                 "var": "select"
+              },
+              "class": {
+                "var": "selected"
               }
             },
             "content": [
