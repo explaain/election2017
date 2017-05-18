@@ -180,9 +180,6 @@ module.exports = class Helpers {
     console.log('path, value, action')
     console.log(path, value, action)
     const self = this;
-    if (path.search("/user.opinions/")) {
-      self.model.user.opinions.issues = {};
-    }
     var schema = self.model;  // a moving reference to internal objects within model
     var pList = path.split('.');
     var len = pList.length;

@@ -1457,10 +1457,15 @@ class Quiz {
       var answers = qp.answers;
       //This doesn't work if the answer hasn't been given yet
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
-      qp.opinions.push(opinion);
-      var issue = quizQuestions[qp.opinions.length-1].issue;
-      var debate = quizQuestions[qp.opinions.length-1].debate;
-      helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', opinion);
+      model.user.quizProgress.opinions.push(opinion);
+      var issue = quizQuestions[model.user.quizProgress.opinions.length-1].issue;
+      var debate = quizQuestions[model.user.quizProgress.opinions.length-1].debate;
+      model.user.opinions.issues = model.user.opinions.issues || {};
+      model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
+      model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
+      model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
+      model.user.opinions.issues[issue].debates[debate].opinion = opinion;
+      // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', opinion);
       self.next();
     }
     self.back = function(){
@@ -1610,9 +1615,14 @@ class Quiz {
         subanswer.answer = function(){
           model.user.quizProgress.opinions.push(subanswer.opinion);
           if (quizQuestions && qp && quizQuestions[qp.opinions.length]) { //Maybe this isn't a proper fix?
-            var issue = quizQuestions[qp.opinions.length].issue;
-            var debate = quizQuestions[qp.opinions.length].debate;
-            helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
+            var issue = quizQuestions[qp.opinions.length-1].issue;
+            var debate = quizQuestions[qp.opinions.length-1].debate;
+            model.user.opinions.issues = model.user.opinions.issues || {};
+            model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
+            model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
+            model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
+            model.user.opinions.issues[issue].debates[debate].opinion = subanswer.opinion;
+            // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
           }
           self.next();
         }
