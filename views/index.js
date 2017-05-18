@@ -1424,12 +1424,12 @@ function getResults(resultsType){
 class Quiz {
   constructor(){
     const self = this;
-    self.quizResults = false;
+    self.quizResults = model.user.quizProgress.quizRezults;
     self.next = function(){
       if(model.user.quizProgress.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
-        self.quizResults = true;
+        model.user.quizProgress.quizRezults = true;
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
         // routes.step({ name: 'result', type: 'result' }).push();
@@ -1443,7 +1443,7 @@ class Quiz {
     }
     self.skip = function(){
       var answers = model.user.quizProgress.answers;
-      var opinion = answers[answers.length-1]=="yes" ? 0.75 : 0.25;
+      var opinion = answers[answers.length-1]==="yes" ? 0.75 : 0.25;
       model.user.quizProgress.opinions.push(opinion);
       //TODO: not sure what to push if you skip the subquestion!
       model.user.quizProgress.opinions.push(null/*<--- not sure*/);

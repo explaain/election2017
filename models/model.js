@@ -31,7 +31,8 @@ module.exports = {
     isWaiting: false,
     quizProgress: {
       answers: [],
-      opinions: []
+      opinions: [],
+      quizRezults: false
     }
   },
 
