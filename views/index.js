@@ -1457,9 +1457,9 @@ class Quiz {
       //This doesn't work if the answer hasn't been given yet
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
       model.user.quizProgress.opinions.push(opinion);
-      var issue = quizQuestions[model.user.quizProgress.opinions.length].issue;
-      var debate = quizQuestions[model.user.quizProgress.opinions.length].debate;
-      helpers.updateModel('model.user.opinions.issues.' + issue + '.debates' + debate + '.opinion', subanswer.opinion);
+      var issue = quizQuestions[model.user.quizProgress.opinions.length-1].issue;
+      var debate = quizQuestions[model.user.quizProgress.opinions.length-1].debate;
+      helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', opinion);
       self.next();
     }
     self.startQuiz = function(){
@@ -1605,7 +1605,7 @@ class Quiz {
           if (quizQuestions && qp && quizQuestions[qp.opinions.length]) { //Maybe this isn't a proper fix?
             var issue = quizQuestions[qp.opinions.length].issue;
             var debate = quizQuestions[qp.opinions.length].debate;
-            helpers.updateModel('model.user.opinions.issues.' + issue + '.debates' + debate + '.opinion', subanswer.opinion);
+            helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
           }
           self.next();
         }
