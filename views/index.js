@@ -1424,16 +1424,17 @@ function getResults(resultsType){
 class Quiz {
   constructor(){
     const self = this;
-    self.quizStarted = model.user.quizProgress.quizStarted;
-    self.quizResults = model.user.quizProgress.quizRezults;
-    self.selectedCountry = model.user.quizProgress.country;
+    const qp = model.user.quizProgress;
+    self.quizStarted = qp.quizStarted;
+    self.quizResults = qp.quizRezults;
+    self.selectedCountry = qp.country;
     self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
-      if(model.user.quizProgress.opinions.length<quizQuestions.length){
+      if(qp.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
         trackEvent("Results Got",{type: "Quiz"});
-        model.user.quizProgress.quizRezults = true;
+        qp.quizRezults = true;
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
         // routes.step({ name: 'result', type: 'result' }).push();
@@ -1449,25 +1450,39 @@ class Quiz {
     self.answerYes = function(){self.answer("yes")}
     self.answerNo = function(){self.answer("no")}
     self.answer = function(answer){
-      model.user.quizProgress.answers.push(answer);
+      qp.answers.push(answer);
       self.next();
     }
     self.skip = function(){
-      var answers = model.user.quizProgress.answers;
+      var answers = qp.answers;
       //This doesn't work if the answer hasn't been given yet
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
-      model.user.quizProgress.opinions.push(opinion);
-      var issue = quizQuestions[model.user.quizProgress.opinions.length-1].issue;
-      var debate = quizQuestions[model.user.quizProgress.opinions.length-1].debate;
+      qp.opinions.push(opinion);
+      var issue = quizQuestions[qp.opinions.length-1].issue;
+      var debate = quizQuestions[qp.opinions.length-1].debate;
       helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', opinion);
       self.next();
     }
     self.back = function(){
-      
+      if(qp.answers.length>0){
+        qp.quizRezults = false;
+        if(qp.opinions.length===qp.answers.length){
+          qp.opinions.pop();
+        } else {
+          qp.answers.pop();
+        }
+      } else {
+        if(self.countrySelected){
+          qp.country = null;
+        } else {
+          qp.quizStarted = false;
+        }
+      }
+      self.next();
     }
     self.startQuiz = function(){
       trackEvent("Quiz Started",{type: "Quiz"});
-      model.user.quizProgress.quizStarted = true;
+      qp.quizStarted = true;
       self.next();
     }
     self.countriesData = [
@@ -1636,6 +1651,7 @@ class Quiz {
       countrySelected: self.countrySelected,
       countriesData: self.countriesData,
       selectedCountry: self.selectedCountry,
+      back: self.back,
     }, CardTemplates.quizMaster);
   }
 }

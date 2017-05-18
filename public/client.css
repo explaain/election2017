@@ -1374,3 +1374,26 @@ footer {
 .quizCountrySelector:hover {
   background-color: #f1f1f1;
 }
+
+.quizBack {
+  float: left;
+  width:60px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.quizSkip {
+  float: right;
+  width:60px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.quizTopLine {
+  overflow: hidden;
+  margin-top:10px;
+}
+
+.quizTopLine .progress {
+  margin: 0 auto;
+}
