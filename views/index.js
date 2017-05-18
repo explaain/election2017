@@ -65,7 +65,7 @@ class App {
 
     } else {
 
-      return h('div.body' + (Standalone ? '.standalone' : ''),
+      return h('div.body' + (Standalone ? '.standalone' : '') + (Quiz ? '.quiz' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -229,12 +229,14 @@ class Header {
   }
   render() {
     const self = this;
+    var logoImg = Quiz ? "img/politicalanimal.png" : "/img/ge2017logobeta.png"
+    var logoClass = Quiz ? "politicalanimal-logo" : "ge2017-logo";
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
         " Home"
       ), self.logoRoute.a(
-        h("img.ge2017-logo", {"src": "/img/ge2017logobeta.png"})
+        h("img." + logoClass, {"src": logoImg})
       ),
       (new Progress())
     )
@@ -1402,6 +1404,7 @@ class Quiz {
     const qp = model.user.quizProgress;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
+    self.resultsData = qp.resultsData;
     self.selectedCountry = qp.country;
     self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
@@ -1466,9 +1469,9 @@ class Quiz {
           percentage: parseInt(party.match*100),
           newMatch: {
             question: quizQuestions[qp.opinions.length-1].question,
-            userOpinion: userOpinion, //TEXT!!!
+            userOpinion: userOpinion,
             partyOpinion: partyOpinion,
-            isMatch: userOpinion == partyOpinion //NOT WORKING
+            isMatch: userOpinion == partyOpinion
           }
         }
         console.log(newScore);
@@ -1504,19 +1507,32 @@ class Quiz {
     self.startQuiz = function(){
       trackEvent("Quiz Started",{type: "Quiz"});
       qp.quizStarted = true;
+      $('.body.quiz').addClass('moving');
       self.next();
     }
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
     self.updatePartyPercentages = function(map){
       if(qp.country){
+        var topParty = {percentage: 0}
         map.forEach(function(party){
           qp.country.parties.forEach(function(_party){
             if(party.key===_party.key){
-              _party.percentage = party.percentage + "%";
+              _party.percentage = parseInt(party.percentage) + "%";
+              // _party.percentageText = party.percentage + "%";
               _party.matches.push(party.newMatch);
+              if (party.percentage > topParty.percentage) {
+                topParty = party;
+              }
             }
           })
         })
+        qp.resultsData = {
+          logo: '/img/party-logos/'+topParty.key+'.png',
+          name: allParties.filter(function(party){return party.key==topParty.key})[0].name,
+          percentage: parseInt(topParty.percentage)+"%"
+        }
+        console.log('self.resultsData');
+        console.log(self.resultsData);
       }
       console.log('qp.country.parties');
       console.log(qp.country.parties);
@@ -1534,35 +1550,40 @@ class Quiz {
         parties: [
           {
             color: "blue",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/may.png",
+            fullName: "Conservative",
             name: "Con",
             key: "conservative",
             matches: []
           },
           {
             color: "red",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/corbyn.png",
+            fullName: "Labour",
             name: "Lab",
             key: "labour",
             matches: []
           },
           {
             color: "orange",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/farron.png",
+            fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
             matches: []
           },
           {
             color: "purple",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/nuttall.png",
+            fullName: "Ukip",
             name: "Ukip",
             key: "ukip",
             matches: []
           },
           {
             color: "green",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/lucas.png",
+            fullName: "Green",
             name: "Green",
             key: "green",
             matches: []
@@ -1575,42 +1596,48 @@ class Quiz {
         parties: [
           {
             color: "blue",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/may.png",
+            fullName: "Conservative",
             name: "Con",
             key: "conservative",
             matches: []
           },
           {
             color: "red",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/corbyn.png",
+            fullName: "Labour",
             name: "Lab",
             key: "labour",
             matches: []
           },
           {
-            color: "red",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            color: "#005500",
+            photo: "/img/leader-faces/wood.png",
+            fullName: "Plaid",
             name: "Plaid",
             key: "plaid-cymru",
             matches: []
           },
           {
             color: "orange",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/farron.png",
+            fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
             matches: []
           },
           {
             color: "purple",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/nuttall.png",
+            fullName: "Ukip",
             name: "Ukip",
             key: "ukip",
             matches: []
           },
           {
             color: "green",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/lucas.png",
+            fullName: "Green",
             name: "Green",
             key: "green",
             matches: []
@@ -1623,42 +1650,40 @@ class Quiz {
         parties: [
           {
             color: "blue",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/may.png",
+            fullName: "Conservative",
             name: "Con",
             key: "conservative",
             matches: []
           },
           {
             color: "red",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/corbyn.png",
+            fullName: "Labour",
             name: "Lab",
             key: "labour",
             matches: []
           },
           {
             color: "yellow",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/sturgeon.png",
+            fullName: "SNP",
             name: "SNP",
             key: "snp",
             matches: []
           },
           {
             color: "orange",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/farron.png",
+            fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
             matches: []
           },
           {
-            color: "purple",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-            name: "Ukip",
-            key: "ukip",
-            matches: []
-          },
-          {
             color: "green",
-            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+            photo: "/img/leader-faces/lucas.png",
+            fullName: "Green",
             name: "Green",
             key: "green",
             matches: []
@@ -1670,32 +1695,37 @@ class Quiz {
     self.partiesRandomChartData = [
       {
         color: "red",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%",
+        photo: "/img/leader-faces/corbyn.png",
+        percentage: parseInt((Math.random()*100))+"%",
+        fullName: "Labour",
         name: "Lab"
       },
       {
         color: "green",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%",
+        photo: "/img/leader-faces/wood.png",
+        percentage: parseInt((Math.random()*100))+"%",
+        fullName: "Green",
         name: "Green"
       },
       {
         color: "blue",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%",
+        photo: "/img/leader-faces/may.png",
+        percentage: parseInt((Math.random()*100))+"%",
+        fullName: "Conservative",
         name: "Con"
       },
       {
         color: "purple",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%",
+        photo: "/img/leader-faces/nuttall.png",
+        percentage: parseInt((Math.random()*100))+"%",
+        fullName: "Ukip",
         name: "Ukip"
       },
       {
         color: "orange",
-        photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%",
+        photo: "/img/leader-faces/farron.png",
+        percentage: parseInt((Math.random()*100))+"%",
+        fullName: "Liberal Democrats",
         name: "Lib Dem"
       },
     ];
@@ -1733,14 +1763,17 @@ class Quiz {
           qp.country = country; // we set the whole country object here
           qp.country.parties.forEach(function(party){
             party.percentage = "0%";
+            party.percentageText = "0%";
           })
-
           self.next();
         }
       })
     })
     return helpers.assembleCards({
       quizResults: self.quizResults,
+      resultLogo: self.resultsData.logo,
+      resultName: self.resultsData.name,
+      resultPercentage: self.resultsData.percentage,
       currentQuestion: quizQuestions[qp.opinions.length],
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",

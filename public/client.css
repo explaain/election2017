@@ -19,6 +19,10 @@ body > div.body {
   transition: background-color 1s;
 }
 
+body > div.body.quiz {
+  background: #f6f6f6;
+}
+
 h1, h2, h3, h4, h5, button.phrase-button {
   font-family: Lato, Helvetica, sans-serif;
 }
@@ -60,6 +64,18 @@ header img.ge2017-logo {
   height: 35px;
   margin: 10px auto;
   display: block;
+}
+header img.politicalanimal-logo {
+  text-align: center;
+  height: 170px;
+  margin: -10px auto -40px;
+  display: block;
+  transition: height .4s, margin .4s;
+  -webkit-transition: height .4s, margin .4s;
+}
+.body.moving header img.politicalanimal-logo {
+  height: 100px;
+  margin-bottom: 10px;
 }
 @media (max-width: 400px) {
   header img.ge2017-logo {
@@ -131,6 +147,10 @@ footer a.behind-this {
 
 footer {
   padding-bottom:20px;
+}
+
+.body.quiz footer {
+  display: none;
 }
 
 /* Because of social media panel and Share button */
@@ -665,6 +685,10 @@ section:not(.wide) .card section.card-media {
   background-position: center;
 }
 
+.body.quiz .top-strip {
+  display: none;
+}
+
 @media only screen and (max-width: 500px) {
   .top-strip {
     background-size: 100%;
@@ -1165,6 +1189,10 @@ footer {
 
 /* Quiz for 18 May 2017 */
 
+.card.quiz-percentages .content {
+  padding: 20px;
+}
+
 .quizAnswersYesNo {
   margin-top:20px;
   text-align: center;
@@ -1316,21 +1344,38 @@ footer {
 
 .quizPercentagesPartyFace.absolute {
   position: absolute;
+  background-size: 80%;
+  background-position: bottom;
 }
 
 .quizPercentagesPartyFace.inline {
   display: inline-block;
   margin: 10px 5px 0px 5px;
+  background-size: 80%;
+  background-position: bottom;
+}
+.quizPercentagesPartyPercent.absolute {
+  width:40px;
+  height: 40px;
+  left: calc((100% - 40px)/2);
+  border-radius: 100%;
+  z-index:2;
+  position: absolute;
+  margin-bottom: 30px;
 }
 
 .quizPercentagesPartyPodium{
-  -webkit-transition: height .4s;
-  transition: height .4s;
+  -webkit-transition: height .6s;
+  transition: height .6s;
 }
 
 .quizPercentagesPartyFace{
-  -webkit-transition: bottom .4s;
-  transition: bottom .4s;
+  -webkit-transition: bottom .6s;
+  transition: bottom .6s;
+}
+.quizPercentagesPartyPercent{
+  -webkit-transition: bottom .6s;
+  transition: bottom .6s;
 }
 
 .quizPop {
@@ -1380,6 +1425,7 @@ footer {
   width:60px;
   color: #ccc;
   cursor: pointer;
+  margin-top: -5px;
 }
 
 .quizSkip {
@@ -1387,6 +1433,8 @@ footer {
   width:60px;
   color: #ccc;
   cursor: pointer;
+  pointer-events: none;
+  opacity: 0;
 }
 
 .quizTopLine {
@@ -1396,4 +1444,19 @@ footer {
 
 .quizTopLine .progress {
   margin: 0 auto;
+}
+.quizTopLine .progress-inner {
+  background: #00909d;
+}
+.quizResults {
+  padding: 20px;
+}
+.quizResults img {
+  float: left;
+  width: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.quizResults p {
+  margin-top: 50px;
 }

@@ -34,7 +34,8 @@ module.exports = {
       opinions: [],
       quizRezults: false,
       quizStarted: false,
-      country: null
+      country: null,
+      resultsData: {}
     }
   },
 

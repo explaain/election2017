@@ -1677,16 +1677,16 @@ module.exports = function(CardTemplates){
       {
         "dom": ".quizTopLine",
         "content": [
-          // {
-          //   "dom": ".quizSkip",
-          //   "content": "Skip >",
-          //   //"condition": "quizStarted",
-          //   /*"attr": {
-          //     "onclick": {
-          //       "var": "skip"
-          //     }
-          //   }*/
-          // },
+          {
+            "dom": ".quizSkip",
+            "content": "Skip >",
+            //"condition": "quizStarted",
+            /*"attr": {
+              "onclick": {
+                "var": "skip"
+              }
+            }*/
+          },
           {
             "dom": ".quizBack",
             "content": "< Back",
@@ -1716,23 +1716,28 @@ module.exports = function(CardTemplates){
             "condition": "!quizStarted",
             "content": [
               {
-                "dom": ".card",
+                "dom": ".card.quiz-percentages",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
                     "content": [
                       {
-                        "dom": "h1",
-                        "content": "Hello there"
-                      },
-                      {
-                        "dom": "p",
-                        "content": "Paragraph of text"
-                      },
-                      {
-                        "template": "quizPercentages",
-                        "mapping": [
-                          ["data", "partiesRandomChartData"]
+                        "dom": ".content",
+                        "content": [
+                          {
+                            "dom": "h2",
+                            "content": "Where do you stand on these 12 ideas?"
+                          },
+                          {
+                            "dom": "p",
+                            "content": "See who you match with in real time as you give your views on the election's hottest topics. The results may surprise you…"
+                          },
+                          {
+                            "template": "quizPercentages",
+                            "mapping": [
+                              ["data", "partiesRandomChartData"]
+                            ]
+                          }
                         ]
                       }
                     ]
@@ -1754,10 +1759,19 @@ module.exports = function(CardTemplates){
           {
             "dom": "section.step",
             "condition": "quizStarted",
-            "loop": "countriesData",
             "content": [
               {
-                "template": "quizCountrySelector"
+                "dom": "h2",
+                "content": "Where are you voting from?"
+              },
+              {
+                "dom": "div",
+                "loop": "countriesData",
+                "content": [
+                  {
+                    "template": "quizCountrySelector"
+                  }
+                ]
               }
             ]
           }
@@ -1786,7 +1800,11 @@ module.exports = function(CardTemplates){
             "template": "quizPercentagesWrapper",
             "mapping": [
               ["data", "partiesChartData"],
-              ["openMatches", "openMatches"]
+              ["openMatches", "openMatches"],
+              ["quizResults", "quizResults"],
+              ["resultLogo", "resultLogo"],
+              ["resultName", "resultName"],
+              ["resultPercentage", "resultPercentage"]
             ]
           },
           {
@@ -1939,16 +1957,55 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizPercentages = {
-    "dom": ".quizPercentages",
+    "dom": "div",
     "content": [
       {
-        "loop": "data",
-        "content": [{"template": "quizPercentagesParty"}]
+        "dom": "div.quizResults",
+        "condition": "quizResults",
+        "content": [
+          {
+            "dom": "h3",
+            "content": "Your best match is:"
+          },
+          {
+            "dom": "img",
+            "attr": {
+              "src": {
+                "var": "resultLogo"
+              }
+            }
+          },
+          {
+            "dom": "h2",
+            "content": {
+              "var": "resultName"
+            }
+          },
+          {
+            "dom": "h2",
+            "content": {
+              "var": "resultPercentage"
+            }
+          },
+          {
+            "dom": "p",
+            "content": "Click on a party leader's face to see how you match with their party's views."
+          }
+        ]
+      },
+      {
+        "dom": ".quizPercentages",
+        "content": [
+          {
+            "loop": "data",
+            "content": [{"template": "quizPercentagesParty"}]
+          }
+        ]
       }
     ]
   }
   CardTemplates.quizPercentagesParty = {
-    "dom": "a.quizPercentagesParty",
+    "dom": "a.quizPercentagesParty.discard-card-style",
     "attr": {
       "onclick": {
         "var": "openMatches"
@@ -1982,6 +2039,20 @@ module.exports = function(CardTemplates){
               "var": "color"
             },
           }
+        }
+      },
+      {
+        "dom": ".quizPercentagesPartyPercent.absolute",
+        "condition": "quizResults",
+        "attr": {
+          "style": {
+            "bottom": {
+              "var": "percentage"
+            }
+          }
+        },
+        "content": {
+          "var": "percentage"
         }
       }
     ]
@@ -2054,10 +2125,14 @@ module.exports = function(CardTemplates){
             "content": [
               {
                 "dom": "h2",
-                "content": "Share"
+                "content": "Now, make sure you’re registered to vote"
               },
               {
                 "template": "registerButton"
+              },
+              {
+                "dom": "h3",
+                "content": "Challenge friends to see where they stand"
               },
               {
                 "template": "shareButtons"

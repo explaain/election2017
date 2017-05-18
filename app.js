@@ -53,27 +53,27 @@ app.use(function(req, res, next) {
 });
 
 app.get('/', function(req, res, next) {
-  res.render('index', { standalone: false, embed: false,  step: '' });
+  res.render('index', { standalone: false, embed: false,  step: '', quiz: false });
 });
 app.get('/students/', function(req, res, next) {
-  res.render('index', { standalone: true, embed: false, step: 'postcode-compare' });
+  res.render('index', { standalone: true, embed: false, step: 'postcode-compare', quiz: false });
 });
 //This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
 app.get('/student/', function(req, res, next) {
   res.redirect(301,"/students");
-  //res.render('/index', { standalone: true, embed: false, step: req.params.step });
+  //res.render('/index', { standalone: true, embed: false, step: req.params.step, quiz: false });
 });
 
 app.get('/embed/:step', function(req, res, next) {
-  res.render('index', { standalone: false, embed: true, step: req.params.step });
+  res.render('index', { standalone: false, embed: true, step: req.params.step, quiz: false });
 });
 
 app.get('/policy', function(req, res, next) {
-  res.render('index', { standalone: true, embed: false, step: 'policy' });
+  res.render('index', { standalone: true, embed: false, step: 'policy', quiz: false });
 });
 
 app.get('/quiz', function(req, res, next) {
-  res.render('index', { standalone: true, embed: false, step: 'quiz' });
+  res.render('index', { standalone: true, embed: false, step: 'quiz', quiz: true });
 });
 
 //Teporary because AddThis was sending people to the wrong place!
