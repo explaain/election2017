@@ -1710,7 +1710,8 @@ module.exports = function(CardTemplates){
               ["noAnswered","currentQuestionNo"],
               ["answerYes","answerYes"],
               ["answerNo","answerNo"],
-              ["skip", "skipSubquestion"]
+              ["skip", "skipSubquestion"],
+              ["quizResults", "quizResults"]
             ]
           },
           {
@@ -1721,11 +1722,10 @@ module.exports = function(CardTemplates){
           },
           {
             "condition": "quizResults",
-            "template": "registerButton"
-          },
-          {
-            "condition": "quizResults",
-            "template": "shareButtons"
+            "template": "quizShareCard",
+            "mapping": [
+              ["quizResults", "quizResults"]
+            ]
           }
         ]
       }
@@ -1908,5 +1908,30 @@ module.exports = function(CardTemplates){
         }
       }
     ]
-  }
-}
+  };
+  CardTemplates.quizShareCard = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": ".card",
+        "content": [
+          {
+            "dom": ".card-visible.text-center",
+            "content": [
+              {
+                "dom": "h2",
+                "content": "Share"
+              },
+              {
+                "template": "registerButton"
+              },
+              {
+                "template": "shareButtons"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+};
