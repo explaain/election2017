@@ -1672,14 +1672,47 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizMaster = {
-    "dom": "div",
+    "dom": "section.step",
     "content": [
+      {
+        "dom": ".quizTopLine",
+        "content": [
+          {
+            "dom": ".quizSkip",
+            "content": "Skip >",
+            //"condition": "quizStarted",
+            /*"attr": {
+              "onclick": {
+                "var": "skip"
+              }
+            }*/
+          },
+          {
+            "dom": ".quizBack",
+            "content": "< Back",
+            "condition": "quizStarted",
+            "attr": {
+              "onclick": {
+                "var": "back"
+              }
+            }
+          },
+          {
+            "template": "quizProgress",
+            "condition": "countrySelected",
+            "mapping": [
+              ["progressBarWidth", "progressBarWidth"],
+              ["countrySelected", "countrySelected"]
+            ]
+          }
+        ]
+      },
       {
         "dom": "div",
         "condition": "!countrySelected",
         "content": [
           {
-            "dom":"section.step",
+            "dom":"div",
             "condition": "!quizStarted",
             "content": [
               {
@@ -1731,15 +1764,9 @@ module.exports = function(CardTemplates){
         ]
       },
       {
-        "dom": "section.step",
+        "dom": "div",
         "condition": "countrySelected",
         "content": [
-          {
-            "template": "quizProgress",
-            "mapping": [
-              ["progressBarWidth", "progressBarWidth"]
-            ]
-          },
           {
             "condition": "!quizResults",
             "template": "quizQuestion",
@@ -1766,16 +1793,6 @@ module.exports = function(CardTemplates){
             "template": "quizShareCard",
             "mapping": [
               ["quizResults", "quizResults"]
-            ]
-          },
-          {
-            "template": "quizCountrySelector",
-            "condition": "!quizResults",
-            "mapping": [
-              ["label", "selectedCountry.label"],
-              ["parties", "selectedCountry.parties"],
-              ["selected", "countrySelected"],
-              ["quizResults","quizResults"]
             ]
           }
         ]

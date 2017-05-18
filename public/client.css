@@ -1367,10 +1367,33 @@ footer {
   background-color: #cd1559;
 }
 
-.quizCountrySelector:not(.true) {
+.quizCountrySelector {
   cursor: pointer;
 }
 
-.quizCountrySelector:not(.true):hover {
+.quizCountrySelector:hover {
   background-color: #f1f1f1;
+}
+
+.quizBack {
+  float: left;
+  width:60px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.quizSkip {
+  float: right;
+  width:60px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.quizTopLine {
+  overflow: hidden;
+  margin-top:10px;
+}
+
+.quizTopLine .progress {
+  margin: 0 auto;
 }
