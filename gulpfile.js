@@ -167,7 +167,6 @@ gulp.task('watch-development', function () {
 gulp.task('build-development', function(done){
   console.log("Watch: Files building... " + (new Date()))
   runSequence(
-    'js-fetch-external',
     'js-prepare-templates',
     'js-build-index-development',
     'js-pack-development',

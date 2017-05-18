@@ -18,9 +18,11 @@ npm install gulp -g
 ```sh
 git checkout development
 # build and cache external libraries (once per day or when those libraries are updated)
+npm run build-production
+# run in dev mode
 npm run dev
 # OR run with debugging (easier to catch errors on the fly!)
 npm run debug
 # http://localhost:1234/
 ```
-When pushing local **development** branch to **origin/development** it deploys an instance at http://uk-election-2017-dev.herokuapp.com/students
+When pushing local **development** branch to **origin/development** it deploys an instance at http://uk-election-2017-dev.herokuapp.com
