@@ -1684,6 +1684,7 @@ module.exports = function(CardTemplates){
             ]
           },
           {
+            "condition": "!quizResults",
             "template": "quizQuestion",
             "mapping": [
               ["question", "currentQuestion"],
@@ -1701,6 +1702,14 @@ module.exports = function(CardTemplates){
             "mapping": [
               ["data", "partiesChartData"]
             ]
+          },
+          {
+            "condition": "quizResults",
+            "template": "registerButton"
+          },
+          {
+            "condition": "quizResults",
+            "template": "shareButtons"
           }
         ]
       }
