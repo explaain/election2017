@@ -89,4 +89,11 @@ module.exports = class Designers {
     // $('.slick-container').slick('init');
   }
 
+  onQuizNextStep() {
+    /*$(".quizAnswerYesNo").hide();
+    setTimeout(function(){
+      $(".quizAnswerYesNo").show();
+    })*/
+  }
+
 }

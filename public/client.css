@@ -610,7 +610,7 @@ section:not(.wide) .card section.card-media {
 .task {
   animation-name: taskpop;
   animation-duration: .2s;
-  transform: scale(0,0) rotate(-5deg);
+  transform: scale(0,0);
   animation-fill-mode: forwards;
 }
 
@@ -786,7 +786,7 @@ a.explaain-link.discard-card-style:active,
 .seat {
   animation-name: taskpop;
   animation-duration: .2s;
-  transform: scale(0,0) rotate(-5deg);
+  transform: scale(0,0);
   animation-fill-mode: forwards;
 }
 
@@ -799,7 +799,7 @@ a.explaain-link.discard-card-style:active,
 .step-number {
   animation-name: taskpop;
   animation-duration: .2s;
-  transform: scale(0,0) rotate(-5deg);
+  transform: scale(0,0);
   animation-fill-mode: forwards;
 }
 
@@ -978,7 +978,7 @@ a.explaain-link.discard-card-style:active,
 .popup {
   animation-name: taskpop;
   animation-duration: .2s;
-  transform: scale(0,0) rotate(-5deg);
+  transform: scale(0,0);
   animation-fill-mode: forwards;
 }
 
@@ -1212,6 +1212,29 @@ footer {
   border-radius: 6px;
   padding: 5px 10px;
   margin: 20px 0;
+  animation-duration: .2s;
+  transform: scale(0,0);
+  animation-fill-mode: forwards;
+}
+
+.quizSubquestionLabel.yes {
+  animation-name: quizfloatYes;
+}
+
+.quizSubquestionLabel.no {
+  animation-name: quizfloatNo;
+}
+
+@keyframes quizfloatYes {
+  0% {transform: translateY(60px) translateX(60px);}
+  80%  {transform: translateY(-5px) translateX(-5px);}
+  100%  {transform: translateY(0px) translateX(0px);}
+}
+
+@keyframes quizfloatNo {
+  0% {transform: translateY(60px) translateX(-60px);}
+  80%  {transform: translateY(-5px) translateX(5px);}
+  100%  {transform: translateY(0px) translateX(0px);}
 }
 
 .quizSubquestionAnswer {
@@ -1300,4 +1323,22 @@ footer {
 .quizPercentagesPartyFace{
   -webkit-transition: bottom .2s;
   transition: bottom .2s;
+}
+
+.quizPop {
+  animation-name: quizpop;
+  animation-duration: .2s;
+  transform: scale(0,0);
+  animation-fill-mode: forwards;
+}
+
+.quizPop:nth-of-type(1){animation-delay: .2s}
+.quizPop:nth-of-type(2){animation-delay: .4s}
+.quizPop:nth-of-type(3){animation-delay: .6s}
+.quizPop:nth-of-type(4){animation-delay: .8s}
+
+@keyframes quizpop {
+  0% {transform: scale(0,0);}
+  80%  {transform: scale(1.1,1.1);}
+  100%  {transform: scale(1,1);}
 }

@@ -1746,12 +1746,12 @@ module.exports = function(CardTemplates){
                 "condition": "!answered"
               },
               {
-                "dom": ".quizSubquestionLabel",
+                "dom": ".quizSubquestionLabel.yes",
                 "condition": "yesAnswered",
                 "content": "Yes"
               },
               {
-                "dom": ".quizSubquestionLabel",
+                "dom": ".quizSubquestionLabel.no",
                 "condition": "noAnswered",
                 "content": "No"
               },
@@ -1774,7 +1774,7 @@ module.exports = function(CardTemplates){
     "dom": ".quizAnswersYesNo",
     "content": [
       {
-        "dom": ".quizAnswerYesNo.no",
+        "dom": ".quizAnswerYesNo.no.quizPop",
         "content": "No",
         "attr": {
           "onclick": {
@@ -1783,7 +1783,7 @@ module.exports = function(CardTemplates){
         }
       },
       {
-        "dom": ".quizAnswerYesNo.yes",
+        "dom": ".quizAnswerYesNo.yes.quizPop",
         "content": "Yes",
         "attr": {
           "onclick": {
@@ -1816,7 +1816,7 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizSubquestionAnswer = {
-    "dom": ".quizSubquestionAnswer",
+    "dom": ".quizSubquestionAnswer.quizPop",
     "content": {
       "var": "label"
     },
