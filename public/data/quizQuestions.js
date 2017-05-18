@@ -2,6 +2,8 @@
 var quizQuestions = [
   {
     question: "Do you like the first question?",
+    issue: "brexit",
+    debate: "brexit-1",
     answers: {
       yes: [
         {
@@ -27,6 +29,8 @@ var quizQuestions = [
   },
   {
     question: "Do you like the second question?",
+    issue: "brexit",
+    debate: "brexit-2",
     answers: {
       yes: [
         {

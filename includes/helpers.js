@@ -200,6 +200,7 @@ module.exports = class Helpers {
         }
         break;
       default:
+        console.log('no action')
         schema[pList[len-1]] = value;
     }
   }

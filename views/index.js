@@ -1453,6 +1453,9 @@ class Quiz {
       var answers = model.user.quizProgress.answers;
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
       model.user.quizProgress.opinions.push(opinion);
+      var issue = quizQuestions[model.user.quizProgress.opinions.length].issue;
+      var debate = quizQuestions[model.user.quizProgress.opinions.length].debate;
+      helpers.updateModel('model.user.opinions.issues.' + issue + '.debates' + debate + '.opinion', subanswer.opinion);
       //TODO: not sure what to push if you skip the subquestion!
       // model.user.quizProgress.opinions.push(null/*<--- not sure*/);
       self.next();
@@ -1537,6 +1540,9 @@ class Quiz {
       subquestions.forEach(function(subanswer){
         subanswer.answer = function(){
           model.user.quizProgress.opinions.push(subanswer.opinion);
+          var issue = quizQuestions[qp.opinions.length].issue;
+          var debate = quizQuestions[qp.opinions.length].debate;
+          helpers.updateModel('model.user.opinions.issues.' + issue + '.debates' + debate + '.opinion', subanswer.opinion);
           self.next();
         }
       })
