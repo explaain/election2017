@@ -1767,6 +1767,14 @@ module.exports = function(CardTemplates){
             "mapping": [
               ["quizResults", "quizResults"]
             ]
+          },
+          {
+            "template": "quizCountrySelector",
+            "mapping": [
+              ["label", "selectedCountry.label"],
+              ["parties", "selectedCountry.parties"],
+              ["selected", "countrySelected"]
+            ]
           }
         ]
       }
@@ -1969,9 +1977,19 @@ module.exports = function(CardTemplates){
             "content": [
               {
                 "dom": "h2",
-                "content": {
-                  "var": "label"
-                }
+                "content": [
+                  {
+                    "dom": "span",
+                    "content": {
+                      "var": "label"
+                    }
+                  },
+                  {
+                    "dom": "span",
+                    "condition": "!selected",
+                    "content": " >"
+                  },
+                ]
               },
               {
                 "loop": "parties",
