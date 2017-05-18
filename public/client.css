@@ -1367,10 +1367,10 @@ footer {
   background-color: #cd1559;
 }
 
-.quizCountrySelector:not(.true) {
+.quizCountrySelector {
   cursor: pointer;
 }
 
-.quizCountrySelector:not(.true):hover {
+.quizCountrySelector:hover {
   background-color: #f1f1f1;
 }
