@@ -1426,6 +1426,8 @@ class Quiz {
     const self = this;
     self.quizStarted = model.user.quizProgress.quizStarted;
     self.quizResults = model.user.quizProgress.quizRezults;
+    self.selectedCountry = model.user.quizProgress.country;
+    self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
       if(model.user.quizProgress.opinions.length<quizQuestions.length){
         self.refresh();
@@ -1461,6 +1463,65 @@ class Quiz {
       model.user.quizProgress.quizStarted = true;
       self.next();
     }
+    self.maybeAddMoreSymbol = function(text){
+      return text + " >";
+    }
+    self.countriesData = [
+      {
+        label: "England",
+        code: "england",
+        parties: [
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          }
+        ]
+      },
+      {
+        label: "Wales",
+        code: "wales",
+        parties: [
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          }
+        ]
+      },
+      {
+        label: "Scotland",
+        code: "scotland",
+        parties: [
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          },
+          {
+            color: "red",
+            photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
+          }
+        ]
+      }
+    ]
     // this is for random data
     self.partiesRandomChartData = [
       {
@@ -1541,6 +1602,12 @@ class Quiz {
         }
       })
     }
+    self.countriesData.forEach(function(country){
+      country.select = function(){
+        model.user.quizProgress.country = country; // we set the whole country object here
+        self.next();
+      }
+    })
     return helpers.assembleCards({
       quizResults: self.quizResults,
       currentQuestion: quizQuestions[qp.opinions.length],
@@ -1556,6 +1623,10 @@ class Quiz {
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
       startQuiz: self.startQuiz,
+      countrySelected: self.countrySelected,
+      countriesData: self.countriesData,
+      maybeAddMoreSymbol: self.maybeAddMoreSymbol,
+      selectedCountry: self.selectedCountry,
     }, CardTemplates.quizMaster);
   }
 }

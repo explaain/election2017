@@ -1309,10 +1309,18 @@ footer {
   left: calc((100% - 40px)/2);
   border-radius: 100%;
   z-index:2;
-  position: absolute;
   background-size:cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.quizPercentagesPartyFace.absolute {
+  position: absolute;
+}
+
+.quizPercentagesPartyFace.inline {
+  display: inline-block;
+  margin: 10px 5px 0px 5px;
 }
 
 .quizPercentagesPartyPodium{
@@ -1357,4 +1365,12 @@ footer {
 
 .startQuiz:hover {
   background-color: #cd1559;
+}
+
+.quizCountrySelector {
+  cursor: pointer;
+}
+
+.quizCountrySelector:hover {
+  background-color: #f1f1f1;
 }

@@ -1675,11 +1675,12 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": [
       {
-        "dom": "section.step",
-        "condition": "!quizStarted",
+        "dom": "div",
+        "condition": "!countrySelected",
         "content": [
           {
-            "dom":"div",
+            "dom":"section.step",
+            "condition": "!quizStarted",
             "content": [
               {
                 "dom": ".card",
@@ -1704,9 +1705,11 @@ module.exports = function(CardTemplates){
                     ]
                   }
                 ]
-              }, {
+              },
+              {
                 "dom": ".startQuiz",
                 "content": "Find your match >",
+                "condition": "!quizStarted",
                 "attr": {
                   "onclick": {
                     "var": "startQuiz"
@@ -1714,12 +1717,22 @@ module.exports = function(CardTemplates){
                 }
               }
             ]
+          },
+          {
+            "dom": "section.step",
+            "condition": "quizStarted",
+            "loop": "countriesData",
+            "content": [
+              {
+                "template": "quizCountrySelector"
+              }
+            ]
           }
         ]
       },
       {
         "dom": "section.step",
-        "condition": "quizStarted",
+        "condition": "countrySelected",
         "content": [
           {
             "template": "quizProgress",
@@ -1923,7 +1936,7 @@ module.exports = function(CardTemplates){
         }
       },
       {
-        "dom": ".quizPercentagesPartyFace",
+        "dom": ".quizPercentagesPartyFace.absolute",
         "attr": {
           "style": {
             "bottom": {
@@ -1940,6 +1953,50 @@ module.exports = function(CardTemplates){
       }
     ]
   };
+  CardTemplates.quizCountrySelector = {
+    "dom": "div",
+    "content": [
+      {
+        "dom": ".card",
+        "content": [
+          {
+            "dom": ".card-visible.text-center.quizCountrySelector",
+            "attr": {
+              "onclick": {
+                "var": "select"
+              }
+            },
+            "content": [
+              {
+                "dom": "h2",
+                "content": {
+                  "var": "label"
+                }
+              },
+              {
+                "loop": "parties",
+                "content": [
+                  {
+                    "dom": ".quizPercentagesPartyFace.inline",
+                    "attr": {
+                      "style": {
+                        "background-image": {
+                          "var": "photo"
+                        },
+                        "background-color": {
+                          "var": "color"
+                        },
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
   CardTemplates.quizShareCard = {
     "dom": "div",
     "content": [
