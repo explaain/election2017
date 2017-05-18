@@ -7,7 +7,7 @@ var partyStances ={
                   question:"Should cannabis be legalised?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -44,7 +44,7 @@ var partyStances ={
                   question:"Should tuition fees be scrapped?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -81,7 +81,7 @@ var partyStances ={
                   question:"Should there be a cap on how much landlords can charge for rent?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -118,7 +118,7 @@ var partyStances ={
                   question:"Should the UK have voted to leave the EU?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0.75,
 
                      },
@@ -151,7 +151,7 @@ var partyStances ={
                   question:"Should there be a second EU referendum on the terms of leaving ?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -184,7 +184,7 @@ var partyStances ={
                   question:"Should all EU citizens currently living in the UK be immediately given the right to stay?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0.6,
 
                      },
@@ -221,7 +221,7 @@ var partyStances ={
                   question:"Should companies have to pay more to hire someone from outside the UK?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:1,
 
                      },
@@ -258,7 +258,7 @@ var partyStances ={
                   question:"Should fox hunting be legal?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:1,
 
                      },
@@ -295,7 +295,7 @@ var partyStances ={
                   question:"If you earn more than 95% of the rest of the country, should your tax go up?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -328,7 +328,7 @@ var partyStances ={
                   question:"Should we all pay more tax to fund the NHS and social care?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0.4,
 
                      },
@@ -365,7 +365,7 @@ var partyStances ={
                   question:"Should the government own utlilites like the railway, post office and water companies?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0,
 
                      },
@@ -400,7 +400,7 @@ var partyStances ={
                   question:"Should the UK carry out airstrikes on another country without MPs voting on it?",
                   buttons: {},
                   parties:{
-                     "conservatives":{
+                     "conservative":{
                         opinion:0.8,
 
                      },

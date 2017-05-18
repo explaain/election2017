@@ -1443,18 +1443,36 @@ class Quiz {
       }
       model.parties = partyStances;
       var partyMatches = api.getPartyMatches(model);
+      function getOpinionText(question, opinion) {
+        var aggAnswers = question.answers.yes.concat(question.answers.no);
+        console.log('opinion: ' + opinion)
+        console.log(aggAnswers)
+        var answer = {diff: 1};
+        aggAnswers.forEach(function(_answer) {
+          _answer.diff = Math.abs(opinion - _answer.opinion);
+          console.log('diff: ' + _answer.diff);
+          answer = _answer.diff<answer.diff ? _answer : answer;
+          console.log(answer);
+        })
+        console.log(answer);
+        return answer.label;
+      }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        return {
+        var userOpinion = getOpinionText(quizQuestions[qp.opinions.length-1], opinion);
+        var partyOpinion = getOpinionText(quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
+        var newScore = {
           key: partyKey,
           percentage: parseInt(party.match*100),
           newMatch: {
             question: quizQuestions[qp.opinions.length-1].question,
-            userOpinion: opinion, //Needs to be text!
-            partyOpinion: model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion,  //Needs to be text!
-            isMatch: true //Needs to be defined!!!!
+            userOpinion: userOpinion, //TEXT!!!
+            partyOpinion: partyOpinion,
+            isMatch: userOpinion == partyOpinion //NOT WORKING
           }
         }
+        console.log(newScore);
+        return newScore;
       });
       self.updatePartyPercentages(newScores);
       self.next();
@@ -1698,7 +1716,7 @@ class Quiz {
       country.parties.forEach(function(party){
         const matches = party.matches;
         party.openMatches = function(){
-          var tempKey = 'http://api.explaain.com/QuizMatch/123';// + parseInt(Math.random()*100000000000);
+          var tempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
           var tempCard = {
             '@id': tempKey,
             '@type': 'QuizMatch',
