@@ -1677,16 +1677,16 @@ module.exports = function(CardTemplates){
       {
         "dom": ".quizTopLine",
         "content": [
-          {
-            "dom": ".quizSkip",
-            "content": "Skip >",
-            //"condition": "quizStarted",
-            /*"attr": {
-              "onclick": {
-                "var": "skip"
-              }
-            }*/
-          },
+          // {
+          //   "dom": ".quizSkip",
+          //   "content": "Skip >",
+          //   //"condition": "quizStarted",
+          //   /*"attr": {
+          //     "onclick": {
+          //       "var": "skip"
+          //     }
+          //   }*/
+          // },
           {
             "dom": ".quizBack",
             "content": "< Back",
