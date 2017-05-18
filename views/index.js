@@ -1449,6 +1449,10 @@ class Quiz {
       model.user.quizProgress.opinions.push(null/*<--- not sure*/);
       self.next();
     }
+    self.startQuiz = function(){
+      model.user.quizProgress.quizStarted = true;
+      self.next();
+    }
     //TODO: this is a sample data
     self.partiesChartData = [
       {
@@ -1509,7 +1513,9 @@ class Quiz {
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
-      partiesChartData: self.partiesChartData
+      partiesChartData: self.partiesChartData,
+      quizStarted: qp.quizStarted,
+      startQuiz: self.startQuiz,
     }, CardTemplates.quizMaster);
   }
 }

@@ -32,7 +32,9 @@ module.exports = {
     quizProgress: {
       answers: [],
       opinions: [],
-      quizRezults: false
+      quizRezults: false,
+      quizStarted: false,
+      country: null
     }
   },
 

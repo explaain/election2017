@@ -1676,6 +1676,22 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": "section.step",
+        "condition": "!quizStarted",
+        "content": [
+          {
+            "dom":"div",
+            "content": "click to start quiz",
+            "attr": {
+              "onclick": {
+                "var": "startQuiz"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "dom": "section.step",
+        "condition": "quizStarted",
         "content": [
           {
             "template": "quizProgress",
