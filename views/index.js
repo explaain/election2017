@@ -1424,12 +1424,15 @@ function getResults(resultsType){
 class Quiz {
   constructor(){
     const self = this;
+    self.quizResults = false;
     self.next = function(){
       if(model.user.quizProgress.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
+        self.quizResults = true;
+        self.refresh();
         //TODO: Jeremy, you might want to change this :)
-        routes.step({ name: 'result', type: 'result' }).push();
+        // routes.step({ name: 'result', type: 'result' }).push();
       }
     }
     self.answerYes = function(){self.answer("yes")}
@@ -1439,6 +1442,9 @@ class Quiz {
       self.next();
     }
     self.skip = function(){
+      var answers = model.user.quizProgress.answers;
+      var opinion = answers[answers.length-1]=="yes" ? 0.75 : 0.25;
+      model.user.quizProgress.opinions.push(opinion);
       //TODO: not sure what to push if you skip the subquestion!
       model.user.quizProgress.opinions.push(null/*<--- not sure*/);
       self.next();
@@ -1448,36 +1454,44 @@ class Quiz {
       {
         color: "red",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%"
+        percentage: (Math.random()*100)+"%",
+        name: "Lab"
       },
       {
         color: "green",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%"
+        percentage: (Math.random()*100)+"%",
+        name: "Green"
       },
       {
         color: "blue",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%"
+        percentage: (Math.random()*100)+"%",
+        name: "Con"
       },
       {
         color: "purple",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%"
+        percentage: (Math.random()*100)+"%",
+        name: "Ukip"
       },
       {
         color: "orange",
         photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
-        percentage: (Math.random()*100)+"%"
+        percentage: (Math.random()*100)+"%",
+        name: "Lib Dem"
       },
     ];
   }
   render(){
     const self = this;
     const qp = model.user.quizProgress;
-    const subquestions = quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]];
+    console.log('self.quizResults');
+    console.log(self.quizResults);
+    const subquestions = quizQuestions[qp.opinions.length] ? quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
     if(subquestions){
       subquestions.forEach(function(subanswer){
+        console.log(subanswer);
         subanswer.answer = function(){
           model.user.quizProgress.opinions.push(subanswer.opinion);
           self.next();
@@ -1485,11 +1499,12 @@ class Quiz {
       })
     }
     return helpers.assembleCards({
+      quizResults: self.quizResults,
       currentQuestion: quizQuestions[qp.opinions.length],
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
       currentQuestionNo: qp.answers[qp.opinions.length]==="no",
-      currentSubquestion: quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]],
+      currentSubquestion: quizQuestions[qp.opinions.length] ? quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null,
       progressBarWidth: ((qp.opinions.length/quizQuestions.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
