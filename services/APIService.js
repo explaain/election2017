@@ -369,6 +369,8 @@ APIService.prototype.getPartyMatches = function(data) {
 
     }
   });
+  console.log('partyMatches');
+  console.log(partyMatches);
   return partyMatches;
 }
 
@@ -395,7 +397,9 @@ APIService.prototype.getAgreements = function(data) {
               partyOpinion: allPartiesDebate.parties[partyKey].opinion,
               userOpinion: debate.opinion,
               weight: debate.weight || 1,
-              description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description)
+              description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
+              // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
+              // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
             }
           })
         } catch (e) {

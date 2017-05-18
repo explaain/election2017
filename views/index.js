@@ -1401,7 +1401,7 @@ class Quiz {
     const self = this;
     const qp = model.user.quizProgress;
     self.quizStarted = qp.quizStarted;
-    self.quizResults = qp.quizRezults;
+    self.quizResults = qp.quizResults;
     self.selectedCountry = qp.country;
     self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
@@ -1409,7 +1409,7 @@ class Quiz {
         self.refresh();
       } else {
         trackEvent("Results Got",{type: "Quiz"});
-        qp.quizRezults = true;
+        qp.quizResults = true;
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
         // routes.step({ name: 'result', type: 'result' }).push();
@@ -1447,11 +1447,16 @@ class Quiz {
         var party = partyMatches[partyKey];
         return {
           key: partyKey,
-          percentage: parseInt(party.match*100)
+          percentage: parseInt(party.match*100),
+          newMatch: {
+            question: quizQuestions[qp.opinions.length-1].question,
+            userOpinion: opinion, //Needs to be text!
+            partyOpinion: model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion,  //Needs to be text!
+            isMatch: true //Needs to be defined!!!!
+          }
         }
       });
       self.updatePartyPercentages(newScores);
-      self.updatePartyPercentages([{key: "labour",percentage: 50}])
       self.next();
     }
     self.skip = function(){
@@ -1463,7 +1468,7 @@ class Quiz {
     }
     self.back = function(){
       if(qp.answers.length>0){
-        qp.quizRezults = false;
+        qp.quizResults = false;
         if(qp.opinions.length===qp.answers.length){
           qp.opinions.pop();
         } else {
@@ -1490,11 +1495,17 @@ class Quiz {
           qp.country.parties.forEach(function(_party){
             if(party.key===_party.key){
               _party.percentage = party.percentage + "%";
+              _party.matches.push(party.newMatch);
             }
           })
         })
       }
+      console.log('qp.country.parties');
+      console.log(qp.country.parties);
     }
+    // self.openMatches = function() {
+    //   alert("opening");
+    // }
     //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
     self.partiesChartData = qp.country?qp.country.parties:[];
 
@@ -1507,31 +1518,36 @@ class Quiz {
             color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Con",
-            key: "conservative"
+            key: "conservative",
+            matches: []
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lab",
-            key: "labour"
+            key: "labour",
+            matches: []
           },
           {
             color: "orange",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lib Dem",
-            key: "lib-dem"
+            key: "lib-dem",
+            matches: []
           },
           {
             color: "purple",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Ukip",
-            key: "ukip"
+            key: "ukip",
+            matches: []
           },
           {
             color: "green",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Green",
-            key: "green"
+            key: "green",
+            matches: []
           },
         ]
       },
@@ -1543,37 +1559,43 @@ class Quiz {
             color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Con",
-            key: "conservative"
+            key: "conservative",
+            matches: []
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lab",
-            key: "labour"
+            key: "labour",
+            matches: []
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Plaid",
-            key: "plaid-cymru"
+            key: "plaid-cymru",
+            matches: []
           },
           {
             color: "orange",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lib Dem",
-            key: "lib-dem"
+            key: "lib-dem",
+            matches: []
           },
           {
             color: "purple",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Ukip",
-            key: "ukip"
+            key: "ukip",
+            matches: []
           },
           {
             color: "green",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Green",
-            key: "green"
+            key: "green",
+            matches: []
           },
         ]
       },
@@ -1585,37 +1607,43 @@ class Quiz {
             color: "blue",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Con",
-            key: "conservative"
+            key: "conservative",
+            matches: []
           },
           {
             color: "red",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lab",
-            key: "labour"
+            key: "labour",
+            matches: []
           },
           {
             color: "yellow",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "SNP",
-            key: "snp"
+            key: "snp",
+            matches: []
           },
           {
             color: "orange",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Lib Dem",
-            key: "lib-dem"
+            key: "lib-dem",
+            matches: []
           },
           {
             color: "purple",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Ukip",
-            key: "ukip"
+            key: "ukip",
+            matches: []
           },
           {
             color: "green",
             photo: "https://images-na.ssl-images-amazon.com/images/I/81iAVfIkSOL.png",
             name: "Green",
-            key: "green"
+            key: "green",
+            matches: []
           },
         ]
       }
@@ -1667,14 +1695,31 @@ class Quiz {
       })
     }
     self.countriesData.forEach(function(country){
-      country.select = function(){
-        trackEvent("Country Selected",{type: "Quiz", code: country.code});
-        qp.country = country; // we set the whole country object here
-        qp.country.parties.forEach(function(party){
-          party.percentage = "0%";
-        })
-        self.next();
-      }
+      country.parties.forEach(function(party){
+        const matches = party.matches;
+        party.openMatches = function(){
+          var tempKey = 'http://api.explaain.com/QuizMatch/123';// + parseInt(Math.random()*100000000000);
+          var tempCard = {
+            '@id': tempKey,
+            '@type': 'QuizMatch',
+            name: 'Matches',
+            description: 'Description',
+            matches: matches
+          }
+          explaain.addClientCards(tempCard)
+          explaain.showOverlay(tempKey);
+        }
+
+        country.select = function(){
+          trackEvent("Country Selected",{type: "Quiz", code: country.code});
+          qp.country = country; // we set the whole country object here
+          qp.country.parties.forEach(function(party){
+            party.percentage = "0%";
+          })
+
+          self.next();
+        }
+      })
     })
     return helpers.assembleCards({
       quizResults: self.quizResults,
@@ -1688,6 +1733,7 @@ class Quiz {
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
       partiesChartData: self.partiesChartData,
+      // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
       startQuiz: self.startQuiz,

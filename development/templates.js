@@ -1785,7 +1785,8 @@ module.exports = function(CardTemplates){
           {
             "template": "quizPercentagesWrapper",
             "mapping": [
-              ["data", "partiesChartData"]
+              ["data", "partiesChartData"],
+              ["openMatches", "openMatches"]
             ]
           },
           {
@@ -1947,7 +1948,12 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizPercentagesParty = {
-    "dom": ".quizPercentagesParty",
+    "dom": "a.quizPercentagesParty",
+    "attr": {
+      "onclick": {
+        "var": "openMatches"
+      }
+    },
     "content": [
       {
         "dom": ".quizPercentagesPartyPodium",

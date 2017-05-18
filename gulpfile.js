@@ -49,7 +49,7 @@ const JSFiles = [
   'public/data/allParties.js',
   'public/data/partyStories.js',
   'public/data/euRefResults.js',
-  'public/data/partyStances2.js',
+  'public/data/partyStances3.js',
   'public/data/ge2015Results.js',
   'public/data/constituencyOdds.js',
   'public/data/partyReconciliation.js',
