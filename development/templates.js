@@ -1770,10 +1770,12 @@ module.exports = function(CardTemplates){
           },
           {
             "template": "quizCountrySelector",
+            "condition": "!quizResults",
             "mapping": [
               ["label", "selectedCountry.label"],
               ["parties", "selectedCountry.parties"],
-              ["selected", "countrySelected"]
+              ["selected", "countrySelected"],
+              ["quizResults","quizResults"]
             ]
           }
         ]
