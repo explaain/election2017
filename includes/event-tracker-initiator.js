@@ -43,6 +43,11 @@ module.exports = function(trackEvent){
     })
     $(".postcode-compare .register button").addClass("tracked");
 
+    $(".quiz .register button:not(.tracked)").on("click",function(){
+      trackEvent("Register Clicked",{type: "Quiz"});
+    })
+    $(".quiz .register button").addClass("tracked");
+
     // Facebook Share
     $(".postcode-compare .btn-facebook:not(.tracked)").on("click",function(){
       trackEvent("Facebook Share Clicked",{type: "Student"});
@@ -54,6 +59,18 @@ module.exports = function(trackEvent){
       trackEvent("Twitter Share Clicked",{type: "Student"});
     })
     $(".postcode-compare .btn-twitter").addClass("tracked");
+
+    // Facebook Share
+    $(".quiz .btn-facebook:not(.tracked)").on("click",function(){
+      trackEvent("Facebook Share Clicked",{type: "Quiz"});
+    })
+    $(".quiz .btn-facebook").addClass("tracked");
+
+    // Twitter Share
+    $(".quiz .btn-twitter:not(.tracked)").on("click",function(){
+      trackEvent("Twitter Share Clicked",{type: "Quiz"});
+    })
+    $(".quiz .btn-twitter").addClass("tracked");
 
 
     // GLOBAL scope

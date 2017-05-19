@@ -1425,10 +1425,11 @@ class Quiz {
       if (qp.opinions.length > 0) {
         qp.startingQuiz = false;
       }
+      trackEvent("Question Answered",{type: "Quiz", question: quizQuestions[quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
       if(qp.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
-        trackEvent("Results Got",{type: "Quiz"});
+        trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
         qp.quizResults = true;
         qp.country.parties.forEach(function(_party){
           _party.quizResults = true;
@@ -1781,15 +1782,22 @@ class Quiz {
             '@id': tempKey,
             '@type': 'QuizMatch',
             name: 'How you and ' + party.fullName + ' match:',
-            // description: 'Description',
-            matches: matches
+            matches: [matches[0]]
           }
+          // var tempKey2 = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+          // var tempCard2 = {
+          //   '@id': tempKey2,
+          //   '@type': 'QuizMatch',
+          //   name: 'How you and ' + party.fullName + ' match:',
+          //   matches: [matches[1]]
+          // }
           explaain.addClientCards(tempCard)
+          // explaain.addClientCards(tempCard2)
           explaain.showOverlay(tempKey);
         }
 
         country.select = function(){
-          trackEvent("Country Selected",{type: "Quiz", code: country.code});
+          trackEvent("Country Selected",{type: "Quiz", code: country.code, country: country.label});
           qp.country = country; // we set the whole country object here
           qp.country.parties.forEach(function(party){
             party.percentage = "0%";
