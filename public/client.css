@@ -1359,6 +1359,7 @@ p.waiting-text {
   box-sizing: content-box;
   width:30px;
   left: calc((100% - 30px)/2);
+  max-width: calc(10.5vw - 10px);
   opacity: 0.6;
   padding-top:20px;
   z-index:1;
