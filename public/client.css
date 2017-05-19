@@ -21,6 +21,7 @@ body > div.body {
 
 body > div.body.quiz {
   background: #f6f6f6;
+  padding-top: 20px;
 }
 
 h1, h2, h3, h4, h5, button.phrase-button {
@@ -1306,6 +1307,10 @@ p.waiting-text {
 }
 
 .quizSubquestionAnswer:before {
+  content: "+ ",
+  margin-right: 15px;
+}
+.quizSubquestionAnswer::before {
   content: "+ ",
   margin-right: 15px;
 }
