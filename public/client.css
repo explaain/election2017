@@ -160,7 +160,10 @@ footer {
 }
 
 .body.quiz footer {
-  display: none;
+  margin: -20px 20px 10px
+}
+.body.quiz footer img {
+  height: 70px;
 }
 
 /* Because of social media panel and Share button */
@@ -1469,7 +1472,7 @@ a:hover .quizPercentagesPartyFace {
   background-color: #dd2569;
   color: white;
   border-radius:6px;
-  margin: 20px 0;
+  margin: 20px 0 0;
   cursor: pointer;
 }
 
@@ -1531,4 +1534,9 @@ a:hover .quizPercentagesPartyFace {
 }
 .quizResults p {
   margin-top: 50px;
+}
+
+.politicalanimal img {
+  width: 180px;
+  margin: -10px 0 10px;
 }

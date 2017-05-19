@@ -247,15 +247,25 @@ class Header {
 class Footer {
   render() {
     eventTrackerInitiator();
-    return h("footer",
-      h("a.discard-card-style",
-        {
-          "href": "http://api.explaain.com/Detail/5911ba3cac223e0011e45faf"
-        },
-        h("button.btn.btn-default",
-          "Who's behind this?"
-        )
+    var footerContents = h("a.discard-card-style",
+      {
+        "href": "http://api.explaain.com/Detail/5911ba3cac223e0011e45faf"
+      },
+      h("button.btn.btn-default",
+        "Who's behind this?"
       )
+    );
+    routes.quiz(function (params) {
+      footerContents = h("div",
+        h("img",
+          {
+            "src": "img/turnup.png"
+          }
+        )
+      );
+    });
+    return h("footer",
+      footerContents
     )
   }
 }
@@ -1525,7 +1535,6 @@ class Quiz {
           qp.country.parties.forEach(function(_party){
             if(party.key===_party.key){
               _party.percentage = parseInt(party.percentage) + "%";
-              // _party.percentageText = party.percentage + "%";
               _party.matches.push(party.newMatch);
               if (party.percentage > topParty.percentage) {
                 topParty = party;
@@ -1685,7 +1694,7 @@ class Quiz {
             quizResults: false
           },
           {
-            color: "yellow",
+            color: "#e8c300",
             photo: "/img/leader-faces/sturgeon.png",
             fullName: "SNP",
             name: "SNP",
@@ -1785,8 +1794,8 @@ class Quiz {
           trackEvent("Country Selected",{type: "Quiz", code: country.code});
           qp.country = country; // we set the whole country object here
           qp.country.parties.forEach(function(party){
+            console.log('party.percentage', party.percentage);
             party.percentage = "0%";
-            party.percentageText = "0%";
           })
           qp.startingQuiz = true;
           self.next();

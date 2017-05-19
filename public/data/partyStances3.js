@@ -148,7 +148,7 @@ var partyStances ={
                   }
                },
                "eu-2":{
-                  question:"Should there be a second EU referendum on the terms of leaving ?",
+                  question:"Should there be a second EU referendum on the terms of leaving?",
                   buttons: {},
                   parties:{
                      "conservative":{
@@ -389,7 +389,10 @@ var partyStances ={
                         opinion:0.5,
 
                      },
-                     "plaid-cymru":0.5
+                     "plaid-cymru":{
+                        opinion:0.5,
+
+                     }
                   }
                }
             }
@@ -425,7 +428,7 @@ var partyStances ={
 
                      },
                      "plaid-cymru":{
-                        opinion:4
+                        opinion:0.4
                      }
                   }
                }

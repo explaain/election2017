@@ -1761,7 +1761,7 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "section.step",
+            "dom": "div",
             "condition": "quizStarted",
             "content": [
               {
@@ -2157,7 +2157,19 @@ module.exports = function(CardTemplates){
               },
               {
                 "template": "shareButtons"
-              }
+              },
+              {
+                "dom": "div.politicalanimal",
+                "content": [
+                  {
+                    "dom": "img",
+                    "attr": {
+                      "src": "/img/politicalanimal.png"
+                    },
+                    "content": "Challenge friends to see where they stand"
+                  }
+                ]
+              },
             ]
           }
         ]
