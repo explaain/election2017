@@ -35,6 +35,7 @@ module.exports = {
       quizRezults: false,
       quizStarted: false,
       startingQuiz: false,
+      nextButtonText: "Next Question >",
       country: null,
       resultsData: {}
     }

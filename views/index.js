@@ -1417,6 +1417,7 @@ class Quiz {
     self.resultsData = qp.resultsData;
     self.startingQuiz = qp.startingQuiz;
     self.selectedCountry = qp.country;
+    self.nextButtonText = qp.nextButtonText;
     self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
       if (qp.opinions.length > 0) {
@@ -1446,6 +1447,11 @@ class Quiz {
     self.answerNo = function(){self.answer("no")}
     self.answer = function(answer){
       qp.answers.push(answer);
+      console.log(qp.answers.length);
+      console.log(quizQuestions.length);
+      if (qp.answers.length==quizQuestions.length) {
+        qp.nextButtonText = 'See Results >';
+      }
       self.next();
     }
     self.submitOpinion = function(opinion) {
@@ -1465,16 +1471,11 @@ class Quiz {
       var partyMatches = api.getPartyMatches(model);
       function getOpinionText(question, opinion) {
         var aggAnswers = question.answers.yes.concat(question.answers.no);
-        console.log('opinion: ' + opinion)
-        console.log(aggAnswers)
         var answer = {diff: 1};
         aggAnswers.forEach(function(_answer) {
           _answer.diff = Math.abs(opinion - _answer.opinion);
-          console.log('diff: ' + _answer.diff);
           answer = _answer.diff<answer.diff ? _answer : answer;
-          console.log(answer);
         })
-        console.log(answer);
         return answer.label;
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
@@ -1491,7 +1492,6 @@ class Quiz {
             isMatch: userOpinion == partyOpinion
           }
         }
-        console.log(newScore);
         return newScore;
       });
       self.updatePartyPercentages(newScores);
@@ -1547,11 +1547,7 @@ class Quiz {
           name: allParties.filter(function(party){return party.key==topParty.key})[0].name,
           percentage: parseInt(topParty.percentage)+"%"
         }
-        console.log('self.resultsData');
-        console.log(self.resultsData);
       }
-      console.log('qp.country.parties');
-      console.log(qp.country.parties);
     }
     // self.openMatches = function() {
     //   alert("opening");
@@ -1794,7 +1790,6 @@ class Quiz {
           trackEvent("Country Selected",{type: "Quiz", code: country.code});
           qp.country = country; // we set the whole country object here
           qp.country.parties.forEach(function(party){
-            console.log('party.percentage', party.percentage);
             party.percentage = "0%";
           })
           qp.startingQuiz = true;
@@ -1816,6 +1811,7 @@ class Quiz {
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
+      nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
       // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,

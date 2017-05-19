@@ -1804,7 +1804,8 @@ module.exports = function(CardTemplates){
               ["answerYes","answerYes"],
               ["answerNo","answerNo"],
               ["skip", "skipSubquestion"],
-              ["quizResults", "quizResults"]
+              ["quizResults", "quizResults"],
+              ["nextButtonText", "nextButtonText"]
             ]
           },
           {
@@ -1885,7 +1886,8 @@ module.exports = function(CardTemplates){
                 "mapping": [
                   ["subanswers","subquestion"],
                   ["answered","answered"],
-                  ["skip","skip"]
+                  ["skip","skip"],
+                  ["nextButtonText","nextButtonText"]
                 ]
               }
             ]
@@ -1934,7 +1936,9 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": ".quizSubquestionSkip.quizPop.quick",
-        "content": "Next Question >",
+        "content": {
+          "var": "nextButtonText"
+        },
         "attr": {
           "onclick": {
             "var": "skip"
