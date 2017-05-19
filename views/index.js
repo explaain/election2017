@@ -229,8 +229,8 @@ class Header {
   }
   render() {
     const self = this;
-    var logoImg = Quiz ? "img/politicalanimal.png" : "/img/ge2017logobeta.png"
-    var logoClass = Quiz ? "politicalanimal-logo" : "ge2017-logo";
+    var logoImg = Quiz ? "img/unilad.png" : "/img/ge2017logobeta.png"
+    var logoClass = Quiz ? "unilad-logo" : "ge2017-logo";
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
@@ -1405,9 +1405,13 @@ class Quiz {
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
     self.resultsData = qp.resultsData;
+    self.startingQuiz = qp.startingQuiz;
     self.selectedCountry = qp.country;
     self.countrySelected = self.selectedCountry!==null;
     self.next = function(){
+      if (qp.opinions.length > 0) {
+        qp.startingQuiz = false;
+      }
       if(qp.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
@@ -1765,6 +1769,7 @@ class Quiz {
             party.percentage = "0%";
             party.percentageText = "0%";
           })
+          qp.startingQuiz = true;
           self.next();
         }
       })
@@ -1788,6 +1793,7 @@ class Quiz {
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
       startQuiz: self.startQuiz,
+      startingQuiz: self.startingQuiz,
       countrySelected: self.countrySelected,
       countriesData: self.countriesData,
       selectedCountry: self.selectedCountry,

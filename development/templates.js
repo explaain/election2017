@@ -1726,11 +1726,15 @@ module.exports = function(CardTemplates){
                         "content": [
                           {
                             "dom": "h2",
-                            "content": "Where do you stand on these 12 ideas?"
+                            "content": "Where do you stand on these 12 issues?"
                           },
                           {
                             "dom": "p",
-                            "content": "See who you match with in real time as you give your views on the election's hottest topics. The results may surprise you…"
+                            "content": "See who you match with in real time as you give your views on the election's hottest topics."
+                          },
+                          {
+                            "dom": "p.italics",
+                            "content": "The results may surprise you…"
                           },
                           {
                             "template": "quizPercentages",
@@ -1772,13 +1776,20 @@ module.exports = function(CardTemplates){
                     "template": "quizCountrySelector"
                   }
                 ]
+              },
+              {
+                "dom": "p",
+                "content": "Voting in Northern Ireland?",
+                "attr": {
+                  "href": "http://api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
+                }
               }
             ]
           }
         ]
       },
       {
-        "dom": "div",
+        "dom": "div.questions",
         "condition": "countrySelected",
         "content": [
           {
@@ -1804,7 +1815,8 @@ module.exports = function(CardTemplates){
               ["quizResults", "quizResults"],
               ["resultLogo", "resultLogo"],
               ["resultName", "resultName"],
-              ["resultPercentage", "resultPercentage"]
+              ["resultPercentage", "resultPercentage"],
+              ["startingQuiz", "startingQuiz"]
             ]
           },
           {
@@ -1857,16 +1869,16 @@ module.exports = function(CardTemplates){
                 "template": "quizQuestionYesNo",
                 "condition": "!answered"
               },
-              {
-                "dom": ".quizSubquestionLabel.yes",
-                "condition": "yesAnswered",
-                "content": "Yes"
-              },
-              {
-                "dom": ".quizSubquestionLabel.no",
-                "condition": "noAnswered",
-                "content": "No"
-              },
+              // {
+              //   "dom": ".quizSubquestionLabel.yes",
+              //   "condition": "yesAnswered",
+              //   "content": "Yes"
+              // },
+              // {
+              //   "dom": ".quizSubquestionLabel.no",
+              //   "condition": "noAnswered",
+              //   "content": "No"
+              // },
               {
                 "template": "quizSubquestion",
                 "condition": "answered",
@@ -1909,6 +1921,10 @@ module.exports = function(CardTemplates){
     "dom": ".quizSubquestion",
     "content": [
       {
+        "dom": ".quizSubquestionOr",
+        "content": "Any other details:"
+      },
+      {
         "loop": "subanswers",
         "content": [{"template": "quizSubquestionAnswer"}]
       },
@@ -1917,7 +1933,7 @@ module.exports = function(CardTemplates){
         "content": "or"
       },
       {
-        "dom": ".quizSubquestionSkip",
+        "dom": ".quizSubquestionSkip.quizPop.quick",
         "content": "Next Question >",
         "attr": {
           "onclick": {
@@ -1992,6 +2008,11 @@ module.exports = function(CardTemplates){
             "content": "Click on a party leader's face to see how you match with their party's views."
           }
         ]
+      },
+      {
+        "dom": "p.waiting-text",
+        "condition": "startingQuiz",
+        "content": "Submit an answer to see how you match."
       },
       {
         "dom": ".quizPercentages",

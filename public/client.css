@@ -46,6 +46,10 @@ button.btn i.fa {
   font-weight: bold;
 }
 
+.italics {
+  font-style: italic;
+}
+
 body > div.body > div.main {
   /*max-width: 800px;*/
   margin: 0 10px;
@@ -65,16 +69,16 @@ header img.ge2017-logo {
   margin: 10px auto;
   display: block;
 }
-header img.politicalanimal-logo {
+header img.unilad-logo {
   text-align: center;
-  height: 170px;
+  height: 100px;
   margin: -10px auto -40px;
   display: block;
   transition: height .4s, margin .4s;
   -webkit-transition: height .4s, margin .4s;
 }
-.body.moving header img.politicalanimal-logo {
-  height: 100px;
+.body.moving header img.unilad-logo {
+  height: 60px;
   margin-bottom: 10px;
 }
 @media (max-width: 400px) {
@@ -1031,6 +1035,7 @@ a.explaain-link.discard-card-style:active,
   margin: auto;
   margin-top: 20px;
   overflow: hidden;
+  max-width: calc(60vw - 40px);
 }
 
 .body.standalone header .progress {
@@ -1193,6 +1198,15 @@ footer {
   padding: 20px;
 }
 
+p.waiting-text {
+  position: absolute;
+  left: 0;
+  right: 0;
+  color: #999;
+  top: 15px;
+  padding: 0 50px;
+}
+
 .quizAnswersYesNo {
   margin-top:20px;
   text-align: center;
@@ -1209,7 +1223,7 @@ footer {
   width:115px;
   line-height: 24px;
   font-weight: bold;
-  margin: 80px 5px 122px 5px;
+  margin: 60px 5px 90px 5px;
   cursor: pointer;
 }
 
@@ -1231,6 +1245,9 @@ footer {
 .quizAnswerYesNo.yes:hover {
   color: white;
   background-color: green;
+}
+.quizSubquestion {
+  margin: 10px;
 }
 
 .quizSubquestionLabel {
@@ -1269,12 +1286,12 @@ footer {
   display: inline-flex;
   align-items: center;
   justify-content: left;
-  width: calc(100% - 20px);
+  width: calc(100% - 40px);
   height: 50px;
   vertical-align: top;
   margin: 5px 10px;
   padding: 0 10px;
-  text-align: center;
+  text-align: left;
   line-height: 1.3;
   color: #00a2e5;
   text-decoration: none;
@@ -1288,15 +1305,23 @@ footer {
   background-color: #00a2e5;
 }
 
+.quizSubquestionOr {
+  margin: 0;
+}
+
 .quizSubquestionSkip {
   display: inline-block;
-  font-size:20px;
+  /*font-size:20px;*/
   font-weight: bold;
   padding: 10px 20px;
-  background-color: #dd2569;
-  color: white;
+  /*background-color: #dd2569;*/
+  border: solid 3px #dd2569;
+  /*color: white;*/
+  color: #dd2569;
   border-radius:6px;
-  margin: 20px 0;
+  border-radius: 10px;
+  margin: 5px 0;
+  width: calc(100% - 40px);
   cursor: pointer;
 }
 
@@ -1335,11 +1360,17 @@ footer {
   width:40px;
   height: 40px;
   left: calc((100% - 40px)/2);
+  max-width: calc(14vw - 10px);
+  max-height: calc(14vw - 10px);
   border-radius: 100%;
   z-index:2;
   background-size:cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+a:hover .quizPercentagesPartyFace {
+  border: 3px #dd2569 solid;
 }
 
 .quizPercentagesPartyFace.absolute {
@@ -1384,6 +1415,8 @@ footer {
   transform: scale(0,0);
   animation-fill-mode: forwards;
 }
+
+.quizPop.quick:nth-of-type(1){animation-delay: 0s}
 
 .quizPop:nth-of-type(1){animation-delay: .2s}
 .quizPop:nth-of-type(2){animation-delay: .4s}
@@ -1442,11 +1475,18 @@ footer {
   margin-top:10px;
 }
 
+.body.quiz div.questions .card:nth-child(1) {
+  margin-top: 10px;
+}
+.body.quiz div.questions > div:nth-child(1) .card .card-visible {
+  min-height: 300px;
+}
+
 .quizTopLine .progress {
   margin: 0 auto;
 }
 .quizTopLine .progress-inner {
-  background: #00909d;
+  background: #dd2569;
 }
 .quizResults {
   padding: 20px;
