@@ -1984,6 +1984,13 @@ module.exports = function(CardTemplates){
         "condition": "quizResults",
         "content": [
           {
+            "dom": "a.btn.btn-default.retake",
+            "attr": {
+              "href": "/quiz"
+            },
+            "content": "⟲ Retake Quiz"
+          },
+          {
             "dom": "h3",
             "content": "Your best match is:"
           },

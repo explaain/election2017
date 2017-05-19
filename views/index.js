@@ -39,7 +39,9 @@ Model = model;
 
 class App {
   constructor(data) {
-    if (Standalone) {
+    if (Quiz){
+      var logoRoute = routes.quiz();
+    } else if (Standalone) {
       var logoRoute = routes.students();
     } else {
       var logoRoute = routes.root();
