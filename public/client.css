@@ -1530,6 +1530,13 @@ a:hover .quizPercentagesPartyFace {
 .quizResults {
   padding: 20px;
 }
+.quizResults .retake {
+  font-weight: 600;
+  color: #777;
+}
+.quizResults h2 {
+  color: #dd2569;
+}
 .quizResults img {
   float: left;
   width: 80px;
