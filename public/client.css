@@ -50,6 +50,11 @@ button.btn i.fa {
   font-style: italic;
 }
 
+a.explaain-link.dark {
+  background: #dedede !important;
+  border-color: #dedede !important;
+}
+
 body > div.body > div.main {
   /*max-width: 800px;*/
   margin: 0 10px;
@@ -1204,7 +1209,7 @@ p.waiting-text {
   right: 0;
   color: #999;
   top: 15px;
-  padding: 0 50px;
+  padding: 0 70px;
 }
 
 .quizAnswersYesNo {
@@ -1300,6 +1305,11 @@ p.waiting-text {
   cursor: pointer
 }
 
+.quizSubquestionAnswer:before {
+  content: "+ ",
+  margin-right: 15px;
+}
+
 .quizSubquestionAnswer:hover {
   color: white;
   background-color: #00a2e5;
@@ -1326,7 +1336,8 @@ p.waiting-text {
 }
 
 .quizSubquestionSkip:hover {
-  background-color: #cd1559;
+  background-color: #dd2569;
+  color: white;
 }
 
 .quizPercentages {
@@ -1393,6 +1404,7 @@ a:hover .quizPercentagesPartyFace {
   z-index:2;
   position: absolute;
   margin-bottom: 30px;
+  color: #999;
 }
 
 .quizPercentagesPartyPodium{
@@ -1407,6 +1419,20 @@ a:hover .quizPercentagesPartyFace {
 .quizPercentagesPartyPercent{
   -webkit-transition: bottom .6s;
   transition: bottom .6s;
+}
+
+.countries {
+  margin-bottom: 20px;
+}
+
+.action-buttons .register button {
+  padding: 12px 42px !important;
+  min-width: 70%;
+}
+.action-buttons .share-buttons button {
+  padding: 12px;
+  width: calc(50% - 10px);
+  max-width: 130px
 }
 
 .quizPop {
@@ -1442,7 +1468,7 @@ a:hover .quizPercentagesPartyFace {
 }
 
 .startQuiz:hover {
-  background-color: #cd1559;
+  background-color: #dd2569;
 }
 
 .quizCountrySelector {

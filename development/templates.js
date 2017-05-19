@@ -1769,7 +1769,7 @@ module.exports = function(CardTemplates){
                 "content": "Where are you voting from?"
               },
               {
-                "dom": "div",
+                "dom": "div.countries",
                 "loop": "countriesData",
                 "content": [
                   {
@@ -1778,7 +1778,7 @@ module.exports = function(CardTemplates){
                 ]
               },
               {
-                "dom": "p",
+                "dom": "a.explaain-link.dark.standalone-link",
                 "content": "Voting in Northern Ireland?",
                 "attr": {
                   "href": "http://api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
@@ -2142,7 +2142,7 @@ module.exports = function(CardTemplates){
         "dom": ".card",
         "content": [
           {
-            "dom": ".card-visible.text-center",
+            "dom": ".card-visible.text-center.action-buttons",
             "content": [
               {
                 "dom": "h2",

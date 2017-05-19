@@ -1417,6 +1417,9 @@ class Quiz {
       } else {
         trackEvent("Results Got",{type: "Quiz"});
         qp.quizResults = true;
+        qp.country.parties.forEach(function(_party){
+          _party.quizResults = true;
+        });
         self.refresh();
         //TODO: Jeremy, you might want to change this :)
         // routes.step({ name: 'result', type: 'result' }).push();
@@ -1558,7 +1561,8 @@ class Quiz {
             fullName: "Conservative",
             name: "Con",
             key: "conservative",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "red",
@@ -1566,7 +1570,8 @@ class Quiz {
             fullName: "Labour",
             name: "Lab",
             key: "labour",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "orange",
@@ -1574,7 +1579,8 @@ class Quiz {
             fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "purple",
@@ -1582,7 +1588,8 @@ class Quiz {
             fullName: "Ukip",
             name: "Ukip",
             key: "ukip",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "green",
@@ -1590,7 +1597,8 @@ class Quiz {
             fullName: "Green",
             name: "Green",
             key: "green",
-            matches: []
+            matches: [],
+            quizResults: false
           },
         ]
       },
@@ -1604,7 +1612,8 @@ class Quiz {
             fullName: "Conservative",
             name: "Con",
             key: "conservative",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "red",
@@ -1612,7 +1621,8 @@ class Quiz {
             fullName: "Labour",
             name: "Lab",
             key: "labour",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "#005500",
@@ -1620,7 +1630,8 @@ class Quiz {
             fullName: "Plaid",
             name: "Plaid",
             key: "plaid-cymru",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "orange",
@@ -1628,7 +1639,8 @@ class Quiz {
             fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "purple",
@@ -1636,7 +1648,8 @@ class Quiz {
             fullName: "Ukip",
             name: "Ukip",
             key: "ukip",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "green",
@@ -1644,7 +1657,8 @@ class Quiz {
             fullName: "Green",
             name: "Green",
             key: "green",
-            matches: []
+            matches: [],
+            quizResults: false
           },
         ]
       },
@@ -1658,7 +1672,8 @@ class Quiz {
             fullName: "Conservative",
             name: "Con",
             key: "conservative",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "red",
@@ -1666,7 +1681,8 @@ class Quiz {
             fullName: "Labour",
             name: "Lab",
             key: "labour",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "yellow",
@@ -1674,7 +1690,8 @@ class Quiz {
             fullName: "SNP",
             name: "SNP",
             key: "snp",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "orange",
@@ -1682,7 +1699,8 @@ class Quiz {
             fullName: "Liberal Democrats",
             name: "Lib Dem",
             key: "lib-dem",
-            matches: []
+            matches: [],
+            quizResults: false
           },
           {
             color: "green",
@@ -1690,7 +1708,8 @@ class Quiz {
             fullName: "Green",
             name: "Green",
             key: "green",
-            matches: []
+            matches: [],
+            quizResults: false
           },
         ]
       }
@@ -1754,8 +1773,8 @@ class Quiz {
           var tempCard = {
             '@id': tempKey,
             '@type': 'QuizMatch',
-            name: 'Matches',
-            description: 'Description',
+            name: 'How you and ' + party.fullName + ' match:',
+            // description: 'Description',
             matches: matches
           }
           explaain.addClientCards(tempCard)
