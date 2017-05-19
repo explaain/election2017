@@ -1425,7 +1425,7 @@ class Quiz {
       if (qp.opinions.length > 0) {
         qp.startingQuiz = false;
       }
-      trackEvent("Question Answered",{type: "Quiz", question: quizQuestions[quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: quizQuestions[quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
       if(qp.opinions.length<quizQuestions.length){
         self.refresh();
       } else {
@@ -1781,8 +1781,8 @@ class Quiz {
           var tempCard = {
             '@id': tempKey,
             '@type': 'QuizMatch',
-            name: 'How you and ' + party.fullName + ' match:',
-            matches: matches
+            name: matches.length ? 'How you and ' + party.fullName + ' match:' : "Answer a question to see how you match",
+            matches: matches.length ? matches : []
           }
           // var tempKey2 = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
           // var tempCard2 = {
