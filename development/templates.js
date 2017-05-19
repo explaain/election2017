@@ -1824,7 +1824,9 @@ module.exports = function(CardTemplates){
             "condition": "quizResults",
             "template": "quizShareCard",
             "mapping": [
-              ["quizResults", "quizResults"]
+              ["quizResults", "quizResults"],
+              ["facebookShareHref", "facebookShareHref"],
+              ["twitterShareHref", "twitterShareHref"]
             ]
           }
         ]
@@ -2167,7 +2169,11 @@ module.exports = function(CardTemplates){
                 "content": "Challenge friends to see where they stand"
               },
               {
-                "template": "shareButtons"
+                "template": "shareButtons",
+                "mapping": [
+                  ["facebookShareHref", "facebookShareHref"],
+                  ["twitterShareHref", "twitterShareHref"]
+                ]
               },
               {
                 "dom": "div.politicalanimal",
