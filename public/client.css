@@ -1521,6 +1521,11 @@ a:hover .quizPercentagesPartyFace {
   min-height: 300px;
 }
 
+.content.quiz-intro .quizPercentagesParty {
+  pointer-events: none;
+  cursor: default;
+}
+
 .quizTopLine .progress {
   margin: 0 auto;
 }

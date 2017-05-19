@@ -1722,7 +1722,7 @@ module.exports = function(CardTemplates){
                     "dom": ".card-visible.text-center",
                     "content": [
                       {
-                        "dom": ".content",
+                        "dom": ".content.quiz-intro",
                         "content": [
                           {
                             "dom": "h2",

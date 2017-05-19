@@ -8,7 +8,7 @@ var partyStances ={
                   buttons: {},
                   parties:{
                      "conservative":{
-                        opinion:0,
+                        opinion:0.2,
 
                      },
                      "labour":{

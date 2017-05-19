@@ -1473,7 +1473,7 @@ class Quiz {
       model.parties = partyStances;
       var partyMatches = api.getPartyMatches(model);
       function getOpinionText(question, opinion) {
-        var aggAnswers = question.answers.yes.concat(question.answers.no);
+        var aggAnswers = question.answers.yes.concat(question.answers.no).concat([{label: "Yes", opinion: 0.8},{label: "No", opinion: 0.2}]);
         var answer = {diff: 1};
         aggAnswers.forEach(function(_answer) {
           _answer.diff = Math.abs(opinion - _answer.opinion);
@@ -1782,7 +1782,7 @@ class Quiz {
             '@id': tempKey,
             '@type': 'QuizMatch',
             name: 'How you and ' + party.fullName + ' match:',
-            matches: [matches[0]]
+            matches: matches
           }
           // var tempKey2 = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
           // var tempCard2 = {
