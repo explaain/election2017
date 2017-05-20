@@ -39,13 +39,17 @@ Model = model;
 
 class App {
   constructor(data) {
-    if (Quiz){
-      var logoRoute = routes.quiz();
-    } else if (Standalone) {
-      var logoRoute = routes.students();
+    var logoRoute;
+    if (Quiz==true){
+      logoRoute = routes.quiz();
+      console.log('logoRoute1');
+    } else if (Standalone==true) {
+      logoRoute = routes.students();
     } else {
-      var logoRoute = routes.root();
+      logoRoute = routes.root();
     }
+    console.log('logoRoute');
+    console.log(logoRoute);
     this.header = new Header(logoRoute);
     this.footer = new Footer();
     this.phraseSample = 0;
@@ -67,7 +71,7 @@ class App {
 
     } else {
 
-      return h('div.body' + (Standalone ? '.standalone' : '') + (Quiz ? '.quiz' : ''),
+      return h('div.body' + (Standalone==true ? '.standalone' : '') + (Quiz==true ? '.quiz' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -231,8 +235,8 @@ class Header {
   }
   render() {
     const self = this;
-    var logoImg = Quiz ? "img/unilad.png" : "/img/ge2017logobeta.png"
-    var logoClass = Quiz ? "unilad-logo" : "ge2017-logo";
+    var logoImg = Quiz==true ? "img/unilad.png" : "/img/ge2017logobeta.png"
+    var logoClass = Quiz==true ? "unilad-logo" : "ge2017-logo";
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
