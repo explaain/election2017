@@ -2035,6 +2035,10 @@ module.exports = function(CardTemplates){
             "content": [{"template": "quizPercentagesParty"}]
           }
         ]
+      },
+      {
+        "dom": ".partyNameSpacer",
+        "condition": "quizResults"
       }
     ]
   }
@@ -2087,6 +2091,20 @@ module.exports = function(CardTemplates){
         },
         "content": {
           "var": "percentage"
+        }
+      },
+      {
+        "dom": ".quizPercentagesPartyName.absolute",
+        "condition": "quizResults",
+        "attr": {
+          "style": {
+            "color": {
+              "var": "color"
+            }
+          }
+        },
+        "content": {
+          "var": "name"
         }
       }
     ]

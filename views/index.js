@@ -259,10 +259,16 @@ class Footer {
     );
     routes.quiz(function (params) {
       footerContents = h("div",
-        h("img",
+        h("a.turnup",
           {
-            "src": "img/turnup.png"
-          }
+            "href": "http://www.turnup.org.uk/",
+            "target": "_blank",
+          },
+          h("img",
+            {
+              "src": "img/turnup.png"
+            }
+          )
         )
       );
     });
@@ -1585,7 +1591,7 @@ class Quiz {
             color: "orange",
             photo: "/img/leader-faces/farron.png",
             fullName: "Liberal Democrats",
-            name: "Lib Dem",
+            name: "Lib",
             key: "lib-dem",
             matches: [],
             quizResults: false
@@ -1645,7 +1651,7 @@ class Quiz {
             color: "orange",
             photo: "/img/leader-faces/farron.png",
             fullName: "Liberal Democrats",
-            name: "Lib Dem",
+            name: "Lib",
             key: "lib-dem",
             matches: [],
             quizResults: false
@@ -1705,7 +1711,7 @@ class Quiz {
             color: "orange",
             photo: "/img/leader-faces/farron.png",
             fullName: "Liberal Democrats",
-            name: "Lib Dem",
+            name: "Lib",
             key: "lib-dem",
             matches: [],
             quizResults: false
@@ -1757,7 +1763,7 @@ class Quiz {
         photo: "/img/leader-faces/farron.png",
         percentage: parseInt((Math.random()*100))+"%",
         fullName: "Liberal Democrats",
-        name: "Lib Dem"
+        name: "Lib"
       },
     ];
   }

@@ -159,12 +159,7 @@ footer {
   padding-bottom:20px;
 }
 
-.body.quiz footer {
-  margin: -20px 20px 10px
-}
-.body.quiz footer img {
-  height: 70px;
-}
+
 
 /* Because of social media panel and Share button */
 @media only screen and (max-width: 980px) {
@@ -174,6 +169,15 @@ footer {
   .at-expanding-share-button-toggle-bg {
     bottom:60px;
   }
+}
+
+/* Because currently quiz doesn't use social media panel and Share button! */
+.body.quiz footer {
+  margin: -20px 0;
+  padding: 0;
+}
+.body.quiz footer img {
+  height: 70px;
 }
 
 i.fa-check {
@@ -1478,10 +1482,13 @@ a:hover .quizPercentagesPartyFace {
   border-radius:6px;
   margin: 20px 0 0;
   cursor: pointer;
+  border: solid 2px #dd2569;
 }
 
 .startQuiz:hover {
-  background-color: #dd2569;
+  background-color: white;
+  color: #dd2569;
+  /*border-color: #ddd;*/
 }
 
 .quizCountrySelector {
@@ -1526,6 +1533,18 @@ a:hover .quizPercentagesPartyFace {
   cursor: default;
 }
 
+.quizPercentagesPartyName.absolute {
+    position: absolute;
+    width: 100%;
+    bottom: -25px;
+    color: #777;
+    font-weight: bold;
+}
+
+.partyNameSpacer {
+  height: 30px;
+}
+
 .quizTopLine .progress {
   margin: 0 auto;
 }
@@ -1555,4 +1574,8 @@ a:hover .quizPercentagesPartyFace {
 .politicalanimal img {
   width: 180px;
   margin: -10px 0 10px;
+}
+
+a.turnup:hover {
+  opacity: 0.7;
 }

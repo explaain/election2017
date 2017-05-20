@@ -308,7 +308,7 @@ var quizQuestions = [
          opinion: 1
        },
        {
-         label: "Yes, but only when there is an immediate danger to the UKs interest.",
+         label: "Yes, but only when there is an immediate danger to the UK.",
          opinion: 0.8
        }
      ],
