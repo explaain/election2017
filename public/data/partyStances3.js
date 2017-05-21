@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return partyStances;
+  }
+};
+
+
 var partyStances ={
    opinions:{
       issues:{

@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return ge2015Results;
+  }
+};
+
+
 var ge2015Results = {
    "E14000530": [
       {

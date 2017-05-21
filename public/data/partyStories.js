@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return partyStories;
+  }
+};
+
+
 var partyStories = [
   {
     party: "conservative",

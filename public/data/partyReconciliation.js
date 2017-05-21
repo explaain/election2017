@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return partyReconciliationValues;
+  }
+};
+
+
 var partyReconciliationValues = {
   "conservative": "conservative",
   "labour": "labour",

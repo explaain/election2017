@@ -15,7 +15,8 @@ const
   dataProcessor = new (require("../includes/dataprocessor"))(),
   designers = new (require("../includes/designers"))(),
   trackEvent = require("../includes/event-tracker"),
-  eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent)
+  eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent),
+  allData = require('../public/data/allData')
 ;
 
 trackEvent("Landed",{page: location.pathname});
@@ -701,7 +702,7 @@ class Step {
         break;
 
       case 'partyStories':
-        data.cardGroups.push(partyStories)
+        data.cardGroups.push(allData.getAllData().partyStories)
         break;
 
       case 'sampleStory':
@@ -1431,12 +1432,13 @@ class Quiz {
     self.selectedCountry = qp.country;
     self.nextButtonText = qp.nextButtonText;
     self.countrySelected = self.selectedCountry!==null;
+    self.quizQuestions = allData.getAllData().quizQuestions;
     self.next = function(){
       if (qp.opinions.length > 0) {
         qp.startingQuiz = false;
       }
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: quizQuestions[quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
-      if(qp.opinions.length<quizQuestions.length){
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: self.quizQuestions[self.quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
+      if(qp.opinions.length<self.quizQuestions.length){
         self.refresh();
       } else {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
@@ -1461,8 +1463,8 @@ class Quiz {
     self.answer = function(answer){
       qp.answers.push(answer);
       console.log(qp.answers.length);
-      console.log(quizQuestions.length);
-      if (qp.answers.length==quizQuestions.length) {
+      console.log(self.quizQuestions.length);
+      if (qp.answers.length==self.quizQuestions.length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
@@ -1470,9 +1472,9 @@ class Quiz {
     self.submitOpinion = function(opinion) {
       model.user.quizProgress.opinions.push(opinion);
       const qp = model.user.quizProgress;
-      if (quizQuestions && qp && quizQuestions[qp.opinions.length-1]) { //Maybe this isn't a proper fix?
-        var issue = quizQuestions[qp.opinions.length-1].issue;
-        var debate = quizQuestions[qp.opinions.length-1].debate;
+      if (self.quizQuestions && qp && self.quizQuestions[qp.opinions.length-1]) { //Maybe this isn't a proper fix?
+        var issue = self.quizQuestions[qp.opinions.length-1].issue;
+        var debate = self.quizQuestions[qp.opinions.length-1].debate;
         model.user.opinions.issues = model.user.opinions.issues || {};
         model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
         model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
@@ -1493,13 +1495,13 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        var userOpinion = getOpinionText(quizQuestions[qp.opinions.length-1], opinion);
-        var partyOpinion = getOpinionText(quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
+        var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
+        var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
         var newScore = {
           key: partyKey,
           percentage: parseInt(party.match*100),
           newMatch: {
-            question: quizQuestions[qp.opinions.length-1].question,
+            question: self.quizQuestions[qp.opinions.length-1].question,
             userOpinion: userOpinion,
             partyOpinion: partyOpinion,
             isMatch: userOpinion == partyOpinion
@@ -1557,7 +1559,7 @@ class Quiz {
         })
         qp.resultsData = {
           logo: '/img/party-logos/'+topParty.key+'.png',
-          name: allParties.filter(function(party){return party.key==topParty.key})[0].name,
+          name: allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0].name,
           percentage: parseInt(topParty.percentage)+"%"
         }
       }
@@ -1775,7 +1777,7 @@ class Quiz {
     const self = this;
     self.launchRandomRefresh();
     const qp = model.user.quizProgress;
-    const subquestions = quizQuestions[qp.opinions.length] ? quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
+    const subquestions = self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
     if(subquestions){
       subquestions.forEach(function(subanswer){
         subanswer.answer = function(){
@@ -1822,12 +1824,12 @@ class Quiz {
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
       resultPercentage: self.resultsData.percentage,
-      currentQuestion: quizQuestions[qp.opinions.length],
+      currentQuestion: self.quizQuestions[qp.opinions.length],
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
       currentQuestionNo: qp.answers[qp.opinions.length]==="no",
-      currentSubquestion: quizQuestions[qp.opinions.length] ? quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null,
-      progressBarWidth: ((qp.opinions.length/quizQuestions.length)*100) + "%",
+      currentSubquestion: self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null,
+      progressBarWidth: ((qp.opinions.length/self.quizQuestions.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skip,
@@ -1864,7 +1866,7 @@ for(var key in _templates){
 //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
 require("../development/templates.js")(CardTemplates);
 require("../development/model.js")(model);
-require("../development/generatePartyStances.js")(model,partyStances)();
+require("../development/generatePartyStances.js")(model,allData.getAllData().partyStances)();
 hyperdom.append(document.body, new App());
 
 designers.onWindowResize();

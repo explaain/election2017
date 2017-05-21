@@ -1,3 +1,9 @@
+module.exports = {
+  getData: function () {
+    return constituencyOdds;
+  }
+};
+
 var constituencyOdds = {
    "E14000758": [
       {

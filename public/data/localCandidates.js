@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return localCandidates;
+  }
+};
+
+
 var localCandidates = [
   {
     "id": 20533,

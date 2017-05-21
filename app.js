@@ -2,8 +2,11 @@ var express = require('express');
 var ejs = require('ejs');
 var app = express();
 var path = require('path');
+var api = require('./services/apiService');
 const Cookies = require('cookies');
 const compression = require('compression');
+
+var allData = require('./public/data/allData');
 
 // app.get('/', function (req, res) {
 //   res.sendFile(__dirname + '/public/index.html');
@@ -79,6 +82,21 @@ app.get('/quiz', function(req, res, next) {
 //Teporary because AddThis was sending people to the wrong place!
 app.get('/ge2017.com', function(req, res, next) {
   res.redirect(301,"/students");
+});
+
+app.get('/api/postcode/:postcode', function(req, res, next) {
+  api.getContenders(req.params.postcode)
+  .then(function(result) {
+    res.json({test: 'test', result: result});
+  })
+});
+
+app.get('/api/constituency/:id', function(req, res, next) {
+  // api.
+  api.getContenders(req.params.id)
+  .then(function(result) {
+    res.json({test: 'test', result: result});
+  })
 });
 
 

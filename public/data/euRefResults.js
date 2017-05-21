@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return leavePercentages;
+  }
+};
+
+
 var leavePercentages = [
  {
    "area": "Peterborough",

@@ -3,6 +3,9 @@
 var http = require('httpism')
 const q = require("q")
 
+const allData = require('../public/data/allData');
+
+
 function APIService() {
 
 }
@@ -74,7 +77,7 @@ APIService.prototype.getLocalCandidatesResults = function(postcode, userData) {
       data.user = userData || {};
       data.user.constituency = constituency;
       data.candidates = [];
-      localCandidates.forEach(function(localCandidate){
+      allData.getAllData().localCandidates.forEach(function(localCandidate){
         if(localCandidate.gss_code === constituency.id){
           data.candidates.push(localCandidate);
         }
@@ -160,7 +163,14 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
   })
 }
 
-const getContenders = function(postcode) {
+APIService.prototype.getContenders = function(postcode, publicData) {
+  //If publicData is not specified then this assumes the various variables are already available globally
+  // if (publicData) {
+  //   var swingSeatsToForce = swingSeatsToForce;
+  // }
+
+
+
   var user = {};
   var data = {};
   var forceSwing = false;
@@ -171,7 +181,7 @@ const getContenders = function(postcode) {
     } else {
       data = results;
       user = {constituency: results.user.constituency};
-      forceSwing = swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
+      forceSwing = allData.getAllData().swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
       return getPartyChances(data);
     }
   }).then(function(results) {
@@ -182,10 +192,14 @@ const getContenders = function(postcode) {
       if (forceSwing) {
         threshold = 0;
       }
+      console.log('results');
+      console.log(results);
       var partyKeys = Object.keys(results);
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         return results[partyKey].chance > threshold;
       });
+      console.log('topPartyKeys');
+      console.log(topPartyKeys);
       var topParties = topPartyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
@@ -219,6 +233,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (results.error) {
       return results;
     } else {
+      console.log(2);
       totalResults.user = {
         constituency : {
           name: results.constituency.name,
@@ -228,10 +243,13 @@ APIService.prototype.loadPostcodeData = function(postcode) {
       postcodeResults = results;
       var refAreaName = results.refArea.name;
       refAreaName = refAreaName.substring(0, refAreaName.length - 5);
+      console.log(3);
+      console.log(results);
       return loadEURefResults(refAreaName);
     }
   })
   .then(function(results) {
+    console.log(4);
     if (results.error) {
       return results;
     } else {
@@ -241,6 +259,7 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
+    console.log(5);
     if (results.error) {
       return results;
     } else {
@@ -349,7 +368,7 @@ APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
   var agreements = getAgreements(data);
-  allParties.forEach(function(party) {
+  allData.getAllData().allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
     try {
@@ -453,6 +472,9 @@ APIService.prototype.getPartyChances = function(data) {
         chance: totalChance
       }
 
+      console.log('partyChances');
+      console.log(partyChances);
+
       partyChances[partyKey].chances = [];
       partyChances[partyKey].chances.push({
         description: "This is a " + currentParty.name + " seat",
@@ -486,9 +508,12 @@ APIService.prototype.loadConstituency = function(postcode) {
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
       return data.type == 'WMC'
     });
+    console.log('constituency');
+    console.log(constituency);
     var refArea = objectAsArray(res.body.areas).filter(function (data) {
       return (data.type == 'OLF' || data.type == 'UTA')
     });
+    console.log(1);
     return {constituency: constituency[0], refArea: refArea[0], all: res.body.areas}
   }, function (error) {
     if(!postcode){
@@ -502,16 +527,16 @@ APIService.prototype.loadConstituency = function(postcode) {
 };
 
 APIService.prototype.loadEURefResults = function(areaName) {
-  var results = leavePercentages.filter(function (res) {
+  var results = allData.getAllData().leavePercentages.filter(function (res) {
     return res.area == areaName;
   });
   if (results.length==0) {
-    var results = leavePercentages.filter(function (res) {
+    var results = allData.getAllData().leavePercentages.filter(function (res) {
       return res.area.indexOf(areaName) > -1;
     });
   }
   if (results.length==0) {
-    var results = leavePercentages.filter(function (res) {
+    var results = allData.getAllData().leavePercentages.filter(function (res) {
       return res.area.indexOf(areaName.split(" ")[0]);
     });
   }
@@ -520,7 +545,7 @@ APIService.prototype.loadEURefResults = function(areaName) {
 
 APIService.prototype.loadGe2015Results = function(areaKey) {
   var result = {"ge2015": {parties:{}}};
-  var resultsTemp = ge2015Results[areaKey];
+  var resultsTemp = allData.getAllData().ge2015Results[areaKey];
   resultsTemp.forEach(function(party) {
     var partyKey = party.party;
     var partyKey = reconcilePartyKeys(party.party);
@@ -533,10 +558,11 @@ APIService.prototype.loadGe2015Results = function(areaKey) {
 
 APIService.prototype.loadBettingOdds = function(areaKey) {
   var result = {"oddChances": {parties:{}}};
-  var resultsTemp = constituencyOdds[areaKey] || null;
+  var resultsTemp = allData.getAllData().constituencyOdds[areaKey] || null;
   if (resultsTemp == null) {
     result["oddChances"] = {}
   } else {
+    console.log(5);
     resultsTemp.forEach(function(party) {
       var partyKey = party.party;
       var digits = party.odds.split('/');
@@ -549,14 +575,16 @@ APIService.prototype.loadBettingOdds = function(areaKey) {
 
 
 APIService.prototype.loadPartyStances = function() {
-  return partyStances;
+  return allData.getAllData().partyStances;
 }
 
 
 var getFullParty = function(partyKey) {
-  var fullParty = allParties.filter(function(party) {
+  console.log(partyKey);
+  var fullParty = allData.getAllData().allParties.filter(function(party) {
     return party.key == partyKey;
   })[0];
+  console.log(fullParty);
   if (fullParty === undefined) {
     fullParty = {
       key: partyKey,
@@ -579,7 +607,7 @@ var getWinningPartyKey = function(resultParties) {
 }
 
 var reconcilePartyKeys = function(suppliedKey) {
-  var properKey = partyReconciliationValues[suppliedKey];
+  var properKey = allData.getAllData().partyReconciliation[suppliedKey];
   if (properKey === undefined) {
     console.log('Undefined!!');
     properKey = suppliedKey;
@@ -597,6 +625,7 @@ var getResults = APIService.prototype.getResults;
 var getPartyResults = APIService.prototype.getPartyResults;
 var getLocalCandidatesResults = APIService.prototype.getLocalCandidatesResults;
 var comparePostcodes = APIService.prototype.comparePostcodes;
+var getContenders = APIService.prototype.getContenders;
 var loadPostcodeData = APIService.prototype.loadPostcodeData;
 var resultAlgorithm = APIService.prototype.resultAlgorithm;
 var getAgreements = APIService.prototype.getAgreements;

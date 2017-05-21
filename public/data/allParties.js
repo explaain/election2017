@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return allParties;
+  }
+};
+
+
 var allParties = [
   {
     key: "conservative",

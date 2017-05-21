@@ -1,3 +1,10 @@
+module.exports = {
+  getData: function () {
+    return quizQuestions;
+  }
+};
+
+
 /* Sample data for Quiz for 18 May 2017 */
 var quizQuestions = [
  {

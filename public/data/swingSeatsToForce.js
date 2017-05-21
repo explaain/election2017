@@ -1,3 +1,11 @@
+module.exports = {
+  getData: function () {
+    return swingSeatsToForce;
+  }
+};
+
+
+
 var swingSeatsToForce = [
   "W07000046",
   "E14000662",
@@ -211,5 +219,6 @@ var swingSeatsToForce = [
   "W07000063",
   "E14000864",
   "E14000867",
-  "W07000080"
+  "W07000080",
+  "E14000874"
 ];
