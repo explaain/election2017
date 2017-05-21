@@ -2,7 +2,7 @@ var express = require('express');
 var ejs = require('ejs');
 var app = express();
 var path = require('path');
-var api = require('./services/apiService');
+var api = require('./services/APIService');
 const Cookies = require('cookies');
 const compression = require('compression');
 
