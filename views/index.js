@@ -89,7 +89,7 @@ class App {
               /* todo: yet another hack, fix it later :( */
               self.choosingPhrases = false;
               window.setTimeout(function(){
-                routes.phrase({name: 'iWantTo'}).push();
+                // routes.phrase({name: 'iWantTo'}).push();
               },10)
             }),
 
@@ -1448,6 +1448,18 @@ class Quiz {
     self.nextButtonText = qp.nextButtonText;
     self.countrySelected = self.selectedCountry!==null;
     self.quizQuestions = allData.getAllData().quizQuestions;
+    self.postcodeSubmit = function(e) {
+      console.log(e);
+      e.stopPropagation();
+      model.landedOnResult = 1;
+      model.user.isWaiting = "postcode-input";
+      self.refresh();
+      getResults('partyResults').then(function(){
+        delete model.user.isWaiting;
+        routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+      });
+      return false;
+    }
     self.next = function(){
       if (qp.opinions.length > 0) {
         qp.startingQuiz = false;
@@ -1858,6 +1870,7 @@ class Quiz {
       countrySelected: self.countrySelected,
       countriesData: self.countriesData,
       selectedCountry: self.selectedCountry,
+      postcodeSubmit: self.postcodeSubmit,
       back: self.back,
       facebookShareHref: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button",
       twitterShareHref: "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20http%3A%2F%2Fbit.ly%2Funilad-ge2017%20via%20%40UNILAD",
