@@ -74,6 +74,15 @@ header img.ge2017-logo {
   height: 35px;
   margin: 10px auto;
   display: block;
+  transition: height .4s, margin .4s;
+  -webkit-transition: height .4s, margin .4s;
+}
+.body.quiz header img.ge2017-logo {
+  margin-bottom: -20px;
+}
+.body.quiz.moving header img.ge2017-logo {
+  height: 30px;
+  margin-bottom: 10px;
 }
 header img.unilad-logo {
   text-align: center;
@@ -1571,7 +1580,13 @@ a:hover .quizPercentagesPartyFace {
   margin-top: 50px;
 }
 
-.politicalanimal img {
+.politicalanimal {
+  display: none;
+}
+.body.unilad .politicalanimal {
+  display: block;
+}
+.body.unilad .politicalanimal img {
   width: 180px;
   margin: -10px 0 10px;
 }

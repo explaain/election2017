@@ -40,6 +40,8 @@ Model = model;
 
 class App {
   constructor(data) {
+    console.log(SiteBrand);
+
     var logoRoute;
     if (QuizPage==true){
       logoRoute = routes.quiz();
@@ -49,8 +51,6 @@ class App {
     } else {
       logoRoute = routes.root();
     }
-    console.log('logoRoute');
-    console.log(QuizPage==true);
     this.header = new Header(logoRoute);
     this.footer = new Footer();
     this.phraseSample = 0;
@@ -72,7 +72,7 @@ class App {
 
     } else {
 
-      return h('div.body' + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : ''),
+      return h('div.body' + (SiteBrand ? '.' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -236,8 +236,23 @@ class Header {
   }
   render() {
     const self = this;
-    var logoImg = QuizPage==true ? "img/unilad.png" : "/img/ge2017logobeta.png"
-    var logoClass = QuizPage==true ? "unilad-logo" : "ge2017-logo";
+    var logoImg,
+        logoClass;
+
+    switch (SiteBrand) {
+      case 'ge2017':
+        logoImg = "/img/ge2017logobeta.png";
+        logoClass = "ge2017-logo";
+        break;
+      case 'unilad':
+        logoImg = "img/unilad.png";
+        logoClass = "unilad-logo";
+        break;
+      default:
+        logoImg = "/img/ge2017logobeta.png";
+        logoClass = "ge2017-logo";
+    }
+
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
@@ -1849,6 +1864,7 @@ class Quiz {
     }, CardTemplates.quizMaster);
   }
 }
+
 
 /*const templatesUrl = '//explaain-api.herokuapp.com/templates';
 helpers.loadTemplates(templatesUrl).then(function(templates){

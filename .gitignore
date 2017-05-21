@@ -13,3 +13,4 @@ public/compiled.js
 .idea/vcs.xml
 .idea/workspace.xml
 .remote-sync.json
+.env
