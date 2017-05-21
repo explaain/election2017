@@ -1482,7 +1482,7 @@ class Quiz {
         model.user.opinions.issues[issue].debates[debate].opinion = opinion;
         // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
       }
-      model.parties = partyStances;
+      model.parties = allData.getAllData().partyStances;
       var partyMatches = api.getPartyMatches(model);
       function getOpinionText(question, opinion) {
         var aggAnswers = question.answers.yes.concat(question.answers.no).concat([{label: "Yes", opinion: 0.8},{label: "No", opinion: 0.2}]);
@@ -1866,7 +1866,7 @@ for(var key in _templates){
 //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
 require("../development/templates.js")(CardTemplates);
 require("../development/model.js")(model);
-require("../development/generatePartyStances.js")(model,allData.getAllData().partyStances)();
+// require("../development/generatePartyStances.js")(model,allData.getData().partyStances)();
 hyperdom.append(document.body, new App());
 
 designers.onWindowResize();
