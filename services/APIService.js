@@ -164,13 +164,6 @@ APIService.prototype.comparePostcodes = function(postcode1, postcode2) {
 }
 
 APIService.prototype.getContenders = function(postcode, publicData) {
-  //If publicData is not specified then this assumes the various variables are already available globally
-  // if (publicData) {
-  //   var swingSeatsToForce = swingSeatsToForce;
-  // }
-
-
-
   var user = {};
   var data = {};
   var forceSwing = false;
@@ -179,46 +172,49 @@ APIService.prototype.getContenders = function(postcode, publicData) {
     if (results.error) {
       return results;
     } else {
+      console.log('results1');
+      console.log('results1');
+      console.log(results);
       data = results;
       user = {constituency: results.user.constituency};
       forceSwing = allData.getAllData().swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
       return getPartyChances(data);
     }
   }).then(function(results) {
+    console.log('results');
+    console.log('results');
+    console.log('results');
+    console.log(results);
     if (results.error) {
       return results;
     } else {
       var threshold = 0.5;
-      if (forceSwing) {
-        threshold = 0;
-      }
       console.log('results');
       console.log(results);
       var partyKeys = Object.keys(results);
+      partyKeys.sort(function(a, b) {
+        return parseFloat(results[b].chance) - parseFloat(results[a].chance);
+      });
+      console.log('partyKeys');
+      console.log(partyKeys);
+      var i = 0;
       var topPartyKeys = partyKeys.filter(function(partyKey) {
-        return results[partyKey].chance > threshold;
+        i++;
+        return results[partyKey].chance > threshold || i < 2 || ( forceSwing && i < 3 );
       });
       console.log('topPartyKeys');
       console.log(topPartyKeys);
       var topParties = topPartyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
+      console.log('topParties');
+      console.log(topParties);
       topParties.map(function(party) {
         party.chance = results[party.key].chance;
         return party;
       })
-      topParties.sort(function(a, b) {
-        return parseFloat(b.chance) - parseFloat(a.chance);
-      });
-      var i = 0;
-      topParties = topParties.filter(function(party, i) {
-        i++;
-        console.log(i);
-        return party.chance > threshold || ( forceSwing && i < 2 );
-      });
-      if (forceSwing) {
-        topParties = topParties.slice(0,3);
-      }
+      console.log('topParties');
+      console.log(topParties);
 
       return {
         location: user.constituency.name,
@@ -613,11 +609,17 @@ var getWinningPartyKey = function(resultParties) {
 }
 
 var reconcilePartyKeys = function(suppliedKey) {
+  console.log('suppliedKey');
+  console.log(suppliedKey);
+  console.log('allData.getAllData().partyReconciliation');
+  console.log(allData.getAllData().partyReconciliation);
   var properKey = allData.getAllData().partyReconciliation[suppliedKey];
   if (properKey === undefined) {
     console.log('Undefined!!');
     properKey = suppliedKey;
   }
+  console.log('properKey');
+  console.log(properKey);
   return properKey;
 }
 
