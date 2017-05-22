@@ -1503,6 +1503,11 @@ a:hover .quizPercentagesPartyFace {
 .card.quiz-extra {
   margin: 0;
 }
+
+.body.unilad .or, .body.unilad .card.quiz-extra {
+  display: none;
+}
+
 .card.quiz-extra .card-visible {
   padding: 10px 20px;
 }
