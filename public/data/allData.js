@@ -9,6 +9,8 @@ var partyStances2 = require('./partyStances2');
 var partyStories = require('./partyStories');
 var quizQuestions = require('./quizQuestions');
 var swingSeatsToForce = require('./swingSeatsToForce');
+var countriesData = require('./countriesData');
+var ukData = require('./ukData');
 
 
 module.exports = {
@@ -24,7 +26,9 @@ module.exports = {
       // partyStances: {opinions: {issues: Object.assign(partyStances.getData().opinions.issues, partyStances2.getData().opinions.issues)}},
       partyStories: partyStories.getData(),
       quizQuestions: quizQuestions.getData(),
-      swingSeatsToForce: swingSeatsToForce.getData()
+      swingSeatsToForce: swingSeatsToForce.getData(),
+      countriesData: countriesData.getData(),
+      ukData: ukData.getData(),
     }
   }
 };

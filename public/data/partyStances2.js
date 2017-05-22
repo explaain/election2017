@@ -300,7 +300,7 @@ var partyStances = {
         "defence": {
          description: "Nuclear weapons",
          debates: {
-           "trident-1": {
+           "defence-1": {
               question: "Should the UK have nuclear weapons? [Learn more](http://api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
               description: "",
               buttons: {

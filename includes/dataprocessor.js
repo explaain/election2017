@@ -186,16 +186,16 @@ module.exports = class DataProcessor {
     }
 
     var outcomes = {
-      "hardBrexit": "brexit-1",
+      "hardBrexit": "eu-1",
       "tuitionFees": "education-1",
-      "nationalisingRailways": "transport-1",
-      "increasingTax": "economy-1",
-      "moreHouses": "housing-1",
-      "nuclearWeapons": "trident-1",
-      "nhsFunding": "NHS-1",
+      "nationalisingRailways": "public-services-1",
+      "increasingTax": "tax-2",
+      "moreHouses": "housing-2",
+      "nuclearWeapons": "defence-2",
+      // "nhsFunding": "NHS-1",
       "protectingEnvironment": "environment-1",
       "immigration": "immigration-1",
-      "minimumWage": "economy-2",
+      "minimumWage": "jobs-2",
     }
 
     Object.keys(outcomes).forEach(function(outcomeKey) {

@@ -145,7 +145,7 @@ var quizQuestions = [
  {
    question: "6. Should fox hunting be legal?",
    issue: "environment",
-   debate: "enivornment-1",
+   debate: "environment-1",
    answers: {
      yes: [
        {
@@ -225,8 +225,8 @@ var quizQuestions = [
  },
  {
    question: "9. Should the government own utlilites like the railway, post office and water companies?",
-   issue: "public services",
-   debate: "public services-1",
+   issue: "public-services",
+   debate: "public-services-1",
    answers: {
      yes: [
        {
