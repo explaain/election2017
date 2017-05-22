@@ -151,6 +151,7 @@ class App {
               }
 
               var quizButtonClick = function(e) {
+                console.log(123);
                 model.selectedPhrases.push({key: 'allIssues'});
                 goto = {
                   type: 'step',
@@ -189,7 +190,7 @@ class App {
               var goButton = goto ? h('button.popup',{class: 'btn btn-success', onclick: submitData }, 'Let\'s go!') : '';
               var quizButton = h('button.btn.btn-default', {onclick: quizButtonClick}, 'Or go straight to a 10-question quiz');
               var phraseDom = h("div.content.text-center.single-sentence", h("div.body-content.hoverClick", {onclick: beginPhraseChoosing}, hPhrases, currentPhrase, goButton, h('div.help', h('i.fa.fa-hand-pointer-o', {style: 'margin-right:0.2em;'}), 'Tap here to begin') ), h('section.divider', h('div', {class: 'quiz-btn-container'}, quizButton)));
-              return h('section.step', h("h1", "Hi, what do you want to do?"), h('div.cards.sentence', new Card({},function(){}, phraseDom) ) );
+              return h('section.step.single-sentence', h("h1", "What can we help you with?"), h('div.cards.sentence', new Card({},function(){}, phraseDom) ) );
             }),
 
             routes.step(function (params) {
@@ -962,24 +963,84 @@ class CardContent {
         model.landedOnResult = 1;
         model.user.isWaiting = "goToResults";
         self.refresh();
-        getResults(self.resultsType).then(function(){
-          delete model.user.isWaiting;
-          routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
-        });
-        return helpers.assembleCards(data, 'loading');
+
+        model.parties = allData.getAllData().partyStances;
+        var partyMatches = api.getPartyMatches(model);
+        routes.quizResults().push();
+
+        // getResults(self.resultsType).then(function(){
+        //   delete model.user.isWaiting;
+        //   routes.step({ name: data.nextStep, type: data.type, resultsType: self.resultsType }).push();
+        // });
+        // return helpers.assembleCards(data, 'loading');
 
       case 'postcode':
         if (postcodeAlreadyEntered) {
+          console.log('already');
           //Doesn't ask for postcode again
           data.name = "Loading your results...";
           data.description = "";
           model.landedOnResult = 1;
           model.user.isWaiting = "postcode-input";
           self.refresh();
-          getResults('partyResults').then(function(){
-            delete model.user.isWaiting;
-            routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+
+          model.parties = allData.getAllData().partyStances;
+          var partyMatches = api.getPartyMatches(model);
+
+          var newScores = Object.keys(partyMatches).map(function(partyKey) {
+            var party = partyMatches[partyKey];
+            // var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
+            // var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
+            var newScore = {
+              key: partyKey,
+              percentage: parseInt(party.match*100),
+              // newMatch: {
+              //   question: self.quizQuestions[qp.opinions.length-1].question,
+              //   userOpinion: userOpinion,
+              //   partyOpinion: partyOpinion,
+              //   isMatch: userOpinion == partyOpinion
+              // }
+            }
+            return newScore;
           });
+          const qp = model.user.quizProgress;
+          qp.country = qp.countriesData[0];
+          var updatePartyPercentages = function(map){
+            if(qp.country){
+              var topParty = {percentage: 0}
+              map.forEach(function(party){
+                qp.country.parties.forEach(function(_party){
+                  if(party.key===_party.key){
+                    _party.percentage = parseInt(party.percentage) + "%";
+                    _party.percentageText = parseInt(party.percentage) + "%";
+                    _party.matches.push(party.newMatch);
+                    if (party.percentage > topParty.percentage) {
+                      topParty = party;
+                    }
+                  }
+                })
+              })
+              qp.resultsData = {
+                logo: '/img/party-logos/'+topParty.key+'.png',
+                name: allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0].name,
+                percentage: parseInt(topParty.percentage)+"%",
+                percentageText: parseInt(topParty.percentage)+"%"
+              }
+            }
+          }
+          updatePartyPercentages(newScores);
+          qp.quizResults = true;
+          qp.quizResultsPage = true;
+          qp.country.parties.forEach(function(_party){
+            _party.quizResults = true;
+          });
+          qp.finalResults = true;
+          routes.quizResults().push();
+
+          // getResults('partyResults').then(function(){
+          //   delete model.user.isWaiting;
+          //   routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+          // });
           // return false;
         }
         data.isWaiting = model.user.isWaiting === "postcode-input";
@@ -989,39 +1050,48 @@ class CardContent {
           model.landedOnResult = 1;
           model.user.isWaiting = "postcode-input";
           self.refresh();
-          getResults('partyResults').then(function(){
-            delete model.user.isWaiting;
-            routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
-          });
-          return false;
+
+          model.parties = allData.getAllData().partyStances;
+          var partyMatches = api.getPartyMatches(model);
+          routes.quizResults().push();
+
+          // getResults('partyResults').then(function(){
+          //   delete model.user.isWaiting;
+          //   routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+          // });
+          // return false;
         }
-        return helpers.assembleCards(data, 'postcodeInput');
+        // return helpers.assembleCards(data, 'postcodeInput');
 
       case 'quiz-priority':
-        var onTopicClick = function(topicKey){
-          let topicNameIndex = model.featuredTopics.indexOf(topicKey);
-          if(~topicNameIndex){
-            model.user.opinions.issues[topicKey].highPriority = false;
-            model.featuredTopics.splice(topicNameIndex, 1);
-          }
-          else{
-            model.user.opinions.issues[topicKey].highPriority = true;
-            model.featuredTopics.push(topicKey);
-          }
-          return false;
-        };
+        try {
+          var onTopicClick = function(topicKey){
+            let topicNameIndex = model.featuredTopics.indexOf(topicKey);
+            if(~topicNameIndex){
+              model.user.opinions.issues[topicKey].highPriority = false;
+              model.featuredTopics.splice(topicNameIndex, 1);
+            }
+            else{
+              model.user.opinions.issues[topicKey].highPriority = true;
+              model.featuredTopics.push(topicKey);
+            }
+            return false;
+          };
 
-        ['quizTopicsLower', 'quizTopicsHigher'].forEach(function(varName){
-          data[varName].map(function(topic){
-            topic.onTopicClick = function(e){
-              e.stopPropagation();
-              return onTopicClick(topic._key);
-            };
-            return topic;
+          ['quizTopicsLower', 'quizTopicsHigher'].forEach(function(varName){
+            data[varName].map(function(topic){
+              topic.onTopicClick = function(e){
+                e.stopPropagation();
+                return onTopicClick(topic._key);
+              };
+              return topic;
+            });
           });
-        });
 
-        return helpers.assembleCards(data, 'quizPriority');
+          return helpers.assembleCards(data, 'quizPriority');
+        } catch(e) {
+
+        }
 
       case 'goto-postcode-button':
         data.buttonAction = function(e){
@@ -1611,6 +1681,14 @@ class Quiz {
       $('.body.quiz').addClass('moving');
       self.next();
     }
+    self.startStudentCompare = function(){
+      trackEvent("Student Compare Started",{type: "Quiz"});
+      routes.step({name:'postcode-compare'}).push();
+    }
+    self.startSingleSentence = function(){
+      trackEvent("Single Sentence Started",{type: "Quiz"});
+      routes.phrase({name: 'iWantTo'}).push();
+    }
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
     self.updatePartyPercentages = function(map){
       if(qp.country){
@@ -1686,7 +1764,76 @@ class Quiz {
       self.partiesChartDataTopMatch = [tempMaxParty]
     }
 
-    self.countriesData = [
+    qp.countriesData = [
+      {
+        label: "UK",
+        code: "all",
+        parties: [
+          {
+            color: "blue",
+            photo: "/img/leader-faces/may.png",
+            fullName: "Conservative",
+            name: "Con",
+            key: "conservative",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "red",
+            photo: "/img/leader-faces/corbyn.png",
+            fullName: "Labour",
+            name: "Lab",
+            key: "labour",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "orange",
+            photo: "/img/leader-faces/farron.png",
+            fullName: "Liberal Democrats",
+            name: "Lib",
+            key: "lib-dem",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "purple",
+            photo: "/img/leader-faces/nuttall.png",
+            fullName: "Ukip",
+            name: "Ukip",
+            key: "ukip",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "green",
+            photo: "/img/leader-faces/lucas.png",
+            fullName: "Green",
+            name: "Green",
+            key: "green",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "#005500",
+            photo: "/img/leader-faces/wood.png",
+            fullName: "Plaid",
+            name: "Plaid",
+            key: "plaid-cymru",
+            matches: [],
+            quizResults: false
+          },
+          {
+            color: "#e8c300",
+            photo: "/img/leader-faces/sturgeon.png",
+            fullName: "SNP",
+            name: "SNP",
+            key: "snp",
+            matches: [],
+            quizResults: false
+          }
+        ]
+      },
       {
         label: "England",
         code: "england",
@@ -1901,7 +2048,7 @@ class Quiz {
         }
       })
     }
-    self.countriesData.forEach(function(country){
+    qp.countriesData.forEach(function(country){
       country.parties.forEach(function(party){
         const matches = party.matches;
         party.openMatches = function(){
@@ -1959,9 +2106,11 @@ class Quiz {
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
       startQuiz: self.startQuiz,
+      startStudentCompare: self.startStudentCompare,
+      startSingleSentence: self.startSingleSentence,
       startingQuiz: self.startingQuiz,
       countrySelected: self.countrySelected,
-      countriesData: self.countriesData,
+      countriesData: qp.countriesData,
       selectedCountry: self.selectedCountry,
       postcodeSubmit: self.postcodeSubmit,
       postcodeBinding: self.postcodeBinding,

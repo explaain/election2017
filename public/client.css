@@ -1489,7 +1489,7 @@ a:hover .quizPercentagesPartyFace {
   background-color: #dd2569;
   color: white;
   border-radius:6px;
-  margin: 20px 0 0;
+  margin: 10px 0 30px;
   cursor: pointer;
   border: solid 2px #dd2569;
 }
@@ -1498,6 +1498,18 @@ a:hover .quizPercentagesPartyFace {
   background-color: white;
   color: #dd2569;
   /*border-color: #ddd;*/
+}
+
+.card.quiz-extra {
+  margin: 0;
+}
+.card.quiz-extra .card-visible {
+  padding: 10px 20px;
+}
+
+.card.quiz-extra button {
+  padding: 0.5em 2em;
+  margin: 0 0 1.5em;
 }
 
 .quizCountrySelector {
@@ -1686,4 +1698,18 @@ a.turnup:hover {
 
 .body.quiz.ge2017 a.quizPercentagesParty {
   pointer-events: none;
+}
+
+.or {
+  animation-name: taskpop;
+  animation-duration: .2s;
+  transform: scale(0,0);
+  animation-fill-mode: forwards;
+}
+
+
+
+
+section.single-sentence {
+  margin-top: 60px;
 }

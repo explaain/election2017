@@ -38,6 +38,7 @@
       var QuizPage = <%= quiz %>;
       if (Standalone || Embed) {
         var StepName = "<%= step %>";
+        var PhraseName = "<%= phrase %>";
       }
       const MODE = (location.href.match(/production/)?'production':'<%= process.env.NODE_ENV %>');
 

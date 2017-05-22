@@ -45,6 +45,7 @@ module.exports = class DataProcessor {
           break;
 
         case 'whoToVoteFor':
+        console.log(234568);
           goto = {
             type: 'step',
             route: 'step',
@@ -62,6 +63,7 @@ module.exports = class DataProcessor {
           break;
 
         case 'shouldVoteFor':
+        console.log(567869);
           goto = {
             type: 'step',
             route: 'step',
@@ -172,6 +174,7 @@ module.exports = class DataProcessor {
     ];
 
     if (phrasesIncluded(quizKeys).length && phrasesIncluded(['voteOn']).length) {
+      console.log(12345);
       goto = {
         type: 'step',
         route: 'step',
