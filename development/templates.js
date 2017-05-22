@@ -1688,21 +1688,28 @@ module.exports = function(CardTemplates){
             }*/
           },
           {
-            "dom": ".quizBack",
-            "content": "< Back",
-            "condition": "quizStarted",
-            "attr": {
-              "onclick": {
-                "var": "back"
+            "dom": "span",
+            "content": [
+              {
+                "dom": ".quizBack",
+                "content": "< Back",
+                "condition": "quizStarted",
+                "attr": {
+                  "onclick": {
+                    "var": "back"
+                  }
+                }
               }
-            }
+            ],
+            "condition": "!standaloneResults"
           },
           {
             "template": "quizProgress",
             "condition": "countrySelected",
             "mapping": [
               ["progressBarWidth", "progressBarWidth"],
-              ["countrySelected", "countrySelected"]
+              ["countrySelected", "countrySelected"],
+              ["noProgressBarNeeded", "standaloneResults"]
             ]
           }
         ]
@@ -1928,6 +1935,7 @@ module.exports = function(CardTemplates){
   }
   CardTemplates.quizProgress = {
     "dom": "div",
+    "condition": "!noProgressBarNeeded",
     "content": [
       {
         "dom":".progress",

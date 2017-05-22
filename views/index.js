@@ -1042,6 +1042,7 @@ class CardContent {
           // 2) quizChanceResults were empty
           api.getContenders(model.user.postcode).then(function(result){
             qp.quizChanceResults = result;
+            qp.standaloneResults = true;
             routes.quizResults().push();
           });
           //NOTE: Old results page
@@ -1904,6 +1905,7 @@ class Quiz {
       back: self.back,
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
+      standaloneResults: qp.standaloneResults,
     }, CardTemplates.quizMaster);
   }
 }
