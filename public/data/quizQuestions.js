@@ -225,8 +225,8 @@ var quizQuestions = [
  },
  {
    question: "9. Should the government own utlilites like the railway, post office and water companies?",
-   issue: "public services",
-   debate: "public services-1",
+   issue: "public-services",
+   debate: "public-services-1",
    answers: {
      yes: [
        {

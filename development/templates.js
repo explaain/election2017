@@ -1775,31 +1775,13 @@ module.exports = function(CardTemplates){
                   {
                     "dom": ".card-visible.text-center",
                     "content": [
-                      {
-                        "dom": "h2",
-                        "content": "Student? Find out where you should vote."
-                      },
-                      {
-                        "dom": "p",
-                        "content": "Compare your postcodes to see where your vote has most impact."
-                      },
-                      {
-                        "dom": "button.btn.btn-primary",
-                        "content": "Find out >",
-                        "condition": "!quizStarted",
-                        "attr": {
-                          "onclick": {
-                            "var": "startStudentCompare"
-                          }
-                        }
-                      }
                       // {
                       //   "dom": "h2",
-                      //   "content": "I know what I want my vote to do"
+                      //   "content": "Student? Find out where you should vote."
                       // },
                       // {
                       //   "dom": "p",
-                      //   "content": "Just tell me what’s possible"
+                      //   "content": "Compare your postcodes to see where your vote has most impact."
                       // },
                       // {
                       //   "dom": "button.btn.btn-primary",
@@ -1807,10 +1789,28 @@ module.exports = function(CardTemplates){
                       //   "condition": "!quizStarted",
                       //   "attr": {
                       //     "onclick": {
-                      //       "var": "startSingleSentence"
+                      //       "var": "startStudentCompare"
                       //     }
                       //   }
                       // }
+                      {
+                        "dom": "h2",
+                        "content": "I know what I want my vote to do"
+                      },
+                      {
+                        "dom": "p",
+                        "content": "Just tell me what’s possible"
+                      },
+                      {
+                        "dom": "button.btn.btn-primary",
+                        "content": "Find out >",
+                        "condition": "!quizStarted",
+                        "attr": {
+                          "onclick": {
+                            "var": "startSingleSentence"
+                          }
+                        }
+                      }
                     ]
                   }
                 ]

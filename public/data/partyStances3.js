@@ -116,7 +116,34 @@ var partyStances ={
                         opinion:0.4
                      }
                   }
-               }
+               },
+               "housing-2": {
+                  question: "Who should the government prioritise building houses for? [Learn more](http://api.explaain.com/Detail/5916f4237f9f9e0011533ef1)'",
+                  description: "",
+                  parties: {
+                    "conservative": {
+                      opinion: 1
+                    },
+                    "labour": {
+                      opinion: 0.75
+                    },
+                    "lib-dem": {
+                      opinion: 0.75
+                    },
+                    "ukip": {
+                      opinion: 1
+                    },
+                    "plaid-cymru": {
+                      opinion: 0.4
+                    },
+                    "green": {
+                      opinion: 0.75
+                    },
+                    "snp": {
+                      opinion: 0.5
+                    }
+                  }
+                }
             }
          },
          "eu":{
@@ -256,7 +283,34 @@ var partyStances ={
                         opinion:0
                      }
                   }
-               }
+               },
+               "jobs-2": {
+                  question: "The minimum wage should be increased to £10 per hour [Learn more](http://api.explaain.com/)'",
+                  description: "",
+                  parties: {
+                    "conservative": {
+                      opinion: 0.5
+                    },
+                    "labour": {
+                      opinion: 0.75
+                    },
+                    "lib-dem": {
+                      opinion: 0.5
+                    },
+                    "ukip": {
+                      opinion: 0.5
+                    },
+                    "plaid-cymru": {
+                      opinion: 0.75
+                    },
+                    "green": {
+                      opinion: 1
+                    },
+                    "snp": {
+                      opinion: 1
+                    }
+                  }
+                }
             }
          },
          "environment":{
@@ -293,7 +347,34 @@ var partyStances ={
                         opinion:0.5
                      }
                   }
-               }
+               },
+               "environment-2": {
+                  question: "Should protecting the environment be the main priority for government? [Learn more](http://api.explaain.com/)'",
+                  description: "",
+                  parties: {
+                    "conservative": {
+                      opinion: 0.5
+                    },
+                    "labour": {
+                      opinion: 0.5
+                    },
+                    "lib-dem": {
+                      opinion: 0.5
+                    },
+                    "ukip": {
+                      opinion: 0.25
+                    },
+                    "plaid-cymru": {
+                      opinion: 1
+                    },
+                    "green": {
+                      opinion: 1
+                    },
+                    "snp": {
+                      opinion: 1
+                    }
+                  }
+                }
             }
          },
          "tax":{
@@ -366,9 +447,9 @@ var partyStances ={
                }
             }
          },
-         "public services":{
+         "public-services":{
             debates:{
-               "public services-1":{
+               "public-services-1":{
                   question:"Should the government own utlilites like the railway, post office and water companies?",
                   buttons: {},
                   parties:{
@@ -438,8 +519,67 @@ var partyStances ={
                         opinion:0.4
                      }
                   }
-               }
+               },
+               "defence-2": {
+                  question: "Should the UK have nuclear weapons? [Learn more](http://api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
+                  description: "",
+                  parties: {
+                    "conservative": {
+                      opinion: 1
+                    },
+                    "labour": {
+                      opinion: 1
+                    },
+                    "lib-dem": {
+                      opinion: 0.75
+                    },
+                    "ukip": {
+                      opinion: 1
+                    },
+                    "plaid-cymru": {
+                      opinion: 0
+                    },
+                    "green": {
+                      opinion: 0
+                    },
+                    "snp": {
+                      opinion: 0
+                    }
+                  }
+                }
             }
+         },
+         "immigration": {
+            description: "Immigration",
+            debates: {
+              "immigration-1": {
+                 question: "Reducing the levels of immigration to and from the UK is vital [Learn more](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)'",
+                 description: "",
+                 parties: {
+                   "conservative": {
+                     opinion: 1
+                   },
+                   "labour": {
+                     opinion: 0.75
+                   },
+                   "lib-dem": {
+                     opinion: 0.25
+                   },
+                   "ukip": {
+                     opinion: 1
+                   },
+                   "plaid-cymru": {
+                     opinion: 0.25
+                   },
+                   "green": {
+                     opinion: 0
+                   },
+                   "snp": {
+                     opinion: 0
+                   }
+                }
+             }
+           }
          }
       }
    }
