@@ -145,7 +145,7 @@ var quizQuestions = [
  {
    question: "6. Should fox hunting be legal?",
    issue: "environment",
-   debate: "enivornment-1",
+   debate: "environment-1",
    answers: {
      yes: [
        {

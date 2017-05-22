@@ -1640,6 +1640,10 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
+        console.log("QP")
+        console.log(self.quizQuestions)
+        console.log("FOX BUG")
+        console.log(debate)
         var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
         var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
         var newScore = {

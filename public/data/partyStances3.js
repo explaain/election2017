@@ -261,7 +261,7 @@ var partyStances ={
          },
          "environment":{
             debates:{
-               "enivornment-1":{
+               "environment-1":{
                   question:"Should fox hunting be legal?",
                   buttons: {},
                   parties:{
