@@ -210,6 +210,10 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       topParties.sort(function(a, b) {
         return parseFloat(b.chance) - parseFloat(a.chance);
       });
+      threshold = 0.5;
+      topParties = topParties.filter(function(party) {
+        return party.chance > threshold;
+      });
       if (forceSwing) {
         topParties = topParties.slice(0,3);
       }

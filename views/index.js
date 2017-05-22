@@ -2083,6 +2083,15 @@ class Quiz {
         }
       })
     })
+    var facebookShareHref;
+    var twitterShareHref;
+    if (SiteBrand == 'unilad') {
+      facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button";
+      twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20http%3A%2F%2Fbit.ly%2Funilad-ge2017%20via%20%40UNILAD";
+    } else {
+      facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com&display=popup&ref=plugin&src=share_button";
+      twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20ge2017.com";
+    }
     return helpers.assembleCards({
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
@@ -2117,8 +2126,8 @@ class Quiz {
       isWaiting: self.isWaiting,
       finalResults: self.finalResults,
       back: self.back,
-      facebookShareHref: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button",
-      twitterShareHref: "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20http%3A%2F%2Fbit.ly%2Funilad-ge2017%20via%20%40UNILAD",
+      facebookShareHref: facebookShareHref,
+      twitterShareHref: twitterShareHref,
     }, CardTemplates.quizMaster);
   }
 }
