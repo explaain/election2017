@@ -1545,6 +1545,7 @@ class Quiz {
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
     self.quizResultsPage = qp.quizResultsPage;
+    self.quizSafeSeat = qp.quizSafeSeat;
     self.resultsData = qp.resultsData;
     self.startingQuiz = qp.startingQuiz;
     self.selectedCountry = qp.country;
@@ -1553,8 +1554,6 @@ class Quiz {
     self.quizQuestions = allData.getAllData().quizQuestions;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
 
-    console.log('self.quizResults')
-    console.log(self.quizResults)
 
     self.isWaiting = model.user.isWaiting === "quiz-input";
     self.postcodeBinding = [model.user, 'postcode'];
@@ -1596,7 +1595,6 @@ class Quiz {
       }
     }
     self.launchRandomRefresh = function(){
-      console.log(self.quizStarted);
       if(!self.quizStarted){
         setTimeout(function(){
           self.refresh();
@@ -1769,6 +1767,14 @@ class Quiz {
         }
       });
       self.partiesChartDataTopMatch = [tempMaxParty]
+
+      console.log(qp.quizSafeSeat);
+      console.log(self.partiesChartDataChances);
+      qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
+      console.log(qp.quizSafeSeat);
+      setTimeout(function() {
+        self.refresh();
+      },10)
     }
 
     // this is for random data
@@ -1867,6 +1873,7 @@ class Quiz {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com&display=popup&ref=plugin&src=share_button";
       twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20ge2017.com";
     }
+    var safeSeatMessage = "This means your vote has less impact, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
     return helpers.assembleCards({
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
@@ -1893,8 +1900,10 @@ class Quiz {
       startStudentCompare: self.startStudentCompare,
       startSingleSentence: self.startSingleSentence,
       startingQuiz: self.startingQuiz,
+      safeSeatMessage: safeSeatMessage,
       countrySelected: self.countrySelected,
       countriesData: countriesData,
+      quizSafeSeat: self.quizSafeSeat,
       selectedCountry: self.selectedCountry,
       postcodeSubmit: self.postcodeSubmit,
       postcodeBinding: self.postcodeBinding,

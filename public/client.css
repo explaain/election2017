@@ -1722,3 +1722,26 @@ section.single-sentence {
 .card.postcode-compare {
   margin-top: 50px;
 }
+
+.quizSafeSeatText {
+  margin: 20px;
+}
+
+.pink {
+  color: #dd2569;
+}
+
+.explaained a {
+  padding: 0 3px !important;
+  background: #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  text-decoration: none !important;
+  color: #333 !important;
+  box-shadow: none !important;
+}
+.explaained a.highlighted {
+  color: white !important;
+  background: #ff6e73 !important;
+  border: 1px solid #ff6e73 !important;
+  box-shadow: none !important;
+}

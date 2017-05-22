@@ -36,6 +36,7 @@ module.exports = {
       quizResultsPage: false,
       quizStarted: false,
       quizChanceResults: [],
+      quizSafeSeat: false,
       startingQuiz: false,
       nextButtonText: "Next Question >",
       country: null,
