@@ -32,8 +32,10 @@ module.exports = {
     quizProgress: {
       answers: [],
       opinions: [],
-      quizRezults: false,
+      quizResults: false,
+      quizResultsPage: false,
       quizStarted: false,
+      quizChanceResults: [],
       startingQuiz: false,
       nextButtonText: "Next Question >",
       country: null,

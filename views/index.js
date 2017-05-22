@@ -31,6 +31,7 @@ const routes = {
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
   quiz: router.route('/quiz'),
+  quizResults: router.route('/results'),
   policy: router.route('/policy')
 };
 
@@ -218,6 +219,10 @@ class App {
               }
               var step = new Step(params);
               return h('div',step);
+            }),
+
+            routes.quizResults(function (params) {
+              return h('div', new Step({name: 'quizResults', label: 'quizResults'}));
             })
 
           ),
@@ -820,20 +825,24 @@ class Step {
       designers.onStepLoad();
       designers.adaptLayout();
     })
-    designers.uniqueStepLayout(self.step);
+    // designers.uniqueStepLayout(self.step);
   }
 
   render() {
     const self = this;
-    if(self.params.name!=="quiz"){ // Sorry, but the Quiz layout is a bit unique
+    switch (self.params.name) {
+      case 'quiz':
+        return (new Quiz())
+        break;
+      case 'quizResults':
+        return (new QuizResults())
+        break;
+      default:
       return h("section.step",
         (self.error?h('p.error', self.error):null),
         h("div.cards",self.headers,self.cardGroups)
-      )
-    } else {
-      return (new Quiz())
+      );
     }
-
   }
 }
 
@@ -1436,27 +1445,57 @@ function getResults(resultsType){
   return deferred.promise;
 }
 
+
+class QuizResults {
+  constructor() {
+
+  }
+
+  render() {
+    return new Quiz({finalResults: true});
+  }
+
+}
+
 class Quiz {
-  constructor(){
+  constructor(params){
     const self = this;
     const qp = model.user.quizProgress;
+    qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
+    qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
+    qp.quizResultsPage = params && params.finalResults ? !params.finalResults : qp.quizResultsPage;
+    self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
+    self.quizResultsPage = qp.quizResultsPage;
     self.resultsData = qp.resultsData;
     self.startingQuiz = qp.startingQuiz;
     self.selectedCountry = qp.country;
     self.nextButtonText = qp.nextButtonText;
-    self.countrySelected = self.selectedCountry!==null;
+    self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
     self.quizQuestions = allData.getAllData().quizQuestions;
+    self.finalResults = params && params.finalResults ? params.finalResults : false;
+
+    console.log('self.quizResults')
+    console.log(self.quizResults)
+
+    self.isWaiting = model.user.isWaiting === "quiz-input";
+    self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
       console.log(e);
       e.stopPropagation();
       model.landedOnResult = 1;
       model.user.isWaiting = "postcode-input";
       self.refresh();
-      getResults('partyResults').then(function(){
+      api.getContenders(model.user.postcode).then(function(result){
+        console.log('result');
+        console.log('result');
+        console.log('result');
+        console.log('result');
+        console.log(result);
+        qp.quizChanceResults = result;
         delete model.user.isWaiting;
-        routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+        routes.quizResults().push();
       });
       return false;
     }
@@ -1470,6 +1509,7 @@ class Quiz {
       } else {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
         qp.quizResults = true;
+        qp.quizResultsPage = true;
         qp.country.parties.forEach(function(_party){
           _party.quizResults = true;
         });
@@ -1479,6 +1519,7 @@ class Quiz {
       }
     }
     self.launchRandomRefresh = function(){
+      console.log(self.quizStarted);
       if(!self.quizStarted){
         setTimeout(function(){
           self.refresh();
@@ -1549,6 +1590,7 @@ class Quiz {
     self.back = function(){
       if(qp.answers.length>0){
         qp.quizResults = false;
+        qp.quizResultsPage = false;
         if(qp.opinions.length===qp.answers.length){
           qp.opinions.pop();
         } else {
@@ -1577,6 +1619,7 @@ class Quiz {
           qp.country.parties.forEach(function(_party){
             if(party.key===_party.key){
               _party.percentage = parseInt(party.percentage) + "%";
+              _party.percentageText = parseInt(party.percentage) + "%";
               _party.matches.push(party.newMatch);
               if (party.percentage > topParty.percentage) {
                 topParty = party;
@@ -1587,7 +1630,8 @@ class Quiz {
         qp.resultsData = {
           logo: '/img/party-logos/'+topParty.key+'.png',
           name: allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0].name,
-          percentage: parseInt(topParty.percentage)+"%"
+          percentage: parseInt(topParty.percentage)+"%",
+          percentageText: parseInt(topParty.percentage)+"%"
         }
       }
     }
@@ -1596,6 +1640,51 @@ class Quiz {
     // }
     //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
     self.partiesChartData = qp.country?qp.country.parties:[];
+
+
+    if (self.finalResults == true) {
+      setTimeout(function(){
+        $('.body.quiz').addClass('moving')}
+      ,10);
+      self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
+        if (!(qp.quizChanceResults.parties.filter(function(_party) {
+          return party.key == _party.key
+        }).length)) {
+          console.log('setting faded')
+          party.faded = true;
+        }
+        return party;
+      })
+      :
+      [];
+
+      self.partiesChartDataChances = qp.country ? qp.country.parties.filter(function(party) {
+        return qp.quizChanceResults.parties.filter(function(_party) {
+          return party.key == _party.key
+        }).length;
+      })
+      :
+      [];
+
+      var tempMaxParty = {percentage: 0};
+      self.partiesChartDataChances.forEach(function(party) {
+        if (parseInt(party.percentage) > parseInt(tempMaxParty.percentage)) {
+          tempMaxParty = {
+            color: party.color,
+            photo: party.photo,
+            name: party.fullName,
+            key: party.key,
+            percentage: party.percentage,
+            percentageText: party.percentageText + " Match",
+            matches: party.matches,
+            quizResults: party.quizResults
+          }
+          // tempMaxParty = party;
+          // tempMaxParty.name = tempMaxParty.fullName;
+        }
+      });
+      self.partiesChartDataTopMatch = [tempMaxParty]
+    }
 
     self.countriesData = [
       {
@@ -1840,6 +1929,7 @@ class Quiz {
           qp.country = country; // we set the whole country object here
           qp.country.parties.forEach(function(party){
             party.percentage = "0%";
+            party.percentageText = "0%";
           })
           qp.startingQuiz = true;
           self.next();
@@ -1848,6 +1938,7 @@ class Quiz {
     })
     return helpers.assembleCards({
       quizResults: self.quizResults,
+      quizResultsPage: self.quizResultsPage,
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
       resultPercentage: self.resultsData.percentage,
@@ -1862,6 +1953,8 @@ class Quiz {
       skipSubquestion: self.skip,
       nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
+      partiesChartDataChances: self.partiesChartDataChances,
+      partiesChartDataTopMatch: self.partiesChartDataTopMatch,
       // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
@@ -1871,6 +1964,9 @@ class Quiz {
       countriesData: self.countriesData,
       selectedCountry: self.selectedCountry,
       postcodeSubmit: self.postcodeSubmit,
+      postcodeBinding: self.postcodeBinding,
+      isWaiting: self.isWaiting,
+      finalResults: self.finalResults,
       back: self.back,
       facebookShareHref: "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button",
       twitterShareHref: "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20http%3A%2F%2Fbit.ly%2Funilad-ge2017%20via%20%40UNILAD",

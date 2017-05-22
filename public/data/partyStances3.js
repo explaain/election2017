@@ -146,7 +146,7 @@ var partyStances ={
 
                      },
                      "snp":{
-                        opinion:1,
+                        opinion:0,
 
                      },
                      "plaid-cymru":{

@@ -207,7 +207,7 @@ var quizQuestions = [
          opinion: 1
        },
        {
-         label: "Yes, but alongisde a seperate vote by MPs.",
+         label: "Yes, but alongside a seperate vote by MPs.",
          opinion: 1
        }
      ],

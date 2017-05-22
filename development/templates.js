@@ -1809,15 +1809,57 @@ module.exports = function(CardTemplates){
             ]
           },
           {
+            "dom": ".card.finalResult",
+            "condition": "finalResults",
+            "content": [
+              {
+                "dom": ".card-visible.text-center",
+                "content": [
+                  {
+                    "dom": "div.step-number.step-1",
+                    "content": "1"
+                  },
+                  {
+                    "dom": "h2",
+                    "content": "Based on your views and where you are, this is your best option:"
+                  },
+                  {
+                    "dom": ".quizPercentages.topLayer",
+                    "content": [
+                      {
+                        "loop": "partiesChartDataTopMatch",
+                        "content": [{"template": "quizPercentagesParty"}]
+                      }
+                    ]
+                  },
+                  {
+                    "template": "registerButton"
+                  },
+                  {
+                    "dom": "p.small",
+                    "condition": "finalResults",
+                    "content": "Scroll down to see how we reached this match"
+                  },
+                ]
+              }
+            ]
+          },
+          {
             "template": "quizPercentagesWrapper",
             "mapping": [
               ["data", "partiesChartData"],
+              ["chancesData", "partiesChartDataChances"],
               ["openMatches", "openMatches"],
               ["quizResults", "quizResults"],
+              ["quizResultsPage", "quizResultsPage"],
               ["resultLogo", "resultLogo"],
               ["resultName", "resultName"],
               ["resultPercentage", "resultPercentage"],
-              ["startingQuiz", "startingQuiz"]
+              ["postcodeSubmit", "postcodeSubmit"],
+              ["postcodeBinding", "postcodeBinding"],
+              ["isWaiting", "isWaiting"],
+              ["startingQuiz", "startingQuiz"],
+              ["finalResults", "finalResults"]
             ]
           },
           {
@@ -1825,6 +1867,7 @@ module.exports = function(CardTemplates){
             "template": "quizShareCard",
             "mapping": [
               ["quizResults", "quizResults"],
+              ["finalResults", "finalResults"],
               ["facebookShareHref", "facebookShareHref"],
               ["twitterShareHref", "twitterShareHref"]
             ]
@@ -1970,6 +2013,26 @@ module.exports = function(CardTemplates){
             "dom": ".card-visible.text-center",
             "content": [
               {
+                "dom": "div.step-number.step-2",
+                "condition": "finalResults",
+                "content": "2"
+              },
+              {
+                "dom": "h2",
+                "condition": "finalResults",
+                "content": "See how we worked it out"
+              },
+              {
+                "dom": "p.small",
+                "condition": "finalResults",
+                "content": "We’ve used local data to remove candidates who are unlikely to win in this election."
+              },
+              {
+                "dom": "h3",
+                "condition": "finalResults",
+                "content": "Front-runners in your area"
+              },
+              {
                 "template": "quizPercentages"
               }
             ]
@@ -1983,7 +2046,7 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": "div.quizResults",
-        "condition": "quizResults",
+        "condition": "quizResultsPage",
         "content": [
           {
             "dom": "a.btn.btn-default.retake",
@@ -1993,8 +2056,12 @@ module.exports = function(CardTemplates){
             "content": "⟲ Retake Quiz"
           },
           {
-            "dom": "h3",
+            "dom": "h3.bestMatch",
             "content": "Your best match is:"
+          },
+          {
+            "dom": "h3.bestMatchSoFar",
+            "content": "Your best match so far is..."
           },
           {
             "dom": "img",
@@ -2017,7 +2084,45 @@ module.exports = function(CardTemplates){
             }
           },
           {
-            "dom": "p",
+            "dom": "p.postcode-instructions",
+            "content": "But enter your postcode to see who stands the best chance where you are…"
+          },
+          {
+            "dom":"form.postcode-form",
+            "condition": "!isWaiting",
+            "attr":{
+              "onsubmit":{
+                "var":"postcodeSubmit"
+              }
+            },
+            "content":[
+              {
+                "dom":"input.form-control",
+                "attr": {
+                  "autofocus":"true",
+                  "type":"text",
+                  "name":"postcode",
+                  "placeholder":"Postcode",
+                  "binding":{
+                    "var":"postcodeBinding"
+                  }
+                }
+              },
+              {
+                "dom":"button.btn.btn-success",
+                "attr":{
+                  "type":"submit"
+                },
+                "content":"Go!"
+              }
+            ]
+          },
+          {
+            "condition": "isWaiting",
+            "template": "loading"
+          },
+          {
+            "dom": "p.resultTips",
             "content": "Click on a party leader's face to see how you match with their party's views."
           }
         ]
@@ -2026,6 +2131,21 @@ module.exports = function(CardTemplates){
         "dom": "p.waiting-text",
         "condition": "startingQuiz",
         "content": "Submit an answer to see how you match."
+      },
+      {
+        "dom": ".quizPercentages.middleLayer",
+        "condition": "finalResults",
+        "content": [
+          {
+            "loop": "chancesData",
+            "content": [{"template": "quizPercentagesParty"}]
+          }
+        ]
+      },
+      {
+        "dom": "h3",
+        "condition": "finalResults",
+        "content": "All major parties"
       },
       {
         "dom": ".quizPercentages",
@@ -2050,6 +2170,10 @@ module.exports = function(CardTemplates){
       }
     },
     "content": [
+      {
+        "dom": "div.partyFade",
+        "condition": "faded"
+      },
       {
         "dom": ".quizPercentagesPartyPodium",
         "attr": {
@@ -2090,7 +2214,7 @@ module.exports = function(CardTemplates){
           }
         },
         "content": {
-          "var": "percentage"
+          "var": "percentageText"
         }
       },
       {
@@ -2175,6 +2299,11 @@ module.exports = function(CardTemplates){
           {
             "dom": ".card-visible.text-center.action-buttons",
             "content": [
+              {
+                "dom": "div.step-number.step-3",
+                "condition": "finalResults",
+                "content": "3"
+              },
               {
                 "dom": "h2",
                 "content": "Now, make sure you’re registered to vote"

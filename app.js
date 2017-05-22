@@ -84,6 +84,11 @@ app.get('/ge2017.com', function(req, res, next) {
   res.redirect(301,"/students");
 });
 
+//Temporary for dev testing
+app.get('/results', function(req, res, next) {
+  res.redirect(301,"/quiz");
+});
+
 app.get('/api/postcode/:postcode', function(req, res, next) {
   api.getContenders(req.params.postcode)
   .then(function(result) {

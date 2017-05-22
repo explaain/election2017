@@ -1594,3 +1594,96 @@ a:hover .quizPercentagesPartyFace {
 a.turnup:hover {
   opacity: 0.7;
 }
+
+.partyFade {
+    position: absolute;
+    width: 100%;
+    top: -70px;
+    z-index: 10000;
+    background: rgba(255,255,255,0.8);
+    bottom: -30px;
+}
+
+.card.finalResult .card-visible {
+  margin-bottom: 20px;
+}
+.card-visible.text-center.action-buttons {
+  margin-top: 20px;
+}
+
+.quizPercentages.topLayer {
+  margin: 120px 0 40px;
+  height: 60px;
+}
+.card.finalResult p.register button {
+  padding: 12px 42px !important;
+  min-width: 70%;
+}
+.quizPercentages.middleLayer {
+  margin: 80px 0 60px;
+  height: 60px;
+}
+.quizPercentages.topLayer .quizPercentagesParty {
+  max-width: 150px;
+  width: calc(50vw - 20px);
+}
+.quizPercentages.middleLayer .quizPercentagesParty {
+  max-width: 100px;
+  width: calc(33.3333vw - 20px);
+}
+.quizPercentages.middleLayer .quizPercentagesPartyPodium, .quizPercentages.topLayer .quizPercentagesPartyPodium {
+  display: none;
+}
+.quizPercentages.topLayer .quizPercentagesPartyFace {
+  width: 120px;
+  height: 120px;
+  max-width: 120px;
+  max-height: 120px;
+}
+.quizPercentages.middleLayer .quizPercentagesPartyFace {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  max-height: 80px;
+}
+.quizPercentages.topLayer .quizPercentagesPartyPercent {
+  margin-bottom: 110px;
+  width: 100px;
+  left: calc((100% - 100px)/2);
+}
+.quizPercentages.middleLayer .quizPercentagesPartyPercent {
+  margin-bottom: 70px;
+}
+
+.card .card-visible > div.step-number {
+  margin-top: -20px;
+}
+
+.body.quiz p.small {
+  font-size: 13px;
+  margin: 1.5em 2em;
+}
+
+.body.quiz.unilad .postcode-instructions {
+  display: none;
+}
+.body.quiz.unilad .postcode-form {
+  display: none;
+}
+
+
+.body.quiz.unilad .bestMatchSoFar {
+  display: none;
+}
+.body.quiz.ge2017 .bestMatch {
+  display: none;
+}
+
+
+.body.quiz.ge2017 .resultTips {
+  display: none;
+}
+
+.body.quiz.ge2017 a.quizPercentagesParty {
+  pointer-events: none;
+}
