@@ -1004,12 +1004,8 @@ class CardContent {
             return newScore;
           });
           const qp = model.user.quizProgress;
-          console.log("00000")
           const countriesData = allData.getAllData().countriesData;
-          console.log(qp.countriesData)
-          console.log("11111")
           qp.country = countriesData[0];
-          console.log("22222")
           var updatePartyPercentages = function(map){
             if(qp.country){
               var topParty = {percentage: 0}
@@ -1040,12 +1036,18 @@ class CardContent {
             _party.quizResults = true;
           });
           qp.finalResults = true;
-          routes.quizResults().push();
-
-          getResults('partyResults').then(function(){
+          //NOTE: Jeremy, there were 2 bugs here:
+          // 1) if you do route().push() synchronously with return{}, then it will not work
+          // 2) quizChanceResults were empty
+          api.getContenders(model.user.postcode).then(function(result){
+            qp.quizChanceResults = result;
+            routes.quizResults().push();
+          });
+          //NOTE: Old results page
+          /*getResults('partyResults').then(function(){
             delete model.user.isWaiting;
             routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
-          });
+          });*/
           return helpers.assembleCards(data, 'loading');
         }
         data.isWaiting = model.user.isWaiting === "postcode-input";
