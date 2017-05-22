@@ -1004,9 +1004,7 @@ class CardContent {
             return newScore;
           });
           const qp = model.user.quizProgress;
-          const countriesData = allData.getAllData().countriesData;
-          //TODO: Jeremy, why it grabs England by default?
-          qp.country = countriesData[0];
+          qp.country = allData.getAllData().ukData;
           var updatePartyPercentages = function(map){
             if(qp.country){
               var topParty = {percentage: 0}

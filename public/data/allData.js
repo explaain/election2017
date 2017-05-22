@@ -10,6 +10,7 @@ var partyStories = require('./partyStories');
 var quizQuestions = require('./quizQuestions');
 var swingSeatsToForce = require('./swingSeatsToForce');
 var countriesData = require('./countriesData');
+var ukData = require('./ukData');
 
 
 module.exports = {
@@ -27,6 +28,7 @@ module.exports = {
       quizQuestions: quizQuestions.getData(),
       swingSeatsToForce: swingSeatsToForce.getData(),
       countriesData: countriesData.getData(),
+      ukData: ukData.getData(),
     }
   }
 };
