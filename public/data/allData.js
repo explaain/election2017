@@ -9,6 +9,7 @@ var partyStances2 = require('./partyStances2');
 var partyStories = require('./partyStories');
 var quizQuestions = require('./quizQuestions');
 var swingSeatsToForce = require('./swingSeatsToForce');
+var countriesData = require('./countriesData');
 
 
 module.exports = {
@@ -20,11 +21,12 @@ module.exports = {
       ge2015Results: ge2015Results.getData(),
       localCandidates: localCandidates.getData(),
       partyReconciliation: partyReconciliation.getData(),
-      partyStances: partyStances.getData(),
-      // partyStances: {opinions: {issues: Object.assign(partyStances.getData().opinions.issues, partyStances2.getData().opinions.issues)}},
+      // partyStances: partyStances.getData(),
+      partyStances: {opinions: {issues: Object.assign(partyStances.getData().opinions.issues, partyStances2.getData().opinions.issues)}},
       partyStories: partyStories.getData(),
       quizQuestions: quizQuestions.getData(),
-      swingSeatsToForce: swingSeatsToForce.getData()
+      swingSeatsToForce: swingSeatsToForce.getData(),
+      countriesData: countriesData.getData(),
     }
   }
 };

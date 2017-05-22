@@ -1004,7 +1004,12 @@ class CardContent {
             return newScore;
           });
           const qp = model.user.quizProgress;
-          qp.country = qp.countriesData[0];
+          console.log("00000")
+          const countriesData = allData.getAllData().countriesData;
+          console.log(qp.countriesData)
+          console.log("11111")
+          qp.country = countriesData[0];
+          console.log("22222")
           var updatePartyPercentages = function(map){
             if(qp.country){
               var topParty = {percentage: 0}
@@ -1037,11 +1042,11 @@ class CardContent {
           qp.finalResults = true;
           routes.quizResults().push();
 
-          // getResults('partyResults').then(function(){
-          //   delete model.user.isWaiting;
-          //   routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
-          // });
-          // return false;
+          getResults('partyResults').then(function(){
+            delete model.user.isWaiting;
+            routes.step({ name: data.nextStep, type: data.type, resultsType: 'partyResults' }).push();
+          });
+          return helpers.assembleCards(data, 'loading');
         }
         data.isWaiting = model.user.isWaiting === "postcode-input";
         data.postcodeBinding = [model.user, 'postcode'];
@@ -1764,239 +1769,6 @@ class Quiz {
       self.partiesChartDataTopMatch = [tempMaxParty]
     }
 
-    qp.countriesData = [
-      // {
-      //   label: "UK",
-      //   code: "all",
-      //   parties: [
-      //     {
-      //       color: "blue",
-      //       photo: "/img/leader-faces/may.png",
-      //       fullName: "Conservative",
-      //       name: "Con",
-      //       key: "conservative",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "red",
-      //       photo: "/img/leader-faces/corbyn.png",
-      //       fullName: "Labour",
-      //       name: "Lab",
-      //       key: "labour",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "orange",
-      //       photo: "/img/leader-faces/farron.png",
-      //       fullName: "Liberal Democrats",
-      //       name: "Lib",
-      //       key: "lib-dem",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "purple",
-      //       photo: "/img/leader-faces/nuttall.png",
-      //       fullName: "Ukip",
-      //       name: "Ukip",
-      //       key: "ukip",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "green",
-      //       photo: "/img/leader-faces/lucas.png",
-      //       fullName: "Green",
-      //       name: "Green",
-      //       key: "green",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "#005500",
-      //       photo: "/img/leader-faces/wood.png",
-      //       fullName: "Plaid",
-      //       name: "Plaid",
-      //       key: "plaid-cymru",
-      //       matches: [],
-      //       quizResults: false
-      //     },
-      //     {
-      //       color: "#e8c300",
-      //       photo: "/img/leader-faces/sturgeon.png",
-      //       fullName: "SNP",
-      //       name: "SNP",
-      //       key: "snp",
-      //       matches: [],
-      //       quizResults: false
-      //     }
-      //   ]
-      // },
-      {
-        label: "England",
-        code: "england",
-        parties: [
-          {
-            color: "blue",
-            photo: "/img/leader-faces/may.png",
-            fullName: "Conservative",
-            name: "Con",
-            key: "conservative",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "red",
-            photo: "/img/leader-faces/corbyn.png",
-            fullName: "Labour",
-            name: "Lab",
-            key: "labour",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "orange",
-            photo: "/img/leader-faces/farron.png",
-            fullName: "Liberal Democrats",
-            name: "Lib",
-            key: "lib-dem",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "purple",
-            photo: "/img/leader-faces/nuttall.png",
-            fullName: "Ukip",
-            name: "Ukip",
-            key: "ukip",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "green",
-            photo: "/img/leader-faces/lucas.png",
-            fullName: "Green",
-            name: "Green",
-            key: "green",
-            matches: [],
-            quizResults: false
-          },
-        ]
-      },
-      {
-        label: "Wales",
-        code: "wales",
-        parties: [
-          {
-            color: "blue",
-            photo: "/img/leader-faces/may.png",
-            fullName: "Conservative",
-            name: "Con",
-            key: "conservative",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "red",
-            photo: "/img/leader-faces/corbyn.png",
-            fullName: "Labour",
-            name: "Lab",
-            key: "labour",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "#005500",
-            photo: "/img/leader-faces/wood.png",
-            fullName: "Plaid",
-            name: "Plaid",
-            key: "plaid-cymru",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "orange",
-            photo: "/img/leader-faces/farron.png",
-            fullName: "Liberal Democrats",
-            name: "Lib",
-            key: "lib-dem",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "purple",
-            photo: "/img/leader-faces/nuttall.png",
-            fullName: "Ukip",
-            name: "Ukip",
-            key: "ukip",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "green",
-            photo: "/img/leader-faces/lucas.png",
-            fullName: "Green",
-            name: "Green",
-            key: "green",
-            matches: [],
-            quizResults: false
-          },
-        ]
-      },
-      {
-        label: "Scotland",
-        code: "scotland",
-        parties: [
-          {
-            color: "blue",
-            photo: "/img/leader-faces/may.png",
-            fullName: "Conservative",
-            name: "Con",
-            key: "conservative",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "red",
-            photo: "/img/leader-faces/corbyn.png",
-            fullName: "Labour",
-            name: "Lab",
-            key: "labour",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "#e8c300",
-            photo: "/img/leader-faces/sturgeon.png",
-            fullName: "SNP",
-            name: "SNP",
-            key: "snp",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "orange",
-            photo: "/img/leader-faces/farron.png",
-            fullName: "Liberal Democrats",
-            name: "Lib",
-            key: "lib-dem",
-            matches: [],
-            quizResults: false
-          },
-          {
-            color: "green",
-            photo: "/img/leader-faces/lucas.png",
-            fullName: "Green",
-            name: "Green",
-            key: "green",
-            matches: [],
-            quizResults: false
-          },
-        ]
-      }
-    ]
     // this is for random data
     self.partiesRandomChartData = [
       {
@@ -2038,6 +1810,7 @@ class Quiz {
   }
   render(){
     const self = this;
+    const countriesData = allData.getAllData().countriesData;
     self.launchRandomRefresh();
     const qp = model.user.quizProgress;
     const subquestions = self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
@@ -2048,7 +1821,7 @@ class Quiz {
         }
       })
     }
-    qp.countriesData.forEach(function(country){
+    countriesData.forEach(function(country){
       country.parties.forEach(function(party){
         const matches = party.matches;
         party.openMatches = function(){
@@ -2119,7 +1892,7 @@ class Quiz {
       startSingleSentence: self.startSingleSentence,
       startingQuiz: self.startingQuiz,
       countrySelected: self.countrySelected,
-      countriesData: qp.countriesData,
+      countriesData: countriesData,
       selectedCountry: self.selectedCountry,
       postcodeSubmit: self.postcodeSubmit,
       postcodeBinding: self.postcodeBinding,
