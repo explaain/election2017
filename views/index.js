@@ -1733,7 +1733,6 @@ class Quiz {
         if (!(qp.quizChanceResults.parties.filter(function(_party) {
           return party.key == _party.key
         }).length)) {
-          console.log('setting faded')
           party.faded = true;
         }
         return party;
@@ -1768,12 +1767,9 @@ class Quiz {
       });
       self.partiesChartDataTopMatch = [tempMaxParty]
 
-      console.log(qp.quizSafeSeat);
-      console.log(self.partiesChartDataChances);
       qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
-      console.log(qp.quizSafeSeat);
       setTimeout(function() {
-        self.refresh();
+        self.refresh(); //This is not good as it just puts it on repeat!
       },10)
     }
 

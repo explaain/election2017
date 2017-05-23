@@ -593,7 +593,7 @@ section:not(.wide) .card section.card-media {
 .card.postcode-compare .content.resultsLoaded .get-registered .layout-table {
   margin-top: -20px;
 }
-.card.postcode-compare .content.resultsLoaded .register button {
+.card.postcode-compare .content.resultsLoaded .register button, .card.postcode-compare .content.resultsLoaded .goToQuiz button {
   width: 100% !important;
 }
 
@@ -605,7 +605,14 @@ section:not(.wide) .card section.card-media {
   background-color: #449d44;
   border-color: #398439;
 }
-.card.postcode-compare .content.resultsLoaded .learn-more button, .card.postcode-compare .content.resultsLoaded .register button {
+.card.postcode-compare .goToQuiz button {
+  background-color: #dd2569;
+  border-color: #dd2569;
+}
+.card.postcode-compare .goToQuiz button:hover {
+  opacity: 0.7;
+}
+.card.postcode-compare .content.resultsLoaded .learn-more button, .card.postcode-compare .content.resultsLoaded .register button, .card.postcode-compare .content.resultsLoaded .goToQuiz button {
   padding: 12px 12px;
   font-size: 1.02em;
 }
@@ -1451,7 +1458,7 @@ a:hover .quizPercentagesPartyFace {
   margin-bottom: 20px;
 }
 
-.action-buttons .register button {
+.action-buttons .register button, .action-buttons .goToQuiz button {
   padding: 12px 42px !important;
   min-width: 70%;
 }
@@ -1632,7 +1639,7 @@ a.turnup:hover {
   margin: 120px 0 40px;
   height: 60px;
 }
-.card.finalResult p.register button {
+.card.finalResult p.register button, .card.finalResult p.goToQuiz button {
   padding: 12px 42px !important;
   min-width: 70%;
 }

@@ -241,7 +241,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "p",
             "condition": "constituencyResults",
-            "content": "Make sure you’re registered to vote. It takes 3 minutes and is all done online."
+            "content": "Make sure you're informed about the issues."
           },
           {
             "dom": "p.small-link",
@@ -285,13 +285,13 @@ module.exports = function(CardTemplates){
                       }
                     ]
                   },
-                  {
-                    "dom": "p.small",
-                    "content": [
-                      { "dom": "br" },
-                      { "dom": "br" }
-                    ]
-                  }
+                  // {
+                  //   "dom": "p.small",
+                  //   "content": [
+                  //     { "dom": "br" },
+                  //     { "dom": "br" }
+                  //   ]
+                  // }
                 ]
               },
               {
@@ -300,10 +300,24 @@ module.exports = function(CardTemplates){
                   {
                     "condition": "!constituencyResults",
                     "dom": "div.bold",
-                    "content": "or go straight to register"
+                    "content": "or try out the quiz"
                   },
                   {
-                    "template": "registerButton"
+                    "dom": "p.goToQuiz",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-success",
+                            "attr": {
+                              "onclick": "gotToQuiz"
+                            },
+                            "content": "Go to the quiz  >"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
                     "template": "linkToGovUKWebsiteHint"
@@ -504,13 +518,13 @@ module.exports = function(CardTemplates){
                       }
                     ]
                   },
-                  {
-                    "dom": "p.small",
-                    "content": [
-                      { "dom": "br" },
-                      { "dom": "br" }
-                    ]
-                  }
+                  // {
+                  //   "dom": "p.small",
+                  //   "content": [
+                  //     { "dom": "br" },
+                  //     { "dom": "br" }
+                  //   ]
+                  // }
                 ]
               },
               {
@@ -522,7 +536,21 @@ module.exports = function(CardTemplates){
                     "content": "or go straight to register"
                   },
                   {
-                    "template": "registerButton"
+                    "dom": "p.gotToQuiz",
+                    "content": [
+                      {
+                        "dom": "a.discard-card-style",
+                        "content": [
+                          {
+                            "dom": "button.btn.btn-success",
+                            "attr": {
+                              "onclick": "gotToQuiz"
+                            },
+                            "content": "Go to the quiz  >"
+                          }
+                        ]
+                      }
+                    ]
                   },
                   {
                     "template": "linkToGovUKWebsiteHint"
@@ -634,31 +662,31 @@ module.exports = function(CardTemplates){
                       }
                     ]
                   },
-                  {
-                    "dom": "p.small",
-                    "content": [
-                      { "dom": "br" },
-                      { "dom": "br" }
-                    ]
-                  }
+                  // {
+                  //   "dom": "p.small",
+                  //   "content": [
+                  //     { "dom": "br" },
+                  //     { "dom": "br" }
+                  //   ]
+                  // }
                 ]
               },
-              {
-                "dom": "div.column",
-                "content": [
-                  {
-                    "condition": "!constituencyResults",
-                    "dom": "div.bold",
-                    "content": "or go straight to register"
-                  },
-                  {
-                    "template": "registerButton"
-                  },
-                  {
-                    "template": "linkToGovUKWebsiteHint"
-                  }
-                ]
-              }
+              // {
+              //   "dom": "div.column",
+              //   "content": [
+              //     {
+              //       "condition": "!constituencyResults",
+              //       "dom": "div.bold",
+              //       "content": "or go straight to register"
+              //     },
+              //     {
+              //       "template": "registerButton"
+              //     },
+              //     {
+              //       "template": "linkToGovUKWebsiteHint"
+              //     }
+              //   ]
+              // }
             ]
           },
           // {
@@ -808,21 +836,21 @@ module.exports = function(CardTemplates){
       {
         "dom": "div.footer",
         "content": [
-          {
-            "condition": "!constituencyResults",
-            "content": [
-              {
-                "dom": "div.bold",
-                "content": "or go straight to register"
-              },
-              {
-                "template": "registerButton"
-              },
-              {
-                "template": "linkToGovUKWebsiteHint"
-              }
-            ]
-          },
+          // {
+          //   "condition": "!constituencyResults",
+          //   "content": [
+          //     {
+          //       "dom": "div.bold",
+          //       "content": "or go straight to register"
+          //     },
+          //     {
+          //       "template": "registerButton"
+          //     },
+          //     {
+          //       "template": "linkToGovUKWebsiteHint"
+          //     }
+          //   ]
+          // },
           {
             "condition": "constituencyResults",
             "content": [
@@ -848,26 +876,26 @@ module.exports = function(CardTemplates){
                       }
                     ]
                   },
-                  {
-                    "dom": "p.small",
-                    "content": [
-                      { "dom": "br" },
-                      { "dom": "br" }
-                    ]
-                  }
+                  // {
+                  //   "dom": "p.small",
+                  //   "content": [
+                  //     { "dom": "br" },
+                  //     { "dom": "br" }
+                  //   ]
+                  // }
                 ]
               },
-              {
-                "dom": ".column50",
-                "content": [
-                  {
-                    "template": "registerButton"
-                  },
-                  {
-                    "template": "linkToGovUKWebsiteHint"
-                  }
-                ]
-              }
+              // {
+              //   "dom": ".column50",
+              //   "content": [
+              //     {
+              //       "template": "registerButton"
+              //     },
+              //     {
+              //       "template": "linkToGovUKWebsiteHint"
+              //     }
+              //   ]
+              // }
             ]
           }
         ]
@@ -945,7 +973,8 @@ module.exports = function(CardTemplates){
 
   CardTemplates.linkToGovUKWebsiteHint = {
     "dom": "p.small",
-    "content": "This link will take you to the official gov.uk website"
+    // "content": "This link will take you to the official gov.uk website"
+    "content": ""
   }
 
   CardTemplates.registerButton = {
@@ -1035,10 +1064,10 @@ module.exports = function(CardTemplates){
             }
           ]
         },
-        {
-          "dom": "p.small",
-          "content": "This link will take you to the official gov.uk website"
-        }
+        // {
+        //   "dom": "p.small",
+        //   "content": "This link will take you to the official gov.uk website"
+        // }
       ]
     }
   ;
@@ -1907,9 +1936,9 @@ module.exports = function(CardTemplates){
                       }
                     ]
                   },
-                  {
-                    "template": "registerButton"
-                  },
+                  // {
+                  //   "template": "registerButton"
+                  // },
                   {
                     "dom": "p.small",
                     "condition": "finalResults",
@@ -2380,13 +2409,13 @@ module.exports = function(CardTemplates){
                 "condition": "finalResults",
                 "content": "3"
               },
-              {
-                "dom": "h2",
-                "content": "Now, make sure you’re registered to vote"
-              },
-              {
-                "template": "registerButton"
-              },
+              // {
+              //   "dom": "h2",
+              //   "content": "Now, make sure you’re registered to vote"
+              // },
+              // {
+              //   "template": "registerButton"
+              // },
               {
                 "dom": "h3",
                 "content": "Challenge friends to see where they stand"
