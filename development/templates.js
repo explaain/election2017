@@ -1944,6 +1944,13 @@ module.exports = function(CardTemplates){
                     "condition": "finalResults",
                     "content": "Scroll down to see how we reached this match"
                   },
+                  // {
+                  //   "dom": "button",
+                  //   "attr": {
+                  //     "onclick": "getLocalCandidates"
+                  //   },
+                  //   "content": "See Local Candidates"
+                  // }
                 ]
               }
             ]
@@ -1965,6 +1972,45 @@ module.exports = function(CardTemplates){
               ["startingQuiz", "startingQuiz"],
               ["finalResults", "finalResults"]
             ]
+          },
+          {
+            "dom": ".card.finalResult",
+            "condition": "finalResults",
+            "content": [
+              {
+                "dom": ".card-visible.text-center",
+                "content": [
+                  {
+                    "dom": "div.step-number.step-3",
+                    "content": "3"
+                  },
+                  {
+                    "dom": "h2",
+                    "content": "View your local candidates"
+                  },
+                  {
+                    "dom": "p",
+                    "content": "Click on a candidate to see their full profile"
+                  },
+                  {
+                    "dom": "div",
+                    // "condition": "isLocalCandidates",
+                    "content": [
+                      {
+                        "dom": "div.local-candidates-container",
+                        // "condition": "!isWaiting",
+                        "loop": "localCandidateData",
+                        "content": [{"template": "localCandidatePlate"}]
+                      },
+                      {
+                        "dom": "div.clearfix",
+                        "content": ""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
           },
           {
             "condition": "quizResults",
@@ -2405,9 +2451,9 @@ module.exports = function(CardTemplates){
             "dom": ".card-visible.text-center.action-buttons",
             "content": [
               {
-                "dom": "div.step-number.step-3",
+                "dom": "div.step-number.step-4",
                 "condition": "finalResults",
-                "content": "3"
+                "content": "4"
               },
               // {
               //   "dom": "h2",

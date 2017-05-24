@@ -40,7 +40,8 @@ module.exports = {
       startingQuiz: false,
       nextButtonText: "Next Question >",
       country: null,
-      resultsData: {}
+      resultsData: {},
+      localCandidateData: []
     }
   },
 

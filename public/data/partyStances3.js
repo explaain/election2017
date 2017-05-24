@@ -79,6 +79,29 @@ var partyStances ={
                         opinion:1
                      }
                   }
+               },
+               "38-education-1": {
+                 question: "Should we create more grammar schools?",
+                 parties: {
+                   "conservatives": {
+                     opinion: 1
+                   },
+                   "labour": {
+                     opinion: 0.4
+                   },
+                   "lib-dem": {
+                     opinion: 0.4
+                   },
+                   "green": {
+                     opinion: -1
+                   },
+                   "plaid": {
+                     opinion: 0.4
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
                }
             }
          },
@@ -246,6 +269,52 @@ var partyStances ={
                         opinion:1
                      }
                   }
+               },
+               "38-eu-1": {
+                 question: "Should there be a second EU referendum on the final Brexit deal?",
+                 parties: {
+                   "conservatives": {
+                     opinion: 0.4
+                   },
+                   "labour": {
+                     opinion: 0.4
+                   },
+                   "lib-dem": {
+                     opinion: 1
+                   },
+                   "green": {
+                     opinion: 1
+                   },
+                   "plaid": {
+                     opinion: -1
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
+               },
+               "38-eu-2": {
+                 question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
+                 parties: {
+                   "conservatives": {
+                     opinion: 0
+                   },
+                   "labour": {
+                     opinion: 0.8
+                   },
+                   "lib-dem": {
+                     opinion: 1
+                   },
+                   "green": {
+                     opinion: 0.8
+                   },
+                   "plaid": {
+                     opinion: -1
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
                }
             }
          },
@@ -374,7 +443,76 @@ var partyStances ={
                       opinion: 1
                     }
                   }
-                }
+               },
+               "38-environment-1": {
+                 question: "Should there be a fresh vote in parliament to bring back fox hunting?",
+                 parties: {
+                   "conservatives": {
+                     opinion: 1
+                   },
+                   "labour": {
+                     opinion: 0
+                   },
+                   "lib-dem": {
+                     opinion: -1
+                   },
+                   "green": {
+                     opinion: -1
+                   },
+                   "plaid": {
+                     opinion: -1
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
+               },
+               "38-environment-2": {
+                 question: "Should we ban pesticides which kill bees?",
+                 parties: {
+                   "conservatives": {
+                     opinion: -1
+                   },
+                   "labour": {
+                     opinion: 1
+                   },
+                   "lib-dem": {
+                     opinion: 0.8
+                   },
+                   "green": {
+                     opinion: -1
+                   },
+                   "plaid": {
+                     opinion: -1
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
+               },
+               "38-environment-3": {
+                 question: "Should fracking be banned?",
+                 parties: {
+                   "conservatives": {
+                     opinion: 0
+                   },
+                   "labour": {
+                     opinion: 1
+                   },
+                   "lib-dem": {
+                     opinion: 0.8
+                   },
+                   "green": {
+                     opinion: 1
+                   },
+                   "plaid": {
+                     opinion: -1
+                   },
+                   "ukip": {
+                     opinion: 0.5
+                   }
+                 }
+               }
             }
          },
          "tax":{
@@ -444,7 +582,76 @@ var partyStances ={
                         opinion:0.4
                      }
                   }
-               }
+               },
+               "38-tax-1": {
+                  issue: "tax",
+                  parties: {
+                    "conservatives": {
+                      opinion: -1
+                    },
+                    "labour": {
+                      opinion: 1
+                    },
+                    "lib-dem": {
+                      opinion: 1
+                    },
+                  "green": {
+                    opinion: 0.6
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              },
+              "38-tax-2": {
+                question: "Should corporation tax rates be increased?",
+                parties: {
+                  "conservatives": {
+                    opinion: 0
+                  },
+                  "labour": {
+                    opinion: 0.8
+                  },
+                  "lib-dem": {
+                    opinion: 0.6
+                  },
+                  "green": {
+                    opinion: 1
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              },
+              "38-tax-3": {
+                question: "Should income tax go up for people earning over £80,000 per year?",
+                parties: {
+                  "conservatives": {
+                    opinion: 0
+                  },
+                  "labour": {
+                    opinion: 1
+                  },
+                  "lib-dem": {
+                    opinion: 0.4
+                  },
+                  "green": {
+                    opinion: -1
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              }
             }
          },
          "public-services":{
@@ -578,6 +785,204 @@ var partyStances ={
                      opinion: 0
                    }
                 }
+             },
+             "38-immigration-1": {
+               question: "Should there be a higher levy charged on companies hiring migrant workers?",
+               parties: {
+                 "conservatives": {
+                   opinion: 1
+                 },
+                 "labour": {
+                   opinion: 0.8
+                 },
+                 "lib-dem": {
+                   opinion: 0.4
+                 },
+                 "green": {
+                   opinion: -1
+                 },
+                 "plaid": {
+                   opinion: -1
+                 },
+                 "ukip": {
+                   opinion: 0.5
+                 }
+               }
+             },
+             "38-immigration-2": {
+               question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
+               parties: {
+                 "conservatives": {
+                   opinion: 1
+                 },
+                 "labour": {
+                   opinion: 0
+                 },
+                 "lib-dem": {
+                   opinion: -1
+                 },
+                 "green": {
+                   opinion: -1
+                 },
+                 "plaid": {
+                   opinion: -1
+                 },
+                 "ukip": {
+                   opinion: 0.5
+                 }
+               }
+             }
+           }
+         },
+         "welfare": {
+            description: "Welfare",
+            debates: {
+              "38-welfare-1": {
+                question: "Should the 4 year freeze on increases to benefits payments be scrapped?",
+                parties: {
+                  "conservatives": {
+                    opinion: -1
+                  },
+                  "labour": {
+                    opinion: -1
+                  },
+                  "lib-dem": {
+                    opinion: -1
+                  },
+                  "green": {
+                    opinion: -1
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              },
+              "38-welfare-2": {
+                question: "Should the bedroom tax be scrapped?",
+                parties: {
+                  "conservatives": {
+                    opinion: -1
+                  },
+                  "labour": {
+                    opinion: 1
+                  },
+                  "lib-dem": {
+                    opinion: 1
+                  },
+                  "green": {
+                    opinion: 1
+                  },
+                  "plaid": {
+                    opinion: 1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              }
+           }
+         },
+         "economy": {
+            description: "Economy",
+            debates: {
+              "38-economy-1": {
+                question: "Should we get rid of the deficit by 2025?",
+                parties: {
+                  "conservatives": {
+                    opinion: 1
+                  },
+                  "labour": {
+                    opinion: 0.8
+                  },
+                  "lib-dem": {
+                    opinion: 0.8
+                  },
+                  "green": {
+                    opinion: -1
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              },
+              "38-economy-2": {
+                question: "Should the government take over the running of railways, water companies and the royal mail?",
+                parties: {
+                  "conservatives": {
+                    opinion: -1
+                  },
+                  "labour": {
+                    opinion: 1
+                  },
+                  "lib-dem": {
+                    opinion: -1
+                  },
+                  "green": {
+                    opinion: 1
+                  },
+                  "plaid": {
+                    opinion: -1
+                  },
+                  "ukip": {
+                    opinion: 0.5
+                  }
+                }
+              }
+           }
+         },
+         "living-costs": {
+           debates: {
+             "38-living-costs-1": {
+               question: "Should there be a cap on how much landlords can charge for rent?",
+               parties: {
+                 "conservatives": {
+                   opinion: -1
+                 },
+                 "labour": {
+                   opinion: 0.8
+                 },
+                 "lib-dem": {
+                   opinion: 0.8
+                 },
+                 "green": {
+                   opinion: 1
+                 },
+                 "plaid": {
+                   opinion: -1
+                 },
+                 "ukip": {
+                   opinion: 0.5
+                 }
+               }
+             },
+             "38-living-costs-2": {
+               question: "Should the national living wage be increased by more than inflation?",
+               parties: {
+                 "conservatives": {
+                   opinion: 0
+                 },
+                 "labour": {
+                   opinion: 1
+                 },
+                 "lib-dem": {
+                   opinion: -1
+                 },
+                 "green": {
+                   opinion: 1
+                 },
+                 "plaid": {
+                   opinion: 1
+                 },
+                 "ukip": {
+                   opinion: 0.5
+                 }
+               }
              }
            }
          }

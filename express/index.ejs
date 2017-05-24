@@ -31,7 +31,8 @@
     <%- include partials/preloaders.ejs %>
     <div id="app"></div>
     <script type="text/javascript">
-      var Model;
+      var Model,
+          Routes;
       var Embed = <%= embed %>;
       var SiteBrand = getParameterByName('brand') || "<%= brand %>";
       var Standalone = <%= standalone %>;

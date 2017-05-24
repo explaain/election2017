@@ -385,6 +385,8 @@ APIService.prototype.getPartyMatches = function(data) {
       partyMatchesByIssue[partyKey].forEach(function(match) {
         partyMatches[partyKey].match += match.agreement*match.weight;
       })
+      console.log('partyMatchesByIssue[partyKey]');
+      console.log(partyMatchesByIssue[partyKey]);
       partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
     } catch(e) {
 
@@ -412,15 +414,19 @@ APIService.prototype.getAgreements = function(data) {
           var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
           var partyKeys = Object.keys(allPartiesDebate.parties);
           partyKeys.forEach(function(partyKey) {
-            createObjectProps(agreementMatrix, [partyKey, issueKey])
-            agreementMatrix[partyKey][issueKey][debateKey] = {
-              agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
-              partyOpinion: allPartiesDebate.parties[partyKey].opinion,
-              userOpinion: debate.opinion,
-              weight: debate.weight || 1,
-              description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
-              // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
-              // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
+            console.log('allPartiesDebate.parties[partyKey].opinion');
+            console.log(allPartiesDebate.parties[partyKey].opinion);
+            if (allPartiesDebate.parties[partyKey] && allPartiesDebate.parties[partyKey].opinion > -1) {
+              createObjectProps(agreementMatrix, [partyKey, issueKey])
+              agreementMatrix[partyKey][issueKey][debateKey] = {
+                agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
+                // partyOpinion: allPartiesDebate.parties[partyKey].opinion,
+                userOpinion: debate.opinion,
+                weight: debate.weight || 1,
+                description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
+                // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
+                // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
+              }
             }
           })
         } catch (e) {

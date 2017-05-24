@@ -38,6 +38,7 @@ const routes = {
 router.start();
 
 Model = model;
+Routes = routes;
 
 class App {
   constructor(data) {
@@ -147,6 +148,8 @@ class App {
 
               var submitData = function(e) {
                 var goto = dataProcessor.processSentenceData(model, helpers);
+                console.log('goto');
+                console.log(goto);
                 routes[goto.route](goto).push();
               }
 
@@ -253,6 +256,10 @@ class Header {
       case 'unilad':
         logoImg = "img/unilad.png";
         logoClass = "unilad-logo";
+        break;
+      case '38degrees':
+        logoImg = "img/38degrees.png";
+        logoClass = "ge2017-logo";
         break;
       default:
         logoImg = "/img/ge2017logobeta.png";
@@ -455,83 +462,83 @@ class PhraseSelect {
 
 
 }
-
-class Phrase {
-
-  constructor(params) {
-    this.phrase = model.phrases[params.phrase] || { title: "This is a phrase", text: "I should buy ${thing}", options: { thing: { boat: "a boat", cat: "a cat" } } }
-    model.showProgressBar = false;
-  }
-
-  onload() {
-    $('div.body').removeClass('backColor');
-  }
-
-  render() {
-    var phraseDOM = [];
-
-    if (!Object.keys(this.phrase.options).length) {
-      phraseDOM.push(h("p", "No options to display"))
-    } else {
-      const phrase = this.phrase
-      const replacements = Object.keys(phrase.options)
-        .map(function(opt) {
-          const optionSet = phrase.options[opt]
-          const options = Object.keys(optionSet).map(function(optName){
-            const value = phrase.options[opt][optName]
-            return h('option', {
-              value: JSON.stringify(value),
-            }, optName );
-          })
-          options.unshift(h('option', {
-            value: null,
-          }, '' ))
-
-          const select = h('select', {
-            onchange: function(e){
-              const value = JSON.parse(e.target.value)
-              if(value.goto){
-                routes[value.goto.type](value.goto).push()
-              } else {
-                 helpers.updateData(value.dataUpdates);
-              }
-            }
-          }, options)
-
-          return {
-            replace: '${'+opt+'}',
-            with: select
-          }
-        })
-
-      this.phrase.text.split(' ')
-        .map(function(repl) {
-          var match
-          replacements.forEach(function(replacement){
-            if (repl === replacement.replace) {
-              match = replacement.with
-            }
-          })
-
-          return match || repl+' '
-        })
-        .forEach(function(wordOrOption) {
-          phraseDOM.push(wordOrOption)
-        })
-    }
-
-    return h("span.phrase",
-      // h("h1", this.phrase.title),
-      // h("h2", this.phrase.subtitle),
-      // h("section.text",
-        phraseDOM
-      // )
-    )
-  }
-
-
-
-}
+//
+// class Phrase {
+//
+//   constructor(params) {
+//     this.phrase = model.phrases[params.phrase] || { title: "This is a phrase", text: "I should buy ${thing}", options: { thing: { boat: "a boat", cat: "a cat" } } }
+//     model.showProgressBar = false;
+//   }
+//
+//   onload() {
+//     $('div.body').removeClass('backColor');
+//   }
+//
+//   render() {
+//     var phraseDOM = [];
+//
+//     if (!Object.keys(this.phrase.options).length) {
+//       phraseDOM.push(h("p", "No options to display"))
+//     } else {
+//       const phrase = this.phrase
+//       const replacements = Object.keys(phrase.options)
+//         .map(function(opt) {
+//           const optionSet = phrase.options[opt]
+//           const options = Object.keys(optionSet).map(function(optName){
+//             const value = phrase.options[opt][optName]
+//             return h('option', {
+//               value: JSON.stringify(value),
+//             }, optName );
+//           })
+//           options.unshift(h('option', {
+//             value: null,
+//           }, '' ))
+//
+//           const select = h('select', {
+//             onchange: function(e){
+//               const value = JSON.parse(e.target.value)
+//               if(value.goto){
+//                 routes[value.goto.type](value.goto).push()
+//               } else {
+//                  helpers.updateData(value.dataUpdates);
+//               }
+//             }
+//           }, options)
+//
+//           return {
+//             replace: '${'+opt+'}',
+//             with: select
+//           }
+//         })
+//
+//       this.phrase.text.split(' ')
+//         .map(function(repl) {
+//           var match
+//           replacements.forEach(function(replacement){
+//             if (repl === replacement.replace) {
+//               match = replacement.with
+//             }
+//           })
+//
+//           return match || repl+' '
+//         })
+//         .forEach(function(wordOrOption) {
+//           phraseDOM.push(wordOrOption)
+//         })
+//     }
+//
+//     return h("span.phrase",
+//       // h("h1", this.phrase.title),
+//       // h("h2", this.phrase.subtitle),
+//       // h("section.text",
+//         phraseDOM
+//       // )
+//     )
+//   }
+//
+//
+//
+// }
 
 class Dashboard {
 
@@ -1551,9 +1558,17 @@ class Quiz {
     self.selectedCountry = qp.country;
     self.nextButtonText = qp.nextButtonText;
     self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
-    self.quizQuestions = allData.getAllData().quizQuestions;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
 
+    switch (SiteBrand) {
+      case '38degrees':
+        self.quizQuestions = allData.getAllData().quizQuestions38Degrees;
+        break;
+
+      default:
+        self.quizQuestions = allData.getAllData().quizQuestions;
+
+    }
 
     self.isWaiting = model.user.isWaiting === "quiz-input";
     self.postcodeBinding = [model.user, 'postcode'];
@@ -1590,8 +1605,6 @@ class Quiz {
           _party.quizResults = true;
         });
         self.refresh();
-        //TODO: Jeremy, you might want to change this :)
-        // routes.step({ name: 'result', type: 'result' }).push();
       }
     }
     self.launchRandomRefresh = function(){
@@ -1638,17 +1651,20 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
-        var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
-        var newScore = {
-          key: partyKey,
-          percentage: parseInt(party.match*100),
-          newMatch: {
+        if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion > -1) {
+          var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
+          var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion) || -1;
+          var newMatch =  {
             question: self.quizQuestions[qp.opinions.length-1].question,
             userOpinion: userOpinion,
             partyOpinion: partyOpinion,
             isMatch: userOpinion == partyOpinion
           }
+        }
+        var newScore = {
+          key: partyKey,
+          percentage: parseInt(party.match*100),
+          newMatch: newMatch ? newMatch : undefined
         }
         return newScore;
       });
@@ -1703,7 +1719,8 @@ class Quiz {
             if(party.key===_party.key){
               _party.percentage = parseInt(party.percentage) + "%";
               _party.percentageText = parseInt(party.percentage) + "%";
-              _party.matches.push(party.newMatch);
+              if (party.newMatch)
+                _party.matches.push(party.newMatch);
               if (party.percentage > topParty.percentage) {
                 topParty = party;
               }
@@ -1729,6 +1746,7 @@ class Quiz {
       setTimeout(function(){
         $('.body.quiz').addClass('moving')}
       ,10);
+      qp.standaloneResults = false;
       self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
         if (!(qp.quizChanceResults.parties.filter(function(_party) {
           return party.key == _party.key
@@ -1768,9 +1786,21 @@ class Quiz {
       self.partiesChartDataTopMatch = [tempMaxParty]
 
       qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
-      setTimeout(function() {
-        self.refresh(); //This is not good as it just puts it on repeat!
-      },10)
+      if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
+        getResults('localCandidates')
+        .then(function(results) {
+          console.log('results')
+          console.log('results')
+          console.log('results')
+          console.log('results')
+          console.log(results)
+          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults;
+          self.refresh();
+        })
+      }
+      // setTimeout(function() {
+      //   self.refresh(); //This is not good as it just puts it on repeat!
+      // },10)
     }
 
     // this is for random data
@@ -1909,6 +1939,7 @@ class Quiz {
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
       standaloneResults: qp.standaloneResults,
+      localCandidateData: qp.localCandidateData,
     }, CardTemplates.quizMaster);
   }
 }
