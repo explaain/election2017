@@ -1707,6 +1707,7 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizTopLine",
+        "condition": "!finalResults",
         "content": [
           {
             "dom": ".quizSkip",
