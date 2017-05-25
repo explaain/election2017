@@ -309,9 +309,10 @@ module.exports = function(CardTemplates){
                         "dom": "a.discard-card-style",
                         "content": [
                           {
-                            "dom": "button.btn.btn-success",
+                            "dom": "a.btn.btn-success",
                             "attr": {
-                              "onclick": "gotToQuiz"
+                              // "onclick": "gotToQuiz"
+                              "href": "/quiz"
                             },
                             "content": "Go to the quiz  >"
                           }
@@ -542,9 +543,10 @@ module.exports = function(CardTemplates){
                         "dom": "a.discard-card-style",
                         "content": [
                           {
-                            "dom": "button.btn.btn-success",
+                            "dom": "a.btn.btn-success",
                             "attr": {
-                              "onclick": "gotToQuiz"
+                              // "onclick": "gotToQuiz"
+                              "href": "/quiz"
                             },
                             "content": "Go to the quiz  >"
                           }
