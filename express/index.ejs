@@ -17,10 +17,12 @@
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 
-    <% if(step=='postcode-compare'){ %>
-       <%- include partials/meta-students.ejs %>
-     <% } else{ %>
-       <%- include partials/meta-home.ejs %>
+    <% if(typeof params !== 'undefined' && params.party && params.percentage) { %>
+      <%- include partials/meta-quizresults.ejs %>
+    <% } else if(step=='postcode-compare') { %>
+      <%- include partials/meta-students.ejs %>
+    <% } else { %>
+      <%- include partials/meta-home.ejs %>
     <% } %>
 
     <%- include partials/event-tracking.ejs %>

@@ -1702,6 +1702,125 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+  CardTemplates.landingView = {
+    "dom": "section.step",
+    "content": [
+      {
+        "dom": ".quizTopLine",
+        "content": [
+          { "dom": "div.spacer" }
+        ],
+      },
+      {
+      "dom": "div",
+      "condition": "!countrySelected",
+      "content": [
+        {
+          "dom":"div",
+          "content": [
+            {
+              "dom": ".card.quiz-percentages",
+              "content": [
+                {
+                  "dom": ".card-visible.text-center",
+                  "content": [
+                    {
+                      "dom": ".content.quiz-intro",
+                      "content": [
+                        {
+                          "dom": "div.step-number.step-2",
+                          "condition": "quizResultsPage",
+                          "content": "2"
+                        },
+                        {
+                          "dom": "h2",
+                          "content": "Where do you stand on these 12 issues?"
+                        },
+                        {
+                          "dom": "p",
+                          "content": "See who you match with in real time as you give your views on the election's hottest topics."
+                        },
+                        {
+                          "dom": "p.italics",
+                          "content": "The results may surprise you…"
+                        },
+                        {
+                          "template": "quizPercentages",
+                          "mapping": [
+                            ["data", "partiesRandomChartData"]
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "dom": ".startQuiz",
+                      "content": "Find your match >",
+                      "condition": "!quizStarted",
+                      "attr": {
+                        "onclick": {
+                          "var": "clickStartQuiz"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "dom": "p.or",
+              "content": "or"
+            },
+            {
+              "dom": ".card.quiz-extra",
+              "content": [
+                {
+                  "dom": ".card-visible.text-center",
+                  "content": [
+                    {
+                      "dom": "h2",
+                      "content": "Student? Find out where you should vote."
+                    },
+                    {
+                      "dom": "p",
+                      "content": "Compare your postcodes to see where your vote has most impact."
+                    },
+                    {
+                      "dom": "button.btn.btn-primary",
+                      "content": "Find out >",
+                      "condition": "!quizStarted",
+                      "attr": {
+                        "onclick": {
+                          "var": "startStudentCompare"
+                        }
+                      }
+                    }
+                    // {
+                    //   "dom": "h2",
+                    //   "content": "I know what I want my vote to do"
+                    // },
+                    // {
+                    //   "dom": "p",
+                    //   "content": "Just tell me what’s possible"
+                    // },
+                    // {
+                    //   "dom": "button.btn.btn-primary",
+                    //   "content": "Find out >",
+                    //   "condition": "!quizStarted",
+                    //   "attr": {
+                    //     "onclick": {
+                    //       "var": "startSingleSentence"
+                    //     }
+                    //   }
+                    // }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }],
+  },
   CardTemplates.quizMaster = {
     "dom": "section.step",
     "content": [
@@ -1711,7 +1830,12 @@ module.exports = function(CardTemplates){
           {
             "dom": ".quizSkip",
             "content": "Skip >",
-            //"condition": "quizStarted",
+            "condition": "quizStarted && countrySelected",
+            "mapping": [
+              ["progressBarWidth", "progressBarWidth"],
+              ["countrySelected", "countrySelected"],
+              ["noProgressBarNeeded", "standaloneResults"]
+            ]
             /*"attr": {
               "onclick": {
                 "var": "skip"
@@ -1719,20 +1843,19 @@ module.exports = function(CardTemplates){
             }*/
           },
           {
-            "dom": "span",
+            "dom": "div",
             "content": [
               {
                 "dom": ".quizBack",
                 "content": "< Back",
-                "condition": "quizStarted",
                 "attr": {
                   "onclick": {
                     "var": "back"
                   }
-                }
+                },
+                "condition": "!standaloneResults && !finalResults"
               }
-            ],
-            "condition": "!standaloneResults"
+            ]
           },
           {
             "template": "quizProgress",
@@ -1795,6 +1918,13 @@ module.exports = function(CardTemplates){
                         }
                       },
                       {
+                        "template": "shareButtons",
+                        "mapping": [
+                          ["facebookShareHref", "facebookShareAlignmentHref"],
+                          ["twitterShareHref", "twitterShareAlignmentHref"]
+                        ]
+                      },
+                      {
                         "dom": "p.postcode-instructions",
                         "content": "... now add your postcode and see the options in your constituency."
                       },
@@ -1845,134 +1975,24 @@ module.exports = function(CardTemplates){
         "condition": "!countrySelected",
         "content": [
           {
-            "dom":"div",
-            "condition": "!quizStarted",
+            "dom": "h2",
+            "content": "Where are you voting from?"
+          },
+          {
+            "dom": "div.countries",
+            "loop": "countriesData",
             "content": [
               {
-                "dom": ".card.quiz-percentages",
-                "content": [
-                  {
-                    "dom": ".card-visible.text-center",
-                    "content": [
-                      {
-                        "dom": ".content.quiz-intro",
-                        "content": [
-                          {
-                            "dom": "div.step-number.step-2",
-                            "condition": "quizResultsPage",
-                            "content": "2"
-                          },
-                          {
-                            "dom": "h2",
-                            "content": "Where do you stand on these 12 issues?"
-                          },
-                          {
-                            "dom": "p",
-                            "content": "See who you match with in real time as you give your views on the election's hottest topics."
-                          },
-                          {
-                            "dom": "p.italics",
-                            "content": "The results may surprise you…"
-                          },
-                          {
-                            "template": "quizPercentages",
-                            "mapping": [
-                              ["data", "partiesRandomChartData"]
-                            ]
-                          }
-                        ]
-                      },
-                      {
-                        "dom": ".startQuiz",
-                        "content": "Find your match >",
-                        "condition": "!quizStarted",
-                        "attr": {
-                          "onclick": {
-                            "var": "startQuiz"
-                          }
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "dom": "p.or",
-                "content": "or"
-              },
-              {
-                "dom": ".card.quiz-extra",
-                "content": [
-                  {
-                    "dom": ".card-visible.text-center",
-                    "content": [
-                      {
-                        "dom": "h2",
-                        "content": "Student? Find out where you should vote."
-                      },
-                      {
-                        "dom": "p",
-                        "content": "Compare your postcodes to see where your vote has most impact."
-                      },
-                      {
-                        "dom": "button.btn.btn-primary",
-                        "content": "Find out >",
-                        "condition": "!quizStarted",
-                        "attr": {
-                          "onclick": {
-                            "var": "startStudentCompare"
-                          }
-                        }
-                      }
-                      // {
-                      //   "dom": "h2",
-                      //   "content": "I know what I want my vote to do"
-                      // },
-                      // {
-                      //   "dom": "p",
-                      //   "content": "Just tell me what’s possible"
-                      // },
-                      // {
-                      //   "dom": "button.btn.btn-primary",
-                      //   "content": "Find out >",
-                      //   "condition": "!quizStarted",
-                      //   "attr": {
-                      //     "onclick": {
-                      //       "var": "startSingleSentence"
-                      //     }
-                      //   }
-                      // }
-                    ]
-                  }
-                ]
+                "template": "quizCountrySelector"
               }
             ]
           },
           {
-            "dom": "div",
-            "condition": "quizStarted",
-            "content": [
-              {
-                "dom": "h2",
-                "content": "Where are you voting from?"
-              },
-              {
-                "dom": "div.countries",
-                "loop": "countriesData",
-                "content": [
-                  {
-                    "template": "quizCountrySelector"
-                  }
-                ]
-              },
-              {
-                "dom": "a.explaain-link.dark.standalone-link",
-                "content": "Voting in Northern Ireland?",
-                "attr": {
-                  "href": "http://api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
-                }
-              }
-            ]
+            "dom": "a.explaain-link.dark.standalone-link",
+            "content": "Voting in Northern Ireland?",
+            "attr": {
+              "href": "http://api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
+            }
           }
         ]
       },
@@ -2129,7 +2149,7 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizProgress = {
-    "dom": "div",
+    "dom": "div.progress-container",
     "condition": "!noProgressBarNeeded",
     "content": [
       {

@@ -76,8 +76,21 @@ app.get('/policy', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'policy', phrase: '', quiz: false });
 });
 
+app.get('/shared/:party?/:percentage?', function(req, res, next) {
+  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+})
+
 app.get('/quiz', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true });
+});
+
+app.get('/quiz/questions', function(req, res, next) {
+  res.redirect(301,"/quiz");
+});
+
+//Temporary for dev testing
+app.get('/results', function(req, res, next) {
+  res.redirect(301,"/quiz");
 });
 
 app.get('/phrase/iWantTo/', function(req, res, next) {
@@ -87,11 +100,6 @@ app.get('/phrase/iWantTo/', function(req, res, next) {
 //Teporary because AddThis was sending people to the wrong place!
 app.get('/ge2017.com', function(req, res, next) {
   res.redirect(301,"/students");
-});
-
-//Temporary for dev testing
-app.get('/results', function(req, res, next) {
-  res.redirect(301,"/quiz");
 });
 
 app.get('/api/postcode/:postcode', function(req, res, next) {

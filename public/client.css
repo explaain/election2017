@@ -770,23 +770,23 @@ a.explaain-link.discard-card-style:active,
 }
 
 .btn-facebook {
-  background-color: #3b5998;
-  color: white;
+  background-color: #3b5998 !important;
+  color: white !important;
 }
 
 .btn-facebook:hover {
-  background-color: #2b4988;
-  color: white;
+  background-color: #2b4988 !important;
+  color: white !important;
 }
 
 .btn-twitter {
-  background-color: #00aced;
-  color: white;
+  background-color: #00aced !important;
+  color: white !important;
 }
 
 .btn-twitter:hover {
-  background-color: #009cdd;
-  color: white;
+  background-color: #009cdd !important;
+  color: white !important;
 }
 
 /* igor: text styles */
@@ -1556,6 +1556,24 @@ a:hover .quizPercentagesPartyFace {
 .quizTopLine {
   overflow: hidden;
   margin-top:10px;
+}
+
+.quizTopLine > * {
+    position: relative;
+    z-index: 5;
+    display: block;
+}
+
+.spacer {
+    height: 20px;
+}
+
+/* To center the progress bar */
+.progress-container {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    z-index: 1 !important;
 }
 
 .body.quiz div.questions .card:nth-child(1) {
