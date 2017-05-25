@@ -1,32 +1,6 @@
 module.exports = {
   getData: function () {
-    return [{
-      question: "1. Should cannabis be legalised?",
-      issue: "health",
-      debate: "health-1",
-      answers: {
-        yes: [
-          {
-            label: "Yes, but for medical use.",
-            opinion: 0.6
-          },
-          {
-            label: "Yes, and decriminalise all drugs over time.",
-            opinion: 1
-          }
-        ],
-        no: [
-          {
-            label: "No, but reduce punishment for personal use.",
-            opinion: 0.4
-          },
-          {
-            label: "No, and make punishment for personal use more severe.",
-            opinion: 0
-          }
-        ]
-      }
-    }]
+    return quizQuestions;
   }
 };
 
