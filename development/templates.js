@@ -1217,67 +1217,6 @@ module.exports = function(CardTemplates){
     }
   ;
 
-  CardTemplates.shareButtonsDynamicLink =
-    {
-      "dom": "div.share-buttons",
-      "content": [
-        {
-          "dom": "p",
-          "content": {
-            "var": "shareHeading",
-            "default": "Share this to help friends and family #GE2017"
-          }
-        },
-        {
-          "dom": "a.discard-card-style",
-          "attr": {
-            "onclick":{
-              "var": "facebookShareAlignmentURL"
-            }
-          },
-          "content": [
-            {
-              "dom": "button.btn.btn-facebook",
-              "icon": "fa-facebook",
-              "content": [
-                {
-                  "dom": "i.fa.fa-facebook"
-                },
-                {
-                  "dom": "span",
-                  "content": "Facebook"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "dom": "a.discard-card-style",
-          "attr": {
-            "onclick":{
-              "var": "twitterShareAlignmentURL"
-            }
-          },
-          "content": [
-            {
-              "dom": "button.btn.btn-twitter",
-              "icon": "fa-twitter",
-              "content": [
-                {
-                  "dom": "i.fa.fa-twitter"
-                },
-                {
-                  "dom": "span",
-                  "content": "Twitter"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ;
-
   CardTemplates.shareButtons =
     {
       "dom": "div.share-buttons",
@@ -1979,10 +1918,10 @@ module.exports = function(CardTemplates){
                         }
                       },
                       {
-                        "template": "shareButtonsDynamicLink",
+                        "template": "shareButtons",
                         "mapping": [
-                          ["facebookShareAlignmentURL", "facebookShareAlignmentURL"],
-                          ["twitterShareAlignmentURL", "twitterShareAlignmentURL"]
+                          ["facebookShareHref", "facebookShareAlignmentHref"],
+                          ["twitterShareHref", "twitterShareAlignmentHref"]
                         ]
                       },
                       {
