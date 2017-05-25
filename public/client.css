@@ -1588,6 +1588,7 @@ a:hover .quizPercentagesPartyFace {
   padding: 20px;
 }
 .quizResults .retake {
+  margin: 10px 0 -10px;
   font-weight: 600;
   color: #777;
 }
@@ -1602,6 +1603,10 @@ a:hover .quizPercentagesPartyFace {
 }
 .quizResults p {
   margin-top: 50px;
+}
+
+.body:not(.unilad) .questions .quizResults {
+  display: none;
 }
 
 .politicalanimal {
@@ -1679,8 +1684,11 @@ a.turnup:hover {
   margin-bottom: 70px;
 }
 
-.card .card-visible > div.step-number {
+.card .card-visible div.step-number {
   margin-top: -20px;
+}
+.card .card-visible section > div.step-number, .card .card-visible .body-content > div.step-number, .card .card-visible .footer > div.step-number {
+  margin-top: -31px;
 }
 
 .body.quiz p.small {
@@ -1751,4 +1759,23 @@ section.single-sentence {
   background: #ff6e73 !important;
   border: 1px solid #ff6e73 !important;
   box-shadow: none !important;
+}
+
+
+h2.seeHow {
+  margin-bottom: 50px;
+}
+
+.body.degrees38 .card.percentageHeads {
+  /*display: none;*/
+}
+
+.body.quiz.unilad .card.results-top {
+  display: none;
+}
+.body.quiz.unilad h2.seeHow {
+  display: none;
+}
+.body.quiz.unilad .step-number {
+  display: none;
 }

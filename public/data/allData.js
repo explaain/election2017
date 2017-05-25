@@ -24,7 +24,6 @@ module.exports = {
       localCandidates: localCandidates.getData(),
       partyReconciliation: partyReconciliation.getData(),
       partyStances: partyStances.getData(),
-      // partyStances: {opinions: {issues: Object.assign(partyStances.getData().opinions.issues, partyStances2.getData().opinions.issues)}},
       partyStories: partyStories.getData(),
       quizQuestions: quizQuestions.getData(),
       quizQuestions38Degrees: quizQuestions38Degrees.getData(),

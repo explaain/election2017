@@ -257,7 +257,7 @@ class Header {
         logoImg = "img/unilad.png";
         logoClass = "unilad-logo";
         break;
-      case '38degrees':
+      case 'degrees38':
         logoImg = "img/38degrees.png";
         logoClass = "ge2017-logo";
         break;
@@ -1561,7 +1561,7 @@ class Quiz {
     self.finalResults = params && params.finalResults ? params.finalResults : false;
 
     switch (SiteBrand) {
-      case '38degrees':
+      case 'degrees38':
         self.quizQuestions = allData.getAllData().quizQuestions38Degrees;
         break;
 

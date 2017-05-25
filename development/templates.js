@@ -201,7 +201,7 @@ module.exports = function(CardTemplates){
         ]
       },
       {
-        "dom": "div.body-content.results.no-top-border",
+        "dom": "div.body-content.results",
         "condition": "constituencyResults",
         "content": [
           {
@@ -606,7 +606,7 @@ module.exports = function(CardTemplates){
         "condition": "constituencyResults",
         "content": [
           {
-            "dom": "div.step-number.step-2",
+            "dom": "div.step-number.step-1",
             "condition": "constituencyResults",
             "content": "1"
           },
@@ -1744,6 +1744,101 @@ module.exports = function(CardTemplates){
         ]
       },
       {
+        "dom": "a.btn.btn-default.retake",
+        "attr": {
+          "href": "/quiz"
+        },
+        "condition": "quizResults",
+        "content": "⟲ Retake Quiz"
+      },
+      {
+        "dom": ".card.results-top",
+        "condition": "quizResultsPage",
+        "content": [
+          {
+            "dom": ".card-visible.text-center",
+            "content": [
+              {
+                "dom": ".content",
+                "content": [
+                  {
+                    "dom": "div.step-number.step-1",
+                    "content": "1"
+                  },
+                  {
+                    "dom": "h2.bestMatchSoFar",
+                    "content": "See your best match so far..."
+                  },
+                  {
+                    "dom": "div.quizResults",
+                    "content": [
+                      {
+                        "dom": "img",
+                        "attr": {
+                          "src": {
+                            "var": "resultLogo"
+                          }
+                        }
+                      },
+                      {
+                        "dom": "h2",
+                        "content": {
+                          "var": "resultName"
+                        }
+                      },
+                      {
+                        "dom": "h2",
+                        "content": {
+                          "var": "resultPercentage"
+                        }
+                      },
+                      {
+                        "dom": "p.postcode-instructions",
+                        "content": "Do you want to see options, based on your results, on how to maximise your vote in your area?"
+                      },
+                      {
+                        "dom":"form.postcode-form",
+                        "condition": "!isWaiting",
+                        "attr":{
+                          "onsubmit":{
+                            "var":"postcodeSubmit"
+                          }
+                        },
+                        "content":[
+                          {
+                            "dom":"input.form-control",
+                            "attr": {
+                              "autofocus":"true",
+                              "type":"text",
+                              "name":"postcode",
+                              "placeholder":"Postcode",
+                              "binding":{
+                                "var":"postcodeBinding"
+                              }
+                            }
+                          },
+                          {
+                            "dom":"button.btn.btn-success",
+                            "attr":{
+                              "type":"submit"
+                            },
+                            "content":"Go!"
+                          }
+                        ]
+                      },
+                      {
+                        "condition": "isWaiting",
+                        "template": "loading"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "dom": "div",
         "condition": "!countrySelected",
         "content": [
@@ -1760,6 +1855,11 @@ module.exports = function(CardTemplates){
                       {
                         "dom": ".content.quiz-intro",
                         "content": [
+                          {
+                            "dom": "div.step-number.step-2",
+                            "condition": "quizResultsPage",
+                            "content": "2"
+                          },
                           {
                             "dom": "h2",
                             "content": "Where do you stand on these 12 issues?"
@@ -2158,15 +2258,20 @@ module.exports = function(CardTemplates){
     "dom": "div",
     "content": [
       {
-        "dom": ".card",
+        "dom": ".card.percentageHeads",
         "content": [
           {
             "dom": ".card-visible.text-center",
             "content": [
               {
                 "dom": "div.step-number.step-2",
-                "condition": "finalResults",
+                "condition": "quizResults",
                 "content": "2"
+              },
+              {
+                "dom": "h2.seeHow",
+                "condition": "quizResultsPage",
+                "content": "See how you matched with each party"
               },
               {
                 "dom": "h2",
@@ -2184,6 +2289,7 @@ module.exports = function(CardTemplates){
                 "content": "Front-runners in your area"
               },
               {
+                // "condition": "!finalResults",
                 "template": "quizPercentages"
               }
             ]
@@ -2200,19 +2306,8 @@ module.exports = function(CardTemplates){
         "condition": "quizResultsPage",
         "content": [
           {
-            "dom": "a.btn.btn-default.retake",
-            "attr": {
-              "href": "/quiz"
-            },
-            "content": "⟲ Retake Quiz"
-          },
-          {
             "dom": "h3.bestMatch",
             "content": "Your best match is:"
-          },
-          {
-            "dom": "h3.bestMatchSoFar",
-            "content": "Your best match so far is..."
           },
           {
             "dom": "img",
@@ -2233,44 +2328,6 @@ module.exports = function(CardTemplates){
             "content": {
               "var": "resultPercentage"
             }
-          },
-          {
-            "dom": "p.postcode-instructions",
-            "content": "But enter your postcode to see who stands the best chance where you are…"
-          },
-          {
-            "dom":"form.postcode-form",
-            "condition": "!isWaiting",
-            "attr":{
-              "onsubmit":{
-                "var":"postcodeSubmit"
-              }
-            },
-            "content":[
-              {
-                "dom":"input.form-control",
-                "attr": {
-                  "autofocus":"true",
-                  "type":"text",
-                  "name":"postcode",
-                  "placeholder":"Postcode",
-                  "binding":{
-                    "var":"postcodeBinding"
-                  }
-                }
-              },
-              {
-                "dom":"button.btn.btn-success",
-                "attr":{
-                  "type":"submit"
-                },
-                "content":"Go!"
-              }
-            ]
-          },
-          {
-            "condition": "isWaiting",
-            "template": "loading"
           },
           {
             "dom": "p.resultTips",
@@ -2450,6 +2507,11 @@ module.exports = function(CardTemplates){
           {
             "dom": ".card-visible.text-center.action-buttons",
             "content": [
+              {
+                "dom": "div.step-number.step-3",
+                "condition": "quizResults",
+                "content": "3"
+              },
               {
                 "dom": "div.step-number.step-4",
                 "condition": "finalResults",
