@@ -30,7 +30,9 @@ const routes = {
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
-  quiz: router.route('/quiz'),
+  quizLanding: router.route('/shared/:party/:percentage'),
+  quizNew: router.route('/quiz'),
+  quiz: router.route('/quiz/questions'),
   quizResults: router.route('/results'),
   policy: router.route('/policy')
 };
@@ -217,9 +219,13 @@ class App {
               return h('div',step);
             }),
 
-            routes.quiz.under(function (params) {
+            routes.quizLanding(landingPage), // from fb
+
+            routes.quizNew(landingPage), // organic
+
+            routes.quiz(function (params) {
               var params = {
-                name: StepName
+                name: 'quiz'
               }
               var step = new Step(params);
               return h('div',step);
@@ -237,7 +243,17 @@ class App {
     }
   }
 }
-
+var landed = 0
+function landingPage(params) {
+  if(landed == 0) {
+    var params = {
+      name: 'quizLanding'
+    }
+    var step = new Step(params);
+    return h('div',step);
+  }
+  landed++;
+}
 
 class Header {
   constructor(logoRoute) {
@@ -257,7 +273,7 @@ class Header {
         logoImg = "img/unilad.png";
         logoClass = "unilad-logo";
         break;
-      case 'degrees38':
+      case '38degrees':
         logoImg = "img/38degrees.png";
         logoClass = "ge2017-logo";
         break;
@@ -638,6 +654,13 @@ class Step {
     };
 
     switch (params.name) {
+      case 'quizLanding':
+        data.cardGroups.push([{
+          type: 'prequiz',
+          name: 'Wanna start a quiz?',
+          description: 'Click to start quiz'
+        }])
+        break;
 
       case 'quiz':
         break;
@@ -839,6 +862,9 @@ class Step {
   render() {
     const self = this;
     switch (self.params.name) {
+      case 'quizLanding':
+        return (new QuizLanding())
+        break;
       case 'quiz':
         return (new Quiz())
         break;
@@ -1529,9 +1555,76 @@ function getResults(resultsType){
   return deferred.promise;
 }
 
+class QuizLanding {
+  constructor (params) {
+    const qp = model.user.quizProgress;
+    const self = this;
+
+    console.log("Quiz-Landing page")
+    self.launchRandomRefresh = function() {
+      // if(!self.quizStarted){
+      setTimeout(function(){
+        self.refresh();
+      },1000);
+      // }
+    }
+
+    self.clickStartQuiz = function(){
+      $('.body.quiz').addClass('moving');
+      routes.quiz({begin: true}).push()
+    }
+  }
+
+  render() {
+    const qp = model.user.quizProgress;
+    const self = this;
+    self.launchRandomRefresh();
+
+    return helpers.assembleCards({
+      clickStartQuiz: self.clickStartQuiz,
+      partiesRandomChartData: [
+        {
+          color: "red",
+          photo: "/img/leader-faces/corbyn.png",
+          percentage: parseInt((Math.random()*100))+"%",
+          fullName: "Labour",
+          name: "Lab"
+        },
+        {
+          color: "green",
+          photo: "/img/leader-faces/wood.png",
+          percentage: parseInt((Math.random()*100))+"%",
+          fullName: "Green",
+          name: "Green"
+        },
+        {
+          color: "blue",
+          photo: "/img/leader-faces/may.png",
+          percentage: parseInt((Math.random()*100))+"%",
+          fullName: "Conservative",
+          name: "Con"
+        },
+        {
+          color: "purple",
+          photo: "/img/leader-faces/nuttall.png",
+          percentage: parseInt((Math.random()*100))+"%",
+          fullName: "Ukip",
+          name: "Ukip"
+        },
+        {
+          color: "orange",
+          photo: "/img/leader-faces/farron.png",
+          percentage: parseInt((Math.random()*100))+"%",
+          fullName: "Liberal Democrats",
+          name: "Lib"
+        }
+      ]
+    }, CardTemplates.landingView)
+  }
+}
 
 class QuizResults {
-  constructor() {
+  constructor(params) {
 
   }
 
@@ -1542,10 +1635,12 @@ class QuizResults {
 }
 
 class Quiz {
-  constructor(params){
+  constructor(params) {
+    console.log("Quiz page")
+
     const self = this;
     const qp = model.user.quizProgress;
-    qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
+    // qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
     qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
     qp.quizResultsPage = params && params.finalResults ? !params.finalResults : qp.quizResultsPage;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
@@ -1559,15 +1654,18 @@ class Quiz {
     self.nextButtonText = qp.nextButtonText;
     self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
+    self.beginTheQuiz = params && params.begin;
+    self.params = params
+
+    self.quizStarted = true;
 
     switch (SiteBrand) {
-      case 'degrees38':
+      case '38degrees':
         self.quizQuestions = allData.getAllData().quizQuestions38Degrees;
         break;
 
       default:
         self.quizQuestions = allData.getAllData().quizQuestions;
-
     }
 
     self.facebookShareConstituencyHref = null;
@@ -1576,7 +1674,7 @@ class Quiz {
     var brand = SiteBrand || '';
     var shareData = model.user.quizProgress.resultsData;
     try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-    var sharePath = `http://${brand}ge2017.com/quiz/shared/${shareData.name}/${perc}`;
+    var sharePath = `http://${brand}ge2017.com/shared/${shareData.name}/${perc}`;
     // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
     self.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?kid_directed_site=${encodeURIComponent(sharePath)}&display=popup&ref=plugin&src=share_button`;
     self.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent`I support ${shareData.percentage}% of ${shareData.name} policies. #GE2017 - ${sharePath}`;
@@ -1617,13 +1715,6 @@ class Quiz {
           _party.quizResults = true;
         });
         self.refresh();
-      }
-    }
-    self.launchRandomRefresh = function(){
-      if(!self.quizStarted){
-        setTimeout(function(){
-          self.refresh();
-        },1000);
       }
     }
     self.answerYes = function(){self.answer("yes")}
@@ -1814,52 +1905,19 @@ class Quiz {
       //   self.refresh(); //This is not good as it just puts it on repeat!
       // },10)
     }
-
-    // this is for random data
-    self.partiesRandomChartData = [
-      {
-        color: "red",
-        photo: "/img/leader-faces/corbyn.png",
-        percentage: parseInt((Math.random()*100))+"%",
-        fullName: "Labour",
-        name: "Lab"
-      },
-      {
-        color: "green",
-        photo: "/img/leader-faces/wood.png",
-        percentage: parseInt((Math.random()*100))+"%",
-        fullName: "Green",
-        name: "Green"
-      },
-      {
-        color: "blue",
-        photo: "/img/leader-faces/may.png",
-        percentage: parseInt((Math.random()*100))+"%",
-        fullName: "Conservative",
-        name: "Con"
-      },
-      {
-        color: "purple",
-        photo: "/img/leader-faces/nuttall.png",
-        percentage: parseInt((Math.random()*100))+"%",
-        fullName: "Ukip",
-        name: "Ukip"
-      },
-      {
-        color: "orange",
-        photo: "/img/leader-faces/farron.png",
-        percentage: parseInt((Math.random()*100))+"%",
-        fullName: "Liberal Democrats",
-        name: "Lib"
-      },
-    ];
   }
   render(){
     const self = this;
     const countriesData = allData.getAllData().countriesData;
-    self.launchRandomRefresh();
     const qp = model.user.quizProgress;
     const subquestions = self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
+
+    // On Landing Page button click
+    if(self.beginTheQuiz || !self.params) {
+      console.log("Starting quiz",self.params)
+      self.startQuiz();
+    }
+
     if(subquestions){
       subquestions.forEach(function(subanswer){
         subanswer.answer = function(){
@@ -1934,7 +1992,6 @@ class Quiz {
       // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
-      startQuiz: self.startQuiz,
       startStudentCompare: self.startStudentCompare,
       startSingleSentence: self.startSingleSentence,
       startingQuiz: self.startingQuiz,
@@ -1957,7 +2014,6 @@ class Quiz {
     }, CardTemplates.quizMaster);
   }
 }
-
 
 /*const templatesUrl = '//explaain-api.herokuapp.com/templates';
 helpers.loadTemplates(templatesUrl).then(function(templates){
