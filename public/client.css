@@ -170,6 +170,7 @@ footer {
 
 
 
+
 /* Because of social media panel and Share button */
 @media only screen and (max-width: 980px) {
   footer {
@@ -1514,7 +1515,7 @@ a:hover .quizPercentagesPartyFace {
   margin: 0;
 }
 
-.body.unilad .or, .body.unilad .card.quiz-extra {
+.body.unilad .or, .body.unilad .card.quiz-extra, .body.degrees38 .or, .body.degrees38 .card.quiz-extra {
   display: none;
 }
 
@@ -1623,7 +1624,7 @@ a:hover .quizPercentagesPartyFace {
   margin: -10px 0 10px;
 }
 
-a.turnup:hover {
+a.turnupFooter:hover, a.ge2017Footer:hover {
   opacity: 0.7;
 }
 
@@ -1781,4 +1782,8 @@ h2.seeHow {
 }
 .body.quiz.unilad .step-number {
   display: none;
+}
+
+.body.quiz footer a.ge2017Footer img {
+  height: 30px;
 }
