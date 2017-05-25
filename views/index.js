@@ -315,7 +315,7 @@ class Footer {
           },
           h("img",
             {
-              "src": "img/turnup.png"
+              "src": "/img/turnup.png"
             }
           )
         )

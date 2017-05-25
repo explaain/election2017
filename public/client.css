@@ -1560,6 +1560,11 @@ a:hover .quizPercentagesPartyFace {
 .quizTopLine > * {
     position: relative;
     z-index: 5;
+    display: block;
+}
+
+.spacer {
+    height: 20px;
 }
 
 /* To center the progress bar */

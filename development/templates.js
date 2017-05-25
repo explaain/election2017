@@ -1707,6 +1707,9 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizTopLine",
+        "content": [
+          { "dom": "div.spacer" }
+        ],
       },
       {
       "dom": "div",
@@ -1840,7 +1843,7 @@ module.exports = function(CardTemplates){
             }*/
           },
           {
-            "dom": "span",
+            "dom": "div",
             "content": [
               {
                 "dom": ".quizBack",
@@ -1849,10 +1852,10 @@ module.exports = function(CardTemplates){
                   "onclick": {
                     "var": "back"
                   }
-                }
+                },
+                "condition": "!standaloneResults && !finalResults"
               }
-            ],
-            "condition": "!standaloneResults"
+            ]
           },
           {
             "template": "quizProgress",
