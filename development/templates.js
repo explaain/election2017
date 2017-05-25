@@ -1852,7 +1852,7 @@ module.exports = function(CardTemplates){
                 }
               }
             ],
-            "condition": "!standaloneResults || countrySelected"
+            "condition": "countrySelected"
           },
           {
             "template": "quizProgress",

@@ -655,11 +655,6 @@ class Step {
 
     switch (params.name) {
       case 'quizLanding':
-        data.cardGroups.push([{
-          type: 'prequiz',
-          name: 'Wanna start a quiz?',
-          description: 'Click to start quiz'
-        }])
         break;
 
       case 'quiz':
@@ -1559,17 +1554,19 @@ class QuizLanding {
   constructor (params) {
     const qp = model.user.quizProgress;
     const self = this;
+    var randomyGraphyThing;
 
     console.log("Quiz-Landing page")
     self.launchRandomRefresh = function() {
       // if(!self.quizStarted){
-      setTimeout(function(){
+      randomyGraphyThing = setTimeout(function(){
         self.refresh();
       },1000);
       // }
     }
 
     self.clickStartQuiz = function(){
+      clearTimeout(randomyGraphyThing);
       $('.body.quiz').addClass('moving');
       routes.quiz({begin: true}).push()
     }
@@ -1578,7 +1575,7 @@ class QuizLanding {
   render() {
     const qp = model.user.quizProgress;
     const self = this;
-    self.launchRandomRefresh();
+    // self.launchRandomRefresh();
 
     return helpers.assembleCards({
       clickStartQuiz: self.clickStartQuiz,
@@ -1640,7 +1637,7 @@ class Quiz {
 
     const self = this;
     const qp = model.user.quizProgress;
-    // qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
+    qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
     qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
     qp.quizResultsPage = params && params.finalResults ? !params.finalResults : qp.quizResultsPage;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
@@ -1657,7 +1654,7 @@ class Quiz {
     self.beginTheQuiz = params && params.begin;
     self.params = params
 
-    self.quizStarted = true;
+    // self.quizStarted = true;
 
     switch (SiteBrand) {
       case '38degrees':
@@ -1803,7 +1800,7 @@ class Quiz {
       trackEvent("Quiz Started",{type: "Quiz"});
       qp.quizStarted = true;
       $('.body.quiz').addClass('moving');
-      self.next();
+      // self.next();
     }
     self.startStudentCompare = function(){
       trackEvent("Student Compare Started",{type: "Quiz"});
@@ -1913,7 +1910,8 @@ class Quiz {
     const subquestions = self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
 
     // On Landing Page button click
-    if(self.beginTheQuiz || !self.params) {
+    if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
+      qp.hasStarted = true;
       console.log("Starting quiz",self.params)
       self.startQuiz();
     }
@@ -1951,10 +1949,15 @@ class Quiz {
         country.select = function(){
           trackEvent("Country Selected",{type: "Quiz", code: country.code, country: country.label});
           qp.country = country; // we set the whole country object here
+          self.countrySelected = true;
+          /*qp.*/
           qp.country.parties.forEach(function(party){
             party.percentage = "0%";
             party.percentageText = "0%";
           })
+          console.log(country)
+          // qp.country = country; // This thing's causing mad loop errors
+          // qp.x = country
           qp.startingQuiz = true;
           self.next();
         }
@@ -2011,6 +2014,8 @@ class Quiz {
       twitterShareAlignmentHref: self.twitterShareAlignmentHref,
       standaloneResults: qp.standaloneResults,
       localCandidateData: qp.localCandidateData,
+      standaloneResults: qp.standaloneResults,
+      beginTheQuiz: self.beginTheQuiz
     }, CardTemplates.quizMaster);
   }
 }
