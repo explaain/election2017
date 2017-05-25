@@ -1677,17 +1677,6 @@ class Quiz {
         self.quizQuestions = allData.getAllData().quizQuestions;
     }
 
-    self.facebookShareConstituencyHref = null;
-    self.twitterShareConstituencyHref = null;
-
-    var brand = SiteBrand || '';
-    var shareData = model.user.quizProgress.resultsData;
-    try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-    var sharePath = `http://${brand}ge2017.com/shared/${shareData.name}/${perc}`;
-    // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
-    self.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?kid_directed_site=${encodeURIComponent(sharePath)}&display=popup&ref=plugin&src=share_button`;
-    self.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent`I support ${shareData.percentage}% of ${shareData.name} policies. #GE2017 - ${sharePath}`;
-
     self.isWaiting = model.user.isWaiting === "quiz-input";
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
@@ -1710,6 +1699,8 @@ class Quiz {
       return false;
     }
     self.next = function(){
+      self.updateShareLinks();
+
       if (qp.opinions.length > 0) {
         qp.startingQuiz = false;
       }
@@ -1726,6 +1717,7 @@ class Quiz {
         self.refresh();
       }
     }
+
     self.answerYes = function(){self.answer("yes")}
     self.answerNo = function(){self.answer("no")}
     self.answer = function(answer){
@@ -1781,6 +1773,7 @@ class Quiz {
         return newScore;
       });
       self.updatePartyPercentages(newScores);
+
       self.next();
     }
     self.skip = function(){
@@ -1808,6 +1801,37 @@ class Quiz {
       }
       self.next();
     }
+    self.updateShareLinks = function() {
+      // self.facebookShareConstituencyHref = null;
+      // self.twitterShareConstituencyHref = null;
+
+      var brand = SiteBrand || '';
+      var shareData = model.user.quizProgress.resultsData;
+      try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
+      var sharePath = `http://${brand}ge2017.com/shared/${shareData.name}/${perc}`;
+      // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
+      self.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?kid_directed_site=${encodeURIComponent(sharePath)}&display=popup&ref=plugin&src=share_button`;
+      self.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent`I support ${shareData.percentage}% of ${shareData.name} policies. #GE2017 - ${sharePath}`;
+
+      self.twitterShareAlignmentURL = () => popupGET(self.twitterShareAlignmentHref);
+      self.facebookShareAlignmentURL = () => popupGET(self.facebookShareAlignmentHref);
+
+      console.log("New share URLs",self.facebookShareAlignmentHref,self.twitterShareAlignmentHref)
+    }
+
+    function popupGET(url) {
+      console.log(url);
+      var w = popupWindow("");
+      w.location.href = url;
+      console.log(w.location.href);
+    }
+
+    function popupWindow(url, title="_blank", w=400, h=400) {
+      var left = (screen.width/2)-(w/2);
+      var top = (screen.height/2)-(h/2);
+      return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, width='+w+', height='+h+', top='+top+', left='+left);
+    }
+
     self.startQuiz = function(){
       trackEvent("Quiz Started",{type: "Quiz"});
       qp.quizStarted = true;
@@ -1993,6 +2017,7 @@ class Quiz {
       twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20ge2017.com";
     }
     var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
+
     return helpers.assembleCards({
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
@@ -2030,8 +2055,8 @@ class Quiz {
       back: self.back,
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
-      facebookShareAlignmentHref: self.facebookShareAlignmentHref,
-      twitterShareAlignmentHref: self.twitterShareAlignmentHref,
+      facebookShareAlignmentURL: self.facebookShareAlignmentURL,
+      twitterShareAlignmentURL: self.twitterShareAlignmentURL,
       standaloneResults: qp.standaloneResults,
       localCandidateData: qp.localCandidateData,
       standaloneResults: qp.standaloneResults,
