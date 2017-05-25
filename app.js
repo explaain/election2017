@@ -80,6 +80,10 @@ app.get('/quiz', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true });
 });
 
+app.get('/quiz/:party?/:percentage?', function(req, res, next) {
+  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+})
+
 app.get('/phrase/iWantTo/', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: '', phrase: 'iWantTo', quiz: true });
 });

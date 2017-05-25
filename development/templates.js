@@ -1795,6 +1795,13 @@ module.exports = function(CardTemplates){
                         }
                       },
                       {
+                        "template": "shareButtons",
+                        "mapping": [
+                          ["facebookShareHref", "facebookShareAlignmentHref"],
+                          ["twitterShareHref", "twitterShareAlignmentHref"]
+                        ]
+                      },
+                      {
                         "dom": "p.postcode-instructions",
                         "content": "Do you want to see options, based on your results, on how to maximise your vote in your area?"
                       },

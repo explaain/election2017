@@ -217,7 +217,7 @@ class App {
               return h('div',step);
             }),
 
-            routes.quiz(function (params) {
+            routes.quiz.under(function (params) {
               var params = {
                 name: StepName
               }
@@ -1570,6 +1570,17 @@ class Quiz {
 
     }
 
+    self.facebookShareConstituencyHref = null;
+    self.twitterShareConstituencyHref = null;
+
+    var brand = SiteBrand || '';
+    var shareData = model.user.quizProgress.resultsData;
+    try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
+    var sharePath = `http://${brand}ge2017.com/quiz/shared/${shareData.name}/${perc}`;
+    // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
+    self.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?kid_directed_site=${encodeURIComponent(sharePath)}&display=popup&ref=plugin&src=share_button`;
+    self.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent`I support ${shareData.percentage}% of ${shareData.name} policies. #GE2017 - ${sharePath}`;
+
     self.isWaiting = model.user.isWaiting === "quiz-input";
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
@@ -1586,6 +1597,7 @@ class Quiz {
         console.log(result);
         qp.quizChanceResults = result;
         delete model.user.isWaiting;
+        trackEvent("Rerouting on Constituency Result",qp.resultsData);
         routes.quizResults().push();
       });
       return false;
@@ -1938,6 +1950,8 @@ class Quiz {
       back: self.back,
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
+      facebookShareAlignmentHref: self.facebookShareAlignmentHref,
+      twitterShareAlignmentHref: self.twitterShareAlignmentHref,
       standaloneResults: qp.standaloneResults,
       localCandidateData: qp.localCandidateData,
     }, CardTemplates.quizMaster);
