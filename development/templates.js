@@ -2278,17 +2278,17 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2",
                 "condition": "finalResults",
-                "content": "See how we worked it out"
+                "content": "Here's a breakdown of all your options:"
               },
               {
                 "dom": "p.small",
                 "condition": "finalResults",
-                "content": "We’ve used local data to remove candidates who are unlikely to win in this election."
+                "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
               },
               {
                 "dom": "h3",
                 "condition": "finalResults",
-                "content": "Front-runners in your area"
+                "content": "Currently in the lead in your area are:"
               },
               {
                 // "condition": "!finalResults",
@@ -2355,7 +2355,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "h3",
         "condition": "finalResults",
-        "content": "All major parties"
+        "content": "Other parties standing in your area:"
       },
       {
         "dom": ".quizPercentages",
