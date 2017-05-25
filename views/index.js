@@ -291,15 +291,27 @@ class Footer {
       )
     );
     routes.quiz(function (params) {
+
+      var footerImg,
+          footerClass;
+      switch (SiteBrand) {
+        case 'degrees38':
+          footerImg = "img/ge2017logobeta.png";
+          footerClass = "ge2017Footer";
+          break;
+        default:
+          footerImg = "img/turnup.png";
+          footerClass = "turnupFooter";
+      }
       footerContents = h("div",
-        h("a.turnup",
+        h("a." + footerClass,
           {
             "href": "http://www.turnup.org.uk/",
             "target": "_blank",
           },
           h("img",
             {
-              "src": "img/turnup.png"
+              "src": footerImg
             }
           )
         )
@@ -1795,6 +1807,14 @@ class Quiz {
           console.log('results')
           console.log(results)
           qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults;
+
+          // qp.country.parties.forEach(function(party) {
+          //   if (qp.localCandidateData.forEach(function(candidate) {
+          //     party.dClub candidate.party_name
+          //   }).length == 0) {
+          //
+          //   }
+          // })
           self.refresh();
         })
       }
@@ -1886,7 +1906,7 @@ class Quiz {
             party.percentageText = "0%";
           })
           qp.startingQuiz = true;
-          self.next();
+          // self.next();
         }
       })
     })
