@@ -1557,6 +1557,19 @@ a:hover .quizPercentagesPartyFace {
   margin-top:10px;
 }
 
+.quizTopLine > * {
+    position: relative;
+    z-index: 5;
+}
+
+/* To center the progress bar */
+.progress-container {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    z-index: 1 !important;
+}
+
 .body.quiz div.questions .card:nth-child(1) {
   margin-top: 10px;
 }

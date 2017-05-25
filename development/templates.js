@@ -1710,7 +1710,7 @@ module.exports = function(CardTemplates){
       },
       {
       "dom": "div",
-      // "condition": "!countrySelected",
+      "condition": "!countrySelected",
       "content": [
         {
           "dom":"div",
@@ -1852,7 +1852,7 @@ module.exports = function(CardTemplates){
                 }
               }
             ],
-            "condition": "countrySelected"
+            "condition": "!standaloneResults"
           },
           {
             "template": "quizProgress",
@@ -1998,7 +1998,7 @@ module.exports = function(CardTemplates){
         "condition": "countrySelected",
         "content": [
           {
-            // "condition": "!quizResults",
+            "condition": "!quizResults",
             "template": "quizQuestion",
             "mapping": [
               ["question", "currentQuestion"],
@@ -2015,7 +2015,7 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": ".card.finalResult",
-            // "condition": "finalResults",
+            "condition": "finalResults",
             "content": [
               {
                 "dom": ".card-visible.text-center",
@@ -2146,7 +2146,7 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizProgress = {
-    "dom": "div",
+    "dom": "div.progress-container",
     "condition": "!noProgressBarNeeded",
     "content": [
       {
