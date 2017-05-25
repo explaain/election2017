@@ -1874,7 +1874,8 @@ class Quiz {
         if (!(qp.quizChanceResults.parties.filter(function(_party) {
           return party.key == _party.key
         }).length)) {
-          party.faded = true;
+          if (SiteBrand != 'degrees38')
+            party.faded = true;
         }
         return party;
       })
@@ -1919,13 +1920,17 @@ class Quiz {
           console.log(results)
           qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults;
 
-          // qp.country.parties.forEach(function(party) {
-          //   if (qp.localCandidateData.forEach(function(candidate) {
-          //     party.dClub candidate.party_name
-          //   }).length == 0) {
-          //
-          //   }
-          // })
+          qp.country.parties.forEach(function(party) {
+            if (qp.localCandidateData.filter(function(candidate) {
+              console.log('candidate.party_name');
+              console.log(candidate.party_name);
+              console.log(party.dClubNames);
+              console.log(party.dClubNames.indexOf(candidate.party_name));
+              return party.dClubNames.indexOf(candidate.party_name) > -1;
+            }).length == 0) {
+              party.faded = true;
+            }
+          })
           self.refresh();
         })
       }

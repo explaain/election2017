@@ -1826,36 +1826,27 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizTopLine",
+        "condition": "!finalResults && countrySelected",
         "content": [
           {
             "dom": ".quizSkip",
             "content": "Skip >",
-            "condition": "quizStarted && countrySelected",
-            "mapping": [
-              ["progressBarWidth", "progressBarWidth"],
-              ["countrySelected", "countrySelected"],
-              ["noProgressBarNeeded", "standaloneResults"]
-            ]
-            /*"attr": {
+            "attr": {
               "onclick": {
                 "var": "skip"
               }
-            }*/
+            },
+            "condition": "!standaloneResults && !finalResults && countrySelected"
           },
           {
-            "dom": "div",
-            "content": [
-              {
-                "dom": ".quizBack",
-                "content": "< Back",
-                "attr": {
-                  "onclick": {
-                    "var": "back"
-                  }
-                },
-                "condition": "!standaloneResults && !finalResults"
+            "dom": ".quizBack",
+            "content": "< Back",
+            "attr": {
+              "onclick": {
+                "var": "back"
               }
-            ]
+            },
+            "condition": "!standaloneResults && !finalResults && countrySelected"
           },
           {
             "template": "quizProgress",

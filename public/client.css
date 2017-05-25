@@ -1553,6 +1553,11 @@ a:hover .quizPercentagesPartyFace {
   opacity: 0;
 }
 
+.quizSkip:hover,
+.quizBack:hover {
+  font-weight: bold;
+}
+
 .quizTopLine {
   overflow: hidden;
   margin-top:10px;
@@ -1609,8 +1614,8 @@ a:hover .quizPercentagesPartyFace {
 .quizResults {
   padding: 20px;
 }
-.quizResults .retake {
-  margin: 10px 0 -10px;
+.retake {
+  margin: 20px 0 0;
   font-weight: 600;
   color: #777;
 }
@@ -1738,7 +1743,7 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
   display: none;
 }
 
-.body.quiz.ge2017 a.quizPercentagesParty {
+.body.quiz.ge2017 a.quizPercentagesParty, .body.quiz.degrees38 a.quizPercentagesParty {
   pointer-events: none;
 }
 
