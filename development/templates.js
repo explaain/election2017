@@ -1769,7 +1769,7 @@ module.exports = function(CardTemplates){
                   },
                   {
                     "dom": "h2.bestMatchSoFar",
-                    "content": "See your best match so far..."
+                    "content": "Based on the manifestos, your best match is..."
                   },
                   {
                     "dom": "div.quizResults",
@@ -1796,7 +1796,7 @@ module.exports = function(CardTemplates){
                       },
                       {
                         "dom": "p.postcode-instructions",
-                        "content": "Do you want to see options, based on your results, on how to maximise your vote in your area?"
+                        "content": "... now add your postcode and see the options in your constituency."
                       },
                       {
                         "dom":"form.postcode-form",
@@ -2009,7 +2009,7 @@ module.exports = function(CardTemplates){
                   },
                   {
                     "dom": "h2",
-                    "content": "Based on your views and where you are, this is your best option:"
+                    "content": "Based on where you are and your views, this is your top contender..."
                   },
                   {
                     "dom": ".quizPercentages.topLayer",
@@ -2273,22 +2273,22 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2.seeHow",
                 "condition": "quizResultsPage",
-                "content": "See how you matched with each party"
+                "content": "Here is how you matched the major parties manifestos overall:"
               },
               {
                 "dom": "h2",
                 "condition": "finalResults",
-                "content": "See how we worked it out"
+                "content": "Here's a breakdown of all your options:"
               },
               {
                 "dom": "p.small",
                 "condition": "finalResults",
-                "content": "We’ve used local data to remove candidates who are unlikely to win in this election."
+                "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
               },
               {
                 "dom": "h3",
                 "condition": "finalResults",
-                "content": "Front-runners in your area"
+                "content": "Currently in the lead in your area are:"
               },
               {
                 // "condition": "!finalResults",
@@ -2355,7 +2355,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "h3",
         "condition": "finalResults",
-        "content": "All major parties"
+        "content": "Other parties standing in your area:"
       },
       {
         "dom": ".quizPercentages",
