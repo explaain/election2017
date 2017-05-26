@@ -1755,19 +1755,28 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion > -1) {
+        var userOpinionNum = qp.opinions[qp.opinions.length-1];
+        var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
+        var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
+        var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
+        console.log('partyOpinionNum');
+        console.log(partyOpinionNum);
+        console.log('matchScore');
+        console.log(matchScore);
+        if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
           var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
-          var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion) || -1;
+          var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], partyOpinionNum) || -1;
           var newMatch =  {
             question: self.quizQuestions[qp.opinions.length-1].question,
             userOpinion: userOpinion,
             partyOpinion: partyOpinion,
-            isMatch: userOpinion == partyOpinion
+            isMatch: userOpinion == partyOpinion,
+            matchScore: matchScore
           }
         }
         var newScore = {
           key: partyKey,
-          percentage: parseInt(party.match*100),
+          percentage: (SiteBrand=='38degrees') ?  parseInt(matchScore*100) : parseInt(party.match*100),
           newMatch: newMatch ? newMatch : undefined
         }
         return newScore;
