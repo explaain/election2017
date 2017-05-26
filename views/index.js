@@ -274,8 +274,8 @@ class Header {
         logoClass = "_unilad-logo";
         break;
       case '38degrees':
-        logoImg = "img/38degrees.png";
-        logoClass = "ge2017-logo";
+        logoImg = "img/38degrees_ge2017.png";
+        logoClass = "_38degrees-logo";
         break;
       default:
         logoImg = "/img/ge2017logobeta.png";
@@ -306,33 +306,49 @@ class Footer {
         "Who's behind this?"
       )
     );
-    routes.quiz(function (params) {
 
-      var footerImg,
-          footerClass;
-      switch (SiteBrand) {
-        case 'degrees38':
-          footerImg = "/img/ge2017logobeta.png";
-          footerClass = "ge2017Footer";
-          break;
-        default:
-          footerImg = "/img/turnup.png";
-          footerClass = "turnupFooter";
-      }
-      footerContents = h("div",
-        h("a." + footerClass,
+    var footerImg,
+        footerClass;
+    switch (SiteBrand) {
+      case 'degrees38':
+        footerImg = "/img/ge2017logobeta.png";
+        footerClass = "ge2017Footer";
+        break;
+      default:
+        footerImg = "/img/turnup.png";
+        footerClass = "turnupFooter";
+    }
+    var quizFooterContents = h("div",
+      h("a." + footerClass,
+        {
+          "href": "http://www.turnup.org.uk/",
+          "target": "_blank",
+        },
+        h("img",
           {
-            "href": "http://www.turnup.org.uk/",
-            "target": "_blank",
-          },
-          h("img",
-            {
-              "src": footerImg
-            }
-          )
+            "src": footerImg
+          }
         )
-      );
+      )
+    );
+
+    routes.quiz(function (params) {
+      console.log('quiz');
+      footerContents = quizFooterContents
     });
+    routes.quizNew(function (params) {
+      console.log('quizNew');
+      footerContents = quizFooterContents
+    });
+    routes.quizLanding(function (params) {
+      console.log('quizLanding');
+      footerContents = quizFooterContents
+    });
+    routes.quizResults(function (params) {
+      console.log('quizResults');
+      footerContents = quizFooterContents
+    });
+
     return h("footer",
       footerContents
     )

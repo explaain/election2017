@@ -96,6 +96,18 @@ header img._unilad-logo {
   height: 60px;
   margin-bottom: 10px;
 }
+header img._38degrees-logo {
+  text-align: center;
+  height: 90px;
+  margin: -10px auto -20px;
+  display: block;
+  transition: height .4s, margin .4s;
+  -webkit-transition: height .4s, margin .4s;
+}
+.body.moving header img._38degrees-logo {
+  height: 55px;
+  margin-bottom: 10px;
+}
 @media (max-width: 400px) {
   header img.ge2017-logo {
     height: 30px;
