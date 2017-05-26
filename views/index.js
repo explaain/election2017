@@ -1729,68 +1729,45 @@ class Quiz {
 
     	console.log("Database of questions",initialOrder,quiz.questionDB);
 
-      // Shuffle
-    	// console.log("Randomise group indexes",qIdGroups);
-      // - group questions by randomiseGroup
-      // - randomiseGroup.forEach
-      // --- shuffle questionIDs amongst the indexes of those questions in initialOrder
-      // resulting in...
       qp.questionSeries = initialOrder;
 
-      // console.log("Defining quiz.questionDB")
-      // quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
-      //
-      // // // Get all the randomise groups (e.g. 38degrees wants first 3 randomised, then last 9 randomised)
-      // // var randomiseGroups = new Set();
-      // // quiz.questionDB.forEach((q) => randomiseGroups.add(q.randomiseGroup));
-      // // console.log(randomiseGroups);
-      //
-      // // collect groups and their current indexes
-      // var qIdGroups = {};
-      // var initialOrder = [];
-      // self.questionDB = {}
-      // quiz.questionDB.forEach(function(q,I) {
-      //   q.I = I;
-      //   initialOrder.push(q.debate);
-      //   self.questionDB[q.debate] = q;
-      //
-      //   // - group questions by randomiseGroup
-      //   if(typeof q.randomiseGroup !== 'undefined' && q.randomiseGroup != null) {
-      //     console.log(qIdGroups[q.randomiseGroup])
-      //     if(!qIdGroups[q.randomiseGroup]) qIdGroups[q.randomiseGroup] = new Set();
-      //     qIdGroups[q.randomiseGroup].add(q.debate);
-      //   }
-      // }, {});
-      // console.log(self.questionDB);
-      //
-      // qp.questionSeries = initialOrder;
-      //
-      // if(config[SiteBrand].randomise) {
-      //   console.log("Randomise group indexes",qIdGroups);
-      //
-      //   // within each group of indexes, shuffle
-      //   var questionSeries = new Array(5).fill(0);
-      //   Object.keys(qIdGroups).forEach(function(rGroup) {
-      //     console.log("qIdGroups[rGroup]",qIdGroups[rGroup])
-      //     // vacate the indexes
-      //     // var groupQs = {};
-      //     // qIdGroups[rGroup].forEach((I) => {
-      //     //   console.log(I)
-      //     //   groupQs[I] = quiz.questionDB.find((q)=> q.I == I)
-      //     // });
-      //     // shuffle questionIDs amongst the indexes of those questions in initialOrder
-      //     Object.keys(groupQs).forEach((q,i) => {
-      //       console.log("In this randomGroup",q,i)
-      //       var randI = qIdGroups[rGroup][Math.floor(Math.random() * qIdGroups[rGroup].length)]
-      //       console.log(`chose ${randI} of ${qIdGroups[rGroup].toString()}`);
-      //       questionSeries[randI] = q;
-      //       qIdGroups[rGroup].delete(randI)
-      //     });
-      //   })
-      //   console.log(quiz.questionDB)
-      // }
+      console.log("Defining quiz.questionDB");
+      quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
+
+      if(config[SiteBrand].randomise) {
+        console.log("Randomise group indexes",randomiseGroupsSet);
+
+        // within each group of indexes, shuffle
+        var questionSeries = initialOrder;
+
+        randomiseGroupsSet.forEach(function(rGroup) {
+          console.log("New fill",questionSeries);
+          var questions = quiz.questionDB.filter((q)=>q.randomiseGroup == rGroup);
+
+          var indexes = new Set();
+          questions.forEach((q,i)=> indexes.add(q.I));
+          indexes = Array.from(indexes);
+          console.log("This group's indexes",indexes);
+
+          questions.forEach((q,i,arr) => {
+            var randI = indexes[Math.floor(Math.random() * indexes.length)]
+            console.log("RandI",randI,questionSeries[randI]);
+            qp.questionSeries[randI] = q.debate;
+            console.log(questionSeries[randI])
+            indexes.splice(indexes.indexOf(randI),1);
+          })
+        })
+        console.log("shuffled question order",qp.questionSeries);
+      }
     }
-    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.opinions.length]]
+    quiz.questionDB = {};
+    JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions)).forEach((q) => quiz.questionDB[q.debate] = q);
+
+    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.opinions.length]];
+    console.log("Running quiz with question order:",qp.questionSeries)
+    console.log("Running quiz with question DB:",quiz.questionDB)
+    console.log("Running quiz with current answers:",qp.opinions)
+    console.log("Current question",self.currentQuestion);
 
     self.next = function() {
       self.updateShareLinks();
