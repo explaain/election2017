@@ -1827,34 +1827,21 @@ class Quiz {
       self.next();
     }
     self.updateShareLinks = function() {
+        console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
       // self.facebookShareConstituencyHref = null;
       // self.twitterShareConstituencyHref = null;
 
-      var brand = SiteBrand || '';
+      var brand = SiteBrand && SiteBrand != 'ge2017' ? SiteBrand+"." : "";
       var shareData = model.user.quizProgress.resultsData;
       try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-      var sharePath = `http://${brand}ge2017.com/shared/${shareData.name}/${perc}`;
+      var sharePath = `http://${brand}uk-election-2017-dev.herokuapp.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
       // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
-      self.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?kid_directed_site=${encodeURIComponent(sharePath)}&display=popup&ref=plugin&src=share_button`;
-      self.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent`I support ${shareData.percentage}% of ${shareData.name} policies. #GE2017 - ${sharePath}`;
+      qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
+      qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
 
-      self.twitterShareAlignmentURL = () => popupGET(self.twitterShareAlignmentHref);
-      self.facebookShareAlignmentURL = () => popupGET(self.facebookShareAlignmentHref);
+      console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
 
-      console.log("New share URLs",self.facebookShareAlignmentHref,self.twitterShareAlignmentHref)
-    }
-
-    function popupGET(url) {
-      console.log(url);
-      var w = popupWindow("");
-      w.location.href = url;
-      console.log(w.location.href);
-    }
-
-    function popupWindow(url, title="_blank", w=400, h=400) {
-      var left = (screen.width/2)-(w/2);
-      var top = (screen.height/2)-(h/2);
-      return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, width='+w+', height='+h+', top='+top+', left='+left);
+      self.refresh();
     }
 
     self.startQuiz = function(){
@@ -2081,8 +2068,8 @@ class Quiz {
       back: self.back,
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
-      facebookShareAlignmentURL: self.facebookShareAlignmentURL,
-      twitterShareAlignmentURL: self.twitterShareAlignmentURL,
+      facebookShareAlignmentHref: qp.facebookShareAlignmentHref,
+      twitterShareAlignmentHref: qp.twitterShareAlignmentHref,
       standaloneResults: qp.standaloneResults,
       localCandidateData: qp.localCandidateData,
       standaloneResults: qp.standaloneResults,
