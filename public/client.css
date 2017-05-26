@@ -1743,7 +1743,7 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
   display: none;
 }
 
-.body.quiz.ge2017 a.quizPercentagesParty, .body.quiz.degrees38 a.quizPercentagesParty {
+.body.quiz.ge2017 a.quizPercentagesParty, .body.quiz.38degrees a.quizPercentagesParty {
   pointer-events: none;
 }
 
