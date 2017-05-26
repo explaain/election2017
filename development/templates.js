@@ -1785,13 +1785,14 @@ module.exports = function(CardTemplates){
                       "content": "Compare your postcodes to see where your vote has most impact."
                     },
                     {
-                      "dom": "button.btn.btn-primary",
+                      "dom": "a.btn.btn-primary",
                       "content": "Find out >",
                       "condition": "!quizStarted",
                       "attr": {
-                        "onclick": {
-                          "var": "startStudentCompare"
-                        }
+                        // "onclick": {
+                        //   "var": "startStudentCompare"
+                        // }
+                        "href": "/students"
                       }
                     }
                     // {
