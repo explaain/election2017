@@ -18,6 +18,49 @@ const
   eventTrackerInitiator = require("../includes/event-tracker-initiator")(trackEvent),
   allData = require('../public/data/allData')
 ;
+var cfg = {
+  'ge2017': {
+    subdomain: false,
+    logoImg: "/img/ge2017logobeta.png",
+    logoClass: "ge2017-logo",
+    footerImg: "/img/turnup.png",
+    footerClass: "turnupFooter",
+    randomise: true,
+    numbers: true,
+    quizQuestions: allData.getAllData().quizQuestions
+  },
+  '38degrees': {
+    subdomain: '38degrees',
+    logoImg: "img/38degrees_ge2017.png",
+    logoClass: "_38degrees-logo",
+    footerImg: "/img/ge2017logobeta.png",
+    footerClass: "ge2017Footer",
+    randomise: true,
+    numbers: false,
+    quizQuestions: allData.getAllData().quizQuestions38Degrees
+  },
+  'unilad': {
+    subdomain: 'unilad',
+    logoImg: "img/unilad.png",
+    logoClass: "_unilad-logo",
+    randomise: true
+  }
+}
+// Get all the defined properties
+var props = new Set();
+Object.keys(cfg).forEach((site) => {
+  for(k in cfg[site]) { props.add(k) }
+});
+console.log(props)
+// Patch each brand object with default 'ge2017' data
+Object.keys(cfg).forEach((site) => {
+  props.forEach((k) => {
+    console.log(site,k,cfg[site][k]);
+    cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.ge2017[k];
+  })
+});
+const config = cfg;
+console.log("Configuration stuffs",config);
 
 trackEvent("Landed",{page: location.pathname});
 
@@ -44,7 +87,7 @@ Routes = routes;
 
 class App {
   constructor(data) {
-    console.log(SiteBrand);
+    console.log("! Site running on "+SiteBrand);
 
     var logoRoute;
     if (QuizPage==true){
@@ -261,33 +304,13 @@ class Header {
   }
   render() {
     const self = this;
-    var logoImg,
-        logoClass;
-
-    switch (SiteBrand) {
-      case 'ge2017':
-        logoImg = "/img/ge2017logobeta.png";
-        logoClass = "ge2017-logo";
-        break;
-      case 'unilad':
-        logoImg = "img/unilad.png";
-        logoClass = "_unilad-logo";
-        break;
-      case '38degrees':
-        logoImg = "img/38degrees_ge2017.png";
-        logoClass = "_38degrees-logo";
-        break;
-      default:
-        logoImg = "/img/ge2017logobeta.png";
-        logoClass = "ge2017-logo";
-    }
 
     return h("header",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
         " Home"
       ), self.logoRoute.a(
-        h("img." + logoClass, {"src": logoImg})
+        h("img." + config[SiteBrand].logoClass, {"src": config[SiteBrand].logoImg})
       ),
       (new Progress())
     )
@@ -307,26 +330,15 @@ class Footer {
       )
     );
 
-    var footerImg,
-        footerClass;
-    switch (SiteBrand) {
-      case 'degrees38':
-        footerImg = "/img/ge2017logobeta.png";
-        footerClass = "ge2017Footer";
-        break;
-      default:
-        footerImg = "/img/turnup.png";
-        footerClass = "turnupFooter";
-    }
     var quizFooterContents = h("div",
-      h("a." + footerClass,
+      h("a." + config[SiteBrand].footerClass,
         {
           "href": "http://www.turnup.org.uk/",
           "target": "_blank",
         },
         h("img",
           {
-            "src": footerImg
+            "src": config[SiteBrand].footerImg
           }
         )
       )
