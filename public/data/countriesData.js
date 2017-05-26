@@ -16,7 +16,10 @@ const countriesData = [
         name: "Con",
         key: "conservative",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Conservative and Unionist Party"
+        ]
       },
       {
         color: "red",
@@ -25,7 +28,11 @@ const countriesData = [
         name: "Lab",
         key: "labour",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Labour Party",
+          "Labour and Co-operative Party"
+        ]
       },
       {
         color: "orange",
@@ -34,7 +41,10 @@ const countriesData = [
         name: "Lib",
         key: "lib-dem",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Liberal Democrats"
+        ]
       },
       {
         color: "purple",
@@ -43,7 +53,10 @@ const countriesData = [
         name: "Ukip",
         key: "ukip",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "UK Independence Party (UKIP)"
+        ]
       },
       {
         color: "green",
@@ -52,7 +65,11 @@ const countriesData = [
         name: "Green",
         key: "green",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Green Party",
+          "Scottish Green Party"
+        ]
       },
     ]
   },
@@ -67,7 +84,10 @@ const countriesData = [
         name: "Con",
         key: "conservative",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Conservative and Unionist Party"
+        ]
       },
       {
         color: "red",
@@ -76,7 +96,11 @@ const countriesData = [
         name: "Lab",
         key: "labour",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Labour Party",
+          "Labour and Co-operative Party"
+        ]
       },
       {
         color: "#005500",
@@ -85,7 +109,10 @@ const countriesData = [
         name: "Plaid",
         key: "plaid-cymru",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Plaid Cymru - The Party of Wales"
+        ]
       },
       {
         color: "orange",
@@ -94,7 +121,10 @@ const countriesData = [
         name: "Lib",
         key: "lib-dem",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Liberal Democrats"
+        ]
       },
       {
         color: "purple",
@@ -103,7 +133,10 @@ const countriesData = [
         name: "Ukip",
         key: "ukip",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "UK Independence Party (UKIP)"
+        ]
       },
       {
         color: "green",
@@ -112,7 +145,11 @@ const countriesData = [
         name: "Green",
         key: "green",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Green Party",
+          "Scottish Green Party"
+        ]
       },
     ]
   },
@@ -127,7 +164,10 @@ const countriesData = [
         name: "Con",
         key: "conservative",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Conservative and Unionist Party"
+        ]
       },
       {
         color: "red",
@@ -136,7 +176,11 @@ const countriesData = [
         name: "Lab",
         key: "labour",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Labour Party",
+          "Labour and Co-operative Party"
+        ]
       },
       {
         color: "#e8c300",
@@ -145,7 +189,10 @@ const countriesData = [
         name: "SNP",
         key: "snp",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Scottish National Party (SNP)"
+        ]
       },
       {
         color: "orange",
@@ -154,7 +201,10 @@ const countriesData = [
         name: "Lib",
         key: "lib-dem",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Liberal Democrats"
+        ]
       },
       {
         color: "green",
@@ -163,7 +213,11 @@ const countriesData = [
         name: "Green",
         key: "green",
         matches: [],
-        quizResults: false
+        quizResults: false,
+        dClubNames: [
+          "Green Party",
+          "Scottish Green Party"
+        ]
       },
     ]
   }
