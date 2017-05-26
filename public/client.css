@@ -84,7 +84,7 @@ header img.ge2017-logo {
   height: 30px;
   margin-bottom: 10px;
 }
-header img.unilad-logo {
+header img._unilad-logo {
   text-align: center;
   height: 100px;
   margin: -10px auto -40px;
@@ -92,7 +92,7 @@ header img.unilad-logo {
   transition: height .4s, margin .4s;
   -webkit-transition: height .4s, margin .4s;
 }
-.body.moving header img.unilad-logo {
+.body.moving header img._unilad-logo {
   height: 60px;
   margin-bottom: 10px;
 }
@@ -434,7 +434,7 @@ section.questions a.task:hover {
 }
 
 .card {
-  margin: 30px 0 0 0;
+  margin: 20px 0 0;
   text-align: left;
 }
 .slick-container .card {
@@ -1512,10 +1512,10 @@ a:hover .quizPercentagesPartyFace {
 }
 
 .card.quiz-extra {
-  margin: 0;
+  /*margin: 0;*/
 }
 
-.body.unilad .or, .body.unilad .card.quiz-extra, .body.degrees38 .or, .body.degrees38 .card.quiz-extra {
+.body._unilad .or, .body._unilad .card.quiz-extra, .body._38degrees .or, .body._38degrees .card.quiz-extra {
   display: none;
 }
 
@@ -1577,7 +1577,7 @@ a:hover .quizPercentagesPartyFace {
 }
 
 .body.quiz div.questions .card:nth-child(1) {
-  margin-top: 10px;
+  /*margin-top: 10px;*/
 }
 .body.quiz div.questions > div:nth-child(1) .card .card-visible {
   min-height: 300px;
@@ -1609,8 +1609,8 @@ a:hover .quizPercentagesPartyFace {
 .quizResults {
   padding: 20px;
 }
-.quizResults .retake {
-  margin: 10px 0 -10px;
+.retake {
+  margin: 10px 0 0;
   font-weight: 600;
   color: #777;
 }
@@ -1627,17 +1627,17 @@ a:hover .quizPercentagesPartyFace {
   margin-top: 50px;
 }
 
-.body:not(.unilad) .questions .quizResults {
+.body:not(._unilad) .questions .quizResults {
   display: none;
 }
 
 .politicalanimal {
   display: none;
 }
-.body.unilad .politicalanimal {
+.body._unilad .politicalanimal {
   display: block;
 }
-.body.unilad .politicalanimal img {
+.body._unilad .politicalanimal img {
   width: 180px;
   margin: -10px 0 10px;
 }
@@ -1718,15 +1718,15 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
   margin: 1.5em 2em;
 }
 
-.body.quiz.unilad .postcode-instructions {
+.body.quiz._unilad .postcode-instructions {
   display: none;
 }
-.body.quiz.unilad .postcode-form {
+.body.quiz._unilad .postcode-form {
   display: none;
 }
 
 
-.body.quiz.unilad .bestMatchSoFar {
+.body.quiz._unilad .bestMatchSoFar {
   display: none;
 }
 .body.quiz.ge2017 .bestMatch {
@@ -1788,17 +1788,17 @@ h2.seeHow {
   margin-bottom: 50px;
 }
 
-.body.degrees38 .card.percentageHeads {
+.body._38degrees .card.percentageHeads {
   /*display: none;*/
 }
 
-.body.quiz.unilad .card.results-top {
+.body.quiz._unilad .card.results-top {
   display: none;
 }
-.body.quiz.unilad h2.seeHow {
+.body.quiz._unilad h2.seeHow {
   display: none;
 }
-.body.quiz.unilad .step-number {
+.body.quiz._unilad .step-number {
   display: none;
 }
 

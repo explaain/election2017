@@ -76,7 +76,7 @@ class App {
 
     } else {
 
-      return h('div.body' + (SiteBrand ? '.' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : ''),
+      return h('div.body' + (SiteBrand ? '._' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -271,7 +271,7 @@ class Header {
         break;
       case 'unilad':
         logoImg = "img/unilad.png";
-        logoClass = "unilad-logo";
+        logoClass = "_unilad-logo";
         break;
       case '38degrees':
         logoImg = "img/38degrees.png";
