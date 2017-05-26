@@ -1057,17 +1057,10 @@ class CardContent {
 
           var newScores = Object.keys(partyMatches).map(function(partyKey) {
             var party = partyMatches[partyKey];
-            // var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
-            // var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], model.parties.opinions.issues[issue].debates[debate].parties[partyKey].opinion);
+
             var newScore = {
               key: partyKey,
-              percentage: parseInt(party.match*100),
-              // newMatch: {
-              //   question: self.quizQuestions[qp.opinions.length-1].question,
-              //   userOpinion: userOpinion,
-              //   partyOpinion: partyOpinion,
-              //   isMatch: userOpinion == partyOpinion
-              // }
+              percentage: parseInt(party.match*100)
             }
             return newScore;
           });
@@ -1677,6 +1670,7 @@ class Quiz {
 
     const self = this;
     const qp = model.user.quizProgress;
+    const quiz = model.questions;
     qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
     qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
     qp.quizResultsPage = params && params.finalResults ? !params.finalResults : qp.quizResultsPage;
@@ -1694,46 +1688,116 @@ class Quiz {
     self.beginTheQuiz = params && params.begin;
     self.params = params
 
-    // self.quizStarted = true;
-
-    switch (SiteBrand) {
-      case '38degrees':
-        self.quizQuestions = allData.getAllData().quizQuestions38Degrees;
-        break;
-
-      default:
-        self.quizQuestions = allData.getAllData().quizQuestions;
+    self.startStudentCompare = function(){
+      trackEvent("Student Compare Started",{type: "Quiz"});
+      routes.step({name:'postcode-compare'}).push();
     }
+
+    self.startSingleSentence = function(){
+      trackEvent("Single Sentence Started",{type: "Quiz"});
+      routes.phrase({name: 'iWantTo'}).push();
+    }
+
+    /* ------------
+      Construct quiz
+    */
 
     self.isWaiting = model.user.isWaiting === "quiz-input";
-    self.postcodeBinding = [model.user, 'postcode'];
-    self.postcodeSubmit = function(e) {
-      console.log(e);
-      e.stopPropagation();
-      model.landedOnResult = 1;
-      model.user.isWaiting = "postcode-input";
-      self.refresh();
-      api.getContenders(model.user.postcode).then(function(result){
-        console.log('result');
-        console.log('result');
-        console.log('result');
-        console.log('result');
-        console.log(result);
-        qp.quizChanceResults = result;
-        delete model.user.isWaiting;
-        trackEvent("Rerouting on Constituency Result",qp.resultsData);
-        routes.quizResults().push();
-      });
-      return false;
+
+    self.startQuiz = function() {
+      trackEvent("Quiz Started",{type: "Quiz"});
+      qp.quizStarted = true;
+      $('.body.quiz').addClass('moving');
+      // self.next();
     }
-    self.next = function(){
+
+    // Deal with shuffling
+    if(!quiz.quizQuestions) {
+      quiz.quizQuestions = config[SiteBrand].quizQuestions;
+
+    	var initialOrder = []; // holds the question order, as loaded from file
+    	quiz.questionDB = {} // holds the question objects
+    	// groups of questions to shuffle within themselves
+      var randomiseGroupsSet = new Set();
+      quiz.quizQuestions.forEach(function(q,I) {
+    		q.I = I; // initial index
+    		initialOrder.push(q.debate);
+    		quiz.questionDB[q.debate] = q;
+    		randomiseGroupsSet.add(q.randomiseGroup);
+    	});
+    	var randomiseGroups = Array.from(randomiseGroupsSet);
+
+    	console.log("Database of questions",initialOrder,quiz.questionDB);
+
+      // Shuffle
+    	// console.log("Randomise group indexes",qIdGroups);
+      // - group questions by randomiseGroup
+      // - randomiseGroup.forEach
+      // --- shuffle questionIDs amongst the indexes of those questions in initialOrder
+      // resulting in...
+      qp.questionSeries = initialOrder;
+
+      // console.log("Defining quiz.questionDB")
+      // quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
+      //
+      // // // Get all the randomise groups (e.g. 38degrees wants first 3 randomised, then last 9 randomised)
+      // // var randomiseGroups = new Set();
+      // // quiz.questionDB.forEach((q) => randomiseGroups.add(q.randomiseGroup));
+      // // console.log(randomiseGroups);
+      //
+      // // collect groups and their current indexes
+      // var qIdGroups = {};
+      // var initialOrder = [];
+      // self.questionDB = {}
+      // quiz.questionDB.forEach(function(q,I) {
+      //   q.I = I;
+      //   initialOrder.push(q.debate);
+      //   self.questionDB[q.debate] = q;
+      //
+      //   // - group questions by randomiseGroup
+      //   if(typeof q.randomiseGroup !== 'undefined' && q.randomiseGroup != null) {
+      //     console.log(qIdGroups[q.randomiseGroup])
+      //     if(!qIdGroups[q.randomiseGroup]) qIdGroups[q.randomiseGroup] = new Set();
+      //     qIdGroups[q.randomiseGroup].add(q.debate);
+      //   }
+      // }, {});
+      // console.log(self.questionDB);
+      //
+      // qp.questionSeries = initialOrder;
+      //
+      // if(config[SiteBrand].randomise) {
+      //   console.log("Randomise group indexes",qIdGroups);
+      //
+      //   // within each group of indexes, shuffle
+      //   var questionSeries = new Array(5).fill(0);
+      //   Object.keys(qIdGroups).forEach(function(rGroup) {
+      //     console.log("qIdGroups[rGroup]",qIdGroups[rGroup])
+      //     // vacate the indexes
+      //     // var groupQs = {};
+      //     // qIdGroups[rGroup].forEach((I) => {
+      //     //   console.log(I)
+      //     //   groupQs[I] = quiz.questionDB.find((q)=> q.I == I)
+      //     // });
+      //     // shuffle questionIDs amongst the indexes of those questions in initialOrder
+      //     Object.keys(groupQs).forEach((q,i) => {
+      //       console.log("In this randomGroup",q,i)
+      //       var randI = qIdGroups[rGroup][Math.floor(Math.random() * qIdGroups[rGroup].length)]
+      //       console.log(`chose ${randI} of ${qIdGroups[rGroup].toString()}`);
+      //       questionSeries[randI] = q;
+      //       qIdGroups[rGroup].delete(randI)
+      //     });
+      //   })
+      //   console.log(quiz.questionDB)
+      // }
+    }
+    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.opinions.length]]
+
+    self.next = function() {
       self.updateShareLinks();
 
-      if (qp.opinions.length > 0) {
-        qp.startingQuiz = false;
-      }
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: self.quizQuestions[self.quizQuestions.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
-      if(qp.opinions.length<self.quizQuestions.length){
+      if (qp.opinions.length > 0) qp.startingQuiz = false;
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: quiz.questionDB[qp.questionSeries.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
+      if(qp.opinions.length < qp.questionSeries.length){
         self.refresh();
       } else {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
@@ -1746,30 +1810,32 @@ class Quiz {
       }
     }
 
-    self.answerYes = function(){self.answer("yes")}
-    self.answerNo = function(){self.answer("no")}
-    self.answer = function(answer){
+    /* ---
+      Resolve question
+    */
+    self.answerYes = function(){ self.answer("yes") }
+    self.answerNo = function(){ self.answer("no") }
+    self.answer = function(answer) {
       qp.answers.push(answer);
       console.log(qp.answers.length);
-      console.log(self.quizQuestions.length);
-      if (qp.answers.length==self.quizQuestions.length) {
+      console.log(qp.questionSeries.length);
+      if (qp.answers.length==qp.questionSeries.length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
     }
+
     self.submitOpinion = function(opinion) {
       model.user.quizProgress.opinions.push(opinion);
-      const qp = model.user.quizProgress;
-      if (self.quizQuestions && qp && self.quizQuestions[qp.opinions.length-1]) { //Maybe this isn't a proper fix?
-        var issue = self.quizQuestions[qp.opinions.length-1].issue;
-        var debate = self.quizQuestions[qp.opinions.length-1].debate;
-        model.user.opinions.issues = model.user.opinions.issues || {};
-        model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
-        model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
-        model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
-        model.user.opinions.issues[issue].debates[debate].opinion = opinion;
-        // helpers.updateModel('model.user.opinions.issues.' + issue + '.debates.' + debate + '.opinion', subanswer.opinion);
-      }
+
+      var issue = self.currentQuestion.issue;
+      var debate = self.currentQuestion.debate;
+      model.user.opinions.issues = model.user.opinions.issues || {};
+      model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
+      model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
+      model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
+      model.user.opinions.issues[issue].debates[debate].opinion = opinion;
+
       model.parties = allData.getAllData().partyStances;
       var partyMatches = api.getPartyMatches(model);
       function getOpinionText(question, opinion) {
@@ -1792,10 +1858,10 @@ class Quiz {
         console.log('matchScore');
         console.log(matchScore);
         if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
-          var userOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], opinion);
-          var partyOpinion = getOpinionText(self.quizQuestions[qp.opinions.length-1], partyOpinionNum) || -1;
+          var userOpinion = getOpinionText(self.currentQuestion, opinion);
+          var partyOpinion = getOpinionText(self.currentQuestion, partyOpinionNum) || -1;
           var newMatch =  {
-            question: self.quizQuestions[qp.opinions.length-1].question,
+            question: self.currentQuestion.question,
             userOpinion: userOpinion,
             partyOpinion: partyOpinion,
             isMatch: userOpinion == partyOpinion,
@@ -1813,14 +1879,16 @@ class Quiz {
 
       self.next();
     }
-    self.skip = function(){
+
+    self.simpleYesNo = function() {
       var answers = qp.answers;
       //This doesn't work if the answer hasn't been given yet
       var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion);
       self.next();
     }
-    self.back = function(){
+
+    self.back = function() {
       if(qp.answers.length>0){
         qp.quizResults = false;
         qp.quizResultsPage = false;
@@ -1838,40 +1906,9 @@ class Quiz {
       }
       self.next();
     }
-    self.updateShareLinks = function() {
-        console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
-      // self.facebookShareConstituencyHref = null;
-      // self.twitterShareConstituencyHref = null;
 
-      var brand = SiteBrand && SiteBrand != 'ge2017' ? SiteBrand+"." : "";
-      var shareData = model.user.quizProgress.resultsData;
-      try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-      var sharePath = `http://${brand}uk-election-2017-dev.herokuapp.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
-      // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
-      qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
-      qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
-
-      console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
-
-      self.refresh();
-    }
-
-    self.startQuiz = function(){
-      trackEvent("Quiz Started",{type: "Quiz"});
-      qp.quizStarted = true;
-      $('.body.quiz').addClass('moving');
-      // self.next();
-    }
-    self.startStudentCompare = function(){
-      trackEvent("Student Compare Started",{type: "Quiz"});
-      routes.step({name:'postcode-compare'}).push();
-    }
-    self.startSingleSentence = function(){
-      trackEvent("Single Sentence Started",{type: "Quiz"});
-      routes.phrase({name: 'iWantTo'}).push();
-    }
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
-    self.updatePartyPercentages = function(map){
+    self.updatePartyPercentages = function(map) {
       if(qp.country){
         var topParty = {percentage: 0}
         map.forEach(function(party){
@@ -1895,12 +1932,51 @@ class Quiz {
         }
       }
     }
-    // self.openMatches = function() {
-    //   alert("opening");
-    // }
-    //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
-    self.partiesChartData = qp.country?qp.country.parties:[];
 
+    //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
+    self.partiesChartData = qp.country ? qp.country.parties : [];
+
+    /* -------------------------
+      All questions answered
+    */
+    self.updateShareLinks = function() {
+        console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+      // self.facebookShareConstituencyHref = null;
+      // self.twitterShareConstituencyHref = null;
+
+      var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
+      var shareData = model.user.quizProgress.resultsData;
+      try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
+      var sharePath = `http://${subdomain}uk-election-2017-dev.herokuapp.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
+      // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
+      qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
+      qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
+
+      console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+
+      self.refresh();
+    }
+
+    self.postcodeBinding = [model.user, 'postcode'];
+    self.postcodeSubmit = function(e) {
+      console.log(e);
+      e.stopPropagation();
+      model.landedOnResult = 1;
+      model.user.isWaiting = "postcode-input";
+      self.refresh();
+      api.getContenders(model.user.postcode).then(function(result){
+        console.log('result');
+        console.log('result');
+        console.log('result');
+        console.log('result');
+        console.log(result);
+        qp.quizChanceResults = result;
+        delete model.user.isWaiting;
+        trackEvent("Rerouting on Constituency Result",qp.resultsData);
+        routes.quizResults().push();
+      });
+      return false;
+    }
 
     if (self.finalResults == true) {
       setTimeout(function(){
@@ -1976,7 +2052,7 @@ class Quiz {
     const self = this;
     const countriesData = allData.getAllData().countriesData;
     const qp = model.user.quizProgress;
-    const subquestions = self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null;
+    const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.opinions.length]] : null;
 
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
@@ -2049,15 +2125,15 @@ class Quiz {
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
       resultPercentage: self.resultsData.percentage,
-      currentQuestion: self.quizQuestions[qp.opinions.length],
+      currentQuestion: self.currentQuestion,
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
       currentQuestionNo: qp.answers[qp.opinions.length]==="no",
-      currentSubquestion: self.quizQuestions[qp.opinions.length] ? self.quizQuestions[qp.opinions.length].answers[qp.answers[qp.opinions.length]] : null,
-      progressBarWidth: ((qp.opinions.length/self.quizQuestions.length)*100) + "%",
+      currentSubquestion: self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.opinions.length]] : null,
+      progressBarWidth: ((qp.opinions.length/qp.questionSeries.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
-      skipSubquestion: self.skip,
+      simpleYesNo: self.simpleYesNo,
       nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
       partiesChartDataChances: self.partiesChartDataChances,

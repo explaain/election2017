@@ -2011,7 +2011,7 @@ module.exports = function(CardTemplates){
               ["noAnswered","currentQuestionNo"],
               ["answerYes","answerYes"],
               ["answerNo","answerNo"],
-              ["skip", "skipSubquestion"],
+              ["simpleYesNo", "simpleYesNo"],
               ["quizResults", "quizResults"],
               ["nextButtonText", "nextButtonText"]
             ]
@@ -2204,7 +2204,7 @@ module.exports = function(CardTemplates){
                 "mapping": [
                   ["subanswers","subquestion"],
                   ["answered","answered"],
-                  ["skip","skip"],
+                  ["simpleYesNo","simpleYesNo"],
                   ["nextButtonText","nextButtonText"]
                 ]
               }
@@ -2259,7 +2259,7 @@ module.exports = function(CardTemplates){
         },
         "attr": {
           "onclick": {
-            "var": "skip"
+            "var": "simpleYesNo"
           }
         }
       }
