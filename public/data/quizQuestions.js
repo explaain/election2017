@@ -8,7 +8,7 @@ module.exports = {
 /* Sample data for Quiz for 18 May 2017 */
 var quizQuestions = [
  {
-   question: "1. Should cannabis be legalised?",
+   question: "Should cannabis be legalised?",
    issue: "health",
    randomiseGroup: 0,
    debate: "health-1",
@@ -36,7 +36,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "2. Should tuition fees be scrapped?",
+   question: "Should tuition fees be scrapped?",
    issue: "education",
    randomiseGroup: 0,
    debate: "education-1",
@@ -64,7 +64,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "3. Should there be a cap on how much landlords can charge for rent?",
+   question: "Should there be a cap on how much landlords can charge for rent?",
    issue: "housing",
    randomiseGroup: 0,
    debate: "housing-1",
@@ -92,7 +92,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "4. Should the UK have voted to leave the EU?",
+   question: "Should the UK have voted to leave the EU?",
    issue: "eu",
    randomiseGroup: 1,
    debate: "eu-1",
@@ -120,7 +120,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "5. Should companies have to pay more to hire someone from outside the UK?",
+   question: "Should companies have to pay more to hire someone from outside the UK?",
    issue: "jobs",
    randomiseGroup: 1,
    debate: "jobs-1",
@@ -148,7 +148,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "6. Should fox hunting be legal?",
+   question: "Should fox hunting be legal?",
    issue: "environment",
    randomiseGroup: 1,
    debate: "environment-1",
@@ -176,7 +176,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "7. If you earn more than 95% of the rest of the country, should your tax go up?",
+   question: "If you earn more than 95% of the rest of the country, should your tax go up?",
    issue: "tax",
    randomiseGroup: 1,
    debate: "tax-1",
@@ -204,7 +204,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "8. Should there be a second EU referendum on the terms of leaving ?",
+   question: "Should there be a second EU referendum on the terms of leaving ?",
    issue: "eu",
    randomiseGroup: 1,
    debate: "eu-2",
@@ -232,7 +232,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "9. Should the government own utlilites like the railway, post office and water companies?",
+   question: "Should the government own utlilites like the railway, post office and water companies?",
    issue: "public-services",
    randomiseGroup: 1,
    debate: "public-services-1",
@@ -260,7 +260,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "10. Should all EU citizens currently living in the UK be immediately given the right to stay?",
+   question: "Should all EU citizens currently living in the UK be immediately given the right to stay?",
    issue: "eu",
    randomiseGroup: 1,
    debate: "eu-3",
@@ -288,7 +288,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "11. Should we all pay more tax to fund the NHS and social care?",
+   question: "Should we all pay more tax to fund the NHS and social care?",
    issue: "tax",
    randomiseGroup: 1,
    debate: "tax-2",
@@ -316,7 +316,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "12. Should the UK carry out airstrikes on another country without MPs voting on it?",
+   question: "Should the UK carry out airstrikes on another country without MPs voting on it?",
    issue: "defence",
    randomiseGroup: 1,
    debate: "defence-1",

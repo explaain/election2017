@@ -26,7 +26,7 @@ var cfg = {
     footerImg: "/img/turnup.png",
     footerClass: "turnupFooter",
     randomise: true,
-    numbers: true,
+    numbering: true,
     quizQuestions: allData.getAllData().quizQuestions
   },
   '38degrees': {
@@ -36,7 +36,7 @@ var cfg = {
     footerImg: "/img/ge2017logobeta.png",
     footerClass: "ge2017Footer",
     randomise: true,
-    numbers: false,
+    numbering: false,
     quizQuestions: allData.getAllData().quizQuestions38Degrees
   },
   'unilad': {
@@ -1763,6 +1763,12 @@ class Quiz {
     quiz.questionDB = {};
     JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions)).forEach((q) => quiz.questionDB[q.debate] = q);
 
+    if(config[SiteBrand].numbering) {
+      qp.questionSeries.forEach((k,i) => {
+        quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
+      })
+    }
+
     self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.opinions.length]];
     console.log("Running quiz with question order:",qp.questionSeries)
     console.log("Running quiz with question DB:",quiz.questionDB)
@@ -2102,6 +2108,7 @@ class Quiz {
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
       resultPercentage: self.resultsData.percentage,
+      currentQuestionI: self.currentQuestionI,
       currentQuestion: self.currentQuestion,
       currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
       currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
