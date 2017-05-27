@@ -1729,11 +1729,16 @@ class Quiz {
     	var randomiseGroups = Array.from(randomiseGroupsSet);
 
       quiz.quizTopics = Array.from(quiz.quizTopics);
-      quiz.quizTopics.forEach((topic,i) => quiz.quizTopics[i] = {
-        issue: topic,
-        label: topic,
-        highPriority: false,
-        topicTogglePriority: () => quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority
+      quiz.quizTopics.forEach(function(topic,i) {
+        quiz.quizTopics[i] = {
+          issue: topic,
+          label: topic,
+          highPriority: false,
+          topicTogglePriority: () => {
+            self.reprioritiseTopic(topic,i);
+            self.refresh();
+          }
+        }
       });
 
       qp.questionSeries = initialOrder;
@@ -1810,19 +1815,31 @@ class Quiz {
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
       qp.answers.push(answer);
-      console.log(qp.answers.length);
-      console.log(qp.questionSeries.length);
       if (qp.answers.length==qp.questionSeries.length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
     }
+    self.skipSubquestion = function() {
+      var answers = qp.answers;
+      //This doesn't work if the answer hasn't been given yet
+      var opinion = answers[answers.length-1] === "yes" ? 0.8 : 0.2;
+      self.submitOpinion(opinion);
+      self.next();
+    }
 
-    self.submitOpinion = function(opinion) {
+    // self.submitPriorities = function(x) {
+    //   console.log("Issue ",x)
+    //   qp.prioritiesSet = true;
+    //   // now update the 'weight' property of each question?
+    //   // model.user.opinions.issues[issue].debates[debate].opinion
+    //   // qp.questions
+    // }
+    self.submitOpinion = function(opinion, thisQuestion = self.currentQuestion) {
       model.user.quizProgress.opinions.push(opinion);
 
-      var issue = self.currentQuestion.issue;
-      var debate = self.currentQuestion.debate;
+      var issue = thisQuestion.issue;
+      var debate = thisQuestion.debate;
       model.user.opinions.issues = model.user.opinions.issues || {};
       model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
       model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
@@ -1851,10 +1868,10 @@ class Quiz {
         // console.log('matchScore');
         // console.log(matchScore);
         if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
-          var userOpinion = getOpinionText(self.currentQuestion, opinion);
-          var partyOpinion = getOpinionText(self.currentQuestion, partyOpinionNum) || -1;
+          var userOpinion = getOpinionText(thisQuestion, opinion);
+          var partyOpinion = getOpinionText(thisQuestion, partyOpinionNum) || -1;
           var newMatch =  {
-            question: self.currentQuestion.question,
+            question: thisQuestion.question,
             userOpinion: userOpinion,
             partyOpinion: partyOpinion,
             isMatch: userOpinion == partyOpinion,
@@ -1872,13 +1889,28 @@ class Quiz {
 
       self.next();
     }
-
-    self.simpleYesNo = function() {
-      var answers = qp.answers;
-      //This doesn't work if the answer hasn't been given yet
-      var opinion = answers[answers.length-1]==="yes" ? 0.8 : 0.2;
-      self.submitOpinion(opinion);
-      self.next();
+    self.recalculateOpinions = function() {
+      // Clear opinions
+      model.user.quizProgress.opinions = [];
+      // Now resubmit them, mocking  currentQuestion  as  quiz.questionDB[q]
+      qp.questionSeries.forEach((q) => {
+        var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
+        console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
+        self.submitOpinion(mq.opinion, quiz.questionDB[q]);
+      });
+    }
+    self.reprioritiseTopic = function(topic,i) {
+      console.log("Toggling issue",topic)
+      quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
+      var newWeight = quiz.quizTopics[i].highPriority ? 2 : 1;
+      // console.log("!!! Changing priority -",topic,newWeight);
+      Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
+        console.log("!!!!! Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
+        // model.user.opinions.issues[topic].debates[k] = model.user.opinions.issues[topic].debates[k] || {}
+        model.user.opinions.issues[topic].debates[k].weight = newWeight
+        // console.log("!!!!! Changed priority - ",k,newWeight);
+      })
+      self.recalculateOpinions();
     }
 
     self.back = function() {
@@ -1933,11 +1965,6 @@ class Quiz {
     /* -------------------------
       All questions answered
     */
-    self.submitPriorities = function() {
-      qp.prioritiesSet = true;
-      // qp.opinions
-      // quizTopics.reduce((t) );
-    }
 
     self.updateShareLinks = function() {
         console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
@@ -2121,7 +2148,8 @@ class Quiz {
     var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
 
     return helpers.assembleCards({
-      quizPrioritiesNotSet: false,
+      submitPriorities: self.submitPriorities,
+      // quizPrioritiesNotSet: false,
       quizTopics: quiz.quizTopics,
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
@@ -2137,7 +2165,7 @@ class Quiz {
       progressBarWidth: ((qp.opinions.length/qp.questionSeries.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
-      simpleYesNo: self.simpleYesNo,
+      skipSubquestion: self.skipSubquestion,
       nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
       partiesChartDataChances: self.partiesChartDataChances,

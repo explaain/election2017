@@ -1603,16 +1603,16 @@ module.exports = function(CardTemplates){
                 ]
               }
             ]
-          },
-          {
-            "dom": "a.submitPriorities",
-            "content": "Calculate my results",
-            "attr": {
-              "onclick": {
-                "var": "submitPriorities"
-              }
-            }
           }
+          // ,{
+          //   "dom": "button.submitPriorities",
+          //   "content": "Calculate my results",
+          //   "attr": {
+          //     "onclick": {
+          //       "var": "submitPriorities"
+          //     }
+          //   }
+          // }
         ]
       }
     ]
@@ -1885,7 +1885,8 @@ module.exports = function(CardTemplates){
                   {
                     "template": "quizPriority",
                     "mapping": [
-                      ["quizTopics", "quizTopics"]
+                      ["quizTopics", "quizTopics"],
+                      ["submitPriorities", "submitPriorities"]
                     ]
                   }
                 ]
@@ -1894,101 +1895,101 @@ module.exports = function(CardTemplates){
           }
         ]
       },
-      {
-        "dom": ".card.results-top",
-        "condition": "quizResultsPage",
-        "content": [
-          {
-            "dom": ".card-visible.text-center",
-            "content": [
-              {
-                "dom": ".content",
-                // "condition": "quizPrioritiesSet",
-                "content": [
-                  {
-                    "dom": "div.step-number.step-1",
-                    "content": "1"
-                  },
-                  {
-                    "dom": "h2.bestMatchSoFar",
-                    "content": "Based on the manifestos, your best match is..."
-                  },
-                  {
-                    "dom": "div.quizResults",
-                    "content": [
-                      {
-                        "dom": "img",
-                        "attr": {
-                          "src": {
-                            "var": "resultLogo"
-                          }
-                        }
-                      },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultName"
-                        }
-                      },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultPercentage"
-                        }
-                      },
-                      {
-                        "template": "shareButtons",
-                        "mapping": [
-                          ["facebookShareHref", "facebookShareAlignmentHref"],
-                          ["twitterShareHref", "twitterShareAlignmentHref"]
-                        ]
-                      },
-                      {
-                        "dom": "p.postcode-instructions",
-                        "content": "... now add your postcode and see the options in your constituency."
-                      },
-                      {
-                        "dom":"form.postcode-form",
-                        "condition": "!isWaiting",
-                        "attr":{
-                          "onsubmit":{
-                            "var":"postcodeSubmit"
-                          }
-                        },
-                        "content":[
-                          {
-                            "dom":"input.form-control",
-                            "attr": {
-                              "autofocus":"true",
-                              "type":"text",
-                              "name":"postcode",
-                              "placeholder":"Postcode",
-                              "binding":{
-                                "var":"postcodeBinding"
-                              }
-                            }
-                          },
-                          {
-                            "dom":"button.btn.btn-success",
-                            "attr":{
-                              "type":"submit"
-                            },
-                            "content":"Go!"
-                          }
-                        ]
-                      },
-                      {
-                        "condition": "isWaiting",
-                        "template": "loading"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
+      // {
+        // "dom": ".card.results-top",
+        // "condition": "quizResultsPage",
+        // "content": [
+          // {
+          //   "dom": ".card-visible.text-center",
+          //   "content": [
+              // {
+              //   "dom": ".content",
+              //   // "condition": "quizPrioritiesSet",
+              //   "content": [
+              //     {
+              //       "dom": "div.step-number.step-1",
+              //       "content": "1"
+              //     },
+              //     {
+              //       "dom": "h2.bestMatchSoFar",
+              //       "content": "Based on the manifestos, your best match is..."
+              //     },
+              //     {
+              //       "dom": "div.quizResults",
+              //       "content": [
+              //         {
+              //           "dom": "img",
+              //           "attr": {
+              //             "src": {
+              //               "var": "resultLogo"
+              //             }
+              //           }
+              //         },
+              //         {
+              //           "dom": "h2",
+              //           "content": {
+              //             "var": "resultName"
+              //           }
+              //         },
+              //         {
+              //           "dom": "h2",
+              //           "content": {
+              //             "var": "resultPercentage"
+              //           }
+              //         },
+              //         {
+              //           "template": "shareButtons",
+              //           "mapping": [
+              //             ["facebookShareHref", "facebookShareAlignmentHref"],
+              //             ["twitterShareHref", "twitterShareAlignmentHref"]
+              //           ]
+              //         },
+              //         {
+              //           "dom": "p.postcode-instructions",
+              //           "content": "... now add your postcode and see the options in your constituency."
+              //         },
+              //         {
+              //           "dom":"form.postcode-form",
+              //           "condition": "!isWaiting",
+              //           "attr":{
+              //             "onsubmit":{
+              //               "var":"postcodeSubmit"
+              //             }
+              //           },
+              //           "content":[
+              //             {
+              //               "dom":"input.form-control",
+              //               "attr": {
+              //                 "autofocus":"true",
+              //                 "type":"text",
+              //                 "name":"postcode",
+              //                 "placeholder":"Postcode",
+              //                 "binding":{
+              //                   "var":"postcodeBinding"
+              //                 }
+              //               }
+              //             },
+              //             {
+              //               "dom":"button.btn.btn-success",
+              //               "attr":{
+              //                 "type":"submit"
+              //               },
+              //               "content":"Go!"
+              //             }
+              //           ]
+              //         },
+              //         {
+              //           "condition": "isWaiting",
+              //           "template": "loading"
+              //         }
+              //       ]
+              //     }
+              //   ]
+              // }
+            // ]
+          // }
+      //   ]
+      // },
       {
         "dom": "div",
         "condition": "!countrySelected",
@@ -2030,7 +2031,7 @@ module.exports = function(CardTemplates){
               ["noAnswered","currentQuestionNo"],
               ["answerYes","answerYes"],
               ["answerNo","answerNo"],
-              ["simpleYesNo", "simpleYesNo"],
+              ["skipSubquestion", "skipSubquestion"],
               ["quizResults", "quizResults"],
               ["nextButtonText", "nextButtonText"]
             ]
@@ -2223,7 +2224,7 @@ module.exports = function(CardTemplates){
                 "mapping": [
                   ["subanswers","subquestion"],
                   ["answered","answered"],
-                  ["simpleYesNo","simpleYesNo"],
+                  ["skipSubquestion","skipSubquestion"],
                   ["nextButtonText","nextButtonText"]
                 ]
               }
@@ -2278,7 +2279,7 @@ module.exports = function(CardTemplates){
         },
         "attr": {
           "onclick": {
-            "var": "simpleYesNo"
+            "var": "skipSubquestion"
           }
         }
       }
