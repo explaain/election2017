@@ -14,11 +14,11 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "with an increase in income tax for the highest 5 percent of earners",
+         label: "with an increase in income tax for the highest 5 percent of earners.",
          opinion: 1,
        },
        {
-         label: "with a 1p increase on income tax for basic, higher and additional rates",
+         label: "with a 1p increase on income tax for basic, higher and additional rates.",
          opinion: 1,
        },
      ],
@@ -55,7 +55,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "a better system for protecting pensions should be explored.",
+         label: "a different system for protecting pensions should be explored.",
          opinion: 0.2,
        },
      ]
@@ -77,6 +77,10 @@ var quizQuestions = [
        },
      ],
      no: [
+       {
+         label: "but it's impact on those who have had it cut should be assessed.",
+         opinion: 0.2
+       },
        {
          label: "maintain the tax as it currently stands.",
          opinion: 0
@@ -105,7 +109,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "and drop it further to 17%",
+         label: "and drop it further to 17%.",
          opinion: 0
        },
      ]
@@ -172,7 +176,7 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "companies who employ migrants should pay £2000 a year per migrant they employ full time.",
+         label: "those who employ a migrant full time should pay £2000 a year.",
          opinion: 1,
        },
        {
@@ -182,7 +186,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "don't increase, create a Migration Impact Fund paid for centrally by exisitng budgets.",
+         label: "don't increase, create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
          opinion: 0.4,
        },
        {
@@ -209,6 +213,10 @@ var quizQuestions = [
      ],
      no: [
        {
+         label: "the ban should remain be periodically reassessed. ",
+         opinion: 0.2
+       },
+       {
          label: "there should be no vote, fox hunting should remain illegal. ",
          opinion: 0
        },
@@ -233,6 +241,10 @@ var quizQuestions = [
      no: [
        {
          label: "it should rise at 60% of median earnings by 2020.",
+         opinion: 0.2
+       },
+       {
+         label: "it should not rise at all.",
          opinion: 0
        },
      ]
@@ -254,7 +266,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "tax should go up for all taxpayers with an additional 1p extra per £ of income tax.",
+         label: "increase tax for all taxpayers via an additional 1p extra per £ of income tax.",
          opinion: 0.4,
        },
        {
@@ -281,8 +293,12 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "we should use them but only under strict controls ",
+         label: "we should use them but only under strict controls. ",
          opinion: 0.4,
+       },
+       {
+         label: "we should use them more frequently on certain crops. ",
+         opinion: 0,
        },
      ]
    }
@@ -385,6 +401,10 @@ var quizQuestions = [
      ],
      no: [
        {
+         label: "studies should be carried out to assess the pros and cons of use.",
+         opinion: 0.4
+       },
+       {
          label: "the industry should be further developed.",
          opinion: 0
        },
@@ -425,7 +445,7 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "we must maintain access to the single market",
+         label: "we must maintain access to the single market.",
          opinion: 1,
        },
        {
@@ -434,6 +454,10 @@ var quizQuestions = [
        },
      ],
      no: [
+       {
+         label: "on the whole but certain industries should retain access.",
+         opinion: 0.4
+       },
        {
          label: "we will be leaving the single market.",
          opinion: 0
