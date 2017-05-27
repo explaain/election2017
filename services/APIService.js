@@ -385,9 +385,14 @@ APIService.prototype.getPartyMatches = function(data) {
       partyMatchesByIssue[partyKey].forEach(function(match) {
         partyMatches[partyKey].match += match.agreement*match.weight;
       })
+
+      var totalWeights = 0;
+      partyMatchesByIssue[partyKey].forEach(function(match) {
+        totalWeights += match.weight;
+      })
       console.log('partyMatchesByIssue[partyKey]');
       console.log(partyMatchesByIssue[partyKey]);
-      partyMatches[partyKey].match /= partyMatchesByIssue[partyKey].length;
+      partyMatches[partyKey].match /= totalWeights;
     } catch(e) {
 
     }

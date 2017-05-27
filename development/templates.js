@@ -1557,68 +1557,69 @@ module.exports = function(CardTemplates){
 
 
   CardTemplates.quizPriority = {
-    "dom":"div.content",
+    "dom":"div.content.priorities",
     "content":[
       {
         "dom":"div.body-content",
         "content":[
           {
-            "dom": "h2.q-high-priority",
-            "content": "These things really matter"
+            "dom": "h2.q-priority",
+            "content": "Are any of these issues top‑priority for you?"
           },
           {
-            "dom": "div.high-priority",
-            "loop": "quizTopicsHigher",
-            "content": [{"template": "quizTopicPlate"}]
+            "dom": "div.priority",
+            "loop": "quizTopics",
+            "content":[
+              {
+                "dom": "a.quiz-topic-plate",
+                "attr": {
+                  // "style": {
+                  //   "background-color": {
+                  //     "var": "color"
+                  //   }
+                  // },
+                  "onclick": {
+                    "var": "topicTogglePriority"
+                  },
+                  // "data-label": {
+                  //   "var": "label"
+                  // },
+                  // "class": {
+                  //   "var": "isNewClass"
+                  // }
+                },
+                "content": [
+                  {
+                    "dom": "div",
+                    "content": [
+                      {
+                        "dom": "span",
+                        "content": {
+                          "var": "label"
+                        }
+                      },
+                      {
+                        "dom": "span.t-featured",
+                        "content": "🌟",
+                        "condition": "highPriority"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
-            "dom": "div.divider",
-            "content": ""
-          },
-          {
-            "dom": "div.low-priority",
-            "loop": "quizTopicsLower",
-            "content": [{"template": "quizTopicPlate"}]
-          },
-          {
-            "dom": "h2.q-low-priority",
-            "content": "LOWER PRIORITY"
+            "dom": "a.submitPriorities",
+            "content": "Calculate my results",
+            "attr": {
+              "onclick": {
+                "var": "setPriorities"
+              }
+            }
           }
         ]
       }
-    ]
-  }
-
-  CardTemplates.quizTopicPlate = {
-    "dom": "a.quiz-topic-plate",
-    "attr": {
-      "style": {
-        "background-color": {
-          "var": "color"
-        }
-      },
-      "onclick": {
-        "var": "onTopicClick"
-      },
-      "data-label": {
-        "var": "label"
-      },
-      "class": {
-        "var": "isNewClass"
-      }
-    },
-    "content": [
-      {
-        "dom": "span",
-        "content": {
-          "var": "label"
-        }
-      },
-      {
-        "dom": "span.t-featured",
-        "content": "🌟",
-        "condition": "highPriority"
-      },
     ]
   }
 
@@ -1827,11 +1828,11 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizTopLine",
+        "condition": "topLineConditional",
         "content": [
           {
             "dom": ".quizSkip",
             "content": "Skip >",
-            "condition": "quizStarted && countrySelected",
             "mapping": [
               ["progressBarWidth", "progressBarWidth"],
               ["countrySelected", "countrySelected"],
@@ -1877,9 +1878,9 @@ module.exports = function(CardTemplates){
         "condition": "quizResults",
         "content": "⟲ Retake Quiz"
       },
-      {
+      { // Party results
         "dom": ".card.results-top",
-        "condition": "quizResultsPage",
+        "condition": "partyResults",
         "content": [
           {
             "dom": ".card-visible.text-center",
@@ -1972,6 +1973,29 @@ module.exports = function(CardTemplates){
         ]
       },
       {
+        "dom": ".card.priority",
+        "condition": "quizPriorityPage",
+        "content": [
+          {
+            "dom": ".card-visible.text-center",
+            "content": [
+              {
+                "dom": ".content",
+                "content": [
+                  {
+                    "template": "quizPriority",
+                    "mapping": [
+                      ["quizTopics", "quizTopics"],
+                      ["setPriorities", "setPriorities"]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      { // Country selector
         "dom": "div",
         "condition": "!countrySelected",
         "content": [
@@ -1997,7 +2021,7 @@ module.exports = function(CardTemplates){
           }
         ]
       },
-      {
+      { // Questions
         "dom": "div.questions",
         "condition": "countrySelected",
         "content": [
@@ -2012,7 +2036,7 @@ module.exports = function(CardTemplates){
               ["noAnswered","currentQuestionNo"],
               ["answerYes","answerYes"],
               ["answerNo","answerNo"],
-              ["skip", "skipSubquestion"],
+              ["skipSubquestion", "skipSubquestion"],
               ["quizResults", "quizResults"],
               ["nextButtonText", "nextButtonText"]
             ]
@@ -2086,14 +2110,14 @@ module.exports = function(CardTemplates){
               ["openMatches", "openMatches"],
               ["quizResults", "quizResults"],
               ["quizResultsPage", "quizResultsPage"],
+              ["prioritiesSet", "prioritiesSet"],
               ["resultLogo", "resultLogo"],
               ["resultName", "resultName"],
               ["resultPercentage", "resultPercentage"],
               ["postcodeSubmit", "postcodeSubmit"],
               ["postcodeBinding", "postcodeBinding"],
               ["isWaiting", "isWaiting"],
-              ["startingQuiz", "startingQuiz"],
-              ["finalResults", "finalResults"]
+              ["startingQuiz", "startingQuiz"]
             ]
           },
           {
@@ -2136,13 +2160,14 @@ module.exports = function(CardTemplates){
             ],
           },
           {
-            "condition": "quizResults",
+            "condition": "prioritiesSet",
             "template": "quizShareCard",
             "mapping": [
               ["quizResults", "quizResults"],
               ["finalResults", "finalResults"],
               ["facebookShareHref", "facebookShareHref"],
-              ["twitterShareHref", "twitterShareHref"]
+              ["twitterShareHref", "twitterShareHref"],
+              ["prioritiesSet", "prioritiesSet"]
             ]
           }
         ]
@@ -2205,7 +2230,7 @@ module.exports = function(CardTemplates){
                 "mapping": [
                   ["subanswers","subquestion"],
                   ["answered","answered"],
-                  ["skip","skip"],
+                  ["skipSubquestion","skipSubquestion"],
                   ["nextButtonText","nextButtonText"]
                 ]
               }
@@ -2219,7 +2244,7 @@ module.exports = function(CardTemplates){
     "dom": ".quizAnswersYesNo",
     "content": [
       {
-        "dom": ".quizAnswerYesNo.no.quizPop",
+        "dom": ".quizAnswerYesNo.no.initial.quizPop",
         "content": "No",
         "attr": {
           "onclick": {
@@ -2228,7 +2253,7 @@ module.exports = function(CardTemplates){
         }
       },
       {
-        "dom": ".quizAnswerYesNo.yes.quizPop",
+        "dom": ".quizAnswerYesNo.yes.initial.quizPop",
         "content": "Yes",
         "attr": {
           "onclick": {
@@ -2260,14 +2285,14 @@ module.exports = function(CardTemplates){
         },
         "attr": {
           "onclick": {
-            "var": "skip"
+            "var": "skipSubquestion"
           }
         }
       }
     ]
   }
   CardTemplates.quizSubquestionAnswer = {
-    "dom": ".quizSubquestionAnswer.quizPop",
+    "dom": ".quizSubquestionAnswer.secondary.quizPop",
     "content": {
       "var": "label"
     },
@@ -2288,12 +2313,12 @@ module.exports = function(CardTemplates){
             "content": [
               {
                 "dom": "div.step-number.step-2",
-                "condition": "quizResults",
+                "condition": "prioritiesSet",
                 "content": "2"
               },
               {
                 "dom": "h2.seeHow",
-                "condition": "quizResultsPage",
+                "condition": "prioritiesSet",
                 "content": "Here is how you matched the major parties manifestos overall:"
               },
               {
@@ -2312,7 +2337,6 @@ module.exports = function(CardTemplates){
                 "content": "Currently in the lead in your area are:"
               },
               {
-                // "condition": "!finalResults",
                 "template": "quizPercentages"
               }
             ]
