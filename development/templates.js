@@ -1555,31 +1555,42 @@ module.exports = function(CardTemplates){
     ]
   }
 
+
   CardTemplates.quizPriority = {
-    // "dom":"div.content.priorities",
-    // "content":[
-    //   {
-    //     "dom":"div.body-content",
-    //     "content":[
-          // {
-          //   "dom": "h2.q-priority",
-          //   "content": "Which are your top-priority issues?"
-          // },
-          // {
-            "condition": "quizResultsPage",
+    "dom":"div.content.priorities",
+    "content":[
+      {
+        "dom":"div.body-content",
+        "content":[
+          {
+            "dom": "h2.q-priority",
+            "content": "Which are your top-priority issues?"
+          },
+          {
             "dom": "div.priority",
             "loop": "quizTopics",
             "content":[
               {
                 "dom": "a.quiz-topic-plate",
                 "attr": {
+                  // "style": {
+                  //   "background-color": {
+                  //     "var": "color"
+                  //   }
+                  // },
                   "onclick": {
                     "var": "topicTogglePriority"
                   },
+                  // "data-label": {
+                  //   "var": "label"
+                  // },
+                  // "class": {
+                  //   "var": "isNewClass"
+                  // }
                 },
                 "content": [
                   {
-                    "dom": "span.name",
+                    "dom": "span",
                     "content": {
                       "var": "label"
                     }
@@ -1592,10 +1603,19 @@ module.exports = function(CardTemplates){
                 ]
               }
             ]
-    //       }
-    //     ]
-    //   }
-    // ]
+          }
+          // ,{
+          //   "dom": "button.submitPriorities",
+          //   "content": "Calculate my results",
+          //   "attr": {
+          //     "onclick": {
+          //       "var": "submitPriorities"
+          //     }
+          //   }
+          // }
+        ]
+      }
+    ]
   }
 
   CardTemplates.gotoPostcodeButton = {
@@ -1614,6 +1634,8 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+
+
 
   CardTemplates.localCandidatePlate = {
     "dom": "a.local-candidate-plate.internal",
@@ -1851,7 +1873,7 @@ module.exports = function(CardTemplates){
         "content": "⟲ Retake Quiz"
       },
       {
-        "dom": ".card.results-top",
+        "dom": ".card.priority",
         "condition": "quizResultsPage",
         "content": [
           {
@@ -1861,81 +1883,10 @@ module.exports = function(CardTemplates){
                 "dom": ".content",
                 "content": [
                   {
-                    "dom": "div.step-number.step-1",
-                    "content": "1"
-                  },
-                  {
-                    "dom": "h2.bestMatchSoFar",
-                    "content": "Based on the manifestos, your best match is..."
-                  },
-                  {
-                    "dom": "div.quizResults",
-                    "content": [
-                      {
-                        "dom": "img",
-                        "attr": {
-                          "src": {
-                            "var": "resultLogo"
-                          }
-                        }
-                      },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultName"
-                        }
-                      },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultPercentage"
-                        }
-                      },
-                      {
-                        "template": "shareButtons",
-                        "mapping": [
-                          ["facebookShareHref", "facebookShareAlignmentHref"],
-                          ["twitterShareHref", "twitterShareAlignmentHref"]
-                        ]
-                      },
-                      {
-                        "dom": "p.postcode-instructions",
-                        "content": "... now add your postcode and see the options in your constituency."
-                      },
-                      {
-                        "dom":"form.postcode-form",
-                        "condition": "!isWaiting",
-                        "attr":{
-                          "onsubmit":{
-                            "var":"postcodeSubmit"
-                          }
-                        },
-                        "content":[
-                          {
-                            "dom":"input.form-control",
-                            "attr": {
-                              "autofocus":"true",
-                              "type":"text",
-                              "name":"postcode",
-                              "placeholder":"Postcode",
-                              "binding":{
-                                "var":"postcodeBinding"
-                              }
-                            }
-                          },
-                          {
-                            "dom":"button.btn.btn-success",
-                            "attr":{
-                              "type":"submit"
-                            },
-                            "content":"Go!"
-                          }
-                        ]
-                      },
-                      {
-                        "condition": "isWaiting",
-                        "template": "loading"
-                      }
+                    "template": "quizPriority",
+                    "mapping": [
+                      ["quizTopics", "quizTopics"],
+                      ["submitPriorities", "submitPriorities"]
                     ]
                   }
                 ]
@@ -1944,6 +1895,101 @@ module.exports = function(CardTemplates){
           }
         ]
       },
+      // {
+        // "dom": ".card.results-top",
+        // "condition": "quizResultsPage",
+        // "content": [
+          // {
+          //   "dom": ".card-visible.text-center",
+          //   "content": [
+              // {
+              //   "dom": ".content",
+              //   // "condition": "quizPrioritiesSet",
+              //   "content": [
+              //     {
+              //       "dom": "div.step-number.step-1",
+              //       "content": "1"
+              //     },
+              //     {
+              //       "dom": "h2.bestMatchSoFar",
+              //       "content": "Based on the manifestos, your best match is..."
+              //     },
+              //     {
+              //       "dom": "div.quizResults",
+              //       "content": [
+              //         {
+              //           "dom": "img",
+              //           "attr": {
+              //             "src": {
+              //               "var": "resultLogo"
+              //             }
+              //           }
+              //         },
+              //         {
+              //           "dom": "h2",
+              //           "content": {
+              //             "var": "resultName"
+              //           }
+              //         },
+              //         {
+              //           "dom": "h2",
+              //           "content": {
+              //             "var": "resultPercentage"
+              //           }
+              //         },
+              //         {
+              //           "template": "shareButtons",
+              //           "mapping": [
+              //             ["facebookShareHref", "facebookShareAlignmentHref"],
+              //             ["twitterShareHref", "twitterShareAlignmentHref"]
+              //           ]
+              //         },
+              //         {
+              //           "dom": "p.postcode-instructions",
+              //           "content": "... now add your postcode and see the options in your constituency."
+              //         },
+              //         {
+              //           "dom":"form.postcode-form",
+              //           "condition": "!isWaiting",
+              //           "attr":{
+              //             "onsubmit":{
+              //               "var":"postcodeSubmit"
+              //             }
+              //           },
+              //           "content":[
+              //             {
+              //               "dom":"input.form-control",
+              //               "attr": {
+              //                 "autofocus":"true",
+              //                 "type":"text",
+              //                 "name":"postcode",
+              //                 "placeholder":"Postcode",
+              //                 "binding":{
+              //                   "var":"postcodeBinding"
+              //                 }
+              //               }
+              //             },
+              //             {
+              //               "dom":"button.btn.btn-success",
+              //               "attr":{
+              //                 "type":"submit"
+              //               },
+              //               "content":"Go!"
+              //             }
+              //           ]
+              //         },
+              //         {
+              //           "condition": "isWaiting",
+              //           "template": "loading"
+              //         }
+              //       ]
+              //     }
+              //   ]
+              // }
+            // ]
+          // }
+      //   ]
+      // },
       {
         "dom": "div",
         "condition": "!countrySelected",
@@ -2066,9 +2112,7 @@ module.exports = function(CardTemplates){
               ["postcodeBinding", "postcodeBinding"],
               ["isWaiting", "isWaiting"],
               ["startingQuiz", "startingQuiz"],
-              ["finalResults", "finalResults"],
-              ["quizTopics", "quizTopics"],
-              ["submitPriorities", "submitPriorities"]
+              ["finalResults", "finalResults"]
             ]
           },
           {
@@ -2269,16 +2313,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2.seeHow",
                 "condition": "quizResultsPage",
-                "content": "Here is how you matched the major parties manifestos overall"
-              },
-              {
-                "dom": "h4.quizpriority",
-                "condition": "quizResultsPage",
-                "content": "Care strongly about any of these issues?"
-              },
-              {
-                // "condition": "quizResultsPage",
-                "template": "quizPriority"
+                "content": "Here is how you matched the major parties manifestos overall:"
               },
               {
                 "dom": "h2",
