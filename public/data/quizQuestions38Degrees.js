@@ -163,7 +163,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "but increasing the amount of housing built will make rent more affordable.",
+         label: "but increasing the number of houses built will make rent more affordable.",
          opinion: 0
        },
      ]
@@ -259,6 +259,7 @@ var quizQuestions = [
        {
          label: "and  gaurantee tax won't go up for anyone earning less than £80,000. ",
          opinion: 1,
+       },
        {
          label: "but look at increasing corporation tax at the same time. ",
          opinion: 1,
