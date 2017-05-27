@@ -2299,7 +2299,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2",
                 "condition": "finalResults",
-                "content": "Here's a breakdown of all your options:"
+                "content": "Here's a breakdown of the people you can vote for in your area:"
               },
               {
                 "dom": "p.small",
@@ -2309,7 +2309,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h3",
                 "condition": "finalResults",
-                "content": "Currently in the lead in your area are:"
+                "content": "In the lead in your area:"
               },
               {
                 // "condition": "!finalResults",

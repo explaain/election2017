@@ -241,7 +241,10 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "and  gaurantee tax won't go up for anyone earning less than £80,000 ",
+         label: "and  gaurantee tax won't go up for anyone earning less than £80,000. ",
+         opinion: 1,
+       {
+         label: "but look at increasing corporation tax at the same time. ",
          opinion: 1,
        },
      ],
