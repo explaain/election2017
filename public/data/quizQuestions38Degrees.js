@@ -75,13 +75,13 @@ var quizQuestions = [
          opinion: 1,
        },
        {
-         label: "and incentivise local authorities to help\ntenants ‘downsize' as well.",
+         label: "and incentivise local authorities to help tenants ‘downsize' as well.",
          opinion: 0.8,
        },
      ],
      no: [
        {
-         label: "but it's impact on those who have had it cut should be assessed.",
+         label: "but its impact on those who have had it cut should be assessed.",
          opinion: 0.2
        },
        {
@@ -99,7 +99,7 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "reinstate the higher level of\ncorporation tax for large businesses.",
+         label: "reinstate the higher level of corporation tax for large businesses.",
          opinion: 1,
        },
        {
@@ -109,7 +109,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "but it shouldnt drop either, keep it at 20%.",
+         label: "but it shouldn't drop either, keep it at 20%.",
          opinion: 0.4,
        },
        {
@@ -141,7 +141,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "i think we should eliminate it before 2025.",
+         label: "I think we should eliminate it before 2025.",
          opinion: 0
        },
      ]
@@ -165,7 +165,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "the free market should dictate price.",
+         label: "the free market should dictate rent costs.",
          opinion: 0.4,
        },
        {
@@ -187,13 +187,13 @@ var quizQuestions = [
          opinion: 1,
        },
        {
-         label: "but make it a voluntary contribution as part of the high net worth investment visa.",
+         label: "but make it a voluntary contribution as part of certain types of visa.",
          opinion: 0.8,
        },
      ],
      no: [
        {
-         label: "don't increase, create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
+         label: "don't increase it, create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
          opinion: 0.4,
        },
        {
@@ -336,14 +336,14 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "the results of the referendum should be the mandate at that's it.",
+         label: "the results of the referendum should be the mandate and that's it.",
          opinion: 0
        },
      ]
    }
  },
  {
-   question: "Should the government take over the running of railways, water companies and the royal mail?",
+   question: "Should the government take over the running of railways, water companies and the Royal Mail?",
    issue: "economy",
    debate: "38-economy-2",
    helperCard:"http://api.explaain.com/Detail/5929a36ec3fde500115269ae",
@@ -355,7 +355,7 @@ var quizQuestions = [
        },
        {
          label: "but only when service levels drop and for short periods of time.",
-         opinion: 0.8,
+         opinion: 0.6,
        },
      ],
      no: [
@@ -371,7 +371,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should we create more grammar schools?",
+   question: "Should we create additional grammar schools?",
    issue: "education",
    debate: "38-education-1",
    helperCard:"http://api.explaain.com/Detail/5929a878c3fde500115269af",
@@ -389,7 +389,7 @@ var quizQuestions = [
      no: [
        {
          label: "they're vanity projects that don't work.",
-         opinion: 0.4,
+         opinion: 0,
        },
        {
          label: "scrap any plans to re-introduce them.",
@@ -438,7 +438,7 @@ var quizQuestions = [
          opinion: 1,
        },
        {
-         label: "but net migration should be zero.",
+         label: "but net migration should be zero, not thousands.",
          opinion: 1,
        },
      ],
@@ -448,7 +448,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "there should be no official targets.",
+         label: "there should be no official target.",
          opinion: 0
        },
      ]
