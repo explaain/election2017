@@ -1,60 +1,6 @@
 module.exports = {
   getData: function () {
-    return [{
-      question: "Should cannabis be legalised?",
-      issue: "health",
-      randomiseGroup: 0,
-      debate: "health-1",
-      answers: {
-        yes: [
-          {
-            label: "Yes, but for medical use.",
-            opinion: 0.6
-          },
-          {
-            label: "Yes, and decriminalise all drugs over time.",
-            opinion: 1
-          }
-        ],
-        no: [
-          {
-            label: "No, but reduce punishment for personal use.",
-            opinion: 0.4
-          },
-          {
-            label: "No, and make punishment for personal use more severe.",
-            opinion: 0
-          }
-        ]
-      }
-    },{
-      question: "Should tuition fees be scrapped?",
-      issue: "education",
-      randomiseGroup: 0,
-      debate: "education-1",
-      answers: {
-        yes: [
-          {
-            label: "Yes, for all students.",
-            opinion: 1
-          },
-          {
-            label: "Yes, but only for certain degrees",
-            opinion: 0.6
-          }
-        ],
-        no: [
-          {
-            label: "No, but they should be reduced.",
-            opinion: 0.4
-          },
-          {
-            label: "No, they should increase in line with inflation.",
-            opinion: 0
-          }
-        ]
-      }
-    }];
+    return quizQuestions;
   }
 };
 
