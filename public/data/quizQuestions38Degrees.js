@@ -54,6 +54,10 @@ var quizQuestions = [
          label: "it should be phased out and replaced in 2020.",
          opinion: 0.4,
        },
+       {
+         label: "a better system for protecting pensions should be explored.",
+         opinion: 0.2,
+       },
      ]
    }
  },
@@ -347,6 +351,10 @@ var quizQuestions = [
          label: "we should lift the ban on creating new grammar schools.",
          opinion: 1,
        },
+       {
+         label: "and explore new ways of creating additional types of selection schools.",
+         opinion: 1,
+       },
      ],
      no: [
        {
@@ -391,6 +399,10 @@ var quizQuestions = [
      yes: [
        {
          label: "annual net migraiton should be in the tens of thousands.",
+         opinion: 1,
+       },
+       {
+         label: "but net migration should be zero.",
          opinion: 1,
        },
      ],
