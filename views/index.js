@@ -1675,6 +1675,7 @@ class Quiz {
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
     qp.quizResultsPage = (params && params.finalResults ? !params.finalResults : qp.quizResultsPage) && qp.prioritiesSet;
+    qp.weighting = qp.weighting ? qp.weighting : 5;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
@@ -1904,7 +1905,7 @@ class Quiz {
     self.reprioritiseTopic = function(topic,i) {
       console.log("Toggling issue",topic)
       quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
-      var newWeight = quiz.quizTopics[i].highPriority ? 2 : 1;
+      var newWeight = quiz.quizTopics[i].highPriority ? qp.weighting : 1;
       // console.log("!!! Changing priority -",topic,newWeight);
       Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
         console.log("!!!!! Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
