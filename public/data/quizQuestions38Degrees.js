@@ -11,6 +11,7 @@ var quizQuestions = [
    question: "Should taxes be increased to fund the NHS and social care?",
    issue: "tax",
    debate: "38-tax-1",
+   helperCard:"http://api.explaain.com/Detail/5929a06cc3fde500115269a3",
    answers: {
      yes: [
        {
@@ -38,6 +39,7 @@ var quizQuestions = [
    question: "Should the pensions 'triple lock' remain in use?",
    issue: "welfare",
    debate: "38-welfare-1",
+   helperCard:"http://api.explaain.com/Detail/5929a0a2c3fde500115269a4",
    answers: {
      yes: [
        {
@@ -65,6 +67,7 @@ var quizQuestions = [
    question: "Should the spare room subsidy (so called 'bedroom tax') be scrapped?",
    issue: "welfare",
    debate: "38-welfare-2",
+   helperCard:"http://api.explaain.com/Detail/5929a172c3fde500115269a5",
    answers: {
      yes: [
        {
@@ -92,6 +95,7 @@ var quizQuestions = [
    question: "Should corporation tax rates be increased?",
    issue: "tax",
    debate: "38-tax-2",
+   helperCard:"http://api.explaain.com/Detail/5929a1b4c3fde500115269a6",
    answers: {
      yes: [
        {
@@ -119,6 +123,7 @@ var quizQuestions = [
    question: "Should we get rid of the deficit by 2025?",
    issue: "economy",
    debate: "38-economy-1",
+   helperCard:"http://api.explaain.com/Detail/5929a232c3fde500115269a8",
    answers: {
      yes: [
        {
@@ -146,6 +151,7 @@ var quizQuestions = [
    question: "Should there be a cap on how much landlords can charge for rent?",
    issue: "living-costs",
    debate: "38-living-costs-1",
+   helperCard:"http://api.explaain.com/Detail/5929a25ac3fde500115269a9",
    answers: {
      yes: [
        {
@@ -173,6 +179,7 @@ var quizQuestions = [
    question: "Should those hiring migrant workers have to pay a fee to government to do so?",
    issue: "immigration",
    debate: "38-immigration-1",
+   helperCard:"http://api.explaain.com/Detail/5929a296c3fde500115269aa",
    answers: {
      yes: [
        {
@@ -200,6 +207,7 @@ var quizQuestions = [
    question: "Should there be a fresh vote in parliament to bring back fox hunting?",
    issue: "environment",
    debate: "38-environment-1",
+   helperCard:"http://api.explaain.com/Detail/5929a1dbc3fde500115269a7",
    answers: {
      yes: [
        {
@@ -227,6 +235,7 @@ var quizQuestions = [
    question: "Should the national living wage be increased by more than inflation?",
    issue: "living-costs",
    debate: "38-living-costs-2",
+   helperCard:"http://api.explaain.com/Detail/5929a2bfc3fde500115269ab",
    answers: {
      yes: [
        {
@@ -254,6 +263,7 @@ var quizQuestions = [
    question: "Should income tax go up for people earning over £80,000 per year?",
    issue: "tax",
    debate: "38-tax-3",
+   helperCard:"http://api.explaain.com/Detail/5929a302c3fde500115269ac",
    answers: {
      yes: [
        {
@@ -281,6 +291,7 @@ var quizQuestions = [
    question: "Should we ban pesticides which kill bees?",
    issue: "enviornment",
    debate: "38-environment-2",
+   helperCard:"http://api.explaain.com/Detail/5929a32bc3fde500115269ad",
    answers: {
      yes: [
        {
@@ -335,6 +346,7 @@ var quizQuestions = [
    question: "Should the government take over the running of railways, water companies and the royal mail?",
    issue: "economy",
    debate: "38-economy-2",
+   helperCard:"http://api.explaain.com/Detail/5929a36ec3fde500115269ae",
    answers: {
      yes: [
        {
@@ -362,6 +374,7 @@ var quizQuestions = [
    question: "Should we create more grammar schools?",
    issue: "education",
    debate: "38-education-1",
+   helperCard:"http://api.explaain.com/Detail/5929a878c3fde500115269af",
    answers: {
      yes: [
        {
@@ -389,6 +402,7 @@ var quizQuestions = [
    question: "Should fracking be banned?",
    issue: "environment",
    debate: "38-environment-3",
+   helperCard:"http://api.explaain.com/Detail/5929a89ec3fde500115269b0",
    answers: {
      yes: [
        {
@@ -416,6 +430,7 @@ var quizQuestions = [
    question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
    issue: "immigration",
    debate: "38-immigration-2",
+   helperCard:"http://api.explaain.com/Detail/5929a8dac3fde500115269b1",
    answers: {
      yes: [
        {
@@ -443,6 +458,7 @@ var quizQuestions = [
    question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
    issue: "eu",
    debate: "38-eu-2",
+   helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",
    answers: {
      yes: [
        {
