@@ -1597,7 +1597,7 @@ a:hover .quizPercentagesPartyFace {
   /*margin-top: 10px;*/
 }
 .body.quiz div.questions > div:nth-child(1) .card .card-visible {
-  min-height: 300px;
+  /*min-height: 300px;*/
 }
 
 .content.quiz-intro .quizPercentagesParty {
@@ -1845,4 +1845,7 @@ span.t-featured {
     right: 10px !important;
     top: -2px;
     font-size: 30px;
+}
+.priority+.questions .quizPercentages {
+    margin-top: 30px  !important;
 }

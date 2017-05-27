@@ -1671,8 +1671,10 @@ class Quiz {
     const qp = model.user.quizProgress;
     const quiz = model.questions;
     qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
+    qp.prioritiesSet = qp.prioritiesSet ? qp.prioritiesSet : false;
+    qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = params && params.finalResults ? params.finalResults : qp.quizResults;
-    qp.quizResultsPage = params && params.finalResults ? !params.finalResults : qp.quizResultsPage;
+    qp.quizResultsPage = (params && params.finalResults ? !params.finalResults : qp.quizResultsPage) && qp.prioritiesSet;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
@@ -1736,7 +1738,7 @@ class Quiz {
           highPriority: false,
           topicTogglePriority: () => {
             self.reprioritiseTopic(topic,i);
-            self.refresh();
+            // self.refresh();
           }
         }
       });
@@ -1913,6 +1915,11 @@ class Quiz {
       self.recalculateOpinions();
     }
 
+    self.setPriorities = function() {
+      qp.prioritiesSet = self.prioritiesSet = true;
+      self.refresh();
+    }
+
     self.back = function() {
       if(qp.answers.length>0){
         qp.quizResults = false;
@@ -1986,6 +1993,7 @@ class Quiz {
 
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
+      qp.constituencyView = true;
       console.log(e);
       e.stopPropagation();
       model.landedOnResult = 1;
@@ -2148,11 +2156,18 @@ class Quiz {
     var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
 
     return helpers.assembleCards({
+      constituencyView: qp.constituencyView,
+      setPriorities: self.setPriorities,
       submitPriorities: self.submitPriorities,
       // quizPrioritiesNotSet: false,
+      resultsOnwards: true,
       quizTopics: quiz.quizTopics,
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
+      prioritiesSet: qp.prioritiesSet,
+      quizPriorityPage: qp.quizResults && !qp.prioritiesSet,
+      partyResults: qp.prioritiesSet && !qp.constituencyView,
+      properResults: self.quizResults && qp.prioritiesSet,
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
       resultPercentage: self.resultsData.percentage,
