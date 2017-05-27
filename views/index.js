@@ -1670,6 +1670,7 @@ class Quiz {
     const self = this;
     const qp = model.user.quizProgress;
     const quiz = model.questions;
+    qp.questionPointer = qp.questionPointer ? qp.questionPointer : 0;
     qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
     qp.prioritiesSet = qp.prioritiesSet ? qp.prioritiesSet : false;
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
@@ -1787,7 +1788,7 @@ class Quiz {
       })
     }
 
-    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.opinions.length]];
+    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
     console.log("Running quiz with question order:",qp.questionSeries)
     console.log("Running quiz with question DB:",quiz.questionDB)
     console.log("Running quiz with current answers:",qp.opinions)
@@ -1796,9 +1797,9 @@ class Quiz {
     self.next = function() {
       self.updateShareLinks();
 
-      if (qp.opinions.length > 0) qp.startingQuiz = false;
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: quiz.questionDB[qp.questionSeries.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.opinions.length-1], fullData: qp});
-      if(qp.opinions.length < qp.questionSeries.length){
+      if (qp.questionPointer > 0) qp.startingQuiz = false;
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, question: quiz.questionDB[qp.questionSeries.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.questionPointer-1], fullData: qp});
+      if(qp.questionPointer < qp.questionSeries.length){
         self.refresh();
       } else {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
@@ -1817,29 +1818,35 @@ class Quiz {
     self.answerYes = function(){ self.answer("yes") }
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
+      console.log("Answer Yes/No");
       qp.answers.push(answer);
+      self.submitOpinion(answer === "yes" ? 0.8 : 0.2);
       if (qp.answers.length==qp.questionSeries.length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
     }
+    self.answerSubquestion = function(answer) {
+      console.log("Improve on Yes/No");
+      qp.answers[qp.answers.length-1] = answer;
+      self.submitOpinion(answer,true);
+      self.next();
+    }
     self.skipSubquestion = function() {
-      var answers = qp.answers;
-      //This doesn't work if the answer hasn't been given yet
-      var opinion = answers[answers.length-1] === "yes" ? 0.8 : 0.2;
-      self.submitOpinion(opinion);
+      console.log("Stay with Yes/No");
+      var opinion = qp.answers[qp.answers.length-1] === "yes" ? 0.8 : 0.2;
+      self.submitOpinion(opinion,true);
       self.next();
     }
 
-    // self.submitPriorities = function(x) {
-    //   console.log("Issue ",x)
-    //   qp.prioritiesSet = true;
-    //   // now update the 'weight' property of each question?
-    //   // model.user.opinions.issues[issue].debates[debate].opinion
-    //   // qp.questions
-    // }
-    self.submitOpinion = function(opinion, thisQuestion = self.currentQuestion) {
-      model.user.quizProgress.opinions.push(opinion);
+    self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
+      if(commitToAnswer) {
+        console.log("Next Q")
+        model.user.quizProgress.opinions.push(opinion);
+        qp.questionPointer++;
+      } else {
+        console.log("Same Q")
+      }
 
       var issue = thisQuestion.issue;
       var debate = thisQuestion.debate;
@@ -1862,14 +1869,11 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        var userOpinionNum = qp.opinions[qp.opinions.length-1];
+        var userOpinionNum = qp.opinions[qp.questionPointer-1];
         var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
         var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
         var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
-        // console.log('partyOpinionNum');
-        // console.log(partyOpinionNum);
-        // console.log('matchScore');
-        // console.log(matchScore);
+
         if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
           var userOpinion = getOpinionText(thisQuestion, opinion);
           var partyOpinion = getOpinionText(thisQuestion, partyOpinionNum) || -1;
@@ -1889,9 +1893,8 @@ class Quiz {
         return newScore;
       });
       self.updatePartyPercentages(newScores);
-
-      self.next();
     }
+
     self.recalculateOpinions = function() {
       // Clear opinions
       model.user.quizProgress.opinions = [];
@@ -1899,7 +1902,7 @@ class Quiz {
       qp.questionSeries.forEach((q) => {
         var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
         console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
-        self.submitOpinion(mq.opinion, quiz.questionDB[q]);
+        self.submitOpinion(mq.opinion, true, quiz.questionDB[q]);
       });
     }
     self.reprioritiseTopic = function(topic,i) {
@@ -1925,8 +1928,9 @@ class Quiz {
       if(qp.answers.length>0){
         qp.quizResults = false;
         qp.quizResultsPage = false;
-        if(qp.opinions.length===qp.answers.length){
+        if(qp.questionPointer===qp.answers.length){
           qp.opinions.pop();
+          qp.questionPointer--;
         } else {
           qp.answers.pop();
         }
@@ -2089,8 +2093,8 @@ class Quiz {
     const countriesData = allData.getAllData().countriesData;
     const qp = model.user.quizProgress;
     const quiz = model.questions;
-    const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.opinions.length]] : null;
-
+    const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.questionPointer]] : null;
+    console.log("Subquestions",subquestions);
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
       qp.hasStarted = true;
@@ -2101,7 +2105,7 @@ class Quiz {
     if(subquestions){
       subquestions.forEach(function(subanswer){
         subanswer.answer = function(){
-          self.submitOpinion(subanswer.opinion);
+          self.answerSubquestion(subanswer.opinion);
         }
       })
     }
@@ -2176,11 +2180,11 @@ class Quiz {
       resultPercentage: self.resultsData.percentage,
       currentQuestionI: self.currentQuestionI,
       currentQuestion: self.currentQuestion,
-      currentQuestionAnswered: qp.answers[qp.opinions.length]!==undefined,
-      currentQuestionYes: qp.answers[qp.opinions.length]==="yes",
-      currentQuestionNo: qp.answers[qp.opinions.length]==="no",
-      currentSubquestion: self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.opinions.length]] : null,
-      progressBarWidth: ((qp.opinions.length/qp.questionSeries.length)*100) + "%",
+      currentQuestionAnswered: qp.answers[qp.questionPointer]!==undefined,
+      currentQuestionYes: qp.answers[qp.questionPointer]==="yes",
+      currentQuestionNo: qp.answers[qp.questionPointer]==="no",
+      currentSubquestion: self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.questionPointer]] : null,
+      progressBarWidth: ((qp.questionPointer/qp.questionSeries.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skipSubquestion,
@@ -2193,7 +2197,7 @@ class Quiz {
       quizStarted: self.quizStarted,
       startStudentCompare: self.startStudentCompare,
       startSingleSentence: self.startSingleSentence,
-      startingQuiz: self.startingQuiz,
+      startingQuiz: self.startingQuiz && qp.answers[qp.questionPointer]==undefined,
       safeSeatMessage: safeSeatMessage,
       countrySelected: self.countrySelected,
       countriesData: countriesData,
