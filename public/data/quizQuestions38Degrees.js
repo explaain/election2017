@@ -170,7 +170,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should there be a higher levy charged on companies hiring migrant workers?",
+   question: "Should those hiring migrant workers have to pay a fee to government to do so?",
    issue: "immigration",
    debate: "38-immigration-1",
    answers: {
