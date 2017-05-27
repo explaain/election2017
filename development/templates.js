@@ -1822,11 +1822,11 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizTopLine",
+        "condition": "topLineConditional",
         "content": [
           {
             "dom": ".quizSkip",
             "content": "Skip >",
-            "condition": "quizStarted && countrySelected",
             "mapping": [
               ["progressBarWidth", "progressBarWidth"],
               ["countrySelected", "countrySelected"],

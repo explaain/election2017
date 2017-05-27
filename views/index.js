@@ -2155,7 +2155,9 @@ class Quiz {
     }
     var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
 
+    var partyResults = qp.prioritiesSet && !qp.constituencyView;
     return helpers.assembleCards({
+      topLineConditional: self.quizStarted && self.countrySelected && !partyResults,
       constituencyView: qp.constituencyView,
       setPriorities: self.setPriorities,
       submitPriorities: self.submitPriorities,
