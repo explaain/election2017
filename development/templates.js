@@ -2243,7 +2243,7 @@ module.exports = function(CardTemplates){
     "dom": ".quizAnswersYesNo",
     "content": [
       {
-        "dom": ".quizAnswerYesNo.no.quizPop",
+        "dom": ".quizAnswerYesNo.no.initial.quizPop",
         "content": "No",
         "attr": {
           "onclick": {
@@ -2252,7 +2252,7 @@ module.exports = function(CardTemplates){
         }
       },
       {
-        "dom": ".quizAnswerYesNo.yes.quizPop",
+        "dom": ".quizAnswerYesNo.yes.initial.quizPop",
         "content": "Yes",
         "attr": {
           "onclick": {
@@ -2291,7 +2291,7 @@ module.exports = function(CardTemplates){
     ]
   }
   CardTemplates.quizSubquestionAnswer = {
-    "dom": ".quizSubquestionAnswer.quizPop",
+    "dom": ".quizSubquestionAnswer.secondary.quizPop",
     "content": {
       "var": "label"
     },
