@@ -1564,7 +1564,7 @@ module.exports = function(CardTemplates){
         "content":[
           {
             "dom": "h2.q-priority",
-            "content": "Which are your top-priority issues?"
+            "content": "Are any of these issues top‑priority for you?"
           },
           {
             "dom": "div.priority",
@@ -1590,22 +1590,27 @@ module.exports = function(CardTemplates){
                 },
                 "content": [
                   {
-                    "dom": "span",
-                    "content": {
-                      "var": "label"
-                    }
-                  },
-                  {
-                    "dom": "span.t-featured",
-                    "content": "🌟",
-                    "condition": "highPriority"
+                    "dom": "div",
+                    "content": [
+                      {
+                        "dom": "span",
+                        "content": {
+                          "var": "label"
+                        }
+                      },
+                      {
+                        "dom": "span.t-featured",
+                        "content": "🌟",
+                        "condition": "highPriority"
+                      }
+                    ]
                   }
                 ]
               }
             ]
-          }
-          ,{
-            "dom": "button.submitPriorities",
+          },
+          {
+            "dom": "a.submitPriorities",
             "content": "Calculate my results",
             "attr": {
               "onclick": {
@@ -1970,11 +1975,6 @@ module.exports = function(CardTemplates){
         "dom": ".card.priority",
         "condition": "quizPriorityPage",
         "content": [
-          {
-            "content": {
-              "var": "prioritiesSet"
-            }
-          },
           {
             "dom": ".card-visible.text-center",
             "content": [

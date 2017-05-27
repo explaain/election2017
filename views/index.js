@@ -2168,7 +2168,7 @@ class Quiz {
       quizResultsPage: self.quizResultsPage,
       prioritiesSet: qp.prioritiesSet,
       quizPriorityPage: qp.quizResults && !qp.prioritiesSet,
-      partyResults: qp.prioritiesSet && !qp.constituencyView,
+      partyResults: partyResults,
       properResults: self.quizResults && qp.prioritiesSet,
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
