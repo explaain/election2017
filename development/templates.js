@@ -1557,68 +1557,64 @@ module.exports = function(CardTemplates){
 
 
   CardTemplates.quizPriority = {
-    "dom":"div.content",
+    "dom":"div.content.priorities",
     "content":[
       {
         "dom":"div.body-content",
         "content":[
           {
-            "dom": "h2.q-high-priority",
-            "content": "These things really matter"
+            "dom": "h2.q-priority",
+            "content": "Which are your top-priority issues?"
           },
           {
-            "dom": "div.high-priority",
-            "loop": "quizTopicsHigher",
-            "content": [{"template": "quizTopicPlate"}]
+            "dom": "div.priority",
+            "loop": "quizTopics",
+            "content":[
+              {
+                "dom": "a.quiz-topic-plate",
+                "attr": {
+                  // "style": {
+                  //   "background-color": {
+                  //     "var": "color"
+                  //   }
+                  // },
+                  "onclick": {
+                    "var": "topicTogglePriority"
+                  },
+                  // "data-label": {
+                  //   "var": "label"
+                  // },
+                  // "class": {
+                  //   "var": "isNewClass"
+                  // }
+                },
+                "content": [
+                  {
+                    "dom": "span",
+                    "content": {
+                      "var": "label"
+                    }
+                  },
+                  {
+                    "dom": "span.t-featured",
+                    "content": "🌟",
+                    "condition": "highPriority"
+                  }
+                ]
+              }
+            ]
           },
           {
-            "dom": "div.divider",
-            "content": ""
-          },
-          {
-            "dom": "div.low-priority",
-            "loop": "quizTopicsLower",
-            "content": [{"template": "quizTopicPlate"}]
-          },
-          {
-            "dom": "h2.q-low-priority",
-            "content": "LOWER PRIORITY"
+            "dom": "a.submitPriorities",
+            "content": "Calculate my results",
+            "attr": {
+              "onclick": {
+                "var": "submitPriorities"
+              }
+            }
           }
         ]
       }
-    ]
-  }
-
-  CardTemplates.quizTopicPlate = {
-    "dom": "a.quiz-topic-plate",
-    "attr": {
-      "style": {
-        "background-color": {
-          "var": "color"
-        }
-      },
-      "onclick": {
-        "var": "onTopicClick"
-      },
-      "data-label": {
-        "var": "label"
-      },
-      "class": {
-        "var": "isNewClass"
-      }
-    },
-    "content": [
-      {
-        "dom": "span",
-        "content": {
-          "var": "label"
-        }
-      },
-      {
-        "dom": "span.t-featured",
-        "content": "🌟",
-        "condition": "highPriority"
-      },
     ]
   }
 
@@ -1877,6 +1873,28 @@ module.exports = function(CardTemplates){
         "content": "⟲ Retake Quiz"
       },
       {
+        "dom": ".card.priority",
+        "condition": "quizResultsPage",
+        "content": [
+          {
+            "dom": ".card-visible.text-center",
+            "content": [
+              {
+                "dom": ".content",
+                "content": [
+                  {
+                    "template": "quizPriority",
+                    "mapping": [
+                      ["quizTopics", "quizTopics"]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
         "dom": ".card.results-top",
         "condition": "quizResultsPage",
         "content": [
@@ -1885,6 +1903,7 @@ module.exports = function(CardTemplates){
             "content": [
               {
                 "dom": ".content",
+                // "condition": "quizPrioritiesSet",
                 "content": [
                   {
                     "dom": "div.step-number.step-1",

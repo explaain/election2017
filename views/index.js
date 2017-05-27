@@ -51,7 +51,6 @@ var props = new Set();
 Object.keys(cfg).forEach((site) => {
   for(k in cfg[site]) { props.add(k) }
 });
-console.log(props)
 // Patch each brand object with default 'ge2017' data
 Object.keys(cfg).forEach((site) => {
   props.forEach((k) => {
@@ -60,7 +59,7 @@ Object.keys(cfg).forEach((site) => {
   })
 });
 const config = cfg;
-console.log("Configuration stuffs",config);
+console.log("Site configuration",config);
 
 trackEvent("Landed",{page: location.pathname});
 
@@ -711,42 +710,42 @@ class Step {
         break;
 
       case 'quiz-priority':
-        model.landedOnQuizPriority = 1; // todo: temporary, refactor
-        model.showProgressBar = true;
-
-        var currentTopics = [];
-        model.user.quizFlow.forEach(function(flow){
-          flow.forEach(function(issueName){
-            currentTopics.push(issueName.split('-')[0]);
-          });
-        });
-
-        var quizTopicsLower = [], quizTopicsHigher = [];
-        Object.keys(model.user.opinions.issues).forEach(function(issueName){
-          let issue = model.tasks['issue-' + issueName];
-          if(~model.featuredTopics.indexOf(issueName)){
-            issue.highPriority = true;
-            quizTopicsHigher.push(issue);
-          }
-          else{
-            issue.highPriority = false;
-            quizTopicsLower.push(issue);
-          }
-          issue.isNewClass = ~currentTopics.indexOf(issueName) ? 'new' : '';
-          issue._key = issueName;
-        });
-
-        data.cardGroups.push([{
-          type: 'quiz-priority',
-          name: 'Please select priority:',
-          description: 'Please select priority 👌',
-          quizTopicsLower: quizTopicsLower,
-          quizTopicsHigher: quizTopicsHigher
-        }], [{
-          type: "goto-postcode-button",
-          heading: "Next!",
-          buttonText: "Next"
-        }])
+        // model.landedOnQuizPriority = 1; // todo: temporary, refactor
+        // model.showProgressBar = true;
+        //
+        // var currentTopics = [];
+        // model.user.quizFlow.forEach(function(flow){
+        //   flow.forEach(function(issueName){
+        //     currentTopics.push(issueName.split('-')[0]);
+        //   });
+        // });
+        //
+        // var quizTopicsLower = [], quizTopicsHigher = [];
+        // Object.keys(model.user.opinions.issues).forEach(function(issueName){
+        //   let issue = model.tasks['issue-' + issueName];
+        //   if(~model.featuredTopics.indexOf(issueName)){
+        //     issue.highPriority = true;
+        //     quizTopicsHigher.push(issue);
+        //   }
+        //   else{
+        //     issue.highPriority = false;
+        //     quizTopicsLower.push(issue);
+        //   }
+        //   issue.isNewClass = ~currentTopics.indexOf(issueName) ? 'new' : '';
+        //   issue._key = issueName;
+        // });
+        //
+        // data.cardGroups.push([{
+        //   type: 'quiz-priority',
+        //   name: 'Please select priority:',
+        //   description: 'Please select priority 👌',
+        //   quizTopicsLower: quizTopicsLower,
+        //   quizTopicsHigher: quizTopicsHigher
+        // }], [{
+        //   type: "goto-postcode-button",
+        //   heading: "Next!",
+        //   buttonText: "Next"
+        // }])
         break;
 
       case 'vote-worth':
@@ -1131,35 +1130,35 @@ class CardContent {
         }
         // return helpers.assembleCards(data, 'postcodeInput');
 
-      case 'quiz-priority':
-        try {
-          var onTopicClick = function(topicKey){
-            let topicNameIndex = model.featuredTopics.indexOf(topicKey);
-            if(~topicNameIndex){
-              model.user.opinions.issues[topicKey].highPriority = false;
-              model.featuredTopics.splice(topicNameIndex, 1);
-            }
-            else{
-              model.user.opinions.issues[topicKey].highPriority = true;
-              model.featuredTopics.push(topicKey);
-            }
-            return false;
-          };
-
-          ['quizTopicsLower', 'quizTopicsHigher'].forEach(function(varName){
-            data[varName].map(function(topic){
-              topic.onTopicClick = function(e){
-                e.stopPropagation();
-                return onTopicClick(topic._key);
-              };
-              return topic;
-            });
-          });
-
-          return helpers.assembleCards(data, 'quizPriority');
-        } catch(e) {
-
-        }
+      // case 'quiz-priority':
+      //   try {
+      //     var onTopicClick = function(topicKey){
+      //       let topicNameIndex = model.featuredTopics.indexOf(topicKey);
+      //       if(~topicNameIndex){
+      //         model.user.opinions.issues[topicKey].highPriority = false;
+      //         model.featuredTopics.splice(topicNameIndex, 1);
+      //       }
+      //       else{
+      //         model.user.opinions.issues[topicKey].highPriority = true;
+      //         model.featuredTopics.push(topicKey);
+      //       }
+      //       return false;
+      //     };
+      //
+      //     ['quizTopicsLower', 'quizTopicsHigher'].forEach(function(varName){
+      //       data[varName].map(function(topic){
+      //         topic.onTopicClick = function(e){
+      //           e.stopPropagation();
+      //           return onTopicClick(topic._key);
+      //         };
+      //         return topic;
+      //       });
+      //     });
+      //
+      //     return helpers.assembleCards(data, 'quizPriority');
+      //   } catch(e) {
+      //
+      //   }
 
       case 'goto-postcode-button':
         data.buttonAction = function(e){
@@ -1711,29 +1710,38 @@ class Quiz {
       // self.next();
     }
 
-    // Deal with shuffling
-    if(!quiz.quizQuestions) {
+    // Initialise quiz questions
+    if(!quiz.quizQuestions || !quiz.quizTopics) {
       quiz.quizQuestions = config[SiteBrand].quizQuestions;
 
     	var initialOrder = []; // holds the question order, as loaded from file
     	quiz.questionDB = {} // holds the question objects
     	// groups of questions to shuffle within themselves
       var randomiseGroupsSet = new Set();
+      quiz.quizTopics = new Set(); // for priority labelling
       quiz.quizQuestions.forEach(function(q,I) {
     		q.I = I; // initial index
     		initialOrder.push(q.debate);
+        quiz.quizTopics.add(q.issue);
     		quiz.questionDB[q.debate] = q;
     		randomiseGroupsSet.add(q.randomiseGroup);
     	});
     	var randomiseGroups = Array.from(randomiseGroupsSet);
 
-    	console.log("Database of questions",initialOrder,quiz.questionDB);
+      quiz.quizTopics = Array.from(quiz.quizTopics);
+      quiz.quizTopics.forEach((topic,i) => quiz.quizTopics[i] = {
+        issue: topic,
+        label: topic,
+        highPriority: false,
+        topicTogglePriority: () => quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority
+      });
 
       qp.questionSeries = initialOrder;
-
-      console.log("Defining quiz.questionDB");
       quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
 
+      /* ---
+        Shuffle questions
+      */
       if(config[SiteBrand].randomise) {
         console.log("Randomise group indexes",randomiseGroupsSet);
 
@@ -1759,7 +1767,9 @@ class Quiz {
         })
         console.log("shuffled question order",qp.questionSeries);
       }
+      /* ---- */
     }
+
     quiz.questionDB = {};
     JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions)).forEach((q) => quiz.questionDB[q.debate] = q);
 
@@ -1836,10 +1846,10 @@ class Quiz {
         var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
         var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
         var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
-        console.log('partyOpinionNum');
-        console.log(partyOpinionNum);
-        console.log('matchScore');
-        console.log(matchScore);
+        // console.log('partyOpinionNum');
+        // console.log(partyOpinionNum);
+        // console.log('matchScore');
+        // console.log(matchScore);
         if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
           var userOpinion = getOpinionText(self.currentQuestion, opinion);
           var partyOpinion = getOpinionText(self.currentQuestion, partyOpinionNum) || -1;
@@ -1892,6 +1902,7 @@ class Quiz {
 
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
     self.updatePartyPercentages = function(map) {
+      console.log("updatePartyPercentages");
       if(qp.country){
         var topParty = {percentage: 0}
         map.forEach(function(party){
@@ -1922,6 +1933,12 @@ class Quiz {
     /* -------------------------
       All questions answered
     */
+    self.submitPriorities = function() {
+      qp.prioritiesSet = true;
+      // qp.opinions
+      // quizTopics.reduce((t) );
+    }
+
     self.updateShareLinks = function() {
         console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
       // self.facebookShareConstituencyHref = null;
@@ -2035,6 +2052,7 @@ class Quiz {
     const self = this;
     const countriesData = allData.getAllData().countriesData;
     const qp = model.user.quizProgress;
+    const quiz = model.questions;
     const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.opinions.length]] : null;
 
     // On Landing Page button click
@@ -2103,6 +2121,8 @@ class Quiz {
     var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
 
     return helpers.assembleCards({
+      quizPrioritiesNotSet: false,
+      quizTopics: quiz.quizTopics,
       quizResults: self.quizResults,
       quizResultsPage: self.quizResultsPage,
       resultLogo: self.resultsData.logo,
