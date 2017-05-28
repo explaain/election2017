@@ -298,7 +298,7 @@ var quizQuestions = [
  {
    question: "Should we ban pesticides which kill bees?",
    randomiseGroup: 2,
-   issue: "enviornment",
+   issue: "environment",
    debate: "38-environment-2",
    helperCard:"http://api.explaain.com/Detail/5929a32bc3fde500115269ad",
    answers: {
@@ -423,7 +423,7 @@ var quizQuestions = [
          opinion: 1,
        },
        {
-         label: "because of its impact on climate change and the local enviornment. ",
+         label: "because of its impact on climate change and the local environment. ",
          opinion: 0.8,
        },
      ],
