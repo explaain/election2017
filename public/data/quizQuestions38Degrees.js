@@ -327,7 +327,7 @@ var quizQuestions = [
  {
    question: "Should there be a second EU referendum on the final Brexit deal?",
    randomiseGroup: 2,
-   issue: "eu",
+   issue: "EU",
    debate: "38-eu-1",
    answers: {
      yes: [
@@ -471,7 +471,7 @@ var quizQuestions = [
  {
    question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
    randomiseGroup: 2,
-   issue: "eu",
+   issue: "EU",
    debate: "38-eu-2",
    helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",
    answers: {

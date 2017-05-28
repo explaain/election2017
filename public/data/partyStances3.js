@@ -166,7 +166,7 @@ var partyStances ={
                 }
             }
          },
-         "eu":{
+         "EU":{
             debates:{
                "eu-1":{
                   question:"Should the UK have voted to leave the EU?",
