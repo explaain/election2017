@@ -1677,7 +1677,6 @@ class Quiz {
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = qp.quizResults ? qp.quizResults : false;
     qp.quizResultsPage = qp.prioritiesSet || false;
-    qp.weighting = qp.weighting ? qp.weighting : 5;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
@@ -1716,7 +1715,7 @@ class Quiz {
     }
 
     // Initialise quiz questions
-    if(!quiz.quizQuestions || !quiz.quizTopics) {
+    if(!quiz.quizQuestions) {
       quiz.quizQuestions = config[SiteBrand].quizQuestions;
 
     	var initialOrder = []; // holds the question order, as loaded from file
@@ -1732,19 +1731,6 @@ class Quiz {
     		if(config[SiteBrand].randomise) randomiseGroupsSet.add(q.randomiseGroup);
     	});
     	var randomiseGroups = Array.from(randomiseGroupsSet);
-
-      quiz.quizTopics = Array.from(quiz.quizTopics);
-      quiz.quizTopics.forEach(function(topic,i) {
-        quiz.quizTopics[i] = {
-          issue: topic,
-          label: topic,
-          highPriority: false,
-          topicTogglePriority: () => {
-            self.reprioritiseTopic(topic,i);
-            // self.refresh();
-          }
-        }
-      });
 
       qp.questionSeries = initialOrder;
       quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
@@ -1806,6 +1792,39 @@ class Quiz {
     console.log("Running quiz with current answers:",qp.opinions)
     console.log("Current question",self.currentQuestion);
 
+    // Topics for prioritising
+    // This needs to run after every question
+    // Because topics for weighting cannot include those entirely skipped by users
+    self.defineCalculableTopics = function() {
+      var oldPriorities = JSON.parse(JSON.stringify(quiz.quizTopics));
+      console.log("Old priorities",oldPriorities);
+      quiz.quizTopics = new Set(); // for priority labelling
+
+      // This will also be used by self.recalculateOpinions
+      qp.calculableQuestions = qp.questionSeries.filter((q,i)=>{
+        // get questions that have not been answered 'false' (i.e. skipped)
+        return typeof qp.answers[i] !== 'undefined' && qp.answers[i] !== false
+      });
+      console.log("calculableQuestions",qp.calculableQuestions)
+
+      qp.calculableQuestions.forEach(function(q) {
+        quiz.quizTopics.add(quiz.questionDB[q].issue);
+      })
+      quiz.quizTopics = Array.from(quiz.quizTopics);
+      quiz.quizTopics.forEach(function(topic,i) {
+        quiz.quizTopics[i] = {
+          issue: topic,
+          label: topic,
+          highPriority: oldPriorities.length && oldPriorities.find((p)=>p.issue == topic) ? oldPriorities.find((p)=>p.issue == topic).highPriority  : false,
+          topicTogglePriority: () => {
+            console.log("Restoring previous priority",oldPriorities.find((p)=>p.issue == topic))
+            self.reprioritiseTopic(topic,i);
+          }
+        }
+      });
+      self.refresh();
+    }
+
     self.next = function() {
       self.updateShareLinks();
 
@@ -1856,13 +1875,37 @@ class Quiz {
         console.log("Next Q")
         model.user.quizProgress.opinions.push(opinion);
         qp.questionPointer++;
+        self.refresh();
+        self.next();
       } else {
         console.log("Same Q")
       }
 
+      model.user.opinions.issues = model.user.opinions.issues || {};
+
+      if(opinion === false) {
+        console.log("Question skipped, won't consider in calculations")
+
+        // Erase from model
+        var issue = thisQuestion.issue;
+        var debate = thisQuestion.debate;
+
+        if(model.user.opinions.issues[issue]) {
+          if(model.user.opinions.issues[issue].debates[debate])
+            delete model.user.opinions.issues[issue].debates[debate]
+
+          if(model.user.opinions.issues[issue].debates.length < 1)
+            delete model.user.opinions.issues[issue]
+        }
+
+        self.defineCalculableTopics();
+        self.next();
+        return false;
+      }
+      // else
+
       var issue = thisQuestion.issue;
       var debate = thisQuestion.debate;
-      model.user.opinions.issues = model.user.opinions.issues || {};
       model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
       model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
       model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
@@ -1906,6 +1949,7 @@ class Quiz {
       });
       console.log('newScores');
       console.log(newScores);
+      self.defineCalculableTopics();
       self.updatePartyPercentages(newScores);
     }
 
@@ -1913,22 +1957,20 @@ class Quiz {
       // Clear opinions
       model.user.quizProgress.opinions = [];
       // Now resubmit them, mocking  currentQuestion  as  quiz.questionDB[q]
-      qp.questionSeries.forEach((q) => {
+      qp.calculableQuestions.forEach((q) => {
         var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
         console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
         self.submitOpinion(mq.opinion, true, quiz.questionDB[q]);
       });
     }
+
     self.reprioritiseTopic = function(topic,i) {
-      console.log("Toggling issue",topic)
+      console.log(`Changing priority of __${topic}__ from ${quiz.quizTopics[i].highPriority} to ${!quiz.quizTopics[i].highPriority}`);
       quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
-      var newWeight = quiz.quizTopics[i].highPriority ? qp.weighting : 1;
-      // console.log("!!! Changing priority -",topic,newWeight);
+      var newWeight = quiz.quizTopics[i].highPriority ? 5 : 1;
       Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
         console.log("!!!!! Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
-        // model.user.opinions.issues[topic].debates[k] = model.user.opinions.issues[topic].debates[k] || {}
         model.user.opinions.issues[topic].debates[k].weight = newWeight
-        // console.log("!!!!! Changed priority - ",k,newWeight);
       })
       self.recalculateOpinions();
     }
@@ -1959,6 +2001,11 @@ class Quiz {
       }
       self.next();
       self.refresh();
+    }
+    self.skipQuestion = function() {
+      var skipOpinion = false;
+      qp.answers.push(skipOpinion);
+      self.submitOpinion(skipOpinion,true);
     }
 
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
@@ -2184,6 +2231,7 @@ class Quiz {
       setPriorities: self.setPriorities,
       submitPriorities: self.submitPriorities,
       // quizPrioritiesNotSet: false,
+      isSubquestion: subquestions !== undefined,
       resultsOnwards: true,
       quizTopics: quiz.quizTopics,
       quizResults: qp.quizResults,
@@ -2226,6 +2274,7 @@ class Quiz {
       isWaiting: self.isWaiting,
       finalResults: self.finalResults,
       back: self.back,
+      skipQuestion: self.skipQuestion,
       facebookShareHref: facebookShareHref,
       twitterShareHref: twitterShareHref,
       facebookShareAlignmentHref: qp.facebookShareAlignmentHref,

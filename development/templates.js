@@ -1835,22 +1835,18 @@ module.exports = function(CardTemplates){
         "condition": "topLineConditional",
         "content": [
           {
-            "dom": ".quizSkip",
-            "content": "Skip >",
-            "mapping": [
-              ["progressBarWidth", "progressBarWidth"],
-              ["countrySelected", "countrySelected"],
-              ["noProgressBarNeeded", "standaloneResults"]
-            ]
-            /*"attr": {
-              "onclick": {
-                "var": "skip"
-              }
-            }*/
-          },
-          {
             "dom": "div",
             "content": [
+              {
+                "dom": ".quizSkip",
+                "content": "Skip >",
+                "attr": {
+                  "onclick": {
+                    "var": "skipQuestion"
+                  }
+                },
+                "condition": "!isSubquestion"
+              },
               {
                 "dom": ".quizBack",
                 "content": "< Back",
@@ -1859,7 +1855,7 @@ module.exports = function(CardTemplates){
                     "var": "back"
                   }
                 },
-                "condition": "!standaloneResults && !finalResults"
+                // "condition": "!standaloneResults && !finalResults"
               }
             ]
           },

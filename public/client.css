@@ -1596,26 +1596,25 @@ a:hover .quizPercentagesPartyFace {
   background-color: #f1f1f1;
 }
 
-.quizBack {
-  float: left;
+.quizBack,
+.quizSkip {
   width:60px;
   color: #ccc;
   cursor: pointer;
   margin-top: -5px;
 }
 
-.quizSkip {
-  float: right;
-  width:60px;
-  color: #ccc;
-  cursor: pointer;
-  pointer-events: none;
-  opacity: 0;
-}
-
 .quizSkip:hover,
 .quizBack:hover {
   font-weight: bold;
+}
+
+.quizBack {
+  float: left;
+}
+
+.quizSkip {
+  float: right;
 }
 
 .quizTopLine {
