@@ -1363,6 +1363,15 @@ p.waiting-text {
   background-color: #00a2e5;
 }
 
+.body._38degrees .quizSubquestionAnswer {
+  border-color: #00ADD0;
+  color: #00ADD0;
+}
+.body._38degrees .quizSubquestionAnswer:hover {
+  background-color: #00ADD0;
+  color: white;
+}
+
 .quizSubquestionOr {
   margin: 0;
 }
@@ -1520,6 +1529,19 @@ a:hover .quizPercentagesPartyFace {
   100%  {transform: scale(1,1);}
 }
 
+.bigActionButton {
+  display: inline-block;
+  font-size:20px;
+  font-weight: bold;
+  padding: 10px 20px;
+  background-color: #dd2569;
+  color: white;
+  border-radius:6px;
+  margin: 10px 0 30px;
+  cursor: pointer;
+  border: solid 2px #dd2569;
+}
+
 .startQuiz {
   display: inline-block;
   font-size:20px;
@@ -1539,12 +1561,14 @@ a:hover .quizPercentagesPartyFace {
 }
 
 .body._38degrees .startQuiz {
-  background-color: #FF7900;
+  background-color: white;
   border-color: #FF7900;
+  color: #FF7900;
 }
 .body._38degrees .startQuiz:hover {
-  background-color: white;
-  color: #FF7900;
+  background-color: #FF7900;
+  border-color: #FF7900;
+  color: white;
 }
 
 .card.quiz-extra {
@@ -1770,16 +1794,16 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 .body.quiz._unilad .bestMatchSoFar {
   display: none;
 }
-.body.quiz.ge2017 .bestMatch {
+.body.quiz._ge2017 .bestMatch {
   display: none;
 }
 
 
-.body.quiz.ge2017 .resultTips {
+.body.quiz._ge2017 .resultTips {
   display: none;
 }
 
-.body.quiz.ge2017 a.quizPercentagesParty, .body.quiz.38degrees a.quizPercentagesParty {
+.body.quiz._ge2017 a.quizPercentagesParty, .body.quiz.38degrees a.quizPercentagesParty {
   pointer-events: none;
 }
 
@@ -1905,4 +1929,9 @@ span.t-featured {
 .helper-text {
   margin: 10px;
   display: inline-block;
+  line-height: 1.4;
+}
+.card .content .helper-desc {
+  margin: 0px 0 30px;
+  line-height: 1.4;
 }

@@ -1564,7 +1564,11 @@ module.exports = function(CardTemplates){
         "content":[
           {
             "dom": "h2.q-priority",
-            "content": "Are any of these issues top‑priority for you?"
+            "content": "Finally, do you care more about certain issues than others?"
+          },
+          {
+            "dom": "p.helper-text.helper-desc",
+            "content": "Click on as many topics as you like and we’ll weight your answer on those topics more highly."
           },
           {
             "dom": "div.priority",
@@ -1573,6 +1577,9 @@ module.exports = function(CardTemplates){
               {
                 "dom": "a.quiz-topic-plate",
                 "attr": {
+                  "class": {
+                    "var": "highPriorityClass"
+                  },
                   // "style": {
                   //   "background-color": {
                   //     "var": "color"
@@ -1584,9 +1591,6 @@ module.exports = function(CardTemplates){
                   // "data-label": {
                   //   "var": "label"
                   // },
-                  // "class": {
-                  //   "var": "isNewClass"
-                  // }
                 },
                 "content": [
                   {
@@ -1610,7 +1614,7 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "a.submitPriorities",
+            "dom": "a.submitPriorities.btn.btn-success.bigActionButton",
             "content": "Calculate my results",
             "attr": {
               "onclick": {
