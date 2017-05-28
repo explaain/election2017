@@ -2129,23 +2129,90 @@ class Quiz {
     countriesData.forEach(function(country){
       country.parties.forEach(function(party){
         const matches = party.matches;
+        const qp = model.user.quizProgress;
+
+        const issues = allData.getAllData().partyStances.opinions.issues;
+
+        const qs_asked = qp.questionSeries.slice(0, qp.opinions.length);
+
+        const answered_issues = Object.entries(issues).filter(function(issue) {
+            const debates = Object.keys(issue[1].debates);
+            return (debates.filter(function(q) { return qs_asked.indexOf(q) !== -1; }).length > 0);
+        });
+
+        const actual_issue_cards = {};
+
+        answered_issues.map(function(issue) {
+            const opinionsPerIssue = Object
+                .entries(issue[1].debates)
+                .filter(function(debate) {
+                    return qs_asked.indexOf(debate[0]) !== -1;
+                })
+                .map(function(debate) {
+                    return {
+                        question: debate[1].question,
+                        partyOpinion: debate[1].parties[party.key].opinion,
+                        userOpinion: qp.opinions[qs_asked.indexOf(debate[0])]
+                    };
+                })
+
+              var ltempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+              var ltempCard = {
+                '@id': ltempKey,
+                '@type': 'QuizMatch',
+                 name: "Here's how you rate "+ issue[0] + " compared to "+party.fullName,
+                 matches: opinionsPerIssue
+              }
+
+              actual_issue_cards[issue[0]] = {
+                  key: ltempKey,
+                  card: ltempCard
+              }
+        });
+
+        let running_upweight = 0;
+
+        const scoresPerIssue = answered_issues.map(function(issue) {
+            const score = Object
+
+            .entries(issue[1].debates)
+            .filter(function(debate) {
+                return qs_asked.indexOf(debate[0]) !== -1;
+            })
+            .map(function(debate) {
+                const upweight = model.user.opinions.issues[issue[0]].debates[debate[0]].weight || 1;
+                running_upweight += upweight;
+                return upweight * Math.abs(debate[1].parties[party.key].opinion - qp.opinions[qs_asked.indexOf(debate[0])]);
+            })
+            .reduce(function(a,b) {
+                return a + b;
+            })
+
+            return { name: issue[0], link: actual_issue_cards[issue[0]].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
+        });
+
+          var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
+            return obj.key;
+          });
+
         party.openMatches = function(){
-          var tempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+          var tempKey = 'http://api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
           var tempCard = {
             '@id': tempKey,
-            '@type': 'QuizMatch',
-            name: matches.length ? 'How you and ' + party.fullName + ' match:' : "Answer a question to see how you match",
-            matches: matches.length ? matches : []
-          }
-          // var tempKey2 = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
-          // var tempCard2 = {
-          //   '@id': tempKey2,
-          //   '@type': 'QuizMatch',
-          //   name: 'How you and ' + party.fullName + ' match:',
-          //   matches: [matches[1]]
-          // }
-          explaain.addClientCards(tempCard)
-          // explaain.addClientCards(tempCard2)
+            '@type': 'IssueMatch',
+             name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+             issues: scoresPerIssue,
+             links: allCardKeys
+          };
+
+          var allCards = Object.values(actual_issue_cards).map(function(obj) {
+            return obj.card;
+          });
+
+          allCards.push(tempCard);
+
+          explaain.addClientCards(allCards);
+          explaain.showOverlay(allCardKeys[0]);
           explaain.showOverlay(tempKey);
         }
 
