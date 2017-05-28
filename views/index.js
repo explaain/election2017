@@ -36,7 +36,8 @@ var cfg = {
     footerImg: "/img/ge2017logobeta.png",
     footerClass: "ge2017Footer",
     randomise: true,
-    numbering: false,
+    numbering: true,
+    insertYesNo: true,
     quizQuestions: allData.getAllData().quizQuestions38Degrees
   },
   'unilad': {
@@ -1787,6 +1788,17 @@ class Quiz {
         quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
       })
     }
+    if(config[SiteBrand].insertYesNo) {
+      qp.questionSeries.forEach((k,i) => {
+        quiz.questionDB[k].answers.yes.forEach((a,j) => {
+          console.log(a);
+          a.label = "Yes, " + a.label
+        })
+        quiz.questionDB[k].answers.no.forEach((a,j) => {
+          a.label = "No, " + a.label
+        })
+      })
+    }
 
     self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
     console.log("Running quiz with question order:",qp.questionSeries)
@@ -1869,7 +1881,7 @@ class Quiz {
       }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        var userOpinionNum = qp.opinions[qp.questionPointer-1];
+        var userOpinionNum = opinion; //commitToAnswer ? qp.opinions[qp.questionPointer-1] : qp.opinions[qp.questionPointer];
         var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
         var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
         var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
@@ -1892,6 +1904,8 @@ class Quiz {
         }
         return newScore;
       });
+      console.log('newScores');
+      console.log(newScores);
       self.updatePartyPercentages(newScores);
     }
 
@@ -2201,6 +2215,7 @@ class Quiz {
       startStudentCompare: self.startStudentCompare,
       startSingleSentence: self.startSingleSentence,
       startingQuiz: self.startingQuiz && qp.answers[qp.questionPointer]==undefined,
+      nowProgressingThroughQuiz: self.quizStarted && !self.startingQuiz && !self.quizResults,
       safeSeatMessage: safeSeatMessage,
       countrySelected: self.countrySelected,
       countriesData: countriesData,

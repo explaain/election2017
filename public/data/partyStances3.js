@@ -92,7 +92,7 @@ var partyStances ={
                    "lib-dem": {
                      opinion: 0.4
                    },
-                   "plaid": {
+                   "plaid-cymru": {
                      opinion: 0.4
                    },
                    "ukip": {
@@ -562,13 +562,13 @@ var partyStances ={
                     "lib-dem": {
                       opinion: 1
                     },
-                  "green": {
-                    opinion: 0.6
-                  },
-                  "ukip": {
-                    opinion: 0.5
-                  }
-                }
+                    "green": {
+                      opinion: 0.6
+                    },
+                    "ukip": {
+                      opinion: 0.5
+                    }
+                 }
               },
               "38-tax-2": {
                 question: "Should corporation tax rates be increased?",
@@ -797,7 +797,7 @@ var partyStances ={
                   "green": {
                     opinion: 1
                   },
-                  "plaid": {
+                  "plaid-cymru": {
                     opinion: 1
                   },
                   "ukip": {
@@ -874,7 +874,7 @@ var partyStances ={
                  "green": {
                    opinion: 1
                  },
-                 "plaid": {
+                 "plaid-cymru": {
                    opinion: 1
                  },
                  "ukip": {

@@ -1096,6 +1096,10 @@ a.explaain-link.discard-card-style:active,
   transition: width .5s;
 }
 
+.body._38degrees .progress-inner {
+  background-color: #FF7900;
+}
+
 /* Fixing specific browsers */
 
 /* Safari Mac */
@@ -1384,6 +1388,15 @@ p.waiting-text {
   color: white;
 }
 
+.body._38degrees .quizSubquestionSkip {
+  border-color: #FF7900;
+  color: #FF7900;
+}
+.body._38degrees .quizSubquestionSkip:hover {
+  background-color: #FF7900;
+  color: white;
+}
+
 .quizPercentages {
   width:100%;
   position: relative;
@@ -1519,11 +1532,19 @@ a:hover .quizPercentagesPartyFace {
   cursor: pointer;
   border: solid 2px #dd2569;
 }
-
 .startQuiz:hover {
   background-color: white;
   color: #dd2569;
   /*border-color: #ddd;*/
+}
+
+.body._38degrees .startQuiz {
+  background-color: #FF7900;
+  border-color: #FF7900;
+}
+.body._38degrees .startQuiz:hover {
+  background-color: white;
+  color: #FF7900;
 }
 
 .card.quiz-extra {
@@ -1879,4 +1900,9 @@ span.t-featured {
 
 .submitPriorities {
     padding: 6px 10px !important;
+}
+
+.helper-text {
+  margin: 10px;
+  display: inline-block;
 }

@@ -2117,7 +2117,8 @@ module.exports = function(CardTemplates){
               ["postcodeSubmit", "postcodeSubmit"],
               ["postcodeBinding", "postcodeBinding"],
               ["isWaiting", "isWaiting"],
-              ["startingQuiz", "startingQuiz"]
+              ["startingQuiz", "startingQuiz"],
+              ["nowProgressingThroughQuiz", "nowProgressingThroughQuiz"]
             ]
           },
           {
@@ -2208,6 +2209,16 @@ module.exports = function(CardTemplates){
                 "dom": "h2",
                 "content": {
                   "var": "question.question"
+                }
+              },
+              {
+                "dom": "a.helper-text.explaain-link",
+                "condition": "question.helperCard",
+                "content": "What does this mean?",
+                "attr": {
+                  "href": {
+                    "var": "question.helperCard"
+                  }
                 }
               },
               {
@@ -2410,6 +2421,11 @@ module.exports = function(CardTemplates){
             "content": [{"template": "quizPercentagesParty"}]
           }
         ]
+      },
+      {
+        "dom": "p.info-text",
+        "condition": "nowProgressingThroughQuiz",
+        "content": "This is how you've matched with the parties so far."
       },
       {
         "dom": ".partyNameSpacer",

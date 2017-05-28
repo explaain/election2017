@@ -5,6 +5,7 @@ var path = require('path');
 var api = require('./services/APIService');
 const Cookies = require('cookies');
 const compression = require('compression');
+var dotenv = require('dotenv').config();
 
 var allData = require('./public/data/allData');
 
