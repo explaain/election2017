@@ -4,11 +4,10 @@ module.exports = {
   }
 };
 
-
-
 var quizQuestions = [
  {
    question: "Should taxes be increased to fund the NHS and social care?",
+   randomiseGroup: 1,
    issue: "tax",
    debate: "38-tax-1",
    helperCard:"http://api.explaain.com/Detail/5929a06cc3fde500115269a3",
@@ -37,6 +36,7 @@ var quizQuestions = [
  },
  {
    question: "Should the pensions 'triple lock' remain in use?",
+   randomiseGroup: 1,
    issue: "welfare",
    debate: "38-welfare-1",
    helperCard:"http://api.explaain.com/Detail/5929a0a2c3fde500115269a4",
@@ -65,6 +65,7 @@ var quizQuestions = [
  },
  {
    question: "Should the spare room subsidy (so called 'bedroom tax') be scrapped?",
+   randomiseGroup: 1,
    issue: "welfare",
    debate: "38-welfare-2",
    helperCard:"http://api.explaain.com/Detail/5929a172c3fde500115269a5",
@@ -93,6 +94,7 @@ var quizQuestions = [
  },
  {
    question: "Should corporation tax rates be increased?",
+   randomiseGroup: 2,
    issue: "tax",
    debate: "38-tax-2",
    helperCard:"http://api.explaain.com/Detail/5929a1b4c3fde500115269a6",
@@ -121,6 +123,7 @@ var quizQuestions = [
  },
  {
    question: "Should we get rid of the deficit by 2025?",
+   randomiseGroup: 2,
    issue: "economy",
    debate: "38-economy-1",
    helperCard:"http://api.explaain.com/Detail/5929a232c3fde500115269a8",
@@ -149,6 +152,7 @@ var quizQuestions = [
  },
  {
    question: "Should there be a cap on how much landlords can charge for rent?",
+   randomiseGroup: 2,
    issue: "living-costs",
    debate: "38-living-costs-1",
    helperCard:"http://api.explaain.com/Detail/5929a25ac3fde500115269a9",
@@ -177,6 +181,7 @@ var quizQuestions = [
  },
  {
    question: "Should those hiring migrant workers have to pay a fee to government to do so?",
+   randomiseGroup: 2,
    issue: "immigration",
    debate: "38-immigration-1",
    helperCard:"http://api.explaain.com/Detail/5929a296c3fde500115269aa",
@@ -205,6 +210,7 @@ var quizQuestions = [
  },
  {
    question: "Should there be a fresh vote in parliament to bring back fox hunting?",
+   randomiseGroup: 2,
    issue: "environment",
    debate: "38-environment-1",
    helperCard:"http://api.explaain.com/Detail/5929a1dbc3fde500115269a7",
@@ -233,6 +239,7 @@ var quizQuestions = [
  },
  {
    question: "Should the national living wage be increased by more than inflation?",
+   randomiseGroup: 2,
    issue: "living-costs",
    debate: "38-living-costs-2",
    helperCard:"http://api.explaain.com/Detail/5929a2bfc3fde500115269ab",
@@ -261,6 +268,7 @@ var quizQuestions = [
  },
  {
    question: "Should income tax go up for people earning over £80,000 per year?",
+   randomiseGroup: 2,
    issue: "tax",
    debate: "38-tax-3",
    helperCard:"http://api.explaain.com/Detail/5929a302c3fde500115269ac",
@@ -289,6 +297,7 @@ var quizQuestions = [
  },
  {
    question: "Should we ban pesticides which kill bees?",
+   randomiseGroup: 2,
    issue: "enviornment",
    debate: "38-environment-2",
    helperCard:"http://api.explaain.com/Detail/5929a32bc3fde500115269ad",
@@ -317,6 +326,7 @@ var quizQuestions = [
  },
  {
    question: "Should there be a second EU referendum on the final Brexit deal?",
+   randomiseGroup: 2,
    issue: "eu",
    debate: "38-eu-1",
    answers: {
@@ -344,6 +354,7 @@ var quizQuestions = [
  },
  {
    question: "Should the government take over the running of railways, water companies and the Royal Mail?",
+   randomiseGroup: 2,
    issue: "economy",
    debate: "38-economy-2",
    helperCard:"http://api.explaain.com/Detail/5929a36ec3fde500115269ae",
@@ -372,6 +383,7 @@ var quizQuestions = [
  },
  {
    question: "Should we create additional grammar schools?",
+   randomiseGroup: 2,
    issue: "education",
    debate: "38-education-1",
    helperCard:"http://api.explaain.com/Detail/5929a878c3fde500115269af",
@@ -400,6 +412,7 @@ var quizQuestions = [
  },
  {
    question: "Should fracking be banned?",
+   randomiseGroup: 2,
    issue: "environment",
    debate: "38-environment-3",
    helperCard:"http://api.explaain.com/Detail/5929a89ec3fde500115269b0",
@@ -428,6 +441,7 @@ var quizQuestions = [
  },
  {
    question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
+   randomiseGroup: 2,
    issue: "immigration",
    debate: "38-immigration-2",
    helperCard:"http://api.explaain.com/Detail/5929a8dac3fde500115269b1",
@@ -456,6 +470,7 @@ var quizQuestions = [
  },
  {
    question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
+   randomiseGroup: 2,
    issue: "eu",
    debate: "38-eu-2",
    helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",
