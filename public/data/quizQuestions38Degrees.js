@@ -198,7 +198,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "don't increase it, create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
+         label: "create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
          opinion: 0.4,
        },
        {
