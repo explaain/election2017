@@ -1676,7 +1676,7 @@ class Quiz {
     qp.prioritiesSet = qp.prioritiesSet ? qp.prioritiesSet : false;
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = qp.quizResults ? qp.quizResults : false;
-    qp.quizResultsPage = (params && params.finalResults ? !params.finalResults : qp.quizResultsPage) && qp.prioritiesSet;
+    qp.quizResultsPage = qp.prioritiesSet || false;
     qp.weighting = qp.weighting ? qp.weighting : 5;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
@@ -1729,7 +1729,7 @@ class Quiz {
     		initialOrder.push(q.debate);
         quiz.quizTopics.add(q.issue);
     		quiz.questionDB[q.debate] = q;
-    		randomiseGroupsSet.add(q.randomiseGroup);
+    		if(config[SiteBrand].randomise) randomiseGroupsSet.add(q.randomiseGroup);
     	});
     	var randomiseGroups = Array.from(randomiseGroupsSet);
 
@@ -2187,7 +2187,7 @@ class Quiz {
       resultsOnwards: true,
       quizTopics: quiz.quizTopics,
       quizResults: qp.quizResults,
-      quizResultsPage: self.quizResultsPage,
+      quizResultsPage: qp.quizResultsPage,
       prioritiesSet: qp.prioritiesSet,
       quizPriorityPage: qp.quizResults && !qp.prioritiesSet,
       partyResults: partyResults,
