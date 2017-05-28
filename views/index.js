@@ -2161,7 +2161,7 @@ class Quiz {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com&display=popup&ref=plugin&src=share_button";
       twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20ge2017.com";
     }
-    var safeSeatMessage = "This means the party you matched isn't as likely to win, but there are [still other things you can do](http://api.explaain.com/Detail/592348d8f82f3f0011c47228)."
+    var safeSeatMessage = "This means the party you matched isn't as likely to win. You can still vote for them or explore other candidates standing in your area below.."
 
     var partyResults = qp.prioritiesSet && !qp.constituencyView;
     return helpers.assembleCards({

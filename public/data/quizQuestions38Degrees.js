@@ -11,14 +11,15 @@ var quizQuestions = [
    question: "Should taxes be increased to fund the NHS and social care?",
    issue: "tax",
    debate: "38-tax-1",
+   helperCard:"http://api.explaain.com/Detail/5929a06cc3fde500115269a3",
    answers: {
      yes: [
        {
-         label: "with an increase in income tax for the highest 5 percent of earners",
+         label: "with an increase in income tax for the highest 5 percent of earners.",
          opinion: 1,
        },
        {
-         label: "with a 1p increase on income tax for basic, higher and additional rates",
+         label: "with a 1p increase on income tax for basic, higher and additional rates.",
          opinion: 1,
        },
      ],
@@ -38,6 +39,7 @@ var quizQuestions = [
    question: "Should the pensions 'triple lock' remain in use?",
    issue: "welfare",
    debate: "38-welfare-1",
+   helperCard:"http://api.explaain.com/Detail/5929a0a2c3fde500115269a4",
    answers: {
      yes: [
        {
@@ -54,6 +56,10 @@ var quizQuestions = [
          label: "it should be phased out and replaced in 2020.",
          opinion: 0.4,
        },
+       {
+         label: "a different system for protecting pensions should be explored.",
+         opinion: 0.2,
+       },
      ]
    }
  },
@@ -61,6 +67,7 @@ var quizQuestions = [
    question: "Should the spare room subsidy (so called 'bedroom tax') be scrapped?",
    issue: "welfare",
    debate: "38-welfare-2",
+   helperCard:"http://api.explaain.com/Detail/5929a172c3fde500115269a5",
    answers: {
      yes: [
        {
@@ -68,11 +75,15 @@ var quizQuestions = [
          opinion: 1,
        },
        {
-         label: "and incentivise local authorities to help\ntenants ‘downsize' as well.",
+         label: "and incentivise local authorities to help tenants ‘downsize' as well.",
          opinion: 0.8,
        },
      ],
      no: [
+       {
+         label: "but its impact on those who have had it cut should be assessed.",
+         opinion: 0.2
+       },
        {
          label: "maintain the tax as it currently stands.",
          opinion: 0
@@ -84,10 +95,11 @@ var quizQuestions = [
    question: "Should corporation tax rates be increased?",
    issue: "tax",
    debate: "38-tax-2",
+   helperCard:"http://api.explaain.com/Detail/5929a1b4c3fde500115269a6",
    answers: {
      yes: [
        {
-         label: "reinstate the higher level of\ncorporation tax for large businesses.",
+         label: "reinstate the higher level of corporation tax for large businesses.",
          opinion: 1,
        },
        {
@@ -97,11 +109,11 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "but it shouldnt drop either, keep it at 20%.",
+         label: "but it shouldn't drop either, keep it at 20%.",
          opinion: 0.4,
        },
        {
-         label: "and drop it further to 17%",
+         label: "and drop it further to 17%.",
          opinion: 0
        },
      ]
@@ -111,6 +123,7 @@ var quizQuestions = [
    question: "Should we get rid of the deficit by 2025?",
    issue: "economy",
    debate: "38-economy-1",
+   helperCard:"http://api.explaain.com/Detail/5929a232c3fde500115269a8",
    answers: {
      yes: [
        {
@@ -128,7 +141,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "i think we should eliminate it before 2025.",
+         label: "I think we should eliminate it before 2025.",
          opinion: 0
        },
      ]
@@ -138,6 +151,7 @@ var quizQuestions = [
    question: "Should there be a cap on how much landlords can charge for rent?",
    issue: "living-costs",
    debate: "38-living-costs-1",
+   helperCard:"http://api.explaain.com/Detail/5929a25ac3fde500115269a9",
    answers: {
      yes: [
        {
@@ -151,34 +165,35 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "the free market should dictate price.",
+         label: "the free market should dictate rent costs.",
          opinion: 0.4,
        },
        {
-         label: "but increasing the amount of housing built will make rent more affordable.",
+         label: "but increasing the number of houses built will make rent more affordable.",
          opinion: 0
        },
      ]
    }
  },
  {
-   question: "Should there be a higher levy charged on companies hiring migrant workers?",
+   question: "Should those hiring migrant workers have to pay a fee to government to do so?",
    issue: "immigration",
    debate: "38-immigration-1",
+   helperCard:"http://api.explaain.com/Detail/5929a296c3fde500115269aa",
    answers: {
      yes: [
        {
-         label: "companies who employ migrants should pay £2000 a year per migrant they employ full time.",
+         label: "those who employ a migrant full time should pay £2000 a year.",
          opinion: 1,
        },
        {
-         label: "but make it a voluntary contribution as part of the high net worth investment visa.",
+         label: "but make it a voluntary contribution as part of certain types of visa.",
          opinion: 0.8,
        },
      ],
      no: [
        {
-         label: "don't increase, create a Migration Impact Fund paid for centrally by exisitng budgets.",
+         label: "don't increase it, create a 'Migration Impact Fund' paid for centrally by exisitng budgets.",
          opinion: 0.4,
        },
        {
@@ -192,6 +207,7 @@ var quizQuestions = [
    question: "Should there be a fresh vote in parliament to bring back fox hunting?",
    issue: "environment",
    debate: "38-environment-1",
+   helperCard:"http://api.explaain.com/Detail/5929a1dbc3fde500115269a7",
    answers: {
      yes: [
        {
@@ -205,6 +221,10 @@ var quizQuestions = [
      ],
      no: [
        {
+         label: "the ban should remain be periodically reassessed. ",
+         opinion: 0.2
+       },
+       {
          label: "there should be no vote, fox hunting should remain illegal. ",
          opinion: 0
        },
@@ -215,6 +235,7 @@ var quizQuestions = [
    question: "Should the national living wage be increased by more than inflation?",
    issue: "living-costs",
    debate: "38-living-costs-2",
+   helperCard:"http://api.explaain.com/Detail/5929a2bfc3fde500115269ab",
    answers: {
      yes: [
        {
@@ -229,6 +250,10 @@ var quizQuestions = [
      no: [
        {
          label: "it should rise at 60% of median earnings by 2020.",
+         opinion: 0.2
+       },
+       {
+         label: "it should not rise at all.",
          opinion: 0
        },
      ]
@@ -238,16 +263,21 @@ var quizQuestions = [
    question: "Should income tax go up for people earning over £80,000 per year?",
    issue: "tax",
    debate: "38-tax-3",
+   helperCard:"http://api.explaain.com/Detail/5929a302c3fde500115269ac",
    answers: {
      yes: [
        {
-         label: "and  gaurantee tax won't go up for anyone earning less than £80,000 ",
+         label: "and  gaurantee tax won't go up for anyone earning less than £80,000. ",
+         opinion: 1,
+       },
+       {
+         label: "but look at increasing corporation tax at the same time. ",
          opinion: 1,
        },
      ],
      no: [
        {
-         label: "tax should go up for all taxpayers with an additional 1p extra per £ of income tax.",
+         label: "increase tax for all taxpayers via an additional 1p extra per £ of income tax.",
          opinion: 0.4,
        },
        {
@@ -261,6 +291,7 @@ var quizQuestions = [
    question: "Should we ban pesticides which kill bees?",
    issue: "enviornment",
    debate: "38-environment-2",
+   helperCard:"http://api.explaain.com/Detail/5929a32bc3fde500115269ad",
    answers: {
      yes: [
        {
@@ -274,8 +305,12 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "we should use them but only under strict controls ",
+         label: "we should use them but only under strict controls. ",
          opinion: 0.4,
+       },
+       {
+         label: "we should use them more frequently on certain crops. ",
+         opinion: 0,
        },
      ]
    }
@@ -301,16 +336,17 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "the results of the referendum should be the mandate at that's it.",
+         label: "the results of the referendum should be the mandate and that's it.",
          opinion: 0
        },
      ]
    }
  },
  {
-   question: "Should the government take over the running of railways, water companies and the royal mail?",
+   question: "Should the government take over the running of railways, water companies and the Royal Mail?",
    issue: "economy",
    debate: "38-economy-2",
+   helperCard:"http://api.explaain.com/Detail/5929a36ec3fde500115269ae",
    answers: {
      yes: [
        {
@@ -319,7 +355,7 @@ var quizQuestions = [
        },
        {
          label: "but only when service levels drop and for short periods of time.",
-         opinion: 0.8,
+         opinion: 0.6,
        },
      ],
      no: [
@@ -335,20 +371,25 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should we create more grammar schools?",
+   question: "Should we create additional grammar schools?",
    issue: "education",
    debate: "38-education-1",
+   helperCard:"http://api.explaain.com/Detail/5929a878c3fde500115269af",
    answers: {
      yes: [
        {
          label: "we should lift the ban on creating new grammar schools.",
          opinion: 1,
        },
+       {
+         label: "and explore new ways of creating additional types of selection schools.",
+         opinion: 1,
+       },
      ],
      no: [
        {
          label: "they're vanity projects that don't work.",
-         opinion: 0.4,
+         opinion: 0,
        },
        {
          label: "scrap any plans to re-introduce them.",
@@ -361,6 +402,7 @@ var quizQuestions = [
    question: "Should fracking be banned?",
    issue: "environment",
    debate: "38-environment-3",
+   helperCard:"http://api.explaain.com/Detail/5929a89ec3fde500115269b0",
    answers: {
      yes: [
        {
@@ -374,6 +416,10 @@ var quizQuestions = [
      ],
      no: [
        {
+         label: "studies should be carried out to assess the pros and cons of use.",
+         opinion: 0.4
+       },
+       {
          label: "the industry should be further developed.",
          opinion: 0
        },
@@ -384,10 +430,15 @@ var quizQuestions = [
    question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
    issue: "immigration",
    debate: "38-immigration-2",
+   helperCard:"http://api.explaain.com/Detail/5929a8dac3fde500115269b1",
    answers: {
      yes: [
        {
          label: "annual net migraiton should be in the tens of thousands.",
+         opinion: 1,
+       },
+       {
+         label: "but net migration should be zero, not thousands.",
          opinion: 1,
        },
      ],
@@ -397,7 +448,7 @@ var quizQuestions = [
          opinion: 0.4,
        },
        {
-         label: "there should be no official targets.",
+         label: "there should be no official target.",
          opinion: 0
        },
      ]
@@ -407,10 +458,11 @@ var quizQuestions = [
    question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
    issue: "eu",
    debate: "38-eu-2",
+   helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",
    answers: {
      yes: [
        {
-         label: "we must maintain access to the single market",
+         label: "we must maintain access to the single market.",
          opinion: 1,
        },
        {
@@ -419,6 +471,10 @@ var quizQuestions = [
        },
      ],
      no: [
+       {
+         label: "on the whole but certain industries should retain access.",
+         opinion: 0.4
+       },
        {
          label: "we will be leaving the single market.",
          opinion: 0
