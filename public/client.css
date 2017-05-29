@@ -1411,6 +1411,7 @@ p.waiting-text {
   position: relative;
   height:160px;
   padding: 10px 0;
+  margin: 50px 0 20px;
 }
 
 .quizPercentagesParty {
@@ -2032,4 +2033,12 @@ span.t-featured {
 }
 .body._38degrees .scrollDown {
   display: none;
+}
+
+
+.body._38degrees p.info-text.fading-info {
+  display: none;
+}
+.fading-info {
+  margin: 50px 20px 0px;
 }

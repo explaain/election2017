@@ -2503,6 +2503,11 @@ module.exports = function(CardTemplates){
         ]
       },
       {
+        "dom": "p.info-text.fading-info",
+        "condition": "finalResults",
+        "content": "As you’re in a safe seat we’ve greyed out the parties who are unlikely to unseat the 2015 winning party due to the margin by which they won."
+      },
+      {
         "dom": "p.info-text",
         "condition": "nowProgressingThroughQuiz",
         "content": "This is how you've matched with the parties so far."
