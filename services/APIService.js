@@ -419,8 +419,8 @@ APIService.prototype.getAgreements = function(data) {
           var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
           var partyKeys = Object.keys(allPartiesDebate.parties);
           partyKeys.forEach(function(partyKey) {
-            console.log('allPartiesDebate.parties[partyKey].opinion');
-            console.log(allPartiesDebate.parties[partyKey].opinion);
+            // console.log('allPartiesDebate.parties[partyKey].opinion');
+            // console.log(allPartiesDebate.parties[partyKey].opinion);
             if (allPartiesDebate.parties[partyKey] && allPartiesDebate.parties[partyKey].opinion > -1) {
               createObjectProps(agreementMatrix, [partyKey, issueKey])
               agreementMatrix[partyKey][issueKey][debateKey] = {

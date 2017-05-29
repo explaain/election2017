@@ -1739,29 +1739,25 @@ class Quiz {
         Shuffle questions
       */
       if(config[SiteBrand].randomise) {
-        console.log("Randomise group indexes",randomiseGroupsSet);
 
         // within each group of indexes, shuffle
         var questionSeries = initialOrder;
 
         randomiseGroupsSet.forEach(function(rGroup) {
-          console.log("New fill",questionSeries);
           var questions = quiz.questionDB.filter((q)=>q.randomiseGroup == rGroup);
 
           var indexes = new Set();
           questions.forEach((q,i)=> indexes.add(q.I));
           indexes = Array.from(indexes);
-          console.log("This group's indexes",indexes);
+          // console.log("This group's indexes",indexes);
 
           questions.forEach((q,i,arr) => {
             var randI = indexes[Math.floor(Math.random() * indexes.length)]
-            console.log("RandI",randI,questionSeries[randI]);
             qp.questionSeries[randI] = q.debate;
-            console.log(questionSeries[randI])
             indexes.splice(indexes.indexOf(randI),1);
           })
         })
-        console.log("shuffled question order",qp.questionSeries);
+        // console.log("shuffled question order",qp.questionSeries);
       }
       /* ---- */
     }
@@ -1788,9 +1784,12 @@ class Quiz {
 
     self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
     console.log("Running quiz with question order:",qp.questionSeries)
-    console.log("Running quiz with question DB:",quiz.questionDB)
-    console.log("Running quiz with current answers:",qp.opinions)
+    // console.log("Running quiz with question DB:",quiz.questionDB)
+    console.log("----")
+    console.log("Committed answers:",qp.opinions)
+    console.log("Tentative answers:",qp.answers)
     console.log("Current question",self.currentQuestion);
+    console.log("----")
 
     // Topics for prioritising
     // This needs to run after every question
@@ -1859,7 +1858,7 @@ class Quiz {
     }
     self.answerSubquestion = function(answer) {
       console.log("Improve on Yes/No");
-      qp.answers[qp.answers.length-1] = answer;
+      // qp.answers[qp.answers.length-1] = answer;
       self.submitOpinion(answer,true);
       self.next();
     }
@@ -1873,7 +1872,7 @@ class Quiz {
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
       if(commitToAnswer) {
         console.log("Next Q")
-        model.user.quizProgress.opinions.push(opinion);
+        qp.opinions.push(opinion);
         qp.questionPointer++;
         self.refresh();
         self.next();
@@ -1882,30 +1881,30 @@ class Quiz {
       }
 
       model.user.opinions.issues = model.user.opinions.issues || {};
+      var issue = thisQuestion.issue;
+      var debate = thisQuestion.debate;
 
       if(opinion === false) {
         console.log("Question skipped, won't consider in calculations")
 
         // Erase from model
-        var issue = thisQuestion.issue;
-        var debate = thisQuestion.debate;
 
-        if(model.user.opinions.issues[issue]) {
-          if(model.user.opinions.issues[issue].debates[debate])
-            delete model.user.opinions.issues[issue].debates[debate]
-
-          if(model.user.opinions.issues[issue].debates.length < 1)
-            delete model.user.opinions.issues[issue]
-        }
+        // if(model.user.opinions.issues[issue]) {
+        //   console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+        //   if(model.user.opinions.issues[issue].debates[debate])
+        //     delete model.user.opinions.issues[issue].debates[debate]
+        //
+        //   if(model.user.opinions.issues[issue].debates.length < 1) {
+        //     console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+        //     delete model.user.opinions.issues[issue]
+        //   }
+        // }
 
         self.defineCalculableTopics();
         self.next();
         return false;
       }
-      // else
 
-      var issue = thisQuestion.issue;
-      var debate = thisQuestion.debate;
       model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
       model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
       model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
@@ -1985,11 +1984,42 @@ class Quiz {
       qp.quizResultsPage = false;
 
       if(qp.answers.length > 0) {
-        if(qp.questionPointer===qp.answers.length){
-          qp.opinions.pop();
-          qp.questionPointer--;
-        } else {
-          qp.answers.pop();
+        var now = {
+          yesNo: qp.questionPointer === qp.opinions.length,
+          subQ: typeof qp.answers[qp.questionPointer] === 'string'
+        }
+        var prev = {
+          subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
+          skipped: qp.answers[qp.questionPointer-1] === false
+        }
+        console.log("-----")
+        console.log(now);
+        console.log(prev);
+
+        if(now.subQ) {
+          qp.answers.pop(); // reset yes/no
+        } else
+        if(now.yesNo) {
+          qp.questionPointer--; // previous question
+          qp.opinions.pop(); // reset model
+
+          model.user.opinions.issues = model.user.opinions.issues || {};
+          var issue = quiz.questionDB[qp.questionSeries[qp.questionPointer]].issue;
+          var debate = quiz.questionDB[qp.questionSeries[qp.questionPointer]].debate;
+          if(model.user.opinions.issues[issue]) {
+            console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+            if(model.user.opinions.issues[issue].debates[debate])
+              delete model.user.opinions.issues[issue].debates[debate]
+
+            if(model.user.opinions.issues[issue].debates.length < 1) {
+              console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+              delete model.user.opinions.issues[issue]
+            }
+          }
+
+          if(prev.skipped) {
+            qp.answers.pop();
+          }
         }
       } else {
         if(qp.prioritiesSet) prioritiesSet = false;
@@ -1999,9 +2029,11 @@ class Quiz {
           qp.quizStarted = false;
         }
       }
-      self.next();
+
       self.refresh();
+      self.next();
     }
+
     self.skipQuestion = function() {
       var skipOpinion = false;
       qp.answers.push(skipOpinion);
@@ -2043,7 +2075,7 @@ class Quiz {
     */
 
     self.updateShareLinks = function() {
-        console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+        // console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
       // self.facebookShareConstituencyHref = null;
       // self.twitterShareConstituencyHref = null;
 
@@ -2055,7 +2087,7 @@ class Quiz {
       qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
       qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
 
-      console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+      // console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
 
       self.refresh();
     }
