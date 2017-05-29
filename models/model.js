@@ -41,7 +41,10 @@ module.exports = {
       nextButtonText: "Next Question >",
       country: null,
       resultsData: {},
-      localCandidateData: []
+      localCandidateData: [],
+      partiesChartDataTopMatch: [],
+      partiesChartDataTopMatchTactical: [],
+      partiesHybridList: []
     }
   },
 

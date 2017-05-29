@@ -1897,28 +1897,38 @@ module.exports = function(CardTemplates){
                     "content": "Based on the manifestos, your best match is..."
                   },
                   {
-                    "dom": "div.quizResults",
+                    "dom": ".quizPercentages.topLayer.basic-top-match",
+                    "condition": "quizResultsPage",
                     "content": [
                       {
-                        "dom": "img",
-                        "attr": {
-                          "src": {
-                            "var": "resultLogo"
-                          }
-                        }
+                        "loop": "partiesChartDataTopMatch",
+                        "content": [{"template": "quizPercentagesParty"}]
                       },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultName"
-                        }
-                      },
-                      {
-                        "dom": "h2",
-                        "content": {
-                          "var": "resultPercentage"
-                        }
-                      },
+                    ]
+                  },
+                  {
+                    "dom": "div.quizResults",
+                    "content": [
+                      // {
+                      //   "dom": "img",
+                      //   "attr": {
+                      //     "src": {
+                      //       "var": "resultLogo"
+                      //     }
+                      //   }
+                      // },
+                      // {
+                      //   "dom": "h2",
+                      //   "content": {
+                      //     "var": "resultName"
+                      //   }
+                      // },
+                      // {
+                      //   "dom": "h2",
+                      //   "content": {
+                      //     "var": "resultPercentage"
+                      //   }
+                      // },
                       {
                         "template": "shareButtons",
                         "mapping": [
@@ -2080,6 +2090,58 @@ module.exports = function(CardTemplates){
                           "var": "safeSeatMessage",
                           "markdown": true
                         }
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "h2.hybrid-top-match",
+                    "content": "Here are the parties' chances of winning in your area"
+                  },
+                  {
+                    "dom": ".quizPercentages.hybrid-top-match",
+                    "content": [
+                      {
+                        "loop": "partiesHybridList",
+                        "content": [
+                          {
+                            "dom": "a.quizPercentagesParty.inline.discard-card-style",
+                            "attr": {
+                              "onclick": {
+                                "var": "openMatches"
+                              },
+                              "class": {
+                                "var": "matchClass"
+                              }
+                            },
+                            "content": [
+                              {
+                                "dom": ".quizPercentagesPartyBadge",
+                                "condition": "badgeText",
+                                "content": {
+                                  "var": "badgeText"
+                                }
+                              },
+                              {
+                                "dom": ".quizPercentagesPartyFace.inline",
+                                "attr": {
+                                  "style": {
+                                    "background-image": {
+                                      "var": "photo"
+                                    },
+                                    "background-color": {
+                                      "var": "color"
+                                    },
+                                  }
+                                }
+                              },
+                              {
+                                "dom": ".quizPercentagesPartyMatch",
+                                "condition": "isMatch",
+                                "content": "Your Match"
+                              },
+                            ]
+                          }
+                        ]
                       }
                     ]
                   },
@@ -2336,22 +2398,22 @@ module.exports = function(CardTemplates){
                 "content": "Here is how you matched the major parties' manifestos overall:"
               },
               {
-                "dom": "h2",
+                "dom": "h2.breakdown",
                 "condition": "finalResults",
                 "content": "Here's a breakdown of the people you can vote for in your area:"
               },
               {
-                "dom": "p.small",
+                "dom": "p.small.tactical-info",
                 "condition": "finalResults",
                 "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
               },
               {
-                "dom": "h3",
+                "dom": "h3.inTheLead",
                 "condition": "finalResults",
                 "content": "In the lead in your area:"
               },
               {
-                "dom": ".quizPercentages.topLayer.basic-top-match",
+                "dom": ".quizPercentages.middleLayer.basic-top-match",
                 "condition": "finalResults",
                 "content": [
                   {
@@ -2451,6 +2513,9 @@ module.exports = function(CardTemplates){
     "attr": {
       "onclick": {
         "var": "openMatches"
+      },
+      "class": {
+        "var": "matchClass"
       }
     },
     "content": [
@@ -2499,6 +2564,20 @@ module.exports = function(CardTemplates){
         },
         "content": {
           "var": "percentageText"
+        }
+      },
+      {
+        "dom": ".quizPercentagesPartyBadge.absolute",
+        "condition": "badgeText",
+        "attr": {
+          "style": {
+            "bottom": {
+              "var": "percentage"
+            }
+          }
+        },
+        "content": {
+          "var": "badgeText"
         }
       },
       {
