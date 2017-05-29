@@ -2002,5 +2002,6 @@ span.t-featured {
   bottom: 0 !important;
 }
 .quizPercentages {
-  height: 140px;
+  height: 120px;
+  padding: 0;
 }

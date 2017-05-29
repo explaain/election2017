@@ -2167,7 +2167,10 @@ class Quiz {
         '5th'
       ]
       qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
+        console.log(party);
         var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0];
+        if (!fullParty)
+          return {};
         party.photo = fullParty.photo;
         party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
           return party.key == _party.key;
