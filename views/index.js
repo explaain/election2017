@@ -1700,11 +1700,9 @@ class Quiz {
     qp.prioritiesSet = qp.prioritiesSet ? qp.prioritiesSet : false;
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = qp.quizResults ? qp.quizResults : false;
-    qp.quizResultsPage = qp.prioritiesSet || false;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
-    self.quizResultsPage = qp.quizResultsPage;
     self.quizSafeSeat = qp.quizSafeSeat;
     self.resultsData = qp.resultsData;
     self.startingQuiz = qp.startingQuiz;
@@ -1712,6 +1710,8 @@ class Quiz {
     self.nextButtonText = qp.nextButtonText;
     self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
+    qp.quizResultsPage = qp.quizResults && !self.finalResults; //qp.prioritiesSet || false;
+    self.quizResultsPage = qp.quizResultsPage;
     self.beginTheQuiz = params && params.begin;
     self.params = params;
     self.partiesChartDataTopMatch = qp.partiesChartDataTopMatch;
