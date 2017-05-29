@@ -2393,6 +2393,11 @@ module.exports = function(CardTemplates){
                 "content": "2"
               },
               {
+                "dom": "h2.seeHowAlt",
+                "condition": "quizResultsPage",
+                "content": "Here is how you matched the major parties' manifestos overall:"
+              },
+              {
                 "dom": "h2.seeHow",
                 "condition": "prioritiesSet",
                 "content": "Here is how you matched the major parties' manifestos overall:"

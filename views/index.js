@@ -2095,13 +2095,14 @@ class Quiz {
           qp.resultsData.push({
             key: topParty.key,
             logo: '/img/party-logos/'+topParty.key+'.png',
-            name: fullParty.name,
+            name: fullParty.fullName,
             percentage: parseInt(topParty.percentage)+"%",
             percentageText: parseInt(topParty.percentage)+"%",
             color: fullParty.color,
             photo: fullParty.photo,
             matches: fullParty.matches,
             openMatches: fullParty.openMatches,
+            quizResults: qp.quizResults
           });
           console.log('topParty');
           console.log('topParty');

@@ -1336,7 +1336,7 @@ p.waiting-text {
   align-items: center;
   justify-content: left;
   width: calc(100% - 40px);
-  height: 50px;
+  min-height: 50px;
   vertical-align: top;
   margin: 5px 10px;
   padding: 0 10px;
@@ -1806,9 +1806,6 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
   display: none;
 }
 
-.body.quiz._ge2017 a.quizPercentagesParty, .body.quiz.38degrees a.quizPercentagesParty {
-  pointer-events: none;
-}
 
 .or {
   animation-name: taskpop;
@@ -2031,7 +2028,8 @@ span.t-featured {
 .logoanchor {
     display: inline-block !important;
 }
-.body._38degrees .scrollDown {
+.body._38degrees .scrollDown,
+.body._38degrees .seeHowAlt {
   display: none;
 }
 
@@ -2041,4 +2039,16 @@ span.t-featured {
 }
 .fading-info {
   margin: 50px 20px 0px;
+}
+
+.body.quiz._ge2017 a.quizPercentagesParty {
+  pointer-events: none;
+}
+.basic-top-match {
+  height: 190px;
+  padding: 40px 0px;
+  margin: 0 0 -40px;
+}
+.basic-top-match .quizPercentagesPartyPercent {
+  bottom: 0 !important;
 }

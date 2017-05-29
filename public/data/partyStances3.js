@@ -210,7 +210,7 @@ var partyStances ={
 
                      },
                      "labour":{
-                        opinion:0.8,
+                        opinion:0.4,
 
                      },
                      "lib-dem":{
