@@ -1909,26 +1909,26 @@ module.exports = function(CardTemplates){
                   {
                     "dom": "div.quizResults",
                     "content": [
-                      // {
-                      //   "dom": "img",
-                      //   "attr": {
-                      //     "src": {
-                      //       "var": "resultLogo"
-                      //     }
-                      //   }
-                      // },
-                      // {
-                      //   "dom": "h2",
-                      //   "content": {
-                      //     "var": "resultName"
-                      //   }
-                      // },
-                      // {
-                      //   "dom": "h2",
-                      //   "content": {
-                      //     "var": "resultPercentage"
-                      //   }
-                      // },
+                      {
+                        "dom": "img.oldResultsFormat",
+                        "attr": {
+                          "src": {
+                            "var": "resultLogo"
+                          }
+                        }
+                      },
+                      {
+                        "dom": "h2.oldResultsFormat",
+                        "content": {
+                          "var": "resultName"
+                        }
+                      },
+                      {
+                        "dom": "h2.oldResultsFormat",
+                        "content": {
+                          "var": "resultPercentage"
+                        }
+                      },
                       {
                         "template": "shareButtons",
                         "mapping": [
@@ -2398,6 +2398,11 @@ module.exports = function(CardTemplates){
                 "content": "Here is how you matched the major parties' manifestos overall:"
               },
               {
+                "dom": "h3.seeHow",
+                "condition": "prioritiesSet",
+                "content": "Your party matches:"
+              },
+              {
                 "dom": "h2.breakdown",
                 "condition": "finalResults",
                 "content": "Here's a breakdown of the people you can vote for in your area:"
@@ -2484,7 +2489,7 @@ module.exports = function(CardTemplates){
         ]
       },
       {
-        "dom": "h3",
+        "dom": "h3.otherParties",
         "condition": "finalResults",
         "content": "Other parties standing in your area:"
       },

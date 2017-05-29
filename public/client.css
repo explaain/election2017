@@ -1852,7 +1852,7 @@ section.single-sentence {
 
 
 h2.seeHow {
-  margin-bottom: 50px;
+  /*margin-bottom: 50px;*/
 }
 
 .body._38degrees .card.percentageHeads {
@@ -1947,7 +1947,8 @@ span.t-featured {
 }
 
 .body:not(._38degrees) .middleLayer.basic-top-match,
-.body:not(._38degrees) .hybrid-top-match {
+.body:not(._38degrees) .hybrid-top-match,
+.body:not(._38degrees) .seeHow {
   display: none;
 }
 
@@ -1955,6 +1956,9 @@ span.t-featured {
   max-width: none;
   width: auto;
   margin-top: 0;
+}
+.hybrid-top-match {
+  margin: 20px 0 70px;
 }
 .hybrid-top-match .quizPercentagesPartyFace {
   margin: 0 5px 20px;
@@ -2004,4 +2008,18 @@ span.t-featured {
 .quizPercentages {
   height: 120px;
   padding: 0;
+}
+
+.otherParties {
+  margin-bottom: 40px;
+}
+.finalResult .quizPercentagesPartyPercent {
+  bottom: 0 !important;
+}
+.body:not(._38degrees) .finalResult .quizPercentages.topLayer {
+  margin-top: 50px;
+}
+
+.body:not(._unilad) .oldResultsFormat {
+  display: none;
 }
