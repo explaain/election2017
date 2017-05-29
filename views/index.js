@@ -1856,7 +1856,7 @@ class Quiz {
       self.updateShareLinks();
 
       if (qp.questionPointer > 0) qp.startingQuiz = false;
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, questionId: qp.questionSeries[qp.questionPointer], question: quiz.questionDB[qp.questionSeries.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.questionPointer-1], fullData: qp});
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, questionId: qp.questionSeries[qp.questionPointer], question: quiz.questionDB[qp.questionSeries.length-1], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.questionPointer-1] });
       console.log(qp.answers.length);
       console.log(quiz.questionDB[qp.questionSeries.length-1]);
       if(qp.questionPointer < qp.questionSeries.length){
