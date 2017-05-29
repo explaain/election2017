@@ -2136,9 +2136,9 @@ class Quiz {
       // self.twitterShareConstituencyHref = null;
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
-      var shareData = model.user.quizProgress.resultsData;
+      var shareData = model.user.quizProgress.resultsData[0];
       try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-      var sharePath = `http://${subdomain}uk-election-2017-dev.herokuapp.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
+      var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
       // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
       qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
       qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);

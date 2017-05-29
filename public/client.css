@@ -2061,3 +2061,10 @@ span.t-featured {
 .at-expanding-share-button-toggle-bg {
   bottom: 0px !important;
 }
+
+.quiz-intro p.italics {
+  margin-bottom: -30px;
+}
+.startQuiz {
+  margin-top: -20px;
+}
