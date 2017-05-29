@@ -37,7 +37,7 @@ var cfg = {
     footerClass: "ge2017Footer",
     randomise: true,
     numbering: true,
-    insertYesNo: true,
+    prependYesNo: true,
     quizQuestions: allData.getAllData().quizQuestions38Degrees
   },
   'unilad': {
@@ -305,11 +305,11 @@ class Header {
   render() {
     const self = this;
 
-    return h("header",
+    return h("header.toplogo",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
         " Home"
-      ), self.logoRoute.a(
+      ), self.logoRoute.a({"class":"logoanchor"},
         h("img." + config[SiteBrand].logoClass, {"src": config[SiteBrand].logoImg})
       ),
       (new Progress())
@@ -1768,7 +1768,7 @@ class Quiz {
         quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
       })
     }
-    if(config[SiteBrand].insertYesNo) {
+    if(config[SiteBrand].prependYesNo) {
       qp.questionSeries.forEach((k,i) => {
         quiz.questionDB[k].answers.yes.forEach((a,j) => {
           console.log(a);

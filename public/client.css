@@ -1515,8 +1515,8 @@ a:hover .quizPercentagesPartyFace {
 
 .quizPop.quick:nth-of-type(1){animation-delay: 0s}
 
-.initial.quizPop:nth-of-type(1){animation-delay: .3s}
-.initial.quizPop:nth-of-type(2){animation-delay: .5s}
+.initial.quizPop:nth-of-type(1){animation-delay: .2s}
+.initial.quizPop:nth-of-type(2){animation-delay: .3s}
 
 .secondary.quizPop:nth-of-type(1){animation-delay: .2s}
 .secondary.quizPop:nth-of-type(2){animation-delay: .2s}
@@ -1933,4 +1933,11 @@ span.t-featured {
 .card .content .helper-desc {
   margin: 0px 0 30px;
   line-height: 1.4;
+}
+
+.toplogo {
+    text-align: center !important;
+}
+.logoanchor {
+    display: inline-block !important;
 }
