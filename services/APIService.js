@@ -390,8 +390,8 @@ APIService.prototype.getPartyMatches = function(data) {
       partyMatchesByIssue[partyKey].forEach(function(match) {
         totalWeights += match.weight;
       })
-      console.log('partyMatchesByIssue[partyKey]');
-      console.log(partyMatchesByIssue[partyKey]);
+      // console.log('partyMatchesByIssue[partyKey]');
+      // console.log(partyMatchesByIssue[partyKey]);
       partyMatches[partyKey].match /= totalWeights;
     } catch(e) {
 
