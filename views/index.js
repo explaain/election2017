@@ -1081,12 +1081,12 @@ class CardContent {
                   }
                 })
               })
-              qp.resultsData = {
+              qp.resultsData = [{
                 logo: '/img/party-logos/'+topParty.key+'.png',
                 name: allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0].name,
                 percentage: parseInt(topParty.percentage)+"%",
                 percentageText: parseInt(topParty.percentage)+"%"
-              }
+              }]
             }
           }
           updatePartyPercentages(newScores);
@@ -1689,7 +1689,9 @@ class Quiz {
     self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
     self.beginTheQuiz = params && params.begin;
-    self.params = params
+    self.params = params;
+    self.partiesChartDataTopMatch = qp.partiesChartDataTopMatch;
+    self.partiesChartDataTopMatchTactical = qp.partiesChartDataTopMatchTactical;
 
     self.startStudentCompare = function(){
       trackEvent("Student Compare Started",{type: "Quiz"});
@@ -1834,7 +1836,7 @@ class Quiz {
       if(qp.questionPointer < qp.questionSeries.length){
         self.refresh();
       } else {
-        trackEvent("Results Got",{type: "Quiz", party: qp.resultsData.name, percentage: qp.resultsData.percentage, fullData: qp});
+        trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1), fullData: qp});
         qp.quizResults = true;
         qp.quizResultsPage = true;
         qp.country.parties.forEach(function(_party){
@@ -2046,7 +2048,7 @@ class Quiz {
     self.updatePartyPercentages = function(map) {
       console.log("updatePartyPercentages");
       if(qp.country){
-        var topParty = {percentage: 0}
+        var topParties = [{percentage: 0}]
         map.forEach(function(party){
           qp.country.parties.forEach(function(_party){
             if(party.key===_party.key){
@@ -2054,18 +2056,45 @@ class Quiz {
               _party.percentageText = parseInt(party.percentage) + "%";
               if (party.newMatch)
                 _party.matches.push(party.newMatch);
-              if (party.percentage > topParty.percentage) {
-                topParty = party;
+              if (party.percentage > topParties[0].percentage) {
+                topParties = [party];
+              } else if (party.percentage == topParties[0].percentage) {
+                topParties.push(party);
               }
             }
           })
         })
-        qp.resultsData = {
-          logo: '/img/party-logos/'+topParty.key+'.png',
-          name: allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0].name,
-          percentage: parseInt(topParty.percentage)+"%",
-          percentageText: parseInt(topParty.percentage)+"%"
-        }
+        // var fullParty = allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0];
+        qp.resultsData = [];
+        var fullParties = topParties.map(function(topParty) {
+          var fullParty = qp.country.parties.filter(function(party){return party.key==topParty.key})[0];
+          qp.resultsData.push({
+            key: topParty.key,
+            logo: '/img/party-logos/'+topParty.key+'.png',
+            name: fullParty.name,
+            percentage: parseInt(topParty.percentage)+"%",
+            percentageText: parseInt(topParty.percentage)+"%",
+            color: fullParty.color,
+            photo: fullParty.photo,
+            matches: fullParty.matches,
+            openMatches: fullParty.openMatches,
+          });
+          console.log('topParty');
+          console.log('topParty');
+          console.log('topParty');
+          console.log(topParty);
+        })
+        // tempMaxParty = {
+        //   color: party.color,
+        //   photo: party.photo,
+        //   name: party.fullName,
+        //   key: party.key,
+        //   percentage: party.percentage,
+        //   percentageText: party.percentageText + " Match",
+        //   matches: party.matches,
+        //   quizResults: party.quizResults
+        // }
+        qp.partiesChartDataTopMatch = qp.resultsData;
       }
     }
 
@@ -2117,6 +2146,7 @@ class Quiz {
     }
 
     if (self.finalResults == true) {
+      console.log('final!!!');
       setTimeout(function(){
         $('.body.quiz').addClass('moving')}
       ,10);
@@ -2152,18 +2182,46 @@ class Quiz {
             percentage: party.percentage,
             percentageText: party.percentageText + " Match",
             matches: party.matches,
+            openMatches: party.openMatches,
             quizResults: party.quizResults
           }
           // tempMaxParty = party;
           // tempMaxParty.name = tempMaxParty.fullName;
         }
       });
-      self.partiesChartDataTopMatch = [tempMaxParty]
+      qp.partiesChartDataTopMatchTactical = [tempMaxParty]
+
+      qp.partiesHybridList = qp.quizChanceResults.partiesAll.slice(0,5);
+      var count = 0;
+      var badges = [
+        '1st',
+        '2nd',
+        '3rd',
+        '4th',
+        '5th'
+      ]
+      qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
+        console.log(party);
+        var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0];
+        if (!fullParty)
+          return {};
+        party.photo = fullParty.photo;
+        party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
+          return party.key == _party.key;
+        }).length > 0;
+        party.matchClass = party.isMatch ? 'isMatch' : '';
+        party.badgeText = badges[count];
+        count++;
+        return party;
+      });
+      console.log('isMatch testing');
 
       qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
       if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
         getResults('localCandidates')
         .then(function(results) {
+          console.log('results')
+          console.log('results')
           console.log('results')
           console.log('results')
           console.log('results')
@@ -2308,6 +2366,9 @@ class Quiz {
           })
           console.log(country)
           // qp.country = country; // This thing's causing mad loop errors
+          // qp.country = country; // This thing's causing mad loop errors
+          // qp.country = country; // This thing's causing mad loop errors
+          // qp.country = country; // This thing's causing mad loop errors
           // qp.x = country
           qp.startingQuiz = true;
           // self.next();
@@ -2357,7 +2418,9 @@ class Quiz {
       nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
       partiesChartDataChances: self.partiesChartDataChances,
-      partiesChartDataTopMatch: self.partiesChartDataTopMatch,
+      partiesChartDataTopMatch: qp.partiesChartDataTopMatch, //Temporary
+      partiesChartDataTopMatchTactical: qp.partiesChartDataTopMatchTactical,
+      partiesHybridList: qp.partiesHybridList,
       // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,

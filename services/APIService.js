@@ -207,6 +207,9 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       var topParties = topPartyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
+      var partiesAll = partyKeys.map(function(partyKey) {
+        return getFullParty(partyKey);
+      });
       console.log('topParties');
       console.log(topParties);
       topParties.map(function(party) {
@@ -218,7 +221,8 @@ APIService.prototype.getContenders = function(postcode, publicData) {
 
       return {
         location: user.constituency.name,
-        parties: topParties
+        parties: topParties,
+        partiesAll: partiesAll
       };
     }
   });

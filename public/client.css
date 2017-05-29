@@ -1727,8 +1727,8 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 }
 
 .quizPercentages.topLayer {
-  margin: 120px 0 40px;
-  height: 60px;
+  /*margin: 120px 0 40px;*/
+  /*height: 60px;*/
 }
 .card.finalResult p.register button, .card.finalResult p.goToQuiz a {
   padding: 12px 42px !important;
@@ -1780,6 +1780,9 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 .body.quiz p.small {
   font-size: 13px;
   margin: 1.5em 2em;
+}
+.body.quiz .finalResult p.small {
+  margin: 3.5em 2em 1.5em;
 }
 
 .body.quiz._unilad .postcode-instructions {
@@ -1849,7 +1852,7 @@ section.single-sentence {
 
 
 h2.seeHow {
-  margin-bottom: 50px;
+  /*margin-bottom: 50px;*/
 }
 
 .body._38degrees .card.percentageHeads {
@@ -1935,6 +1938,92 @@ span.t-featured {
   line-height: 1.4;
 }
 
+
+.body._38degrees .tactical-top-match,
+.body._38degrees .quizPercentages.middleLayer:not(.basic-top-match),
+.body._38degrees h2.breakdown,
+.body._38degrees p.small.tactical-info,
+.body._38degrees h3.inTheLead {
+  display: none;
+}
+
+.body:not(._38degrees) .middleLayer.basic-top-match,
+.body:not(._38degrees) .hybrid-top-match,
+.body:not(._38degrees) .seeHow {
+  display: none;
+}
+
+.hybrid-top-match .quizPercentagesParty {
+  max-width: none;
+  width: auto;
+  margin-top: 0;
+}
+.hybrid-top-match {
+  margin: 20px 0 70px;
+}
+.hybrid-top-match .quizPercentagesPartyFace {
+  margin: 0 5px 20px;
+}
+.hybrid-top-match .quizPercentagesPartyPodium {
+  display: none;
+}
+.hybrid-top-match .isMatch .quizPercentagesPartyFace {
+  max-width: 80px;
+  max-height: 80px;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 0;
+}
+.quizPercentagesPartyBadge {
+  margin: 10px 5px;
+  border-radius: 100%;
+  z-index:2;
+  font-weight: bold;
+  color: #555;
+}
+.isMatch .quizPercentagesPartyBadge {
+  bottom: 45px;
+}
+.quizPercentagesPartyMatch {
+  color: #dd2569;
+  font-weight: bold;
+  margin-top: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.body._38degrees .quizPercentagesPartyMatch {
+  color: #FF7900;
+}
+
+.quizPercentagesParty.inline {
+  display: inline-block;
+}
+.quizPercentages.topLayer .quizPercentagesParty {
+  height: 120px;
+  margin-top: 0;
+}
+.quizPercentages.topLayer .quizPercentagesParty .quizPercentagesPartyFace {
+  bottom: 0 !important;
+}
+.quizPercentages {
+  height: 120px;
+  padding: 0;
+}
+
+.otherParties {
+  margin-bottom: 40px;
+}
+.finalResult .quizPercentagesPartyPercent {
+  bottom: 0 !important;
+}
+.body:not(._38degrees) .finalResult .quizPercentages.topLayer {
+  margin-top: 50px;
+}
+
+.body:not(._unilad) .oldResultsFormat {
+  display: none;
+}
 .toplogo {
     text-align: center !important;
 }
