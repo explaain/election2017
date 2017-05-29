@@ -2030,3 +2030,6 @@ span.t-featured {
 .logoanchor {
     display: inline-block !important;
 }
+.body._38degrees .scrollDown {
+  display: none;
+}

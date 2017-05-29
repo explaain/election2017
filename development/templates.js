@@ -2149,7 +2149,7 @@ module.exports = function(CardTemplates){
                   //   "template": "registerButton"
                   // },
                   {
-                    "dom": "p.small",
+                    "dom": "p.small.scrollDown",
                     "condition": "finalResults",
                     "content": "Scroll down to see how we reached this match"
                   },
