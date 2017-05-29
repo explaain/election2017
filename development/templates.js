@@ -1930,10 +1930,19 @@ module.exports = function(CardTemplates){
                         }
                       },
                       {
-                        "template": "shareButtons",
-                        "mapping": [
-                          ["facebookShareHref", "facebookShareAlignmentHref"],
-                          ["twitterShareHref", "twitterShareAlignmentHref"]
+                        "dom": ".action-buttons",
+                        "content": [
+                          {
+                            "dom": "p.shareText",
+                            "content": "Share your results:"
+                          },
+                          {
+                            "template": "shareButtons",
+                            "mapping": [
+                              ["facebookShareHref", "facebookShareAlignmentHref"],
+                              ["twitterShareHref", "twitterShareAlignmentHref"]
+                            ]
+                          },
                         ]
                       },
                       {

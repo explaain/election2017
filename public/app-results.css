@@ -260,8 +260,8 @@ div.local-candidates-container{
 }
 .local-candidate-plate{
   display: block;
-  width: 50%;
-  width: 179px;
+  width: calc(50% - 10px);
+  /*width: 179px;*/
   float: left;
   margin: 5px;
   border: 1px solid #ddd!important;

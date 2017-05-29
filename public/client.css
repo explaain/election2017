@@ -1501,11 +1501,6 @@ a:hover .quizPercentagesPartyFace {
   padding: 12px 42px !important;
   min-width: 70%;
 }
-.action-buttons .share-buttons button {
-  padding: 12px;
-  width: calc(50% - 10px);
-  max-width: 130px
-}
 
 .quizPop {
   animation-name: quizpop;
@@ -2067,4 +2062,15 @@ span.t-featured {
 }
 .startQuiz {
   margin-top: -20px;
+}
+
+.action-buttons .share-buttons button,
+.card .content .action-buttons .share-buttons button.btn {
+  padding: 12px;
+  width: calc(50% - 10px);
+  max-width: 130px
+}
+
+p.shareText {
+  margin: 50px 0 -40px;
 }
