@@ -37,7 +37,7 @@ var cfg = {
     footerClass: "ge2017Footer",
     randomise: true,
     numbering: true,
-    insertYesNo: true,
+    prependYesNo: true,
     quizQuestions: allData.getAllData().quizQuestions38Degrees
   },
   'unilad': {
@@ -305,11 +305,11 @@ class Header {
   render() {
     const self = this;
 
-    return h("header",
+    return h("header.toplogo",
       routes.root().a({"class": "home " + routes.root(function(){return "fade-hidden"})},
         h("i.fa.fa-arrow-left"),
         " Home"
-      ), self.logoRoute.a(
+      ), self.logoRoute.a({"class":"logoanchor"},
         h("img." + config[SiteBrand].logoClass, {"src": config[SiteBrand].logoImg})
       ),
       (new Progress())
@@ -1724,11 +1724,9 @@ class Quiz {
     	quiz.questionDB = {} // holds the question objects
     	// groups of questions to shuffle within themselves
       var randomiseGroupsSet = new Set();
-      quiz.quizTopics = new Set(); // for priority labelling
       quiz.quizQuestions.forEach(function(q,I) {
     		q.I = I; // initial index
     		initialOrder.push(q.debate);
-        quiz.quizTopics.add(q.issue);
     		quiz.questionDB[q.debate] = q;
     		if(config[SiteBrand].randomise) randomiseGroupsSet.add(q.randomiseGroup);
     	});
@@ -1741,29 +1739,25 @@ class Quiz {
         Shuffle questions
       */
       if(config[SiteBrand].randomise) {
-        console.log("Randomise group indexes",randomiseGroupsSet);
 
         // within each group of indexes, shuffle
         var questionSeries = initialOrder;
 
         randomiseGroupsSet.forEach(function(rGroup) {
-          console.log("New fill",questionSeries);
           var questions = quiz.questionDB.filter((q)=>q.randomiseGroup == rGroup);
 
           var indexes = new Set();
           questions.forEach((q,i)=> indexes.add(q.I));
           indexes = Array.from(indexes);
-          console.log("This group's indexes",indexes);
+          // console.log("This group's indexes",indexes);
 
           questions.forEach((q,i,arr) => {
             var randI = indexes[Math.floor(Math.random() * indexes.length)]
-            console.log("RandI",randI,questionSeries[randI]);
             qp.questionSeries[randI] = q.debate;
-            console.log(questionSeries[randI])
             indexes.splice(indexes.indexOf(randI),1);
           })
         })
-        console.log("shuffled question order",qp.questionSeries);
+        // console.log("shuffled question order",qp.questionSeries);
       }
       /* ---- */
     }
@@ -1776,7 +1770,7 @@ class Quiz {
         quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
       })
     }
-    if(config[SiteBrand].insertYesNo) {
+    if(config[SiteBrand].prependYesNo) {
       qp.questionSeries.forEach((k,i) => {
         quiz.questionDB[k].answers.yes.forEach((a,j) => {
           console.log(a);
@@ -1790,16 +1784,23 @@ class Quiz {
 
     self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
     console.log("Running quiz with question order:",qp.questionSeries)
-    console.log("Running quiz with question DB:",quiz.questionDB)
-    console.log("Running quiz with current answers:",qp.opinions)
+    // console.log("Running quiz with question DB:",quiz.questionDB)
+    console.log("----")
+    console.log("Committed answers:",qp.opinions)
+    console.log("Tentative answers:",qp.answers)
     console.log("Current question",self.currentQuestion);
+    console.log("----")
 
     // Topics for prioritising
     // This needs to run after every question
     // Because topics for weighting cannot include those entirely skipped by users
     self.defineCalculableTopics = function() {
-      var oldPriorities = JSON.parse(JSON.stringify(quiz.quizTopics));
-      console.log("Old priorities",oldPriorities);
+      if(!qp.answers.length || qp.answers.length < 1) return false;
+
+      if(quiz.quizTopics) {
+        var oldPriorities = JSON.parse(JSON.stringify(quiz.quizTopics));
+        console.log("Old priorities",oldPriorities);
+      }
       quiz.quizTopics = new Set(); // for priority labelling
 
       // This will also be used by self.recalculateOpinions
@@ -1817,7 +1818,7 @@ class Quiz {
         quiz.quizTopics[i] = {
           issue: topic,
           label: topic,
-          highPriority: oldPriorities.length && oldPriorities.find((p)=>p.issue == topic) ? oldPriorities.find((p)=>p.issue == topic).highPriority  : false,
+          highPriority: oldPriorities && oldPriorities.length && oldPriorities.find((p)=>p.issue == topic) ? oldPriorities.find((p)=>p.issue == topic).highPriority  : false,
           topicTogglePriority: () => {
             console.log("Restoring previous priority",oldPriorities.find((p)=>p.issue == topic))
             self.reprioritiseTopic(topic,i);
@@ -1861,7 +1862,7 @@ class Quiz {
     }
     self.answerSubquestion = function(answer) {
       console.log("Improve on Yes/No");
-      qp.answers[qp.answers.length-1] = answer;
+      // qp.answers[qp.answers.length-1] = answer;
       self.submitOpinion(answer,true);
       self.next();
     }
@@ -1875,7 +1876,7 @@ class Quiz {
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
       if(commitToAnswer) {
         console.log("Next Q")
-        model.user.quizProgress.opinions.push(opinion);
+        qp.opinions.push(opinion);
         qp.questionPointer++;
         self.refresh();
         self.next();
@@ -1884,30 +1885,30 @@ class Quiz {
       }
 
       model.user.opinions.issues = model.user.opinions.issues || {};
+      var issue = thisQuestion.issue;
+      var debate = thisQuestion.debate;
 
       if(opinion === false) {
         console.log("Question skipped, won't consider in calculations")
 
         // Erase from model
-        var issue = thisQuestion.issue;
-        var debate = thisQuestion.debate;
 
-        if(model.user.opinions.issues[issue]) {
-          if(model.user.opinions.issues[issue].debates[debate])
-            delete model.user.opinions.issues[issue].debates[debate]
-
-          if(model.user.opinions.issues[issue].debates.length < 1)
-            delete model.user.opinions.issues[issue]
-        }
+        // if(model.user.opinions.issues[issue]) {
+        //   console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+        //   if(model.user.opinions.issues[issue].debates[debate])
+        //     delete model.user.opinions.issues[issue].debates[debate]
+        //
+        //   if(model.user.opinions.issues[issue].debates.length < 1) {
+        //     console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+        //     delete model.user.opinions.issues[issue]
+        //   }
+        // }
 
         self.defineCalculableTopics();
         self.next();
         return false;
       }
-      // else
 
-      var issue = thisQuestion.issue;
-      var debate = thisQuestion.debate;
       model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
       model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
       model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
@@ -1944,7 +1945,7 @@ class Quiz {
         }
         var newScore = {
           key: partyKey,
-          percentage: (SiteBrand=='38degrees') ?  parseInt(matchScore*100) : parseInt(party.match*100),
+          percentage: /*(SiteBrand=='38degrees') ?  parseInt(matchScore*100) : */ parseInt(party.match*100),
           newMatch: newMatch ? newMatch : undefined
         }
         return newScore;
@@ -1987,11 +1988,42 @@ class Quiz {
       qp.quizResultsPage = false;
 
       if(qp.answers.length > 0) {
-        if(qp.questionPointer===qp.answers.length){
-          qp.opinions.pop();
-          qp.questionPointer--;
-        } else {
-          qp.answers.pop();
+        var now = {
+          yesNo: qp.questionPointer === qp.opinions.length,
+          subQ: typeof qp.answers[qp.questionPointer] === 'string'
+        }
+        var prev = {
+          subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
+          skipped: qp.answers[qp.questionPointer-1] === false
+        }
+        console.log("-----")
+        console.log(now);
+        console.log(prev);
+
+        if(now.subQ) {
+          qp.answers.pop(); // reset yes/no
+        } else
+        if(now.yesNo) {
+          qp.questionPointer--; // previous question
+          qp.opinions.pop(); // reset model
+
+          // model.user.opinions.issues = model.user.opinions.issues || {};
+          // var issue = quiz.questionDB[qp.questionSeries[qp.questionPointer]].issue;
+          // var debate = quiz.questionDB[qp.questionSeries[qp.questionPointer]].debate;
+          // if(model.user.opinions.issues[issue]) {
+          //   // console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+          //   if(model.user.opinions.issues[issue].debates[debate])
+          //     delete model.user.opinions.issues[issue].debates[debate]
+          //
+          //   if(model.user.opinions.issues[issue].debates.length < 1) {
+          //     // console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+          //     delete model.user.opinions.issues[issue]
+          //   }
+          // }
+
+          if(prev.skipped) {
+            qp.answers.pop();
+          }
         }
       } else {
         if(qp.prioritiesSet) prioritiesSet = false;
@@ -2001,9 +2033,11 @@ class Quiz {
           qp.quizStarted = false;
         }
       }
-      self.next();
+
       self.refresh();
+      self.next();
     }
+
     self.skipQuestion = function() {
       var skipOpinion = false;
       qp.answers.push(skipOpinion);
@@ -2072,7 +2106,7 @@ class Quiz {
     */
 
     self.updateShareLinks = function() {
-        console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+        // console.log("Old share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
       // self.facebookShareConstituencyHref = null;
       // self.twitterShareConstituencyHref = null;
 
@@ -2084,7 +2118,7 @@ class Quiz {
       qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
       qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
 
-      console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+      // console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
 
       self.refresh();
     }
@@ -2216,7 +2250,7 @@ class Quiz {
     const qp = model.user.quizProgress;
     const quiz = model.questions;
     const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.questionPointer]] : null;
-    console.log("Subquestions",subquestions);
+
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
       qp.hasStarted = true;
@@ -2234,24 +2268,91 @@ class Quiz {
     countriesData.forEach(function(country){
       country.parties.forEach(function(party){
         const matches = party.matches;
-        party.openMatches = function(){
-          var tempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
-          var tempCard = {
-            '@id': tempKey,
-            '@type': 'QuizMatch',
-            name: matches.length ? 'How you and ' + party.fullName + ' match:' : "Answer a question to see how you match",
-            matches: matches.length ? matches : []
+        const qp = model.user.quizProgress;
+
+        const qs_asked = qp.calculableQuestions;
+        const answered_issues = quiz.quizTopics;
+        const actual_issue_cards = {};
+
+        if(answered_issues && answered_issues.length) {
+          answered_issues.forEach(function(issueObj) {
+            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
+            // console.log("Issueeeee",issue);
+            const opinionsPerIssue = Object
+              .entries(issue.debates)
+              .filter(function(debate) {
+                  return qs_asked.includes(debate[0]);
+              })
+              .map(function(debate) {
+                // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
+                  return {
+                      question: debate[1].question,
+                      partyOpinion: debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5,
+                      userOpinion: qp.opinions[qs_asked.indexOf(debate[0])]
+                  };
+              })
+
+              var ltempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+              var ltempCard = {
+                '@id': ltempKey,
+                '@type': 'QuizMatch',
+                 name: "Here's how you rate "+ issue[0] + " compared to "+party.fullName,
+                 matches: opinionsPerIssue
+              }
+
+              actual_issue_cards[issue[0]] = {
+                  key: ltempKey,
+                  card: ltempCard
+              }
+          });
+
+          let running_upweight = 0;
+
+          const scoresPerIssue = answered_issues.map(function(issueObj) {
+              var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
+              // console.log("Issueeeee",issue);
+              const score = Object
+                .entries(issue.debates)
+                .filter(function(debate) {
+                    return qs_asked.includes(debate[0]);
+                })
+                .map(function(debate) {
+                    // console.log("scoresPerIssue: Map debate",issueObj.label,debate[0],model.user.opinions.issues[issueObj.label]);
+                    const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
+                    running_upweight += upweight;
+                    return upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]);
+                })
+                .reduce(function(a,b) {
+                    return a + b;
+                })
+
+              return { name: issue[0], link: actual_issue_cards[issue[0]].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
+          });
+
+          var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
+            return obj.key;
+          });
+
+          party.openMatches = function(){
+            var tempKey = 'http://api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
+            var tempCard = {
+              '@id': tempKey,
+              '@type': 'IssueMatch',
+               name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+               issues: scoresPerIssue,
+               links: allCardKeys
+            };
+
+            var allCards = Object.values(actual_issue_cards).map(function(obj) {
+              return obj.card;
+            });
+
+            allCards.push(tempCard);
+
+            explaain.addClientCards(allCards);
+            explaain.showOverlay(allCardKeys[0]);
+            explaain.showOverlay(tempKey);
           }
-          // var tempKey2 = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
-          // var tempCard2 = {
-          //   '@id': tempKey2,
-          //   '@type': 'QuizMatch',
-          //   name: 'How you and ' + party.fullName + ' match:',
-          //   matches: [matches[1]]
-          // }
-          explaain.addClientCards(tempCard)
-          // explaain.addClientCards(tempCard2)
-          explaain.showOverlay(tempKey);
         }
 
         country.select = function(){
