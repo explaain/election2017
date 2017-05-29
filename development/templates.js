@@ -2053,21 +2053,21 @@ module.exports = function(CardTemplates){
                     "content": "1"
                   },
                   {
-                    "dom": "h2",
+                    "dom": "h2.tactical-top-match",
                     "content": "Based on where you are and your views, this is your top contender..."
                   },
                   {
-                    "dom": ".quizPercentages.topLayer",
+                    "dom": ".quizPercentages.topLayer.tactical-top-match",
                     "condition": "!quizSafeSeat",
                     "content": [
                       {
-                        "loop": "partiesChartDataTopMatch",
+                        "loop": "partiesChartDataTopMatchTactical",
                         "content": [{"template": "quizPercentagesParty"}]
                       },
                     ]
                   },
                   {
-                    "dom": ".quizSafeSeatText.topLayer",
+                    "dom": ".quizSafeSeatText.topLayer.tactical-top-match",
                     "condition": "quizSafeSeat",
                     "content": [
                       {
@@ -2109,6 +2109,7 @@ module.exports = function(CardTemplates){
               ["chancesData", "partiesChartDataChances"],
               ["openMatches", "openMatches"],
               ["quizResults", "quizResults"],
+              ["finalResults", "finalResults"],
               ["quizResultsPage", "quizResultsPage"],
               ["prioritiesSet", "prioritiesSet"],
               ["resultLogo", "resultLogo"],
@@ -2118,7 +2119,9 @@ module.exports = function(CardTemplates){
               ["postcodeBinding", "postcodeBinding"],
               ["isWaiting", "isWaiting"],
               ["startingQuiz", "startingQuiz"],
-              ["nowProgressingThroughQuiz", "nowProgressingThroughQuiz"]
+              ["nowProgressingThroughQuiz", "nowProgressingThroughQuiz"],
+              ["partiesChartDataTopMatch", "partiesChartDataTopMatch"],
+              ["partiesChartDataTopMatchTactical", "partiesChartDataTopMatchTactical"]
             ]
           },
           {
@@ -2330,7 +2333,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2.seeHow",
                 "condition": "prioritiesSet",
-                "content": "Here is how you matched the major parties manifestos overall:"
+                "content": "Here is how you matched the major parties' manifestos overall:"
               },
               {
                 "dom": "h2",
@@ -2346,6 +2349,16 @@ module.exports = function(CardTemplates){
                 "dom": "h3",
                 "condition": "finalResults",
                 "content": "In the lead in your area:"
+              },
+              {
+                "dom": ".quizPercentages.topLayer.basic-top-match",
+                "condition": "finalResults",
+                "content": [
+                  {
+                    "loop": "partiesChartDataTopMatch",
+                    "content": [{"template": "quizPercentagesParty"}]
+                  },
+                ]
               },
               {
                 "template": "quizPercentages"

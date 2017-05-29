@@ -1934,3 +1934,11 @@ span.t-featured {
   margin: 0px 0 30px;
   line-height: 1.4;
 }
+
+.body._38degrees .tactical-top-match {
+  display: none;
+}
+
+.body:not(._38degrees) .basic-top-match {
+  display: none;
+}

@@ -1689,7 +1689,9 @@ class Quiz {
     self.countrySelected = params && params.finalResults || self.selectedCountry!==null;
     self.finalResults = params && params.finalResults ? params.finalResults : false;
     self.beginTheQuiz = params && params.begin;
-    self.params = params
+    self.params = params;
+    self.partiesChartDataTopMatch = [];
+    self.partiesChartDataTopMatchTactical = [];
 
     self.startStudentCompare = function(){
       trackEvent("Student Compare Started",{type: "Quiz"});
@@ -2032,6 +2034,17 @@ class Quiz {
           percentage: parseInt(topParty.percentage)+"%",
           percentageText: parseInt(topParty.percentage)+"%"
         }
+        // tempMaxParty = {
+        //   color: party.color,
+        //   photo: party.photo,
+        //   name: party.fullName,
+        //   key: party.key,
+        //   percentage: party.percentage,
+        //   percentageText: party.percentageText + " Match",
+        //   matches: party.matches,
+        //   quizResults: party.quizResults
+        // }
+        self.partiesChartDataTopMatch = [qp.resultsData];
       }
     }
 
@@ -2083,6 +2096,7 @@ class Quiz {
     }
 
     if (self.finalResults == true) {
+      console.log('final!!!');
       setTimeout(function(){
         $('.body.quiz').addClass('moving')}
       ,10);
@@ -2124,12 +2138,14 @@ class Quiz {
           // tempMaxParty.name = tempMaxParty.fullName;
         }
       });
-      self.partiesChartDataTopMatch = [tempMaxParty]
+      self.partiesChartDataTopMatchTactical = [tempMaxParty]
 
       qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
       if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
         getResults('localCandidates')
         .then(function(results) {
+          console.log('results')
+          console.log('results')
           console.log('results')
           console.log('results')
           console.log('results')
@@ -2256,7 +2272,8 @@ class Quiz {
       nextButtonText: self.nextButtonText,
       partiesChartData: self.partiesChartData,
       partiesChartDataChances: self.partiesChartDataChances,
-      partiesChartDataTopMatch: self.partiesChartDataTopMatch,
+      partiesChartDataTopMatch: self.partiesChartDataTopMatch, //Temporary
+      partiesChartDataTopMatchTactical: self.partiesChartDataTopMatchTactical,
       // openMatches: self.openMatches,
       partiesRandomChartData: self.partiesRandomChartData,
       quizStarted: self.quizStarted,
