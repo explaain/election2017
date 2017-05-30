@@ -34,9 +34,9 @@ const watchFiles = [
 
 // Files to fetch from remote services
 const filesToFetch = [
-  "http://explaain-use.herokuapp.com/explaain.js",
-  "http://explaain-app.herokuapp.com/style.css",
-  "http://explaain-api.herokuapp.com/templates",
+  "http://localhost:5001/explaain.js",
+  "http://app.explaain.com/style.css",
+  "http://api.explaain.com/templates",
 ];
 
 // JS Files to compile (babel, browserify)

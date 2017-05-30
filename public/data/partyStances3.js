@@ -9,6 +9,7 @@ var partyStances = {
   opinions: {
     issues: {
       "health": {
+        description: "Health",
         debates: {
           "health-1": {
             question: "Should cannabis be legalised?",
@@ -46,6 +47,7 @@ var partyStances = {
         }
       },
       "education": {
+        description: "Education",
         debates: {
           "education-1": {
             question: "Should tuition fees be scrapped?",
@@ -106,6 +108,7 @@ var partyStances = {
         }
       },
       "housing": {
+        description: "Housing",
         debates: {
           "housing-1": {
             question: "Should there be a cap on how much landlords can charge for rent?",
@@ -170,6 +173,7 @@ var partyStances = {
         }
       },
       "eu": {
+        description: "EU",
         debates: {
           "eu-1": {
             question: "Should the UK have voted to leave the EU?",
@@ -316,6 +320,7 @@ var partyStances = {
         }
       },
       "jobs": {
+        description: "Jobs",
         debates: {
           "jobs-1": {
             question: "Should companies have to pay more to hire someone from outside the UK?",
@@ -380,6 +385,7 @@ var partyStances = {
         }
       },
       "environment": {
+        description: "Environment",
         debates: {
           "environment-1": {
             question: "Should fox hunting be legal?",
@@ -498,6 +504,7 @@ var partyStances = {
         }
       },
       "tax": {
+        description: "Tax",
         debates: {
           "tax-1": {
             question: "If you earn more than 95% of the rest of the country, should your tax go up?",
@@ -632,6 +639,7 @@ var partyStances = {
         }
       },
       "public-services": {
+        description: "Public Services",
         debates: {
           "public-services-1": {
             question: "Should the government own utlilites like the railway, post office and water companies?",
@@ -670,6 +678,7 @@ var partyStances = {
         }
       },
       "defence": {
+        description: "Defence",
         debates: {
           "defence-1": {
             question: "Should the UK carry out airstrikes on another country without MPs voting on it?",
@@ -888,6 +897,7 @@ var partyStances = {
         }
       },
       "living-costs": {
+        description: "Living Costs",
         debates: {
           "38-living-costs-1": {
             question: "Should there be a cap on how much landlords can charge for rent?",

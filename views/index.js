@@ -2358,11 +2358,11 @@ class Quiz {
               var ltempCard = {
                 '@id': ltempKey,
                 '@type': 'QuizMatch',
-                 name: "Here's how you rate "+ issue[0] + " compared to "+party.fullName,
+                 name: "Here's how you rate "+ issue.description + " compared to "+party.fullName,
                  matches: opinionsPerIssue
               }
 
-              actual_issue_cards[issue[0]] = {
+              actual_issue_cards[issueObj.label] = {
                   key: ltempKey,
                   card: ltempCard
               }
@@ -2373,6 +2373,7 @@ class Quiz {
           const scoresPerIssue = answered_issues.map(function(issueObj) {
               var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
               // console.log("Issueeeee",issue);
+              // console.log("Issueeeee",issue ? issue.description : '');
               const score = Object
                 .entries(issue.debates)
                 .filter(function(debate) {
@@ -2388,7 +2389,9 @@ class Quiz {
                     return a + b;
                 })
 
-              return { name: issue[0], link: actual_issue_cards[issue[0]].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
+              console.log('ISSUE', issue, issueObj);
+
+              return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
           });
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
@@ -2412,8 +2415,8 @@ class Quiz {
             allCards.push(tempCard);
 
             explaain.addClientCards(allCards);
-            explaain.showOverlay(allCardKeys[0]);
-            // explaain.showOverlay(tempKey);
+            // explaain.showOverlay(allCardKeys[0]);
+            explaain.showOverlay(tempKey);
           }
         }
 
