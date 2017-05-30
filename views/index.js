@@ -2143,6 +2143,10 @@ class Quiz {
       // self.facebookShareConstituencyHref = null;
       // self.twitterShareConstituencyHref = null;
 
+      /* ---
+        NB: This will send users from Iframed quizes (e.g. unilad, 38degrees?) back to the standalone quiz (with branding)
+      */
+
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
       console.log("Results data for sharing",shareData);
