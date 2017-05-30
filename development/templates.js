@@ -2026,7 +2026,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "h2",
-            "content": "Where are you voting from?"
+            "content": "Where are you voting?"
           },
           {
             "dom": "div.countries",
@@ -2511,7 +2511,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "h3.otherParties",
         "condition": "finalResults",
-        "content": "Other parties standing in your area:"
+        "content": "Other parties standing in your area (and how you matched them):"
       },
       {
         "dom": ".quizPercentages",

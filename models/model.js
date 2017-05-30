@@ -1001,7 +1001,7 @@ module.exports = {
       label: "Loading your results..."
     },
     postcode: {
-      label: "Where are you voting from?"
+      label: "Where are you voting?"
     },
     'quiz-priority': {
       label: "Finally, what matters most to you?"
