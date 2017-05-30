@@ -97,6 +97,9 @@ var partyStances ={
                    },
                    "ukip": {
                      opinion: 0.5
+                   },
+                   "snp": {
+                     opinion: 0
                    }
                  }
                }
@@ -304,6 +307,9 @@ var partyStances ={
                    },
                    "ukip": {
                      opinion: 0.5
+                   },
+                   "snp": {
+                     opinion: 1
                    }
                  }
                }
@@ -444,7 +450,7 @@ var partyStances ={
                    "labour": {
                      opinion: 0
                    },
-                   "ukip": {
+                   "snp": {
                      opinion: 0.5
                    }
                  }
@@ -460,6 +466,9 @@ var partyStances ={
                    },
                    "ukip": {
                      opinion: 0.5
+                   },
+                   "conservative": {
+                     opinion: 0.2
                    }
                  }
                },
@@ -480,6 +489,9 @@ var partyStances ={
                    },
                    "ukip": {
                      opinion: 0.5
+                   },
+                   "snp": {
+                     opinion: 1
                    }
                  }
                }
@@ -555,6 +567,7 @@ var partyStances ={
                },
                "38-tax-1": {
                   issue: "tax",
+                  question: "Should taxes be increased to fund the NHS and social care?",
                   parties: {
                     "labour": {
                       opinion: 1
@@ -567,6 +580,9 @@ var partyStances ={
                     },
                     "ukip": {
                       opinion: 0.5
+                    },
+                    "snp": {
+                      opinion: 0.2
                     }
                  }
               },
@@ -587,6 +603,9 @@ var partyStances ={
                   },
                   "ukip": {
                     opinion: 0.5
+                  },
+                  "snp": {
+                    opinion: 0.6
                   }
                 }
               },
@@ -759,7 +778,7 @@ var partyStances ={
                }
              },
              "38-immigration-2": {
-               question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
+               question: "Should net migration be less than 100,000 per year?",
                parties: {
                  "conservative": {
                    opinion: 1
@@ -777,14 +796,26 @@ var partyStances ={
          "welfare": {
             description: "Welfare",
             debates: {
-              "38-welfare-1": {
-                question: "Should the 4 year freeze on increases to benefits payments be scrapped?",
-                parties: {
-                  "ukip": {
-                    opinion: 0.5
-                  }
+            "38-welfare-1": {
+              question: "Should the pensions 'triple lock' remain in use?",
+              parties: {
+                "conservative": {
+                  opinion: 0.8
+                },
+                "labour": {
+                  opinion: 1
+                },
+                "lib-dem": {
+                  opinion: 1
+                },
+                "ukip": {
+                  opinion: 1
+                },
+                "snp": {
+                  opinion: 1
                 }
-              },
+
+            }
               "38-welfare-2": {
                 question: "Should the bedroom tax be scrapped?",
                 parties: {
@@ -802,8 +833,11 @@ var partyStances ={
                   },
                   "ukip": {
                     opinion: 0.5
+                  },
+                  "snp": {
+                    opinion: 1
                   }
-                }
+
               }
            }
          },
@@ -837,6 +871,9 @@ var partyStances ={
                     opinion: 1
                   },
                   "ukip": {
+                    opinion: 0.5
+                  },
+                  "conservative": {
                     opinion: 0.5
                   }
                 }
@@ -879,6 +916,9 @@ var partyStances ={
                  },
                  "ukip": {
                    opinion: 0.5
+                 },
+                 "snp": {
+                   opinion: 1
                  }
                }
              }
