@@ -2149,15 +2149,20 @@ class Quiz {
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
+        var tweet = `I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
-        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`);
+        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData) {
         // Multiple parties
         var perc = shareData[0].percentage.slice(0,-1);
-        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}-and-${encodeURIComponent(shareData[1].name)}/${perc}`;
+        var partyNames = [];
+        shareData.forEach((p) => partyNames.push(p.name))
+        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
+        var tweet = `I equally support ${shareData[0].percentage} of ${partyNames.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
-        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I equally support ${shareData[0].percentage} of ${shareData[0].name} and ${shareData[1].name} policies. Who should you vote for? #GE2017 ${sharePath}`);
+        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       }
+      console.log("Share string",tweet);
 
       self.refresh();
     }

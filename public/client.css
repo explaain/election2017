@@ -2039,6 +2039,9 @@ span.t-featured {
 .body.quiz._ge2017 a.quizPercentagesParty {
   pointer-events: none;
 }
+.body.quiz._ge2017 a.quizPercentagesParty:nth-child(3){
+  margin-top: 70px;
+}
 .basic-top-match {
   height: 190px;
   padding: 40px 0px;
@@ -2073,4 +2076,7 @@ span.t-featured {
 
 p.shareText {
   margin: 50px 0 -40px;
+}
+.bestMatchSoFar + .basic-top-match {
+  height: auto !important;
 }
