@@ -27,7 +27,10 @@ var cfg = {
     footerClass: "turnupFooter",
     randomise: true,
     numbering: true,
-    quizQuestions: allData.getAllData().quizQuestions
+    quizQuestions: allData.getAllData().quizQuestions,
+    sharing: {
+      basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - ge2017.com",
+    },
   },
   '38degrees': {
     subdomain: '38degrees',
@@ -38,13 +41,21 @@ var cfg = {
     randomise: true,
     numbering: true,
     prependYesNo: true,
-    quizQuestions: allData.getAllData().quizQuestions38Degrees
+    quizQuestions: allData.getAllData().quizQuestions38Degrees,
+    sharing: {
+      basicTwitter: "Take the @38_degrees #GE2017 quiz to find your match + see local candidates 👉 38degrees.ge2017.com",
+      /* shareMetaDescription is not yet used - this object needs to be defined in Node! */
+      shareMetaDescription: "Who should you vote for in the #GeneralElection2017? Compare parties, explore the main issues, and see who’s standing where you live",
+    },
   },
   'unilad': {
     subdomain: 'unilad',
     logoImg: "img/unilad.png",
     logoClass: "_unilad-logo",
-    randomise: true
+    randomise: true,
+    sharing: {
+      basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - http://bit.ly/unilad-ge2017 via @UNILAD",
+    },
   }
 }
 
@@ -1520,7 +1531,7 @@ function getResults(resultsType){
             clientCards.push({
               "@id": "//api.explaain.com/Headline/localCandidate_"+localCandidate.id,
               "@type": "http://api.explaain.com/Headline",
-              image: localCandidate.image_url,
+              image: localCandidate.image_url || '//ge2017.com/img/person.png',
               name: localCandidate.name,
               description: (new LocalCandidateDetails(localCandidate)).render()
             });
@@ -1646,7 +1657,7 @@ class QuizLanding {
         },
         {
           color: "green",
-          photo: "/img/leader-faces/wood.png",
+          photo: "/img/leader-faces/lucas.png",
           percentage: parseInt((Math.random()*100))+"%",
           fullName: "Green",
           name: "Green"
@@ -2275,7 +2286,10 @@ class Quiz {
           console.log('results')
           console.log('results')
           console.log(results)
-          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults;
+          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
+            candidate.image_url = candidate.image_url || '/img/person.png';
+            return candidate;
+          });
 
           qp.country.parties.forEach(function(party) {
             if (qp.localCandidateData.filter(function(candidate) {
@@ -2424,15 +2438,14 @@ class Quiz {
       })
     })
     var facebookShareHref;
-    var twitterShareHref;
     if (SiteBrand == 'unilad') {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button";
-      twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20http%3A%2F%2Fbit.ly%2Funilad-ge2017%20via%20%40UNILAD";
     } else {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com&display=popup&ref=plugin&src=share_button";
-      twitterShareHref = "https://twitter.com/intent/tweet?text="+"Use%20GE2017.com%20To%20Decide%20Who%20To%20Vote%20For%20In%20The%20General%20Election%20%23GE2017%20-%20ge2017.com";
     }
-    var safeSeatMessage = "This means the party you matched isn't as likely to win. You can still vote for them or explore other candidates standing in your area below."
+
+		var twitterShareHref = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(config[SiteBrand].sharing.basicTwitter);
+    var safeSeatMessage = "This means the party you matched isn't as likely to win. You can still vote for them or explore other candidates standing in your area below.."
 
     var partyResults = qp.prioritiesSet && !qp.constituencyView;
     return helpers.assembleCards({
