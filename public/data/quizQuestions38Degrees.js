@@ -315,33 +315,34 @@ var quizQuestions = [
      ]
    }
  },
- {
-   question: "Should there be a second EU referendum on the final Brexit deal?",
-   issue: "eu",
-   debate: "38-eu-1",
-   answers: {
-     yes: [
-       {
-         label: "the British people should have the final say via a referendum.",
-         opinion: 1,
-       },
-       {
-         label: "but MPs should vote as well.",
-         opinion: 0.8,
-       },
-     ],
-     no: [
-       {
-         label: "parliament should have the final vote.",
-         opinion: 0.4,
-       },
-       {
-         label: "the results of the referendum should be the mandate and that's it.",
-         opinion: 0
-       },
-     ]
-   }
- },
+ // {
+ //   question: "Should there be a second EU referendum on the final Brexit deal?",
+ //   randomiseGroup: "remainder",
+ //   issue: "eu",
+ //   debate: "38-eu-1",
+ //   answers: {
+ //     yes: [
+ //       {
+ //         label: "the British people should have the final say via a referendum.",
+ //         opinion: 1,
+ //       },
+ //       {
+ //         label: "but MPs should vote as well.",
+ //         opinion: 0.8,
+ //       },
+ //     ],
+ //     no: [
+ //       {
+ //         label: "parliament should have the final vote.",
+ //         opinion: 0.4,
+ //       },
+ //       {
+ //         label: "the results of the referendum should be the mandate and that's it.",
+ //         opinion: 0
+ //       },
+ //     ]
+ //   }
+ // },
  {
    question: "Should the government take over the running of railways, water companies and the Royal Mail?",
    issue: "economy",
@@ -456,6 +457,7 @@ var quizQuestions = [
  },
  {
    question: "Should the UK aim to stay in the European Union's \"Single Market\" after Brexit?",
+   randomiseGroup: "remainder",
    issue: "eu",
    debate: "38-eu-2",
    helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",

@@ -93,7 +93,7 @@ var quizQuestions = [
  },
  {
    question: "Should the UK have voted to leave the EU?",
-   issue: "EU",
+   issue: "eu",
    randomiseGroup: 1,
    debate: "eu-1",
    answers: {
@@ -205,7 +205,7 @@ var quizQuestions = [
  },
  {
    question: "Should there be a second EU referendum on the terms of leaving ?",
-   issue: "EU",
+   issue: "eu",
    randomiseGroup: 1,
    debate: "eu-2",
    answers: {
@@ -261,7 +261,7 @@ var quizQuestions = [
  },
  {
    question: "Should all EU citizens currently living in the UK be immediately given the right to stay?",
-   issue: "EU",
+   issue: "eu",
    randomiseGroup: 1,
    debate: "eu-3",
    answers: {
