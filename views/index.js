@@ -1520,7 +1520,7 @@ function getResults(resultsType){
             clientCards.push({
               "@id": "//api.explaain.com/Headline/localCandidate_"+localCandidate.id,
               "@type": "http://api.explaain.com/Headline",
-              image: localCandidate.image_url,
+              image: localCandidate.image_url || '//ge2017.com/img/person.png',
               name: localCandidate.name,
               description: (new LocalCandidateDetails(localCandidate)).render()
             });
@@ -1646,7 +1646,7 @@ class QuizLanding {
         },
         {
           color: "green",
-          photo: "/img/leader-faces/wood.png",
+          photo: "/img/leader-faces/lucas.png",
           percentage: parseInt((Math.random()*100))+"%",
           fullName: "Green",
           name: "Green"
@@ -2275,7 +2275,10 @@ class Quiz {
           console.log('results')
           console.log('results')
           console.log(results)
-          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults;
+          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
+            candidate.image_url = candidate.image_url || '/img/person.png';
+            return candidate;
+          });
 
           qp.country.parties.forEach(function(party) {
             if (qp.localCandidateData.filter(function(candidate) {
