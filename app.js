@@ -78,6 +78,12 @@ app.get('/policy', function(req, res, next) {
 });
 
 app.get('/shared/:party?/:percentage?', function(req, res, next) {
+  if(req.params.party && req.params.party.includes("-and-")) {
+    req.params.party = req.params.party.split("-and-").join(" and ");
+    req.params.append = "equally"
+  } else {
+    req.params.append = "";
+  }
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
 })
 

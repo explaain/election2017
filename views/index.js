@@ -2144,14 +2144,20 @@ class Quiz {
       // self.twitterShareConstituencyHref = null;
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
-      var shareData = model.user.quizProgress.resultsData[0];
-      try { var perc = shareData.percentage.slice(0,-1); } catch(e) {} // temp try/catch, don't fully recognise when this should be calculated
-      var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData.name)}/${perc}`;
-      // encodeURIComponent(`http://ge2017.com/quiz/${shareData.name}/${shareData.percentage}`);
-      qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
-      qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData.percentage} of ${shareData.name} policies. Who should you vote for? #GE2017 ${sharePath}`);
-
-      // console.log("New share URLs",qp.facebookShareAlignmentHref,qp.twitterShareAlignmentHref);
+      var shareData = model.user.quizProgress.resultsData;
+      console.log("Results data for sharing",shareData);
+      if(shareData && shareData.length === 1) {
+        var perc = shareData[0].percentage.slice(0,-1);
+        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
+        qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
+        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`);
+      } else if(shareData) {
+        // Multiple parties
+        var perc = shareData[0].percentage.slice(0,-1);
+        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}-and-${encodeURIComponent(shareData[1].name)}/${perc}`;
+        qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
+        qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(`I equally support ${shareData[0].percentage} of ${shareData[0].name} and ${shareData[1].name} policies. Who should you vote for? #GE2017 ${sharePath}`);
+      }
 
       self.refresh();
     }
