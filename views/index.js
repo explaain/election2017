@@ -2395,7 +2395,7 @@ class Quiz {
 
             explaain.addClientCards(allCards);
             explaain.showOverlay(allCardKeys[0]);
-            explaain.showOverlay(tempKey);
+            // explaain.showOverlay(tempKey);
           }
         }
 

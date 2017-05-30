@@ -2042,6 +2042,9 @@ span.t-featured {
 .body.quiz._ge2017 a.quizPercentagesParty:nth-child(3){
   margin-top: 70px;
 }
+.body.quiz._38degrees a.quizPercentagesParty {
+  pointer-events: none;
+}
 .basic-top-match {
   height: 190px;
   padding: 40px 0px;
