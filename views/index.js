@@ -2156,7 +2156,7 @@ class Quiz {
         var tweet = `I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
-      } else if(shareData) {
+      } else if(shareData && shareData.length && shareData.length > 1) {
         // Multiple parties
         var perc = shareData[0].percentage.slice(0,-1);
         var partyNames = [];
