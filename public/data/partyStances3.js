@@ -569,6 +569,9 @@ var partyStances = {
             issue: "tax",
             question: "Should taxes be increased to fund the NHS and social care?",
             parties: {
+              "conservative": {
+                opinion: 0
+              },
               "labour": {
                 opinion: 1
               },
@@ -819,6 +822,9 @@ var partyStances = {
           "38-welfare-2": {
             question: "Should the bedroom tax be scrapped?",
             parties: {
+              "conservative": {
+                opinion: 0
+              },
               "labour": {
                 opinion: 1
               },
