@@ -82,6 +82,18 @@ if (!Object.entries) {
 
 
 
+const getOpinionText = function (question, opinion) {
+  var aggAnswers = question.answers.yes.concat(question.answers.no).concat([{label: "Yes", opinion: 0.8},{label: "No", opinion: 0.2}]);
+  var answer = {diff: 1};
+  aggAnswers.forEach(function(_answer) {
+    _answer.diff = Math.abs(opinion - _answer.opinion);
+    answer = _answer.diff<answer.diff ? _answer : answer;
+  })
+  return answer.label;
+}
+
+
+
 // Get all the defined properties
 var props = new Set();
 Object.keys(cfg).forEach((site) => {
@@ -1956,15 +1968,6 @@ class Quiz {
 
       model.parties = allData.getAllData().partyStances;
       var partyMatches = api.getPartyMatches(model);
-      function getOpinionText(question, opinion) {
-        var aggAnswers = question.answers.yes.concat(question.answers.no).concat([{label: "Yes", opinion: 0.8},{label: "No", opinion: 0.2}]);
-        var answer = {diff: 1};
-        aggAnswers.forEach(function(_answer) {
-          _answer.diff = Math.abs(opinion - _answer.opinion);
-          answer = _answer.diff<answer.diff ? _answer : answer;
-        })
-        return answer.label;
-      }
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
         var userOpinionNum = opinion; //commitToAnswer ? qp.opinions[qp.questionPointer-1] : qp.opinions[qp.questionPointer];
@@ -2346,11 +2349,12 @@ class Quiz {
                   return qs_asked.includes(debate[0]);
               })
               .map(function(debate) {
+                console.log(debate);
                 // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
                   return {
                       question: debate[1].question,
-                      partyOpinion: debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5,
-                      userOpinion: qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)
+                      partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
+                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
                   };
               })
             console.log('opinionsPerIssue', party.key);
@@ -2398,7 +2402,7 @@ class Quiz {
 
             console.log('ISSUE', issue, issueObj);
 
-            return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
+            return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: (100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2)) + '%' };
           });
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
@@ -2411,6 +2415,7 @@ class Quiz {
               '@id': tempKey,
               '@type': 'IssueMatch',
                name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+              //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
                issues: scoresPerIssue,
                links: allCardKeys
             };
