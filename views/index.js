@@ -2350,22 +2350,24 @@ class Quiz {
                   return {
                       question: debate[1].question,
                       partyOpinion: debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5,
-                      userOpinion: qp.opinions[qs_asked.indexOf(debate[0])]
+                      userOpinion: qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)
                   };
               })
+            console.log('opinionsPerIssue', party.key);
+            console.log(opinionsPerIssue);
 
-              var ltempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
-              var ltempCard = {
-                '@id': ltempKey,
-                '@type': 'QuizMatch',
-                 name: "Here's how you rate "+ issue.description + " compared to "+party.fullName,
-                 matches: opinionsPerIssue
-              }
+            var ltempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+            var ltempCard = {
+              '@id': ltempKey,
+              '@type': 'QuizMatch',
+               name: "Here's how you rate "+ issue.description + " compared to "+party.fullName,
+               matches: opinionsPerIssue
+            }
 
-              actual_issue_cards[issueObj.label] = {
-                  key: ltempKey,
-                  card: ltempCard
-              }
+            actual_issue_cards[issueObj.label] = {
+                key: ltempKey,
+                card: ltempCard
+            }
           });
 
 
@@ -2383,11 +2385,12 @@ class Quiz {
                   // console.log("scoresPerIssue: Map debate",issueObj.label,debate[0],model.user.opinions.issues[issueObj.label]);
                   const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
+                  const userOpinion = qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2);
                   console.log(debate[0], party.key);
                   console.log(upweight);
-                  console.log(Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]));
-                  console.log(1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]));
-                  return 1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]);
+                  console.log(Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
+                  console.log(1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
+                  return 1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion);
               })
               .reduce(function(a,b) {
                   return a + b;
