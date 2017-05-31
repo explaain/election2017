@@ -25,6 +25,7 @@ var cfg = {
     logoClass: "ge2017-logo",
     footerImg: "/img/turnup.png",
     footerClass: "turnupFooter",
+    footerLink: "//www.turnup.org.uk/",
     randomise: true,
     numbering: true,
     quizQuestions: allData.getAllData().quizQuestions,
@@ -36,14 +37,16 @@ var cfg = {
     subdomain: '38degrees',
     logoImg: "img/38degrees_ge2017.png",
     logoClass: "_38degrees-logo",
-    footerImg: "/img/ge2017logobeta.png",
+    footerImg: "/img/ge2017logofooter.png",
     footerClass: "ge2017Footer",
+    footerLink: '//ge2017.com',
     randomise: true,
     numbering: true,
     prependYesNo: true,
     quizQuestions: allData.getAllData().quizQuestions38Degrees,
     sharing: {
       basicTwitter: "Take the @38_degrees #GE2017 quiz to find your match + see local candidates 👉 38degrees.ge2017.com",
+      basicTwitterImg: "/img/38degrees_facebook.jpg",
       /* shareMetaDescription is not yet used - this object needs to be defined in Node! */
       shareMetaDescription: "Who should you vote for in the #GeneralElection2017? Compare parties, explore the main issues, and see who’s standing where you live",
     },
@@ -52,6 +55,7 @@ var cfg = {
     subdomain: 'unilad',
     logoImg: "img/unilad.png",
     logoClass: "_unilad-logo",
+    footerLink: "//www.turnup.org.uk/",
     randomise: true,
     sharing: {
       basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - http://bit.ly/unilad-ge2017 via @UNILAD",
@@ -380,7 +384,7 @@ class Footer {
     var quizFooterContents = h("div",
       h("a." + config[SiteBrand].footerClass,
         {
-          "href": "//www.turnup.org.uk/",
+          "href": config[SiteBrand].footerLink,
           "target": "_blank",
         },
         h("img",
@@ -2535,7 +2539,8 @@ class Quiz {
       standaloneResults: qp.standaloneResults,
       localCandidateData: qp.localCandidateData,
       standaloneResults: qp.standaloneResults,
-      beginTheQuiz: self.beginTheQuiz
+      beginTheQuiz: self.beginTheQuiz,
+      calculateText: "[How did we calculate this?](//api.explaain.com/Detail/59106472116f53001109340c)",
     }, CardTemplates.quizMaster);
   }
 }

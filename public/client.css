@@ -1863,7 +1863,7 @@ h2.seeHow {
 }
 
 .body.quiz footer a.ge2017Footer img {
-  height: 30px;
+  height: 50px;
 }
 
 .priority+.questions .quizPercentages {
@@ -1942,6 +1942,7 @@ span.t-featured {
 
 .body:not(._38degrees) .middleLayer.basic-top-match,
 .body:not(._38degrees) .hybrid-top-match,
+.body:not(._38degrees) p.small.tactical-info-2,
 .body:not(._38degrees) .seeHow {
   display: none;
 }

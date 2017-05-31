@@ -2421,12 +2421,17 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2.seeHow",
                 "condition": "prioritiesSet",
-                "content": "Here is how you matched the major parties' manifestos overall:"
+                "content": "Here is how you matched the major parties' manifestos overall"
               },
               {
                 "dom": "h3.seeHow",
                 "condition": "prioritiesSet",
                 "content": "Your party matches:"
+              },
+              {
+                "dom": "p.seeHow",
+                "condition": "prioritiesSet",
+                "content": "Click on the faces to find out more"
               },
               {
                 "dom": "h2.breakdown",
@@ -2455,7 +2460,12 @@ module.exports = function(CardTemplates){
               },
               {
                 "template": "quizPercentages"
-              }
+              },
+              {
+                "dom": "p.small.tactical-info-2",
+                "condition": "finalResults",
+                "content": "Parties not standing in your area are greyed out."
+              },
             ]
           }
         ]
