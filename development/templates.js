@@ -272,7 +272,7 @@ module.exports = function(CardTemplates){
                           {
                             "dom": "a.discard-card-style",
                             "attr": {
-                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
+                              "href": "//api.explaain.com/Detail/5911d608ac223e0011e45fb3"
                             },
                             "content": [
                               {
@@ -506,7 +506,7 @@ module.exports = function(CardTemplates){
                           {
                             "dom": "a.discard-card-style",
                             "attr": {
-                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
+                              "href": "//api.explaain.com/Detail/5911d608ac223e0011e45fb3"
                             },
                             "content": [
                               {
@@ -651,7 +651,7 @@ module.exports = function(CardTemplates){
                           {
                             "dom": "a.discard-card-style",
                             "attr": {
-                              "href": "http://api.explaain.com/Detail/5911d608ac223e0011e45fb3"
+                              "href": "//api.explaain.com/Detail/5911d608ac223e0011e45fb3"
                             },
                             "content": [
                               {
@@ -1436,7 +1436,7 @@ module.exports = function(CardTemplates){
               },
               {
                 "dom": "p",
-                "content": 'Explaain LTD. ("us", "we", or "our") operates http://www.ge2017.com (the "Site"). This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.'
+                "content": 'Explaain LTD. ("us", "we", or "our") operates www.ge2017.com (the "Site"). This page informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.'
               },
               {
                 "dom": "p",
@@ -2041,7 +2041,7 @@ module.exports = function(CardTemplates){
             "dom": "a.explaain-link.dark.standalone-link",
             "content": "Voting in Northern Ireland?",
             "attr": {
-              "href": "http://api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
+              "href": "//api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
             }
           }
         ]

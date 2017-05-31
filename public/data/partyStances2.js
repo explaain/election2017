@@ -12,7 +12,7 @@ var partyStances = {
         description: "Brexit",
         debates: {
           "brexit-1": {
-            question: "Do you agree with the UKs decision to leave the EU?' [Learn more](http://api.explaain.com/Detail/5916ec717f9f9e0011533eea)\"",
+            question: "Do you agree with the UKs decision to leave the EU?' [Learn more](//api.explaain.com/Detail/5916ec717f9f9e0011533eea)\"",
             description: "",
             buttons: {
               "button0": {
@@ -61,7 +61,7 @@ var partyStances = {
         description: "Tuition fees",
         debates: {
           "education-1": {
-            question: "Should tuition fees be scrapped?.' [Learn more](http://api.explaain.com/Detail/5902f54fe04b710011c7af58)",
+            question: "Should tuition fees be scrapped?.' [Learn more](//api.explaain.com/Detail/5902f54fe04b710011c7af58)",
             description: "",
             buttons: {
               "button0": {
@@ -110,7 +110,7 @@ var partyStances = {
          description: "Trains",
          debates: {
            "transport-1": {
-              question: "Should the railways be owned by people who pay tax? [Learn more](http://api.explaain.com/Detail/5916ef1f7f9f9e0011533eed)'",
+              question: "Should the railways be owned by people who pay tax? [Learn more](//api.explaain.com/Detail/5916ef1f7f9f9e0011533eed)'",
               description: "",
               buttons: {
                 "button0": {
@@ -159,7 +159,7 @@ var partyStances = {
          description: "Tax",
          debates: {
            "economy-1": {
-              question: "Do you agree that taxes should increase for those who earn more than 95% of people (over £80,000 per year)? [Learn more](http://api.explaain.com/Detail/5916f08a7f9f9e0011533eef/)' ",
+              question: "Do you agree that taxes should increase for those who earn more than 95% of people (over £80,000 per year)? [Learn more](//api.explaain.com/Detail/5916f08a7f9f9e0011533eef/)' ",
               description: "",
               buttons: {
                 "button0": {
@@ -203,7 +203,7 @@ var partyStances = {
               }
             },
             "economy-2": {
-               question: "The minimum wage should be increased to £10 per hour [Learn more](http://api.explaain.com/)'",
+               question: "The minimum wage should be increased to £10 per hour [Learn more](//api.explaain.com/)'",
                description: "",
                buttons: {
                  "button0": {
@@ -252,7 +252,7 @@ var partyStances = {
          description: "Houses",
          debates: {
            "housing-1": {
-              question: "Who should the government prioritise building houses for? [Learn more](http://api.explaain.com/Detail/5916f4237f9f9e0011533ef1)'",
+              question: "Who should the government prioritise building houses for? [Learn more](//api.explaain.com/Detail/5916f4237f9f9e0011533ef1)'",
               description: "",
               buttons: {
                 "button0": {
@@ -301,7 +301,7 @@ var partyStances = {
          description: "Nuclear weapons",
          debates: {
            "defence-1": {
-              question: "Should the UK have nuclear weapons? [Learn more](http://api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
+              question: "Should the UK have nuclear weapons? [Learn more](//api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
               description: "",
               buttons: {
                 "button0": {
@@ -350,7 +350,7 @@ var partyStances = {
          description: "NHS",
          debates: {
            "NHS-1": {
-              question: "Do you agree that funding the NHS should be a priority over funding for foreign aid?'  [Learn more](http://api.explaain.com/Detail/5916f6b87f9f9e0011533ef3)'",
+              question: "Do you agree that funding the NHS should be a priority over funding for foreign aid?'  [Learn more](//api.explaain.com/Detail/5916f6b87f9f9e0011533ef3)'",
               description: "",
               buttons: {
                 "button0": {
@@ -399,7 +399,7 @@ var partyStances = {
          description: "Global Warming",
          debates: {
            "environment-1": {
-              question: "Should protecting the environment be the main priority for government? [Learn more](http://api.explaain.com/)'",
+              question: "Should protecting the environment be the main priority for government? [Learn more](//api.explaain.com/)'",
               description: "",
               buttons: {
                 "button0": {
@@ -448,7 +448,7 @@ var partyStances = {
          description: "Immigration",
          debates: {
            "immigration-1": {
-              question: "Reducing the levels of immigration to and from the UK is vital [Learn more](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)'",
+              question: "Reducing the levels of immigration to and from the UK is vital [Learn more](//api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)'",
               description: "",
               buttons: {
                 "button0": {

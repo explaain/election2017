@@ -1028,35 +1028,35 @@ module.exports = {
     voteInPersonStory: {
       label: "How do I vote in person?",
       cardUrls: [
-        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
-        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
-        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
-        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+        "//api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "//api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "//api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "//api.explaain.com/Detail/591707647f9f9e0011533ef9"
       ]
     },
     pointOfVotingStory: {
       label: "What's the point of voting?",
       cardUrls: [
-        "http://api.explaain.com/Detail/59172710a1f5940011a03b6a",
-        "http://api.explaain.com/Detail/59172751a1f5940011a03b6b",
-        "http://api.explaain.com/Detail/591728bca1f5940011a03b6e"
+        "//api.explaain.com/Detail/59172710a1f5940011a03b6a",
+        "//api.explaain.com/Detail/59172751a1f5940011a03b6b",
+        "//api.explaain.com/Detail/591728bca1f5940011a03b6e"
       ]
     },
     proxyVotingStory: {
       label: "Proxy Voting",
       cardUrls: [
-        "http://api.explaain.com/Detail/59172171a1f5940011a03b63",
-        "http://api.explaain.com/Detail/59172231a1f5940011a03b65",
-        "http://api.explaain.com/Detail/591722fba1f5940011a03b66",
+        "//api.explaain.com/Detail/59172171a1f5940011a03b63",
+        "//api.explaain.com/Detail/59172231a1f5940011a03b65",
+        "//api.explaain.com/Detail/591722fba1f5940011a03b66",
       ]
     },
     sampleStory: {
       label: "Generic example story",
       cardUrls: [
-        "http://api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
-        "http://api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
-        "http://api.explaain.com/Detail/591707247f9f9e0011533ef8",
-        "http://api.explaain.com/Detail/591707647f9f9e0011533ef9"
+        "//api.explaain.com/Detail/591706ca7f9f9e0011533ef7",
+        "//api.explaain.com/Detail/5917066c7f9f9e0011533ef6",
+        "//api.explaain.com/Detail/591707247f9f9e0011533ef8",
+        "//api.explaain.com/Detail/591707647f9f9e0011533ef9"
       ]
     },
     policy: {

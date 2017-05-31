@@ -144,7 +144,7 @@ var partyStances = {
             }
           },
           "housing-2": {
-            question: "Who should the government prioritise building houses for? [Learn more](http://api.explaain.com/Detail/5916f4237f9f9e0011533ef1)'",
+            question: "Who should the government prioritise building houses for? [Learn more](//api.explaain.com/Detail/5916f4237f9f9e0011533ef1)'",
             description: "",
             parties: {
               "conservative": {
@@ -356,7 +356,7 @@ var partyStances = {
             }
           },
           "jobs-2": {
-            question: "The minimum wage should be increased to £10 per hour [Learn more](http://api.explaain.com/)'",
+            question: "The minimum wage should be increased to £10 per hour [Learn more](//api.explaain.com/)'",
             description: "",
             parties: {
               "conservative": {
@@ -421,7 +421,7 @@ var partyStances = {
             }
           },
           "environment-2": {
-            question: "Should protecting the environment be the main priority for government? [Learn more](http://api.explaain.com/)'",
+            question: "Should protecting the environment be the main priority for government? [Learn more](//api.explaain.com/)'",
             description: "",
             parties: {
               "conservative": {
@@ -714,7 +714,7 @@ var partyStances = {
             }
           },
           "defence-2": {
-            question: "Should the UK have nuclear weapons? [Learn more](http://api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
+            question: "Should the UK have nuclear weapons? [Learn more](//api.explaain.com/Detail/5916f5a67f9f9e0011533ef2)'",
             description: "",
             parties: {
               "conservative": {
@@ -746,7 +746,7 @@ var partyStances = {
         description: "Immigration",
         debates: {
           "immigration-1": {
-            question: "Reducing the levels of immigration to and from the UK is vital [Learn more](http://api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)'",
+            question: "Reducing the levels of immigration to and from the UK is vital [Learn more](//api.explaain.com/Detail/58fb7f0ea22aa10011cfd270)'",
             description: "",
             parties: {
               "conservative": {

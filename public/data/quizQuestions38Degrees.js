@@ -10,7 +10,7 @@ var quizQuestions = [
    randomiseGroup: "firstThree",
    issue: "tax",
    debate: "38-tax-1",
-   helperCard:"http://api.explaain.com/Detail/5929a06cc3fde500115269a3",
+   helperCard:"//api.explaain.com/Detail/5929a06cc3fde500115269a3",
    answers: {
      yes: [
        {
@@ -39,7 +39,7 @@ var quizQuestions = [
    randomiseGroup: "firstThree",
    issue: "welfare",
    debate: "38-welfare-1",
-   helperCard:"http://api.explaain.com/Detail/592da145c45b930011674602",
+   helperCard:"//api.explaain.com/Detail/592da145c45b930011674602",
    answers: {
      yes: [
        {
@@ -68,7 +68,7 @@ var quizQuestions = [
    randomiseGroup: "firstThree",
    issue: "welfare",
    debate: "38-welfare-2",
-   helperCard:"http://api.explaain.com/Detail/5929a172c3fde500115269a5",
+   helperCard:"//api.explaain.com/Detail/5929a172c3fde500115269a5",
    answers: {
      yes: [
        {
@@ -97,7 +97,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "tax",
    debate: "38-tax-2",
-   helperCard:"http://api.explaain.com/Detail/5929a1b4c3fde500115269a6",
+   helperCard:"//api.explaain.com/Detail/5929a1b4c3fde500115269a6",
    answers: {
      yes: [
        {
@@ -126,7 +126,7 @@ var quizQuestions = [
  //   randomiseGroup: "remainder",
  //   issue: "economy",
  //   debate: "38-economy-1",
- //   helperCard:"http://api.explaain.com/Detail/5929a232c3fde500115269a8",
+ //   helperCard:"//api.explaain.com/Detail/5929a232c3fde500115269a8",
  //   answers: {
  //     yes: [
  //       {
@@ -155,7 +155,7 @@ var quizQuestions = [
  //   randomiseGroup: "remainder",
  //   issue: "living-costs",
  //   debate: "38-living-costs-1",
- //   helperCard:"http://api.explaain.com/Detail/5929a25ac3fde500115269a9",
+ //   helperCard:"//api.explaain.com/Detail/5929a25ac3fde500115269a9",
  //   answers: {
  //     yes: [
  //       {
@@ -184,7 +184,7 @@ var quizQuestions = [
  //   randomiseGroup: "remainder",
  //   issue: "immigration",
  //   debate: "38-immigration-1",
- //   helperCard:"http://api.explaain.com/Detail/5929a296c3fde500115269aa",
+ //   helperCard:"//api.explaain.com/Detail/5929a296c3fde500115269aa",
  //   answers: {
  //     yes: [
  //       {
@@ -213,7 +213,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "environment",
    debate: "38-environment-1",
-   helperCard:"http://api.explaain.com/Detail/5929a1dbc3fde500115269a7",
+   helperCard:"//api.explaain.com/Detail/5929a1dbc3fde500115269a7",
    answers: {
      yes: [
        {
@@ -242,7 +242,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "living-costs",
    debate: "38-living-costs-2",
-   helperCard:"http://api.explaain.com/Detail/5929a2bfc3fde500115269ab",
+   helperCard:"//api.explaain.com/Detail/5929a2bfc3fde500115269ab",
    answers: {
      yes: [
        {
@@ -271,7 +271,7 @@ var quizQuestions = [
  //   randomiseGroup: "remainder",
  //   issue: "tax",
  //   debate: "38-tax-3",
- //   helperCard:"http://api.explaain.com/Detail/5929a302c3fde500115269ac",
+ //   helperCard:"//api.explaain.com/Detail/5929a302c3fde500115269ac",
  //   answers: {
  //     yes: [
  //       {
@@ -300,7 +300,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "environment",
    debate: "38-environment-2",
-   helperCard:"http://api.explaain.com/Detail/5929a32bc3fde500115269ad",
+   helperCard:"//api.explaain.com/Detail/5929a32bc3fde500115269ad",
    answers: {
      yes: [
        {
@@ -357,7 +357,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "economy",
    debate: "38-economy-2",
-   helperCard:"http://api.explaain.com/Detail/5929a36ec3fde500115269ae",
+   helperCard:"//api.explaain.com/Detail/5929a36ec3fde500115269ae",
    answers: {
      yes: [
        {
@@ -386,7 +386,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "education",
    debate: "38-education-1",
-   helperCard:"http://api.explaain.com/Detail/5929a878c3fde500115269af",
+   helperCard:"//api.explaain.com/Detail/5929a878c3fde500115269af",
    answers: {
      yes: [
        {
@@ -415,7 +415,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "environment",
    debate: "38-environment-3",
-   helperCard:"http://api.explaain.com/Detail/5929a89ec3fde500115269b0",
+   helperCard:"//api.explaain.com/Detail/5929a89ec3fde500115269b0",
    answers: {
      yes: [
        {
@@ -444,7 +444,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "immigration",
    debate: "38-immigration-2",
-   helperCard:"http://api.explaain.com/Detail/5929a8dac3fde500115269b1",
+   helperCard:"//api.explaain.com/Detail/5929a8dac3fde500115269b1",
    answers: {
      yes: [
        {
@@ -473,7 +473,7 @@ var quizQuestions = [
    randomiseGroup: "remainder",
    issue: "eu",
    debate: "38-eu-2",
-   helperCard:"http://api.explaain.com/Detail/5929a90ac3fde500115269b2",
+   helperCard:"//api.explaain.com/Detail/5929a90ac3fde500115269b2",
    answers: {
      yes: [
        {

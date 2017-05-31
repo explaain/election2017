@@ -370,7 +370,7 @@ class Footer {
     eventTrackerInitiator();
     var footerContents = h("a.discard-card-style",
       {
-        "href": "http://api.explaain.com/Detail/5911ba3cac223e0011e45faf"
+        "href": "//api.explaain.com/Detail/5911ba3cac223e0011e45faf"
       },
       h("button.btn.btn-default",
         "Who's behind this?"
@@ -380,7 +380,7 @@ class Footer {
     var quizFooterContents = h("div",
       h("a." + config[SiteBrand].footerClass,
         {
-          "href": "http://www.turnup.org.uk/",
+          "href": "//www.turnup.org.uk/",
           "target": "_blank",
         },
         h("img",
@@ -810,9 +810,9 @@ class Step {
         data.cardGroups.push([{
           type: 'postcode-compare',
           name: 'Student? Unsure where to vote from? <img src="/img/thinking.png">',
-          subtitle: 'Compare your two postcodes to see [where your vote counts most](http://api.explaain.com/Detail/5911ce5cac223e0011e45fb1).',
+          subtitle: 'Compare your two postcodes to see [where your vote counts most](//api.explaain.com/Detail/5911ce5cac223e0011e45fb1).',
           subheading: 'Why do we need this?',
-          description: 'We need your postcode to [show data](http://api.explaain.com/Detail/5911c1b2ac223e0011e45fb0) relating to your [constituency](http://api.explaain.com/Detail/588cdf6d29d97f1200703d3c) 👌'
+          description: 'We need your postcode to [show data](//api.explaain.com/Detail/5911c1b2ac223e0011e45fb0) relating to your [constituency](//api.explaain.com/Detail/588cdf6d29d97f1200703d3c) 👌'
         }])
         break;
 
@@ -1542,7 +1542,7 @@ function getResults(resultsType){
           mainResults.forEach(function(localCandidate){
             clientCards.push({
               "@id": "//api.explaain.com/Headline/localCandidate_"+localCandidate.id,
-              "@type": "http://api.explaain.com/Headline",
+              "@type": "//api.explaain.com/Headline",
               image: localCandidate.image_url || '//ge2017.com/img/person.png',
               name: localCandidate.name,
               description: (new LocalCandidateDetails(localCandidate)).render()
@@ -2166,7 +2166,7 @@ class Quiz {
       console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
-        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
+        var sharePath = `//${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
         var tweet = `I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
@@ -2175,7 +2175,7 @@ class Quiz {
         var perc = shareData[0].percentage.slice(0,-1);
         var partyNames = [];
         shareData.forEach((p) => partyNames.push(p.name))
-        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
+        var sharePath = `//${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
         var tweet = `I equally support ${shareData[0].percentage} of ${partyNames.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
@@ -2360,7 +2360,7 @@ class Quiz {
             console.log('opinionsPerIssue', party.key);
             console.log(opinionsPerIssue);
 
-            var ltempKey = 'http://api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+            var ltempKey = '//api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
             var ltempCard = {
               '@id': ltempKey,
               '@type': 'QuizMatch',
@@ -2410,7 +2410,7 @@ class Quiz {
           });
 
           party.openMatches = function(){
-            var tempKey = 'http://api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
+            var tempKey = '//api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
             var tempCard = {
               '@id': tempKey,
               '@type': 'IssueMatch',
