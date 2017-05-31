@@ -2455,6 +2455,8 @@ class Quiz {
     var facebookShareHref;
     if (SiteBrand == 'unilad') {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fbit.ly%2Funilad-ge2017&display=popup&ref=plugin&src=share_button";
+    } else if (SiteBrand == '38degrees') {
+      facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2F38degrees.ge2017.com&display=popup&ref=plugin&src=share_button";
     } else {
       facebookShareHref = "https://www.facebook.com/sharer/sharer.php?app_id=&kid_directed_site=0&u=http%3A%2F%2Fge2017.com&display=popup&ref=plugin&src=share_button";
     }
