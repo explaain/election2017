@@ -2211,6 +2211,7 @@ class Quiz {
       console.log('final!!!');
       setTimeout(function(){
         $('.body.quiz').addClass('moving')
+        $('.page-content').addClass('onLoad')
         var $constituencySlider = $('.card-carousel');
         $constituencySlider.slick({
           dots: false,
@@ -2219,12 +2220,12 @@ class Quiz {
           centerMode: true,
           centerPadding: '15px',
           slidesToShow: 1,
-          arrows: false
+          arrows: false,
           // initialSlide: 0
         });
         $('.page-content').on('click', '.carousel-nav-item', function() {
-          // console.log("Changing slide",$(this).attr('data-carousel-link'),$(this));
           $constituencySlider.slick('slickGoTo', $(this).attr('data-carousel-link'));
+          $('.card-carousel').attr('data-carousel-current',$(this).attr('data-carousel-link'));
         });
       },10);
       qp.standaloneResults = false;

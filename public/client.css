@@ -697,13 +697,16 @@ section:not(.wide) .card section.card-media {
   100%  {transform: scale(1,1);}
 }
 
-.card, .seats {
+.card:not(.noAnim),
+.cardAnim,
+.seats {
   animation-name: cardpop;
   animation-duration: .3s;
   opacity:0;
   animation-fill-mode: forwards;
 }
 
+.cardAnim,
 .card:nth-of-type(1){animation-delay: .2s}
 .card:nth-of-type(2){animation-delay: .4s}
 .card:nth-of-type(3){animation-delay: .6s}
@@ -713,6 +716,13 @@ section:not(.wide) .card section.card-media {
   0% {transform: scale(.8,.8); opacity:0}
   60%  {transform: scale(1.1,1.1);opacity:1}
   100%  {transform: scale(1,1);opacity:1}
+}
+
+@keyframes cardunpop {
+  0% {transform: scale(1,1); opacity:1}
+  40%  {transform: scale(1.1,1.1);opacity:1}
+  99%  {transform: scale(0.8,0.8);opacity:0;}
+  100%  {transform: scale(0.8,0.8);opacity:0;display:none}
 }
 
 /* igor: .task-category hiding, temporary */
@@ -2087,14 +2097,6 @@ p.shareText {
 
 /* Final result: Carousel stuffs */
 
-.carousel-nav-container:before {
-    content: "Pick a voting option";
-    /*font-weight: bold;*/
-    font-style: italic;
-    display: block;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
 .carousel-nav-container {
     margin-bottom: -15px;
     counter-reset: carousel-nav;
@@ -2132,8 +2134,7 @@ p.shareText {
 }
 
 .card-carousel {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin: 0 -15px -15px;
 }
 .card-carousel img {
   display: inline;
@@ -2145,4 +2146,45 @@ p.shareText {
 .card-carousel-nav ~ div .step-3,
 .card-carousel-nav ~ div .step-4 {
     display: none;
+}
+
+.NWA {
+  pointer-events: none; /* Prevent explaainy nonsense in the carousel. Quietly disagree with the authorities. */
+}
+.onLoad .pickAVotingOption {
+    max-width: 200px;
+    transition: max-width 0.3s ease;
+}
+.pickAVotingOption {
+    margin-right: 5px;
+    max-width: 0px;
+    transition: max-width 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.pickAVotingOption,
+.pickAVotingOption + a {
+    vertical-align: middle;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* Hide tactical voting, normally */
+/* Hide tactical voting, normally */
+.card-carousel + .tacticalBreakdown {
+    /*transition: all 0.2s ease;*/
+    display: none;
+    opacity: 0;
+    /*animation: cardunpop;
+    animation-duration: .3s;
+    animation-fill-mode: forwards;*/
+}
+.card-carousel[data-carousel-current="1"] + .tacticalBreakdown {
+    /*transition: all 0.2s ease;*/
+    display: block;
+    opacity: 1;
+    animation: cardpop;
+    animation-duration: .3s;
+    animation-fill-mode: forwards;
 }
