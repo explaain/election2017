@@ -2084,3 +2084,65 @@ p.shareText {
 .bestMatchSoFar + .basic-top-match {
   height: auto !important;
 }
+
+/* Final result: Carousel stuffs */
+
+.carousel-nav-container:before {
+    content: "Pick a voting option";
+    /*font-weight: bold;*/
+    font-style: italic;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.carousel-nav-container {
+    margin-bottom: -15px;
+    counter-reset: carousel-nav;
+}
+
+.carousel-nav-item:before {
+    counter-increment: carousel-nav;
+    content: counter(carousel-nav);
+    display: block;
+    background: #DD266A;
+    color: white;
+    border-radius: 100px;
+    width: 17px;
+    height: 17px;
+    line-height: 17px;
+    vertical-align: middle;
+    text-align: center;
+    margin: -17px auto 3px;
+}
+.carousel-nav-item {
+    display: inline-block;
+    background: white;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    color: black;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #DD266A;
+    font-weight: bold;
+    width: 23%;
+    padding: 10px 5px 5px;
+    margin: 1%;
+    text-decoration: none !important;
+    line-height: 1em;
+}
+
+.card-carousel {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.card-carousel img {
+  display: inline;
+}
+
+/* This is tremendously lazy,
+  but the templating system's weird conditional scoping/handling is driving me mad */
+.card-carousel-nav ~ div .step-2,
+.card-carousel-nav ~ div .step-3,
+.card-carousel-nav ~ div .step-4 {
+    display: none;
+}

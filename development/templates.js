@@ -2067,116 +2067,151 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": ".card.finalResult",
-            "condition": "finalResults",
+            "condition": "showStandardResults",
+            "template": "yourTacticalMatch"
+          },
+          {
+            "dom": ".card-carousel-nav",
+            "condition": "showCarouselResults",
             "content": [
               {
-                "dom": ".card-visible.text-center",
+                "dom": "div.carousel-nav-container",
                 "content": [
                   {
-                    "dom": "div.step-number.step-1",
-                    "content": "1"
+                    "dom": "a.carousel-nav-item",
+                    "content": "Vote on principles",
+                    "attr": {
+                      "data-carousel-link": "0"
+                    }
                   },
                   {
-                    "dom": "h2.tactical-top-match",
-                    "content": "Based on where you are and your views, this is your top contender..."
+                    "dom": "a.carousel-nav-item",
+                    "content": "Vote tactically",
+                    "attr": {
+                      "data-carousel-link": "1"
+                    }
                   },
                   {
-                    "dom": ".quizPercentages.topLayer.tactical-top-match",
-                    "condition": "!quizSafeSeat",
+                    "dom": "a.carousel-nav-item",
+                    "content": "I hate 'em all'",
+                    "attr": {
+                      "data-carousel-link": "2"
+                    }
+                  },
+                  {
+                    "dom": "a.carousel-nav-item",
+                    "content": "Swap my vote",
+                    "attr": {
+                      "data-carousel-link": "3"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "dom": ".card-carousel",
+            "condition": "showCarouselResults",
+            "content": [
+              /* /////
+                # Carousel, requires animating
+                - use conditionals to define carousel position
+              */
+              // #1: Vote for your top
+              {
+                "dom": ".card.finalResult",
+                "content": [
+                  {
+                    "dom": ".card-visible.text-center",
                     "content": [
                       {
-                        "loop": "partiesChartDataTopMatchTactical",
-                        "content": [{"template": "quizPercentagesParty"}]
+                        "dom": "div.step-number.step-1",
+                        "content": "1"
                       },
+                      {
+                        "dom": "h2.bestMatchSoFar",
+                        "content": "Vote for your best match"
+                      },
+                      {
+                        "dom": ".quizPercentages.topLayer",
+                        "content": [
+                          {
+                            "loop": "partiesChartDataTopMatch",
+                            "content": [{"template": "quizPercentagesParty"}]
+                          }
+                        ]
+                      },
+                      {
+                        "dom": "p.small" // For standardised margin bottom
+                      }
                     ]
-                  },
+                  }
+                ]
+              },
+              // #2: Vote for your best chance
+              {
+                "template": "yourTacticalMatch"
+              },
+              // #3: Spoil your ballot
+              {
+                "dom": ".card.finalResult",
+                "content": [
                   {
-                    "dom": ".quizSafeSeatText.topLayer.tactical-top-match",
-                    "condition": "quizSafeSeat",
+                    "dom": ".card-visible.text-center",
                     "content": [
                       {
-                        "dom": "h2.pink",
-                        "content": "You're in a safe seat"
+                        "dom": "div.step-number.step-1",
+                        "content": "3"
                       },
                       {
-                        "dom": "p.explaained",
-                        "content": {
-                          "var": "safeSeatMessage",
-                          "markdown": true
+                        "dom": "h3",
+                        // "condition": "finalResults",
+                        "content": "What if I don't like any of them?"
+                      },
+                      {
+                        "dom": "h4",
+                        // "condition": "finalResults",
+                        "content": "Spoil your ballot!"
+                      },
+                      {
+                        "dom": "img",
+                        "attr": {
+                          "src": "/img/spoilyourballot.gif"
                         }
                       }
                     ]
-                  },
+                  }
+                ]
+              },
+              // #4: Swap your vote
+              {
+                "dom": ".card.finalResult",
+                "content": [
                   {
-                    "dom": "h2.hybrid-top-match",
-                    "content": "Here are the parties' chances of winning in your area"
-                  },
-                  {
-                    "dom": ".quizPercentages.hybrid-top-match",
+                    "dom": ".card-visible.text-center",
                     "content": [
                       {
-                        "loop": "partiesHybridList",
-                        "content": [
-                          {
-                            "dom": "a.quizPercentagesParty.inline.discard-card-style",
-                            "attr": {
-                              "onclick": {
-                                "var": "openMatches"
-                              },
-                              "class": {
-                                "var": "matchClass"
-                              }
-                            },
-                            "content": [
-                              {
-                                "dom": ".quizPercentagesPartyBadge",
-                                "condition": "badgeText",
-                                "content": {
-                                  "var": "badgeText"
-                                }
-                              },
-                              {
-                                "dom": ".quizPercentagesPartyFace.inline",
-                                "attr": {
-                                  "style": {
-                                    "background-image": {
-                                      "var": "photo"
-                                    },
-                                    "background-color": {
-                                      "var": "color"
-                                    },
-                                  }
-                                }
-                              },
-                              {
-                                "dom": ".quizPercentagesPartyMatch",
-                                "condition": "isMatch",
-                                "content": "Your Match"
-                              },
-                            ]
-                          }
-                        ]
+                        "dom": "div.step-number.step-1",
+                        "content": "4"
+                      },
+                      {
+                        "dom": "h3",
+                        // "condition": "finalResults",
+                        "content": "What if I don't like any of them?"
+                      },
+                      {
+                        "dom": "a.swapvote",
+                        "content": "Swap your vote with someone in another constituency!",
+                        "attr": {
+                          "href": "https://www.swapmyvote.uk",
+                          "target": "_blank"
+                        }
                       }
                     ]
-                  },
-                  // {
-                  //   "template": "registerButton"
-                  // },
-                  {
-                    "dom": "p.small.scrollDown",
-                    "condition": "finalResults",
-                    "content": "Scroll down to see how we reached this match"
-                  },
-                  // {
-                  //   "dom": "button",
-                  //   "attr": {
-                  //     "onclick": "getLocalCandidates"
-                  //   },
-                  //   "content": "See Local Candidates"
-                  // }
+                  }
                 ]
               }
+              /* ///// Carousel ends ///// */
             ]
           },
           {
@@ -2210,6 +2245,7 @@ module.exports = function(CardTemplates){
                 "content": [
                   {
                     "dom": "div.step-number.step-3",
+                    "condition": "showStandardResults",
                     "content": "3"
                   },
                   {
@@ -2255,6 +2291,120 @@ module.exports = function(CardTemplates){
       }
     ]
   }
+  CardTemplates.yourTacticalMatch = {
+    "dom": ".card.finalResult",
+    "content": [
+      {
+        "dom": ".card-visible.text-center",
+        "content": [
+          {
+            "dom": "div.step-number.step-1",
+            "condition": "showStandardResults",
+            "content": "1"
+          },
+          {
+            "dom": "div.step-number.step-1",
+            "condition": "showCarouselResults",
+            "content": "2"
+          },
+          {
+            "dom": "h2.tactical-top-match",
+            "condition": "showStandardResults",
+            "content": "Based on where you are and your views, this is your top contender..."
+          },
+          {
+            "dom": "h2.tactical-top-match",
+            "condition": "showCarouselResults",
+            "content": "Vote tactically, for someone who stands a chance"
+          },
+          {
+            "dom": ".quizPercentages.topLayer.tactical-top-match",
+            "condition": "!quizSafeSeat",
+            "content": [
+              {
+                "loop": "partiesChartDataTopMatchTactical",
+                "content": [{"template": "quizPercentagesParty"}]
+              },
+            ]
+          },
+          {
+            "dom": ".quizSafeSeatText.topLayer.tactical-top-match",
+            "condition": "quizSafeSeat",
+            "content": [
+              {
+                "dom": "h2.pink",
+                "content": "You're in a safe seat"
+              },
+              {
+                "dom": "p.explaained",
+                "content": {
+                  "var": "safeSeatMessage",
+                  "markdown": true
+                }
+              }
+            ]
+          },
+          {
+            "dom": "h2.hybrid-top-match",
+            "content": "Here are the parties' chances of winning in your area"
+          },
+          {
+            "dom": ".quizPercentages.hybrid-top-match",
+            "content": [
+              {
+                "loop": "partiesHybridList",
+                "content": [
+                  {
+                    "dom": "a.quizPercentagesParty.inline.discard-card-style",
+                    "attr": {
+                      "onclick": {
+                        "var": "openMatches"
+                      },
+                      "class": {
+                        "var": "matchClass"
+                      }
+                    },
+                    "content": [
+                      {
+                        "dom": ".quizPercentagesPartyBadge",
+                        "condition": "badgeText",
+                        "content": {
+                          "var": "badgeText"
+                        }
+                      },
+                      {
+                        "dom": ".quizPercentagesPartyFace.inline",
+                        "attr": {
+                          "style": {
+                            "background-image": {
+                              "var": "photo"
+                            },
+                            "background-color": {
+                              "var": "color"
+                            },
+                          }
+                        }
+                      },
+                      {
+                        "dom": ".quizPercentagesPartyMatch",
+                        "condition": "isMatch",
+                        "content": "Your Match"
+                      },
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "dom": "p.small.scrollDown",
+            "condition": "finalResults",
+            "content": "Scroll down to see how we reached this match"
+          }
+        ]
+      }
+    ]
+  },
   CardTemplates.quizProgress = {
     "dom": "div.progress-container",
     "condition": "!noProgressBarNeeded",

@@ -2124,7 +2124,7 @@ class Quiz {
             photo: fullParty.photo,
             matches: fullParty.matches,
             openMatches: fullParty.openMatches,
-            quizResults: qp.quizResults
+            quizResults: (SiteBrand === "ge2017") || qp.quizResults // Show perc/name in the ge2017 carousel
           });
           console.log('topParty');
           console.log('topParty');
@@ -2210,8 +2210,23 @@ class Quiz {
     if (self.finalResults == true) {
       console.log('final!!!');
       setTimeout(function(){
-        $('.body.quiz').addClass('moving')}
-      ,10);
+        $('.body.quiz').addClass('moving')
+        var $constituencySlider = $('.card-carousel');
+        $constituencySlider.slick({
+          dots: false,
+          infinite: false,
+          adaptiveHeight: true,
+          centerMode: true,
+          centerPadding: '15px',
+          slidesToShow: 1,
+          arrows: false
+          // initialSlide: 0
+        });
+        $('.page-content').on('click', '.carousel-nav-item', function() {
+          // console.log("Changing slide",$(this).attr('data-carousel-link'),$(this));
+          $constituencySlider.slick('slickGoTo', $(this).attr('data-carousel-link'));
+        });
+      },10);
       qp.standaloneResults = false;
       self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
         if (!(qp.quizChanceResults.parties.filter(function(_party) {
@@ -2390,19 +2405,19 @@ class Quiz {
                   const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
                   const userOpinion = qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2);
-                  console.log(debate[0], party.key);
-                  console.log(userOpinion);
-                  console.log(debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
-                  console.log('--');
-                  console.log(upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion)));
-                  console.log('----------');
+                  // console.log(debate[0], party.key);
+                  // console.log(userOpinion);
+                  // console.log(debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  // console.log('--');
+                  // console.log(upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion)));
+                  // console.log('----------');
                   return upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
               })
               .reduce(function(a,b) {
                   return a + b;
               })
 
-            console.log('ISSUE', issue, issueObj);
+            // console.log('ISSUE', issue, issueObj);
 
             return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: (100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2)) + '%' };
           });
@@ -2467,7 +2482,12 @@ class Quiz {
     var safeSeatMessage = "This means the party you matched isn't as likely to win. You can still vote for them or explore other candidates standing in your area below.."
 
     var partyResults = qp.prioritiesSet && !qp.constituencyView;
+
     return helpers.assembleCards({
+      showStandardInitialResults: SiteBrand !== "ge2017" && qp.quizResults && !self.finalResults,
+      showStandardResults: SiteBrand !== "ge2017" && qp.quizResults && self.finalResults,
+      showCarouselResults: SiteBrand === "ge2017" && qp.prioritiesSet && self.finalResults,
+      showFinalCardNumbers: qp.prioritiesSet && (SiteBrand === "ge2017" ? !self.finalResults : true),
       topLineConditional: self.quizStarted && self.countrySelected && !partyResults && !qp.quizResults,
       constituencyView: qp.constituencyView,
       setPriorities: self.setPriorities,
