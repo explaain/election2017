@@ -2166,7 +2166,7 @@ class Quiz {
       console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
-        var sharePath = `//${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
+        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
         var tweet = `I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
@@ -2175,7 +2175,7 @@ class Quiz {
         var perc = shareData[0].percentage.slice(0,-1);
         var partyNames = [];
         shareData.forEach((p) => partyNames.push(p.name))
-        var sharePath = `//${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
+        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
         var tweet = `I equally support ${shareData[0].percentage} of ${partyNames.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
