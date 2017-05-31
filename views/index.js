@@ -2391,10 +2391,12 @@ class Quiz {
                   running_upweight += upweight;
                   const userOpinion = qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2);
                   console.log(debate[0], party.key);
-                  console.log(upweight);
-                  console.log(Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
-                  console.log(1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
-                  return 1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion);
+                  console.log(userOpinion);
+                  console.log(debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  console.log('--');
+                  console.log(upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion)));
+                  console.log('----------');
+                  return upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
               })
               .reduce(function(a,b) {
                   return a + b;
