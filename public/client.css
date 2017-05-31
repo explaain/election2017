@@ -1873,7 +1873,7 @@ h2.seeHow {
 }
 
 .body.quiz footer a.ge2017Footer img {
-  height: 30px;
+  height: 50px;
 }
 
 .priority+.questions .quizPercentages {
@@ -1952,6 +1952,7 @@ span.t-featured {
 
 .body:not(._38degrees) .middleLayer.basic-top-match,
 .body:not(._38degrees) .hybrid-top-match,
+.body:not(._38degrees) p.small.tactical-info-2,
 .body:not(._38degrees) .seeHow {
   display: none;
 }
@@ -2187,4 +2188,18 @@ p.shareText {
     animation: cardpop;
     animation-duration: .3s;
     animation-fill-mode: forwards;
+}
+p.small-link.calculate a {
+  padding: 0 3px !important;
+  background: #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  text-decoration: none !important;
+  color: #333 !important;
+  box-shadow: none !important;
+}
+p.small-link.calculate a:hover {
+  color: white !important;
+  background: #ff6e73 !important;
+  border: 1px solid #ff6e73 !important;
+  box-shadow: none !important;
 }

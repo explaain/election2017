@@ -2358,7 +2358,7 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": "h2.hybrid-top-match",
-        "content": "Here are the parties' chances of winning in your area"
+        "content": "Here’s a prediction of the election results in your area"
       },
       {
         "dom": ".quizPercentages.hybrid-top-match",
@@ -2407,6 +2407,14 @@ module.exports = function(CardTemplates){
             ]
           }
         ]
+      },
+      {
+        "dom": "p.small-link.calculate",
+        "condition": "finalResults",
+        "content":{
+           "var": "calculateText",
+           "markdown": "true"
+         }
       },
       {
         "dom": "p.small.scrollDown",
@@ -2575,12 +2583,17 @@ module.exports = function(CardTemplates){
               {
                 "dom": "h2.seeHow",
                 "condition": "prioritiesSet",
-                "content": "Here is how you matched the major parties' manifestos overall:"
+                "content": "Here is how you matched the major parties' manifestos overall"
               },
               {
                 "dom": "h3.seeHow",
                 "condition": "prioritiesSet",
                 "content": "Your party matches:"
+              },
+              {
+                "dom": "p.seeHow",
+                "condition": "prioritiesSet",
+                "content": "Click on the faces to find out more"
               },
               {
                 "dom": "h2.breakdown",
@@ -2609,7 +2622,12 @@ module.exports = function(CardTemplates){
               },
               {
                 "template": "quizPercentages"
-              }
+              },
+              {
+                "dom": "p.small.tactical-info-2",
+                "condition": "finalResults",
+                "content": "Parties not standing in your area are greyed out."
+              },
             ]
           }
         ]
