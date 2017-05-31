@@ -33,6 +33,7 @@
     "gulp-minify": "0.0.15",
     "gulp-uglify": "^2.1.2",
     "gulp-uglifycss": "^1.0.8",
+    "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "httpism": "^2.7.0",
     "hyperdom": "^0.5.0",

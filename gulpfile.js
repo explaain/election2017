@@ -9,8 +9,9 @@ concat = require('gulp-concat'),
 babel = require('gulp-babel'),
 download = require('gulp-download'),
 insert = require('gulp-insert'),
-runSequence = require('run-sequence')
-watch = require('gulp-watch')
+runSequence = require('run-sequence'),
+watch = require('gulp-watch'),
+gutil = require('gulp-util')
 ;
 
 /* Lists and variables - feel free to modify */
@@ -46,21 +47,17 @@ const JSIndex = [
 
 // JS Files to concat and compress
 const JSFiles = [
-  // 'public/data/allParties.js',
-  // 'public/data/partyStories.js',
-  // 'public/data/euRefResults.js',
-  // 'public/data/partyStances3.js',
-  // 'public/data/ge2015Results.js',
-  // 'public/data/constituencyOdds.js',
-  // 'public/data/partyReconciliation.js',
-  // 'public/data/swingSeatsToForce.js',
-  // 'public/data/localCandidates.js',
-  // 'public/data/quizQuestions.js',
   'public/js/jquery.min.js',
   'public/js/slick.min.js',
   'tmp/explaain.js',
   'tmp/index.js',
 ];
+const LocalJSFiles = [
+  'public/js/jquery.min.js',
+  'public/js/slick.min.js',
+  // 'tmp/explaain.js',
+  'tmp/index.js',
+]
 
 // CSS files to concat and compress
 const CSSFiles = [
@@ -87,7 +84,7 @@ gulp.task('js-prepare-templates', function(){
 // This task fetches files from external services
 gulp.task('js-fetch-external', function(){
   return download(filesToFetch)
-	.pipe(gulp.dest("tmp"));
+  .pipe(gulp.dest("tmp"));
 });
 
 /* Production only tasks */
@@ -145,7 +142,7 @@ gulp.task('js-build-index-development', function(){
 
 // This task concats and compresses JS for production
 gulp.task('js-pack-development', function(){
-  return gulp.src(JSFiles)
+  return gulp.src(process.env.NODE_ENV === 'local' ? LocalJSFiles : JSFiles) /* Don't think this works */
   .pipe(concat('compiled.js'))
   .pipe(gulp.dest('public'));
 });
