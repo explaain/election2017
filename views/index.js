@@ -2368,30 +2368,34 @@ class Quiz {
               }
           });
 
-          let running_upweight = 0;
 
           const scoresPerIssue = answered_issues.map(function(issueObj) {
-              var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
-              // console.log("Issueeeee",issue);
-              // console.log("Issueeeee",issue ? issue.description : '');
-              const score = Object
-                .entries(issue.debates)
-                .filter(function(debate) {
-                    return qs_asked.includes(debate[0]);
-                })
-                .map(function(debate) {
-                    // console.log("scoresPerIssue: Map debate",issueObj.label,debate[0],model.user.opinions.issues[issueObj.label]);
-                    const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
-                    running_upweight += upweight;
-                    return upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]);
-                })
-                .reduce(function(a,b) {
-                    return a + b;
-                })
+            let running_upweight = 0;
+            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
+            // console.log("Issueeeee",issue);
+            // console.log("Issueeeee",issue ? issue.description : '');
+            const score = Object
+              .entries(issue.debates)
+              .filter(function(debate) {
+                  return qs_asked.includes(debate[0]);
+              })
+              .map(function(debate) {
+                  // console.log("scoresPerIssue: Map debate",issueObj.label,debate[0],model.user.opinions.issues[issueObj.label]);
+                  const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
+                  running_upweight += upweight;
+                  console.log(debate[0], party.key);
+                  console.log(upweight);
+                  console.log(Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]));
+                  console.log(1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]));
+                  return 1 - upweight * Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - qp.opinions[qs_asked.indexOf(debate[0])]);
+              })
+              .reduce(function(a,b) {
+                  return a + b;
+              })
 
-              console.log('ISSUE', issue, issueObj);
+            console.log('ISSUE', issue, issueObj);
 
-              return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
+            return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: 100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2) };
           });
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {

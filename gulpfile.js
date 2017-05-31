@@ -33,8 +33,9 @@ const watchFiles = [
 ];
 
 // Files to fetch from remote services
+/* We should maybe remove the 'http' from these? */
 const filesToFetch = [
-  "http://localhost:5001/explaain.js",
+  "http://use.explaain.com/explaain.js",
   "http://app.explaain.com/style.css",
   "http://api.explaain.com/templates",
 ];
