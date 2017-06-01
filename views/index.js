@@ -35,7 +35,7 @@ var cfg = {
   },
   '38degrees': {
     subdomain: '38degrees',
-    logoImg: "img/38degrees_ge2017.png",
+    logoImg: "/img/38degrees_ge2017.png",
     logoClass: "_38degrees-logo",
     footerImg: "/img/ge2017logofooter.png",
     footerClass: "ge2017Footer",
@@ -53,7 +53,7 @@ var cfg = {
   },
   'unilad': {
     subdomain: 'unilad',
-    logoImg: "img/unilad.png",
+    logoImg: "/img/unilad.png",
     logoClass: "_unilad-logo",
     footerLink: "//www.turnup.org.uk/",
     randomise: true,
