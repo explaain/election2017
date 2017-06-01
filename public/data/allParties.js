@@ -126,5 +126,19 @@ var allParties = [
     name: "Ulster Unionist Party",
     color: "#9796ff",
     colorLight: "#9796ff",
+  },
+  {
+    key: "nha",
+    name: "National Health Action Party",
+    color: "#176da6",
+    colorLight: "#176da6",
+    photo: "/img/leader-faces/irvine.png"
+  },
+  {
+    key: "independent-wright",
+    name: "Claire Wright (Independent)",
+    color: "lightgrey",
+    colorLight: "lightgrey",
+    photo: "/img/leader-faces/wright.png"
   }
 ];

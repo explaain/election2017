@@ -2278,6 +2278,8 @@ class Quiz {
         console.log(party);
         var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0];
         if (!fullParty)
+          fullParty = allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
+        if (!fullParty)
           return {};
         party.photo = fullParty.photo;
         party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
@@ -2285,6 +2287,7 @@ class Quiz {
         }).length > 0;
         party.matchClass = party.isMatch ? 'isMatch' : '';
         party.badgeText = badges[count];
+        party.openMatches = fullParty.openMatches;
         count++;
         return party;
       });
@@ -2561,7 +2564,7 @@ for(var key in _templates){
 //if(location.hostname==="localhost" || location.hostname.split('.')[1]==="ngrok"){
 require("../development/templates.js")(CardTemplates);
 require("../development/model.js")(model);
-// require("../development/generatePartyStances.js")(model,allData.getData().partyStances)();
+// require("../development/generatePartyStances.js")(model,allData.getAllData().partyStances)();
 hyperdom.append(document.body, new App());
 
 designers.onWindowResize();
