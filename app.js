@@ -85,6 +85,7 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
       - spoiling ballot
       - swapping vote
   */
+  req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
   if(req.params.party && req.params.party.includes("-and-")) {
@@ -107,6 +108,7 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
 })
 
 app.get('/quiz', function(req, res, next) {
+  req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `https://${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/quiz`;
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
