@@ -46,7 +46,7 @@ var cfg = {
     quizQuestions: allData.getAllData().quizQuestions38Degrees,
     sharing: {
       basicTwitter: "Take the @38_degrees #GE2017 quiz to find your match + see local candidates 👉 38degrees.ge2017.com",
-      basicTwitterImg: "/img/38degrees_facebook.jpg",
+      basicTwitterImg: "https://38degrees.ge2017.com/img/38degrees_facebook.jpg",
       /* shareMetaDescription is not yet used - this object needs to be defined in Node! */
       shareMetaDescription: "Who should you vote for in the #GeneralElection2017? Compare parties, explore the main issues, and see who’s standing where you live",
     },
