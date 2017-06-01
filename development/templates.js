@@ -2116,7 +2116,7 @@ module.exports = function(CardTemplates){
                   },
                   {
                     "dom": "h2.hybrid-top-match",
-                    "content": "Here are the parties' chances of winning in your area"
+                    "content": "Here’s a prediction of the election results in your area"
                   },
                   {
                     "dom": ".quizPercentages.hybrid-top-match",
@@ -2169,6 +2169,14 @@ module.exports = function(CardTemplates){
                   // {
                   //   "template": "registerButton"
                   // },
+                  {
+                    "dom": "p.small-link.calculate",
+                    "condition": "finalResults",
+                    "content":{
+                       "var": "calculateText",
+                       "markdown": "true"
+                     }
+                  },
                   {
                     "dom": "p.small.scrollDown",
                     "condition": "finalResults",

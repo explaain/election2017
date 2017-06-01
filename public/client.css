@@ -2085,3 +2085,18 @@ p.shareText {
 .bestMatchSoFar + .basic-top-match {
   height: auto !important;
 }
+
+p.small-link.calculate a {
+  padding: 0 3px !important;
+  background: #ebebeb !important;
+  border: 1px solid #ebebeb !important;
+  text-decoration: none !important;
+  color: #333 !important;
+  box-shadow: none !important;
+}
+p.small-link.calculate a:hover {
+  color: white !important;
+  background: #ff6e73 !important;
+  border: 1px solid #ff6e73 !important;
+  box-shadow: none !important;
+}
