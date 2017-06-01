@@ -85,6 +85,7 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
       - spoiling ballot
       - swapping vote
   */
+  req.params.quizHome = `${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
   if(req.params.party && req.params.party.includes("-and-")) {
     req.params.party = req.params.party.split("-and-").join(" and ");
