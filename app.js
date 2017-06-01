@@ -78,11 +78,29 @@ app.get('/policy', function(req, res, next) {
 });
 
 app.get('/shared/:party?/:percentage?', function(req, res, next) {
+  /*
+    Need different share URL formats for:
+      - tactical voting
+      - principled voting
+      - spoiling ballot
+      - swapping vote
+  */
+  req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
   if(req.params.party && req.params.party.includes("-and-")) {
     req.params.party = req.params.party.split("-and-").join(" and ");
     req.params.equally = "equally ";
   } else {
     req.params.equally = "";
+  }
+  req.params.share = {
+    fb: {
+      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies`,
+      subtitle: `Who best represents your views?`
+    },
+    tw: {
+      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies`,
+      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+    }
   }
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
 })
