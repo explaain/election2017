@@ -88,8 +88,8 @@ var allParties = [
   {
     key: "plaid-cymru",
     name: "Plaid Cymru",
-    color: "#f7c023",
-    colorLight: "#f7c023",
+    color: "#005500",
+    colorLight: "#005500",
     description: "",
     logo: "plaid-cymru.png",
     image: "plaid-cymru.jpg",
@@ -110,7 +110,7 @@ var allParties = [
     colorLight: "#03823f",
   },
   {
-    key: "plaid",
+    key: "plaid-cymru",
     name: "Plaid Cymru",
     color: "#03823f",
     colorLight: "#03823f",

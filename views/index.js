@@ -2280,11 +2280,14 @@ class Quiz {
       ]
       qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
         console.log(party);
-        var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0];
-        if (!fullParty)
-          fullParty = allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
+        var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
         if (!fullParty)
           return {};
+
+        console.log('fullParty');
+        console.log(fullParty);
+        console.log('party, fullParty');
+        console.log(party, fullParty);
         party.photo = fullParty.photo;
         party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
           return party.key == _party.key;
@@ -2423,7 +2426,7 @@ class Quiz {
 
             console.log('ISSUE', issue, issueObj);
 
-            return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: (100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2)) + '%' };
+            return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' };
           });
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
