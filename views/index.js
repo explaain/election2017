@@ -2147,6 +2147,10 @@ class Quiz {
         //   quizResults: party.quizResults
         // }
         qp.partiesChartDataTopMatch = qp.resultsData;
+        qp.partiesChartDataTopMatch.map(function(party) {
+          party.quizResults = true; //Hack?
+          return party;
+        })
       }
     }
 
