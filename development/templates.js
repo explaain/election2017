@@ -1988,7 +1988,13 @@ module.exports = function(CardTemplates){
                       {
                         "condition": "isWaiting",
                         "template": "loading"
-                      }
+                      },
+                      {
+                        "template":"error",
+                        "mapping": [
+                          ["error", "postcodeError"]
+                        ]
+                      },
                     ]
                   }
                 ]

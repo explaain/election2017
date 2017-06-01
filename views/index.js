@@ -1739,6 +1739,7 @@ class Quiz {
     self.params = params;
     self.partiesChartDataTopMatch = qp.partiesChartDataTopMatch;
     self.partiesChartDataTopMatchTactical = qp.partiesChartDataTopMatchTactical;
+    self.postcodeError = qp.postcodeError;
 
     self.startStudentCompare = function(){
       trackEvent("Student Compare Started",{type: "Quiz"});
@@ -1864,7 +1865,7 @@ class Quiz {
       quiz.quizTopics.forEach(function(topic,i) {
         quiz.quizTopics[i] = {
           issue: topic,
-          label: topic,
+          label: model.parties.opinions.issues[topic].description,
           highPriority: oldPriorities && oldPriorities.length && oldPriorities.find((p)=>p.issue == topic) ? oldPriorities.find((p)=>p.issue == topic).highPriority  : false,
           topicTogglePriority: () => {
             console.log("Restoring previous priority",oldPriorities.find((p)=>p.issue == topic))
@@ -2187,22 +2188,29 @@ class Quiz {
 
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
-      qp.constituencyView = true;
       console.log(e);
       e.stopPropagation();
-      model.landedOnResult = 1;
       model.user.isWaiting = "postcode-input";
       self.refresh();
       api.getContenders(model.user.postcode).then(function(result){
-        console.log('result');
-        console.log('result');
-        console.log('result');
-        console.log('result');
-        console.log(result);
-        qp.quizChanceResults = result;
-        delete model.user.isWaiting;
-        trackEvent("Rerouting on Constituency Result",qp.resultsData);
-        routes.quizResults().push();
+        if (result.error) {
+          console.log('result.error');
+          console.log(result.error);
+          qp.postcodeError = "Sorry, we didn't recognise that postcode.";
+          self.refresh();
+        } else {
+          qp.constituencyView = true;
+          model.landedOnResult = 1;
+          console.log('result');
+          console.log('result');
+          console.log('result');
+          console.log('result');
+          console.log(result);
+          qp.quizChanceResults = result;
+          delete model.user.isWaiting;
+          trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          routes.quizResults().push();
+        }
       });
       return false;
     }
@@ -2341,7 +2349,7 @@ class Quiz {
 
         if(answered_issues && answered_issues.length) {
           answered_issues.forEach(function(issueObj) {
-            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
+            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             // console.log("Issueeeee",issue);
             const opinionsPerIssue = Object
               .entries(issue.debates)
@@ -2368,7 +2376,7 @@ class Quiz {
                matches: opinionsPerIssue
             }
 
-            actual_issue_cards[issueObj.label] = {
+            actual_issue_cards[issueObj.issue] = {
                 key: ltempKey,
                 card: ltempCard
             }
@@ -2377,7 +2385,7 @@ class Quiz {
 
           const scoresPerIssue = answered_issues.map(function(issueObj) {
             let running_upweight = 0;
-            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.label];
+            var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             // console.log("Issueeeee",issue);
             // console.log("Issueeeee",issue ? issue.description : '');
             const score = Object
@@ -2386,8 +2394,8 @@ class Quiz {
                   return qs_asked.includes(debate[0]);
               })
               .map(function(debate) {
-                  // console.log("scoresPerIssue: Map debate",issueObj.label,debate[0],model.user.opinions.issues[issueObj.label]);
-                  const upweight = model.user.opinions.issues[issueObj.label].debates[debate[0]].weight || 1;
+                  // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
+                  const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
                   const userOpinion = qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2);
                   console.log(debate[0], party.key);
@@ -2404,7 +2412,7 @@ class Quiz {
 
             console.log('ISSUE', issue, issueObj);
 
-            return { name: issue ? issue.description : issueObj.label, link: actual_issue_cards[issueObj.label].key, score: (100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2)) + '%' };
+            return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: (100 * parseFloat(Math.round((score/running_upweight) * 100) / 100).toFixed(2)) + '%' };
           });
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
@@ -2515,6 +2523,7 @@ class Quiz {
       selectedCountry: self.selectedCountry,
       postcodeSubmit: self.postcodeSubmit,
       postcodeBinding: self.postcodeBinding,
+      postcodeError: self.postcodeError,
       isWaiting: self.isWaiting,
       finalResults: self.finalResults,
       back: self.back,
