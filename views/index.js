@@ -91,7 +91,7 @@ const getOpinionText = function (question, opinion) {
   var answer = {diff: 1};
   aggAnswers.forEach(function(_answer) {
     _answer.diff = Math.abs(opinion - _answer.opinion);
-    answer = _answer.diff<answer.diff ? _answer : answer;
+    answer = _answer.diff < answer.diff ? _answer : answer;
   })
   return answer.label;
 }
@@ -1838,8 +1838,9 @@ class Quiz {
     console.log("Running quiz with question order:",qp.questionSeries)
     // console.log("Running quiz with question DB:",quiz.questionDB)
     console.log("----")
-    console.log("Committed answers:",qp.opinions)
-    console.log("Tentative answers:",qp.answers)
+    console.log("Committed answers::",qp.opinions)
+    console.log("Tentative answers::",qp.answers)
+    console.log("Questions answered:",qp.calculableQuestions)
     console.log("Current question",self.currentQuestion);
     console.log("----")
 
@@ -1858,7 +1859,7 @@ class Quiz {
       // This will also be used by self.recalculateOpinions
       qp.calculableQuestions = qp.questionSeries.filter((q,i)=>{
         // get questions that have not been answered 'false' (i.e. skipped)
-        return typeof qp.answers[i] !== 'undefined' && qp.answers[i] !== false
+        return typeof qp.opinions[i] !== 'undefined' && qp.opinions[i] !== -1
       });
       console.log("calculableQuestions",qp.calculableQuestions)
 
@@ -1943,7 +1944,7 @@ class Quiz {
       var issue = thisQuestion.issue;
       var debate = thisQuestion.debate;
 
-      if(opinion === false) {
+      if(opinion === -1) {
         console.log("Question skipped, won't consider in calculations")
 
         // Erase from model
@@ -2044,7 +2045,7 @@ class Quiz {
         }
         var prev = {
           subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
-          skipped: qp.answers[qp.questionPointer-1] === false
+          skipped: qp.answers[qp.questionPointer-1] === -1
         }
         console.log("-----")
         console.log(now);
@@ -2057,19 +2058,19 @@ class Quiz {
           qp.questionPointer--; // previous question
           qp.opinions.pop(); // reset model
 
-          // model.user.opinions.issues = model.user.opinions.issues || {};
-          // var issue = quiz.questionDB[qp.questionSeries[qp.questionPointer]].issue;
-          // var debate = quiz.questionDB[qp.questionSeries[qp.questionPointer]].debate;
-          // if(model.user.opinions.issues[issue]) {
-          //   // console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
-          //   if(model.user.opinions.issues[issue].debates[debate])
-          //     delete model.user.opinions.issues[issue].debates[debate]
-          //
-          //   if(model.user.opinions.issues[issue].debates.length < 1) {
-          //     // console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
-          //     delete model.user.opinions.issues[issue]
-          //   }
-          // }
+          model.user.opinions.issues = model.user.opinions.issues || {};
+          var issue = quiz.questionDB[qp.questionSeries[qp.questionPointer]].issue;
+          var debate = quiz.questionDB[qp.questionSeries[qp.questionPointer]].debate;
+          if(model.user.opinions.issues[issue]) {
+            // console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+            if(model.user.opinions.issues[issue].debates[debate])
+              delete model.user.opinions.issues[issue].debates[debate]
+
+            if(model.user.opinions.issues[issue].debates.length < 1) {
+              // console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+              delete model.user.opinions.issues[issue]
+            }
+          }
 
           if(prev.skipped) {
             qp.answers.pop();
@@ -2084,13 +2085,15 @@ class Quiz {
         }
       }
 
+      self.defineCalculableTopics();
+
       self.updateShareLinks();
       self.refresh();
       self.next();
     }
 
     self.skipQuestion = function() {
-      var skipOpinion = false;
+      var skipOpinion = -1;
       qp.answers.push(skipOpinion);
       self.submitOpinion(skipOpinion,true);
     }
@@ -2200,6 +2203,7 @@ class Quiz {
       e.stopPropagation();
       model.user.isWaiting = "postcode-input";
       self.refresh();
+      trackEvent("Submitted postcode",qp.resultsData);
       api.getContenders(model.user.postcode).then(function(result){
         if (result.error) {
           console.log('result.error');
@@ -2364,25 +2368,22 @@ class Quiz {
         if(answered_issues && answered_issues.length) {
           answered_issues.forEach(function(issueObj) {
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
-            // console.log("Issueeeee",issue);
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
                   return qs_asked.includes(debate[0]);
               })
               .map(function(debate) {
-                console.log(debate);
-                // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
                   return {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
-                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
+                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries[qs_asked.indexOf(debate[0])]] || (qp.answers[qp.questionSeries[qs_asked.indexOf(debate[0])]]=="yes" ? 0.8 : 0.2)),
                   };
               })
             console.log('opinionsPerIssue', party.key);
             console.log(opinionsPerIssue);
 
-            var ltempKey = '//api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+            var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
               '@id': ltempKey,
               '@type': 'QuizMatch',
@@ -2402,6 +2403,7 @@ class Quiz {
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             // console.log("Issueeeee",issue);
             // console.log("Issueeeee",issue ? issue.description : '');
+            // console.log("!!!! Questions asked for report cards",qs_asked);
             const score = Object
               .entries(issue.debates)
               .filter(function(debate) {
@@ -2411,14 +2413,15 @@ class Quiz {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
-                  const userOpinion = qp.opinions[qs_asked.indexOf(debate[0])] || (qp.answers[qs_asked.indexOf(debate[0])]=="yes" ? 0.8 : 0.2);
-                  console.log(debate[0], party.key);
-                  console.log(userOpinion);
-                  console.log(debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
-                  console.log('--');
-                  console.log(upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion)));
-                  console.log('----------');
-                  return upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
+                  console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
+                  const userOpinion = qp.opinions[qp.questionSeries[qs_asked.indexOf(debate[0])]] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
+                  console.log("----Debate:",debate[0], party.key);
+                  console.log("user::",userOpinion);
+                  console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
+                  console.log("=>",result);
+                  console.log("----");
+                  return result;
               })
               .reduce(function(a,b) {
                   return a + b;
@@ -2434,7 +2437,7 @@ class Quiz {
           });
 
           party.openMatches = function(){
-            var tempKey = '//api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
+            var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
             var tempCard = {
               '@id': tempKey,
               '@type': 'IssueMatch',
