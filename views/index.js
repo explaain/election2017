@@ -2170,6 +2170,15 @@ class Quiz {
       /* ---
         NB: This will send users from Iframed quizes (e.g. unilad, 38degrees?) back to the standalone quiz (with branding)
       */
+      var partyTags = {
+        'labour': '@Labour',
+        'lib-dem': '@LibDems',
+        'conservative': '@Conservatives',
+        'ukip': '@UKIP',
+        'green': '@TheGreenParty',
+        'plaid-cymru': '@Plaid_Cymru',
+        'snp': '@theSNP'
+      }
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
@@ -2177,18 +2186,30 @@ class Quiz {
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
-        var tweet = `I support ${shareData[0].percentage} of ${shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
+        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData && shareData.length && shareData.length > 1) {
         // Multiple parties
         var perc = shareData[0].percentage.slice(0,-1);
         var partyNames = [];
-        shareData.forEach((p) => partyNames.push(p.name))
+        var partyTwitters = [];
+        shareData.forEach((p) => {
+          partyNames.push(p.name);
+          console.log(p.name,p.key,partyTags[p.key]);
+          partyTwitters.push(partyTags[p.key] || p.name);
+        });
+        console.log("Twitter tweet",shareData,partyTwitters);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
-        var tweet = `I equally support ${shareData[0].percentage} of ${partyNames.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`
+        var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
+        // var partyCandidateStrings = "";
+        // shareData.forEach((p) => {
+        //   partyNames.push(p.name)
+        // })
+        // partyNames.  ${X} (${qp.localCandidateData.filter((x)=>x.party_name === party.name]})
+        // var twitterTossUpMsg = `It's a draw between ${X} (${qp.localCandidateData.filter((x)=>x.party_name === x)}) and ${Y} (${localCandidates[Y]}) in ${constituency}.`;
       }
       console.log("Share string",tweet);
 
