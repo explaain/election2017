@@ -2361,7 +2361,7 @@ class Quiz {
         const matches = party.matches;
         const qp = model.user.quizProgress;
 
-        const qs_asked = qp.calculableQuestions;
+        const qsWithUserOpinions = qp.calculableQuestions;
         const answered_issues = quiz.quizTopics;
         const actual_issue_cards = {};
 
@@ -2371,13 +2371,13 @@ class Quiz {
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return qs_asked.includes(debate[0]);
+                  return qsWithUserOpinions.includes(debate[0]);
               })
               .map(function(debate) {
                   return {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
-                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries[qs_asked.indexOf(debate[0])]] || (qp.answers[qp.questionSeries[qs_asked.indexOf(debate[0])]]=="yes" ? 0.8 : 0.2)),
+                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
                   };
               })
             console.log('opinionsPerIssue', party.key);
@@ -2403,18 +2403,18 @@ class Quiz {
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             // console.log("Issueeeee",issue);
             // console.log("Issueeeee",issue ? issue.description : '');
-            // console.log("!!!! Questions asked for report cards",qs_asked);
+            // console.log("!!!! Questions asked for report cards",qsWithUserOpinions);
             const score = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return qs_asked.includes(debate[0]);
+                  return qsWithUserOpinions.includes(debate[0]);
               })
               .map(function(debate) {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
                   console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
-                  const userOpinion = qp.opinions[qp.questionSeries[qs_asked.indexOf(debate[0])]] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
+                  const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
                   console.log("----Debate:",debate[0], party.key);
                   console.log("user::",userOpinion);
                   console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
