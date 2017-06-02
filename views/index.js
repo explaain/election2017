@@ -2382,7 +2382,7 @@ class Quiz {
             console.log('opinionsPerIssue', party.key);
             console.log(opinionsPerIssue);
 
-            var ltempKey = '//api.explaain.com/QuizMatch/' + parseInt(Math.random()*100000000000);
+            var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
               '@id': ltempKey,
               '@type': 'QuizMatch',
@@ -2436,7 +2436,7 @@ class Quiz {
           });
 
           party.openMatches = function(){
-            var tempKey = '//api.explaain.com/IssueMatch/' + parseInt(Math.random()*100000000000);
+            var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
             var tempCard = {
               '@id': tempKey,
               '@type': 'IssueMatch',
