@@ -2170,7 +2170,7 @@ module.exports = function(CardTemplates){
                   //   "template": "registerButton"
                   // },
                   {
-                    "dom": "p.small-link.calculate",
+                    "dom": "p.small-link.calculate.onFinalResults",
                     "condition": "finalResults",
                     "content":{
                        "var": "calculateText",

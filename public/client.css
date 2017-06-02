@@ -2047,6 +2047,10 @@ span.t-featured {
   /*pointer-events: none;*/
 }
 
+.body.quiz._ge2017 p.small-link.calculate.onFinalResults {
+  margin: 60px 0 -20px;
+}
+
 .basic-top-match {
   height: 190px;
   padding: 40px 0px;
