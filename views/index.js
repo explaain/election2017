@@ -2084,6 +2084,7 @@ class Quiz {
         }
       }
 
+      self.defineCalculableTopics();
       self.updateShareLinks();
       self.refresh();
       self.next();
