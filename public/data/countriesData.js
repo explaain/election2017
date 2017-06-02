@@ -208,7 +208,7 @@ const countriesData = [
       },
       {
         color: "green",
-        photo: "/img/leader-faces/lucas.png",
+        photo: "/img/leader-faces/scottishgreens.png",
         fullName: "Green",
         name: "Green",
         key: "green",

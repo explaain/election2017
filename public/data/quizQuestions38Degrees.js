@@ -64,7 +64,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should the spare room subsidy (so called 'bedroom tax') be scrapped?",
+   question: "Should the so-called 'bedroom tax' be scrapped?",
    randomiseGroup: "firstThree",
    issue: "welfare",
    debate: "38-welfare-2",
