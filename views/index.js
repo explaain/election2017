@@ -2180,6 +2180,9 @@ class Quiz {
         'snp': '@theSNP'
       }
 
+      var partyReconciliation = allData.getAllData().partyReconciliation;
+      var localCandidateData = allData.getAllData().localCandidates;
+
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
       console.log("Results data for sharing",shareData);
@@ -2194,22 +2197,20 @@ class Quiz {
         var perc = shareData[0].percentage.slice(0,-1);
         var partyNames = [];
         var partyTwitters = [];
+        var candidateTwitters = [];
         shareData.forEach((p) => {
           partyNames.push(p.name);
-          console.log(p.name,p.key,partyTags[p.key]);
+          var candidateAnchor = localCandidateData.filter((x) => partyReconciliation[x.party_name.toLowerCase().replace(" ","-")] === p.name);
+          candidateTwitters.push(candidateAnchor ? candidateAnchor + (partyTags[p.key] ? " ("+partyTags[p.key]+")" : "") : (partyTags[p.key] || p.name));
           partyTwitters.push(partyTags[p.key] || p.name);
         });
-        console.log("Twitter tweet",shareData,partyTwitters);
+        console.log("Twitter tweet",shareData,twitterAccounts);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
-        var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
+        var tweet = SiteBrand === 'ge2017' ?
+          `It's a draw between ${candidateTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}` :
+          `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
-        // var partyCandidateStrings = "";
-        // shareData.forEach((p) => {
-        //   partyNames.push(p.name)
-        // })
-        // partyNames.  ${X} (${qp.localCandidateData.filter((x)=>x.party_name === party.name]})
-        // var twitterTossUpMsg = `It's a draw between ${X} (${qp.localCandidateData.filter((x)=>x.party_name === x)}) and ${Y} (${localCandidates[Y]}) in ${constituency}.`;
       }
       console.log("Share string",tweet);
 
