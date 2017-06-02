@@ -1858,7 +1858,7 @@ class Quiz {
 
       // This will also be used by self.recalculateOpinions
       qp.calculableQuestions = qp.questionSeries.filter((q,i)=>{
-        // get questions that have not been answered 'false' (i.e. skipped)
+        // get questions that have been answered, not skipped
         return typeof qp.opinions[i] !== 'undefined' && qp.opinions[i] !== -1
       });
       console.log("calculableQuestions",qp.calculableQuestions)
@@ -2013,8 +2013,8 @@ class Quiz {
       // Now resubmit them, mocking  currentQuestion  as  quiz.questionDB[q]
       qp.calculableQuestions.forEach((q) => {
         var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
-        console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
         self.submitOpinion(mq.opinion, true, quiz.questionDB[q]);
+        console.log("Recalculating question "+q+" with weighting "+mq.weight, mq);
       });
     }
 
@@ -2044,7 +2044,7 @@ class Quiz {
           subQ: typeof qp.answers[qp.questionPointer] === 'string'
         }
         var prev = {
-          subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
+          subQ: typeof qp.answers[qp.questionPointer-1] === 'number' && qp.answers[qp.questionPointer-1] > -1,
           skipped: qp.answers[qp.questionPointer-1] === -1
         }
         console.log("-----")
@@ -2379,11 +2379,11 @@ class Quiz {
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], typeof qp.opinions[qp.questionSeries.indexOf(debate[0])] === 'number' ? qp.opinions[qp.questionSeries.indexOf(debate[0])] : (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2)),
                   };
-                  console.log("First loop",debate[0],x.userOpinion,x.question)
+                  // console.log("First loop",debate[0],x.userOpinion,x.question)
                   return x;
               })
-            console.log('opinionsPerIssue', party.key);
-            console.log(opinionsPerIssue);
+            // console.log('opinionsPerIssue', party.key);
+            // console.log(opinionsPerIssue);
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
@@ -2423,7 +2423,7 @@ class Quiz {
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
                   // console.log("=>",result);
                   // console.log("----");
-                  console.log("Second loop",debate[0],userOpinion,debate[1].question)
+                  // console.log("Second loop",debate[0],userOpinion,debate[1].question)
                   return result;
               })
               .reduce(function(a,b) {
