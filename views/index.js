@@ -2361,24 +2361,26 @@ class Quiz {
         const matches = party.matches;
         const qp = model.user.quizProgress;
 
-        const qsWithUserOpinions = qp.calculableQuestions;
-        const answered_issues = quiz.quizTopics;
+        const answeredDebates = qp.calculableQuestions;
+        const answeredIssues = quiz.quizTopics;
         const actual_issue_cards = {};
 
-        if(answered_issues && answered_issues.length) {
-          answered_issues.forEach(function(issueObj) {
+        if(answeredIssues && answeredIssues.length) {
+          answeredIssues.forEach(function(issueObj) {
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return qsWithUserOpinions.includes(debate[0]);
+                  return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
-                  return {
+                  var x = {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
-                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
+                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], typeof qp.opinions[qp.questionSeries.indexOf(debate[0])] === 'number' ? qp.opinions[qp.questionSeries.indexOf(debate[0])] : (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2)),
                   };
+                  console.log("First loop",debate[0],x.userOpinion,x.question)
+                  return x;
               })
             console.log('opinionsPerIssue', party.key);
             console.log(opinionsPerIssue);
@@ -2398,29 +2400,30 @@ class Quiz {
           });
 
 
-          const scoresPerIssue = answered_issues.map(function(issueObj) {
+          const scoresPerIssue = answeredIssues.map(function(issueObj) {
             let running_upweight = 0;
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
             // console.log("Issueeeee",issue);
             // console.log("Issueeeee",issue ? issue.description : '');
-            // console.log("!!!! Questions asked for report cards",qsWithUserOpinions);
+            // console.log("!!!! Questions asked for report cards",answeredDebates);
             const score = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return qsWithUserOpinions.includes(debate[0]);
+                  return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
-                  console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
-                  const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
-                  console.log("----Debate:",debate[0], party.key);
-                  console.log("user::",userOpinion);
-                  console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  // console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
+                  const userOpinion = typeof qp.opinions[qp.questionSeries.indexOf(debate[0])] === 'number' ? qp.opinions[qp.questionSeries.indexOf(debate[0])] : (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
+                  // console.log("----Debate:",debate[0], party.key);
+                  // console.log("user::",userOpinion);
+                  // console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
-                  console.log("=>",result);
-                  console.log("----");
+                  // console.log("=>",result);
+                  // console.log("----");
+                  console.log("Second loop",debate[0],userOpinion,debate[1].question)
                   return result;
               })
               .reduce(function(a,b) {
