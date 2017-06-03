@@ -44,8 +44,9 @@ module.exports = {
       localCandidateData: [],
       partiesChartDataTopMatch: [],
       partiesChartDataTopMatchTactical: [],
-      partiesHybridList: []
-    }
+      partiesHybridList: [],
+      questions: []
+    },
   },
 
   selectedPhrases: [

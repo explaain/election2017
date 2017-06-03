@@ -106,7 +106,6 @@ Object.keys(cfg).forEach((site) => {
 // Patch each brand object with default 'ge2017' data
 Object.keys(cfg).forEach((site) => {
   props.forEach((k) => {
-    console.log(site,k,cfg[site][k]);
     cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.ge2017[k];
   })
 });
@@ -143,7 +142,6 @@ class App {
     var logoRoute;
     if (QuizPage==true){
       logoRoute = routes.quiz();
-      console.log('logoRoute1');
     } else if (Standalone==true) {
       logoRoute = routes.students();
     } else {
@@ -244,13 +242,10 @@ class App {
 
               var submitData = function(e) {
                 var goto = dataProcessor.processSentenceData(model, helpers);
-                console.log('goto');
-                console.log(goto);
                 routes[goto.route](goto).push();
               }
 
               var quizButtonClick = function(e) {
-                console.log(123);
                 model.selectedPhrases.push({key: 'allIssues'});
                 goto = {
                   type: 'step',
@@ -396,19 +391,15 @@ class Footer {
     );
 
     routes.quiz(function (params) {
-      console.log('quiz');
       footerContents = quizFooterContents
     });
     routes.quizNew(function (params) {
-      console.log('quizNew');
       footerContents = quizFooterContents
     });
     routes.quizLanding(function (params) {
-      console.log('quizLanding');
       footerContents = quizFooterContents
     });
     routes.quizResults(function (params) {
-      console.log('quizResults');
       footerContents = quizFooterContents
     });
 
@@ -1095,7 +1086,6 @@ class CardContent {
 
       case 'postcode':
         if (postcodeAlreadyEntered) {
-          console.log('already');
           //Doesn't ask for postcode again
           data.name = "Loading your results...";
           data.description = "";
@@ -1640,7 +1630,6 @@ class QuizLanding {
     const self = this;
     var randomyGraphyThing;
 
-    console.log("Quiz-Landing page")
     self.launchRandomRefresh = function() {
       // if(!self.quizStarted){
       randomyGraphyThing = setTimeout(function(){
@@ -1717,10 +1706,67 @@ class QuizResults {
 
 class Quiz {
   constructor(params) {
-    console.log("Quiz page")
 
     const self = this;
     const qp = model.user.quizProgress;
+
+    MyQuiz = this;
+
+    self.allQuestions = model.questions.questionDB;
+    console.log(qp.questions);
+
+    self.getCurrentQuestionNumber = function() {
+      const num = qp.questions.filter(function(q) {
+        return q.reached;
+      }).length-1;
+
+      console.log('Getting Current Question: ' + num);
+      console.log(qp.questions[num]);
+
+      console.log(qp.questions);
+      return num;
+    }
+    self.getQuestion = function(num) {
+      console.log('Getting Question ' + num + ':');
+      console.log(qp.questions[num]);
+
+
+      console.log(qp.questions);
+      return qp.questions[num];
+    }
+    self.getQuestionProp = function(num, prop) {
+      console.log('Getting Question [' + num + '].' + prop + ' = ' + qp.questions[num][prop]);
+      console.log(qp.questions[num]);
+
+
+      console.log(qp.questions);
+      return qp.questions[num][prop];
+    }
+    self.setQuestionProp = function(num, prop, value) {
+      qp.questions[num][prop] = value;
+
+      console.log('Setting Question [' + num + '].' + prop + ' = ' + value);
+      console.log(qp.questions[num]);
+    }
+    self.getDebateIssue = function(debate) {
+
+      console.log(qp.questions);
+      return self.allQuestions[debate].issue;
+
+      console.log('Getting Debate Issue: ' + debate + ' = ' + issue);
+    }
+    self.storeUserOpinion = function(debate, opinion) {
+      const issues = model.user.opinions.issues;
+      const issue = self.getDebateIssue(debate);
+      if (!issues[issue]) { issues[issue] = { debates: {} } }
+      const debates = issues[issue].debates;
+      if (!debates[debate]) { debates[debate] = { opinion: null } }
+      debates[debate].opinion = opinion;
+
+      console.log('Storing User Opinion: ' + issue + ': ' + debate + ' = ' + opinion);
+    }
+
+
     const quiz = model.questions;
     qp.questionPointer = qp.questionPointer ? qp.questionPointer : 0;
     qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
@@ -1825,7 +1871,6 @@ class Quiz {
     if(config[SiteBrand].prependYesNo) {
       qp.questionSeries.forEach((k,i) => {
         quiz.questionDB[k].answers.yes.forEach((a,j) => {
-          console.log(a);
           a.label = "Yes, " + a.label
         })
         quiz.questionDB[k].answers.no.forEach((a,j) => {
@@ -1834,14 +1879,18 @@ class Quiz {
       })
     }
 
+    if (!qp.questions.length) {
+      qp.questions = qp.questionSeries.map(function(key) {
+        return {
+          debate: key,
+          reached: false,
+          begun: false
+        }
+      })
+      qp.questions[0].reached = true;
+    }
+
     self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
-    console.log("Running quiz with question order:",qp.questionSeries)
-    // console.log("Running quiz with question DB:",quiz.questionDB)
-    console.log("----")
-    console.log("Committed answers:",qp.opinions)
-    console.log("Tentative answers:",qp.answers)
-    console.log("Current question",self.currentQuestion);
-    console.log("----")
 
     // Topics for prioritising
     // This needs to run after every question
@@ -1851,7 +1900,6 @@ class Quiz {
 
       if(quiz.quizTopics) {
         var oldPriorities = JSON.parse(JSON.stringify(quiz.quizTopics));
-        console.log("Old priorities",oldPriorities);
       }
       quiz.quizTopics = new Set(); // for priority labelling
 
@@ -1860,7 +1908,6 @@ class Quiz {
         // get questions that have not been answered 'false' (i.e. skipped)
         return typeof qp.answers[i] !== 'undefined' && qp.answers[i] !== false
       });
-      console.log("calculableQuestions",qp.calculableQuestions)
 
       qp.calculableQuestions.forEach(function(q) {
         quiz.quizTopics.add(quiz.questionDB[q].issue);
@@ -1872,7 +1919,6 @@ class Quiz {
           label: model.parties.opinions.issues[topic].description,
           highPriority: oldPriorities && oldPriorities.length && oldPriorities.find((p)=>p.issue == topic) ? oldPriorities.find((p)=>p.issue == topic).highPriority  : false,
           topicTogglePriority: () => {
-            console.log("Restoring previous priority",oldPriorities.find((p)=>p.issue == topic))
             self.reprioritiseTopic(topic,i);
           }
         }
@@ -1884,8 +1930,6 @@ class Quiz {
       if (qp.questionPointer > 0) qp.startingQuiz = false;
       trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, questionId: qp.questionSeries[qp.questionPointer], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.questionPointer-1]});
       // console.log("Quiz",  qp.answers.length,  qp.questionSeries[qp.questionPointer],  quiz.questionDB[qp.questionSeries.length-1],  qp.answers[qp.answers.length-1],  qp.opinions[qp.questionPointer-1] );
-      console.log(qp.answers.length);
-      console.log(quiz.questionDB[qp.questionSeries.length-1]);
       if(qp.questionPointer < qp.questionSeries.length){
         // self.updateShareLinks();
         // self.refresh();
@@ -1907,7 +1951,6 @@ class Quiz {
     self.answerYes = function(){ self.answer("yes") }
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
-      console.log("Answer Yes/No");
       qp.answers.push(answer);
       self.submitOpinion(answer === "yes" ? 0.8 : 0.2);
       if (qp.answers.length==qp.questionSeries.length) {
@@ -1916,27 +1959,31 @@ class Quiz {
       self.next();
     }
     self.answerSubquestion = function(answer) {
-      console.log("Improve on Yes/No");
       // qp.answers[qp.answers.length-1] = answer;
       self.submitOpinion(answer,true);
       self.next();
     }
     self.skipSubquestion = function() {
-      console.log("Stay with Yes/No");
       var opinion = qp.answers[qp.answers.length-1] === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
       self.next();
     }
 
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
+      if (opinion !== false) {
+        const num = self.getCurrentQuestionNumber();
+        const debate1 = self.getQuestionProp(num, 'debate');
+        self.storeUserOpinion(debate1, opinion);
+        self.setQuestionProp(commitToAnswer ? num+1 : num, commitToAnswer ? 'reached' : 'begun', true);
+      }
+
+
       if(commitToAnswer) {
-        console.log("Next Q")
         qp.opinions.push(opinion);
         qp.questionPointer++;
         self.refresh();
         self.next();
       } else {
-        console.log("Same Q")
       }
 
       model.user.opinions.issues = model.user.opinions.issues || {};
@@ -1998,8 +2045,6 @@ class Quiz {
         }
         return newScore;
       });
-      console.log('newScores');
-      console.log(newScores);
       self.defineCalculableTopics();
       self.updatePartyPercentages(newScores);
       self.updateShareLinks();
@@ -2012,17 +2057,14 @@ class Quiz {
       // Now resubmit them, mocking  currentQuestion  as  quiz.questionDB[q]
       qp.calculableQuestions.forEach((q) => {
         var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
-        console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
         self.submitOpinion(mq.opinion, true, quiz.questionDB[q]);
       });
     }
 
     self.reprioritiseTopic = function(topic,i) {
-      console.log(`Changing priority of __${topic}__ from ${quiz.quizTopics[i].highPriority} to ${!quiz.quizTopics[i].highPriority}`);
       quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
       var newWeight = quiz.quizTopics[i].highPriority ? 5 : 1;
       Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
-        console.log("!!!!! Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
         model.user.opinions.issues[topic].debates[k].weight = newWeight
       })
       self.recalculateOpinions();
@@ -2038,6 +2080,10 @@ class Quiz {
       qp.quizResultsPage = false;
 
       if(qp.answers.length > 0) {
+        //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
+        const num = self.getCurrentQuestionNumber();
+        self.setQuestionProp(num, self.getQuestion(num).begun ? 'begun' : 'reached', false);
+
         var now = {
           yesNo: qp.questionPointer === qp.opinions.length,
           subQ: typeof qp.answers[qp.questionPointer] === 'string'
@@ -2046,9 +2092,6 @@ class Quiz {
           subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
           skipped: qp.answers[qp.questionPointer-1] === false
         }
-        console.log("-----")
-        console.log(now);
-        console.log(prev);
 
         if(now.subQ) {
           qp.answers.pop(); // reset yes/no
@@ -2091,6 +2134,9 @@ class Quiz {
     }
 
     self.skipQuestion = function() {
+      const num = self.getCurrentQuestionNumber();
+      self.setQuestionProp(num+1, 'reached', true);
+
       var skipOpinion = false;
       qp.answers.push(skipOpinion);
       self.submitOpinion(skipOpinion,true);
@@ -2098,7 +2144,6 @@ class Quiz {
 
     //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
     self.updatePartyPercentages = function(map) {
-      console.log("updatePartyPercentages");
       if(qp.country){
         var topParties = [{percentage: 0}]
         map.forEach(function(party){
@@ -2132,10 +2177,6 @@ class Quiz {
             openMatches: fullParty.openMatches,
             quizResults: qp.quizResults
           });
-          console.log('topParty');
-          console.log('topParty');
-          console.log('topParty');
-          console.log(topParty);
         })
         // tempMaxParty = {
         //   color: party.color,
@@ -2182,7 +2223,6 @@ class Quiz {
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
-      console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
@@ -2196,7 +2236,6 @@ class Quiz {
         var partyTwitters = [];
         shareData.forEach((p) => {
           partyNames.push(p.name);
-          console.log(p.name,p.key,partyTags[p.key]);
           partyTwitters.push(partyTags[p.key] || p.name);
         });
         console.log("Twitter tweet",shareData,partyTwitters);
@@ -2211,31 +2250,22 @@ class Quiz {
         // partyNames.  ${X} (${qp.localCandidateData.filter((x)=>x.party_name === party.name]})
         // var twitterTossUpMsg = `It's a draw between ${X} (${qp.localCandidateData.filter((x)=>x.party_name === x)}) and ${Y} (${localCandidates[Y]}) in ${constituency}.`;
       }
-      console.log("Share string",tweet);
 
       self.refresh();
     }
 
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
-      console.log(e);
       e.stopPropagation();
       model.user.isWaiting = "postcode-input";
       self.refresh();
       api.getContenders(model.user.postcode).then(function(result){
         if (result.error) {
-          console.log('result.error');
-          console.log(result.error);
           qp.postcodeError = "Sorry, we didn't recognise that postcode.";
           self.refresh();
         } else {
           qp.constituencyView = true;
           model.landedOnResult = 1;
-          console.log('result');
-          console.log('result');
-          console.log('result');
-          console.log('result');
-          console.log(result);
           qp.quizChanceResults = result;
           delete model.user.isWaiting;
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
@@ -2246,7 +2276,6 @@ class Quiz {
     }
 
     if (self.finalResults == true) {
-      console.log('final!!!');
       setTimeout(function(){
         $('.body.quiz').addClass('moving')}
       ,10);
@@ -2301,15 +2330,10 @@ class Quiz {
         '5th'
       ]
       qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
-        console.log(party);
         var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
         if (!fullParty)
           return {};
 
-        console.log('fullParty');
-        console.log(fullParty);
-        console.log('party, fullParty');
-        console.log(party, fullParty);
         party.photo = fullParty.photo;
         party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
           return party.key == _party.key;
@@ -2320,19 +2344,11 @@ class Quiz {
         count++;
         return party;
       });
-      console.log('isMatch testing');
 
       qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
       if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
         getResults('localCandidates')
         .then(function(results) {
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log(results)
           qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
             candidate.image_url = candidate.image_url || '/img/person.png';
             return candidate;
@@ -2363,7 +2379,6 @@ class Quiz {
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
       qp.hasStarted = true;
-      console.log("Starting quiz",self.params)
       self.startQuiz();
     }
 
@@ -2393,7 +2408,6 @@ class Quiz {
                   return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
-                console.log(debate);
                 // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
                   return {
                       question: debate[1].question,
@@ -2401,8 +2415,6 @@ class Quiz {
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
                   };
               })
-            console.log('opinionsPerIssue', party.key);
-            console.log(opinionsPerIssue);
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
@@ -2434,21 +2446,15 @@ class Quiz {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
-                  console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
                   const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
-                  console.log("----Debate:",debate[0], party.key);
-                  console.log("user::",userOpinion);
-                  console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
-                  console.log("=>",result);
-                  console.log("----");
+
                   return result;
               })
               .reduce(function(a,b) {
                   return a + b;
               })
-
-            console.log('ISSUE', issue, issueObj);
 
             return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' };
           });
@@ -2489,7 +2495,6 @@ class Quiz {
             party.percentage = "0%";
             party.percentageText = "0%";
           })
-          console.log(country)
           // qp.country = country; // This thing's causing mad loop errors
           // qp.country = country; // This thing's causing mad loop errors
           // qp.country = country; // This thing's causing mad loop errors
