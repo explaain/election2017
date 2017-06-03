@@ -896,6 +896,9 @@ class Step {
           type: 'policy'
         }])
         break;
+      case 'prepare-results':
+        routes.quizResults().push();
+        break;
 
       default:
         data.cardGroups.push([{

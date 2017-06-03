@@ -1162,7 +1162,8 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step',
+        name: 'prepare-results'
       }
     },
     "issue-brexit-for": {
