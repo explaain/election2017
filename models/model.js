@@ -1093,7 +1093,7 @@ module.exports = {
         type: 'quizNew'
       }
     },
-    
+
     //@TODO update dataUpdates and icons
     "issue-nhs-against": {
       label: "Against NHS",
@@ -1157,8 +1157,8 @@ module.exports = {
       color: "#00a2e5",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+          value: 0
         }
       ],
       goto: {
