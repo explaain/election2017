@@ -4,6 +4,9 @@ module.exports = {
   step: -1,
   // todo: those are temporary here, refactor
   question: '',
+  questions: {
+    questionDB: {}
+  },
   landedOnPostcode: 0,
   landedOnResult: 0,
   landedOnQuizPriority: 0,
@@ -30,8 +33,6 @@ module.exports = {
     quizFlow: [],
     isWaiting: false,
     quizProgress: {
-      answers: [],
-      opinions: [],
       quizResults: false,
       quizResultsPage: false,
       quizStarted: false,
@@ -44,8 +45,9 @@ module.exports = {
       localCandidateData: [],
       partiesChartDataTopMatch: [],
       partiesChartDataTopMatchTactical: [],
-      partiesHybridList: []
-    }
+      partiesHybridList: [],
+      questions: []
+    },
   },
 
   selectedPhrases: [

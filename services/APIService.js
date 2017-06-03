@@ -84,9 +84,6 @@ APIService.prototype.getLocalCandidatesResults = function(postcode, userData) {
       });
       return {data: data};
     }).then(function(results) {
-      console.log('results');
-      console.log('results');
-      console.log(results);
       return results;
     })
   })
@@ -173,9 +170,6 @@ APIService.prototype.getContenders = function(postcode, publicData) {
     if (results.error) {
       return results;
     } else {
-      console.log('results1');
-      console.log('results1');
-      console.log(results);
       data = results;
       user = {constituency: results.user.constituency};
       myConstituency = results.user.constituency;
@@ -183,29 +177,19 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       return getPartyChances(data);
     }
   }).then(function(results) {
-    console.log('results');
-    console.log('results');
-    console.log('results');
-    console.log(results);
     if (results.error) {
       return results;
     } else {
       var threshold = 0.5;
-      console.log('results');
-      console.log(results);
       var partyKeys = Object.keys(results);
       partyKeys.sort(function(a, b) {
         return parseFloat(results[b].chance) - parseFloat(results[a].chance);
       });
-      console.log('partyKeys');
-      console.log(partyKeys);
       var i = 0;
       var topPartyKeys = partyKeys.filter(function(partyKey) {
         i++;
         return results[partyKey].chance > threshold || i < 2 || ( forceSwing && i < 3 );
       });
-      console.log('topPartyKeys');
-      console.log(topPartyKeys);
       var topParties = topPartyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
@@ -220,14 +204,10 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       var partiesAll = partyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
-      console.log('partiesAll');
-      console.log(partiesAll);
       topParties.map(function(party) {
         party.chance = results[party.key].chance;
         return party;
       })
-      console.log('topParties');
-      console.log(topParties);
 
       return {
         location: user.constituency.name,
@@ -249,7 +229,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     if (results.error) {
       return results;
     } else {
-      console.log(2);
       totalResults.user = {
         constituency : {
           name: results.constituency.name,
@@ -259,13 +238,10 @@ APIService.prototype.loadPostcodeData = function(postcode) {
       postcodeResults = results;
       var refAreaName = results.refArea.name;
       refAreaName = refAreaName.substring(0, refAreaName.length - 5);
-      console.log(3);
-      console.log(results);
       return loadEURefResults(refAreaName);
     }
   })
   .then(function(results) {
-    console.log(4);
     if (results.error) {
       return results;
     } else {
@@ -275,7 +251,6 @@ APIService.prototype.loadPostcodeData = function(postcode) {
     }
   })
   .then(function(results) {
-    console.log(5);
     if (results.error) {
       return results;
     } else {
@@ -411,8 +386,6 @@ APIService.prototype.getPartyMatches = function(data) {
 
     }
   });
-  console.log('partyMatches');
-  console.log(partyMatches);
   return partyMatches;
 }
 
@@ -420,7 +393,6 @@ APIService.prototype.getAgreements = function(data) {
   var agreementMatrix = {};
 
   var issues = data.user.opinions.issues;
-  console.log(issues);
   var issueKeys = Object.keys(issues);
   issueKeys.forEach(function(issueKey) {
     var issue = issues[issueKey];
@@ -439,7 +411,7 @@ APIService.prototype.getAgreements = function(data) {
               createObjectProps(agreementMatrix, [partyKey, issueKey])
               agreementMatrix[partyKey][issueKey][debateKey] = {
                 agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
-                // partyOpinion: allPartiesDebate.parties[partyKey].opinion,
+                partyOpinion: allPartiesDebate.parties[partyKey].opinion,
                 userOpinion: debate.opinion,
                 weight: debate.weight || 1,
                 description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
@@ -456,8 +428,6 @@ APIService.prototype.getAgreements = function(data) {
 
     }
   })
-  console.log('agreementMatrix');
-  console.log(agreementMatrix);
   return agreementMatrix;
 }
 
@@ -499,8 +469,6 @@ APIService.prototype.getPartyChances = function(data) {
         chance: totalChance
       }
 
-      console.log('partyChances');
-      console.log(partyChances);
 
       partyChances[partyKey].chances = [];
       partyChances[partyKey].chances.push({
@@ -531,16 +499,12 @@ APIService.prototype.loadConstituency = function(postcode) {
   var url = 'https://mapit.mysociety.org/postcode/' + postcode + '?api_key=' + apiKey;
   return http.get(url)
   .then(function (res) {
-    console.log(res)
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
       return data.type == 'WMC'
     });
-    console.log('constituency');
-    console.log(constituency);
     var refArea = objectAsArray(res.body.areas).filter(function (data) {
       return (data.type == 'OLF' || data.type == 'UTA')
     });
-    console.log(1);
     return {constituency: constituency[0], refArea: refArea[0], all: res.body.areas}
   }, function (error) {
     if(!postcode){
@@ -589,7 +553,6 @@ APIService.prototype.loadBettingOdds = function(areaKey) {
   if (resultsTemp == null) {
     result["oddChances"] = {}
   } else {
-    console.log(5);
     resultsTemp.forEach(function(party) {
       var partyKey = party.party;
       var digits = party.odds.split('/');
