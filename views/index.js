@@ -897,6 +897,8 @@ class Step {
         }])
         break;
       case 'prepare-results':
+        // This is where we redirect users after they choose smth in dashboards
+        //@TODO Jan, please feel free to change the right route here if needed
         routes.quizResults().push();
         break;
 
