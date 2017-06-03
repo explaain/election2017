@@ -1209,17 +1209,15 @@ module.exports = {
       }
     },
 
-    //@TODO update labels, dataUpdates and icons
-    // IMPORTANT! "user.opinions.issues" are *SAMPLE* strings!
-    // Make sure they set up real values in real props!
+    //@TODO check dataUpdates, update labels and icons
     "party-party1-against": {
-      label: "Against Labour Party",
+      label: "Against Labour",
       icon: 'compass',
       color: "red",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.partyLiking.debates.labour.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1227,12 +1225,12 @@ module.exports = {
       }
     },
     "party-party1-for": {
-      label: "For Labour Party",
+      label: "For Labour",
       icon: 'compass',
       color: "red",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.partyLiking.debates.labour.opinion',
           value: 1,
         }
       ],
@@ -1246,8 +1244,8 @@ module.exports = {
       color: "green",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.partyLiking.debates.green.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1260,7 +1258,7 @@ module.exports = {
       color: "green",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.partyLiking.debates.green.opinion',
           value: 1,
         }
       ],
@@ -1269,13 +1267,13 @@ module.exports = {
       }
     },
     "party-party3-against": {
-      label: "Against Conservative Party",
+      label: "Against Conservative",
       icon: 'compass',
       color: "blue",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.partyLiking.debates.conservative.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1283,12 +1281,12 @@ module.exports = {
       }
     },
     "party-party3-for": {
-      label: "For Conservative Party",
+      label: "For Conservative",
       icon: 'compass',
       color: "blue",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.partyLiking.debates.conservative.opinion',
           value: 1,
         }
       ],
@@ -1297,13 +1295,13 @@ module.exports = {
       }
     },
     "party-party4-against": {
-      label: "Against UK Independent Party",
+      label: "Against UK Independent",
       icon: 'compass',
       color: "purple",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.partyLiking.debates.ukip.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1311,12 +1309,12 @@ module.exports = {
       }
     },
     "party-party4-for": {
-      label: "For UK Independent Party",
+      label: "For UK Independent",
       icon: 'compass',
       color: "purple",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.partyLiking.debates.ukip.opinion',
           value: 1,
         }
       ],
@@ -1325,13 +1323,13 @@ module.exports = {
       }
     },
     "party-party5-against": {
-      label: "Against Lib Dem Party",
+      label: "Against Lib Dem",
       icon: 'compass',
       color: "orange",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.partyLiking.debates.lib-dem.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1339,12 +1337,12 @@ module.exports = {
       }
     },
     "party-party5-for": {
-      label: "For Lib Dem Party",
+      label: "For Lib Dem",
       icon: 'compass',
       color: "orange",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.partyLiking.debates.lib-dem.opinion',
           value: 1,
         }
       ],
