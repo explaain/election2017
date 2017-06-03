@@ -1106,7 +1106,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-nhs-for": {
@@ -1120,7 +1120,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-immigration-against": {
@@ -1134,7 +1134,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-immigration-for": {
@@ -1148,7 +1148,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-brexit-against": {
@@ -1177,7 +1177,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-education-against": {
@@ -1191,7 +1191,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "issue-education-for": {
@@ -1205,7 +1205,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
 
@@ -1223,7 +1223,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party1-for": {
@@ -1237,7 +1237,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party2-against": {
@@ -1251,7 +1251,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party2-for": {
@@ -1265,7 +1265,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party3-against": {
@@ -1279,7 +1279,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party3-for": {
@@ -1293,7 +1293,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party4-against": {
@@ -1307,7 +1307,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party4-for": {
@@ -1321,7 +1321,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party5-against": {
@@ -1335,7 +1335,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     },
     "party-party5-for": {
@@ -1349,7 +1349,7 @@ module.exports = {
         }
       ],
       goto: {
-        type: 'quizResults'
+        type: 'step', name: 'prepare-results'
       }
     }
     /*
