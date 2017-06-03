@@ -1094,15 +1094,15 @@ module.exports = {
       }
     },
 
-    //@TODO update dataUpdates and icons
+    //@TODO check dataUpdates and change icons
     "issue-nhs-against": {
       label: "Against NHS",
       icon: 'compass',
       color: "#42c299",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.nhs.debates.nhs-1.opinion',
+          value: 0
         }
       ],
       goto: {
@@ -1115,7 +1115,7 @@ module.exports = {
       color: "#42c299",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.nhs.debates.nhs-1.opinion',
           value: 1,
         }
       ],
@@ -1129,8 +1129,8 @@ module.exports = {
       color: "#e74289",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.immigration.debates.immigration-1.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1143,8 +1143,8 @@ module.exports = {
       color: "#e74289",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.immigration.debates.immigration-1.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1158,7 +1158,7 @@ module.exports = {
       dataUpdates: [
         {
           data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
-          value: 0
+          value: 0,
         }
       ],
       goto: {
@@ -1172,8 +1172,8 @@ module.exports = {
       color: "#c042de",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+          value: 1
         }
       ],
       goto: {
@@ -1186,8 +1186,8 @@ module.exports = {
       color: "#00a2e5",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
-          value: 1,
+          data: 'user.opinions.issues.education.debates.education-1.opinion',
+          value: 0,
         }
       ],
       goto: {
@@ -1200,7 +1200,7 @@ module.exports = {
       color: "#00a2e5",
       dataUpdates: [
         {
-          data: 'user.opinions.issues',
+          data: 'user.opinions.issues.education.debates.education-1.opinion',
           value: 1,
         }
       ],
@@ -1208,7 +1208,10 @@ module.exports = {
         type: 'quizResults'
       }
     },
+
     //@TODO update labels, dataUpdates and icons
+    // IMPORTANT! "user.opinions.issues" are *SAMPLE* strings!
+    // Make sure they set up real values in real props!
     "party-party1-against": {
       label: "Against Labour Party",
       icon: 'compass',
