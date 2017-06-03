@@ -54,6 +54,17 @@ module.exports = class Designers {
     /* end hack*/
   }
 
+  onDashboardLoad(){
+    /* ridiculous hack... needed to refresh dashboard animation */
+    if(window.prevHref!==location.href){
+      window.prevHref = location.href;
+      $("section.dashboard").hide();
+      setTimeout(function(){
+        $("section.dashboard").show();
+      },50);
+    }
+  }
+
   uniqueStepLayout(step){
     if (step.label == 'Party stories') {
       $('div.body').addClass('backColor');

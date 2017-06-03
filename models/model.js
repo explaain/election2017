@@ -575,16 +575,6 @@ module.exports = {
         "vote-worth"
       ]
     },
-    start: {
-      title: "What do you want to do? 🙋",
-      subtitle: "Choose an option below. You can come back here later to choose another!",
-      tasks: [
-        "issue-against",
-        "issue-for",
-        "party-against",
-        "party-for"
-      ]
-    },
     brexit: {
       title: "What did you want to do about Brexit?",
       subtitle: "Select one option to continue.",
@@ -605,7 +595,61 @@ module.exports = {
         "issue-education",
         "issue-$apply"
       ]
-    }
+    },
+    //@TODO: change titles and subtitles
+    "start": {
+      title: "What do you want to do? 🙋",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-against",
+        "issue-for",
+        "party-against",
+        "party-for",
+        "backToQuiz",
+      ]
+    },
+    "issue-for": {
+      title: "Select an issue your are for",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-nhs-for",
+        "issue-immigration-for",
+        "issue-brexit-for",
+        "issue-education-for"
+      ]
+    },
+    "issue-against": {
+      title: "Select an issue your are against",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-nhs-against",
+        "issue-immigration-against",
+        "issue-brexit-against",
+        "issue-education-against"
+      ]
+    },
+    "party-for": {
+      title: "Select an party your are for",
+      subtitle: "Choose an option below",
+      tasks: [
+        "party-party1-for",
+        "party-party2-for",
+        "party-party3-for",
+        "party-party4-for",
+        "party-party5-for"
+      ]
+    },
+    "party-against": {
+      title: "Select an party your are against",
+      subtitle: "Choose an option below",
+      tasks: [
+        "party-party1-against",
+        "party-party2-against",
+        "party-party3-against",
+        "party-party4-against",
+        "party-party5-against"
+      ]
+    },
   },
 
   //Tasks are a series of steps, and are chosen from the dashboard
@@ -1003,6 +1047,7 @@ module.exports = {
         name: 'question'
       }
     },
+
     //@TODO: Change colors, labels, icons
     "issue-against": {
       label: "Against issue",
@@ -1040,6 +1085,275 @@ module.exports = {
         name: 'party-for'
       }
     },
+    "backToQuiz": {
+      label: "Back to quiz",
+      subtype: "multi-submit",
+      color: "#00a2e5",
+      goto: {
+        type: 'quizNew'
+      }
+    },
+    
+    //@TODO update dataUpdates and icons
+    "issue-nhs-against": {
+      label: "Against NHS",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-nhs-for": {
+      label: "For NHS",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-immigration-against": {
+      label: "Against Immigration",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-immigration-for": {
+      label: "For Immigration",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-brexit-against": {
+      label: "Against Brexit",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-brexit-for": {
+      label: "For Brexit",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-education-against": {
+      label: "Against Education",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "issue-education-for": {
+      label: "For Education",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    //@TODO update labels, dataUpdates and icons
+    "party-party1-against": {
+      label: "Against Labour Party",
+      icon: 'compass',
+      color: "red",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party1-for": {
+      label: "For Labour Party",
+      icon: 'compass',
+      color: "red",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party2-against": {
+      label: "Against Green Party",
+      icon: 'compass',
+      color: "green",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party2-for": {
+      label: "For Green Party",
+      icon: 'compass',
+      color: "green",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party3-against": {
+      label: "Against Conservative Party",
+      icon: 'compass',
+      color: "blue",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party3-for": {
+      label: "For Conservative Party",
+      icon: 'compass',
+      color: "blue",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party4-against": {
+      label: "Against UK Independent Party",
+      icon: 'compass',
+      color: "purple",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party4-for": {
+      label: "For UK Independent Party",
+      icon: 'compass',
+      color: "purple",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party5-against": {
+      label: "Against Lib Dem Party",
+      icon: 'compass',
+      color: "orange",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    },
+    "party-party5-for": {
+      label: "For Lib Dem Party",
+      icon: 'compass',
+      color: "orange",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'quizResults'
+      }
+    }
+    /*
+    "issue-nhs",
+    "issue-immigration",
+    "issue-brexit",
+    "issue-education",
+    */
   },
 
   // Steps are essentially pages

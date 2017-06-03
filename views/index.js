@@ -664,7 +664,8 @@ class Dashboard {
 
   onload() {
     $('div.body').removeClass('backColor');
-   }
+    designers.onDashboardLoad();
+  }
 
   render() {
 
