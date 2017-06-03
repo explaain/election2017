@@ -33,8 +33,6 @@ module.exports = {
     quizFlow: [],
     isWaiting: false,
     quizProgress: {
-      answers: [],
-      opinions: [],
       quizResults: false,
       quizResultsPage: false,
       quizStarted: false,

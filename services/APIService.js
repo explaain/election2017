@@ -411,7 +411,7 @@ APIService.prototype.getAgreements = function(data) {
               createObjectProps(agreementMatrix, [partyKey, issueKey])
               agreementMatrix[partyKey][issueKey][debateKey] = {
                 agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
-                // partyOpinion: allPartiesDebate.parties[partyKey].opinion,
+                partyOpinion: allPartiesDebate.parties[partyKey].opinion,
                 userOpinion: debate.opinion,
                 weight: debate.weight || 1,
                 description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),

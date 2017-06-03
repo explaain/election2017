@@ -1810,7 +1810,6 @@ class Quiz {
       trackEvent("Quiz Started",{type: "Quiz"});
       qp.quizStarted = true;
       $('.body.quiz').addClass('moving');
-      // self.next();
     }
 
     // Initialise quiz questions
@@ -1922,24 +1921,6 @@ class Quiz {
       self.refresh();
     }
 
-    self.next = function() {
-      if (self.getCurrentQuestionNumber() > 0) qp.startingQuiz = false;
-
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
-      if(self.getCurrentQuestionNumber() < qp.questions.length-1){
-
-      } else {
-        trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1)});
-        qp.quizResults = true;
-        qp.quizResultsPage = true;
-        qp.country.parties.forEach(function(_party){
-          _party.quizResults = true;
-        });
-      }
-      self.updateShareLinks();
-      self.refresh();
-    }
-
     /* ---
       Resolve question
     */
@@ -1947,89 +1928,130 @@ class Quiz {
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
       self.submitOpinion(answer === "yes" ? 0.8 : 0.2);
-      if (self.getBegunQuestions().length==qp.questions.length) {
-        qp.nextButtonText = 'See Results >';
-      }
-      self.next();
     }
     self.answerSubquestion = function(answer) {
       self.submitOpinion(answer,true);
-      self.next();
     }
     self.skipSubquestion = function() {
       var opinion = self.getCurrentQuestion().binary === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
-      self.next();
+    }
+
+    self.skipQuestion = function() {
+      self.submitOpinion(false, true);
+    }
+
+    self.back = function() {
+      qp.quizResults = false;
+      qp.quizResultsPage = false;
+
+      if(self.getBegunQuestions().length > 0) {
+        //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
+        const num = self.getCurrentQuestionNumber();
+        self.setQuestionProp(num, self.getQuestionProp(num,'binary') ? 'binary' : 'reached', false);
+
+      } else {
+        if(qp.prioritiesSet) prioritiesSet = false;
+        if(self.countrySelected){
+          qp.country = null;
+        } else {
+          qp.quizStarted = false;
+        }
+      }
+
+      self.updateScores(self.currentQuestion);
+    }
+
+    self.updateScores = function(thisQuestion) {
+      model.parties = allData.getAllData().partyStances;
+      const partyMatches = api.getPartyMatches(model);
+
+      var topParties = []
+      if (qp.country) {
+        qp.country.parties.forEach(function(party) {
+          const _party = partyMatches[party.key];
+          if (_party) {
+            party.percentage = parseInt(_party.match*100) + '%';
+            party.percentageText = parseInt(_party.match*100) + '%';
+            party.matches = _party.matches.map(function(m) {
+              return {
+                isMatch: m.partyOpinion == m.userOpinion,
+                matchScore: m.agreement,
+                partyOpinion: getOpinionText(thisQuestion, m.partyOpinion),
+                userOpinion: getOpinionText(thisQuestion, m.userOpinion),
+                question: thisQuestion.question
+              }
+            })
+            if (!topParties.length || party.percentage > topParties[0].percentage) {
+              topParties = [party];
+            } else if (party.percentage>0 && party.percentage == topParties[0].percentage) {
+              topParties.push(party);
+            }
+          }
+        })
+
+        qp.resultsData = [];
+        topParties.map(function(topParty) {
+          var fullParty = qp.country.parties.filter(function(party){return party.key==topParty.key})[0];
+          qp.resultsData.push({
+            key: topParty.key,
+            logo: '/img/party-logos/'+topParty.key+'.png',
+            name: fullParty.fullName,
+            percentage: parseInt(topParty.percentage)+"%",
+            percentageText: parseInt(topParty.percentage)+"%",
+            color: fullParty.color,
+            photo: fullParty.photo,
+            matches: fullParty.matches,
+            openMatches: fullParty.openMatches,
+            quizResults: qp.quizResults
+          });
+        })
+        qp.partiesChartDataTopMatch = qp.resultsData;
+        qp.partiesChartDataTopMatch.map(function(party) {
+          party.quizResults = true; //Hack?
+          return party;
+        })
+      }
+      self.defineCalculableTopics();
+      self.updateShareLinks();
+      self.refresh();
     }
 
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
-      if (opinion !== false) {
-        const num = self.getCurrentQuestionNumber();
-        const debate1 = self.getQuestionProp(num, 'debate');
-        self.storeUserOpinion(debate1, opinion);
-        if (commitToAnswer) {
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
+
+      if (self.getCurrentQuestionNumber() > 0) qp.startingQuiz = false;
+
+      const num = self.getCurrentQuestionNumber();
+      const debate1 = self.getQuestionProp(num, 'debate');
+
+      if (opinion === false || commitToAnswer) {
+        if (num < qp.questions.length-1) {
           self.setQuestionProp(num+1, 'reached', true);
         } else {
-          self.setQuestionProp(num, 'binary', opinion==0.8 ? 'yes' : 'no');
+          trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1)});
+          qp.quizResults = true;
+          qp.quizResultsPage = true;
+          qp.country.parties.forEach(function(p){
+            p.quizResults = true;
+          });
+        }
+      } else {
+        self.setQuestionProp(num, 'binary', opinion==0.8 ? 'yes' : 'no');
+        if (num >= qp.questions.length-1) {
+          qp.nextButtonText = 'See Results >';
         }
       }
 
-
-      if(commitToAnswer) {
-        self.refresh();
-        self.next();
+      if (opinion === false) {
+        trackEvent("Question Skipped",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate() });
+      } else {
+        self.storeUserOpinion(debate1, opinion);
       }
 
-      model.user.opinions.issues = model.user.opinions.issues || {};
-      var issue = thisQuestion.issue;
-      var debate = thisQuestion.debate;
 
-      if(opinion === false) {
-        console.log("Question skipped, won't consider in calculations")
 
-        self.updateShareLinks();
-        self.defineCalculableTopics();
-        self.refresh();
-        self.next();
-        return false;
-      }
-
-      model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
-      model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
-      model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
-      model.user.opinions.issues[issue].debates[debate].opinion = opinion;
-
-      model.parties = allData.getAllData().partyStances;
-      var partyMatches = api.getPartyMatches(model);
-      var newScores = Object.keys(partyMatches).map(function(partyKey) {
-        var party = partyMatches[partyKey];
-        var userOpinionNum = opinion;
-        var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
-        var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
-        var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
-
-        if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
-          var userOpinion = getOpinionText(thisQuestion, opinion);
-          var partyOpinion = getOpinionText(thisQuestion, partyOpinionNum) || -1;
-          var newMatch =  {
-            question: thisQuestion.question,
-            userOpinion: userOpinion,
-            partyOpinion: partyOpinion,
-            isMatch: userOpinion == partyOpinion,
-            matchScore: matchScore
-          }
-        }
-        var newScore = {
-          key: partyKey,
-          percentage: /*(SiteBrand=='38degrees') ?  parseInt(matchScore*100) : */ parseInt(party.match*100),
-          newMatch: newMatch ? newMatch : undefined
-        }
-        return newScore;
-      });
-      self.defineCalculableTopics();
-      self.updatePartyPercentages(newScores);
-      self.updateShareLinks();
-      self.refresh();
+      self.updateScores(thisQuestion);
     }
 
     self.recalculateOpinions = function() {
@@ -2056,99 +2078,6 @@ class Quiz {
       self.refresh();
     }
 
-    self.back = function() {
-      qp.quizResults = false;
-      qp.quizResultsPage = false;
-
-      if(self.getBegunQuestions().length > 0) {
-        //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
-        const num = self.getCurrentQuestionNumber();
-        self.setQuestionProp(num, self.getQuestionProp(num,'binary') ? 'binary' : 'reached', false);
-
-        var now = {
-          yesNo: self.getCurrentQuestionNumber() === self.getBegunQuestions().length,
-          subQ: !!self.getCurrentQuestion().binary
-        }
-        var prev = {
-          skipped: self.getQuestion(self.getCurrentQuestionNumber()-1).binary === false
-        }
-
-      } else {
-        if(qp.prioritiesSet) prioritiesSet = false;
-        if(self.countrySelected){
-          qp.country = null;
-        } else {
-          qp.quizStarted = false;
-        }
-      }
-
-      self.defineCalculableTopics();
-      self.updateShareLinks();
-      self.refresh();
-      self.next();
-    }
-
-    self.skipQuestion = function() {
-      const num = self.getCurrentQuestionNumber();
-      self.setQuestionProp(num+1, 'reached', true);
-
-      var skipOpinion = false;
-      self.submitOpinion(skipOpinion,true);
-    }
-
-    //NOTE: Jeremy, 'map' param is [{key:"green", percentage: 10}, {key: "labour", percentage: 90}]
-    self.updatePartyPercentages = function(map) {
-      if(qp.country){
-        var topParties = [{percentage: 0}]
-        map.forEach(function(party){
-          qp.country.parties.forEach(function(_party){
-            if(party.key===_party.key){
-              _party.percentage = parseInt(party.percentage) + "%";
-              _party.percentageText = parseInt(party.percentage) + "%";
-              if (party.newMatch)
-                _party.matches.push(party.newMatch);
-              if (party.percentage > topParties[0].percentage) {
-                topParties = [party];
-              } else if (party.percentage == topParties[0].percentage) {
-                topParties.push(party);
-              }
-            }
-          })
-        })
-        // var fullParty = allData.getAllData().allParties.filter(function(party){return party.key==topParty.key})[0];
-        qp.resultsData = [];
-        var fullParties = topParties.map(function(topParty) {
-          var fullParty = qp.country.parties.filter(function(party){return party.key==topParty.key})[0];
-          qp.resultsData.push({
-            key: topParty.key,
-            logo: '/img/party-logos/'+topParty.key+'.png',
-            name: fullParty.fullName,
-            percentage: parseInt(topParty.percentage)+"%",
-            percentageText: parseInt(topParty.percentage)+"%",
-            color: fullParty.color,
-            photo: fullParty.photo,
-            matches: fullParty.matches,
-            openMatches: fullParty.openMatches,
-            quizResults: qp.quizResults
-          });
-        })
-        // tempMaxParty = {
-        //   color: party.color,
-        //   photo: party.photo,
-        //   name: party.fullName,
-        //   key: party.key,
-        //   percentage: party.percentage,
-        //   percentageText: party.percentageText + " Match",
-        //   matches: party.matches,
-        //   quizResults: party.quizResults
-        // }
-        qp.partiesChartDataTopMatch = qp.resultsData;
-        qp.partiesChartDataTopMatch.map(function(party) {
-          party.quizResults = true; //Hack?
-          return party;
-        })
-      }
-    }
 
     //self.updatePartyPercentages([{key: "labour",percentage: 50}]) <-- THIS IS EXAMPLE!!
     self.partiesChartData = qp.country ? qp.country.parties : [];
@@ -2443,13 +2372,7 @@ class Quiz {
             party.percentage = "0%";
             party.percentageText = "0%";
           })
-          // qp.country = country; // This thing's causing mad loop errors
-          // qp.country = country; // This thing's causing mad loop errors
-          // qp.country = country; // This thing's causing mad loop errors
-          // qp.country = country; // This thing's causing mad loop errors
-          // qp.x = country
           qp.startingQuiz = true;
-          // self.next();
         }
       })
     })
