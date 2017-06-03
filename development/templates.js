@@ -1825,6 +1825,35 @@ module.exports = function(CardTemplates){
                   ]
                 }
               ]
+            },
+            {
+              "dom": ".card.quiz-extra",
+              "content": [
+                {
+                  "dom": ".card-visible.text-center",
+                  "content": [
+                    //@TODO correct the text
+                    {
+                      "dom": "h2",
+                      "content": "[PUT SOME TEXT HERE]"
+                    },
+                    {
+                      "dom": "p",
+                      "content": "[PUT SOME TEXT HERE]"
+                    },
+                    {
+                      "dom": "a.btn.btn-primary",
+                      "content": "[PUT SOME TEXT HERE]",
+                      "condition": "!quizStarted",
+                      "attr": {
+                        "onclick": {
+                          "var": "goToDashboard"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

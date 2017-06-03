@@ -664,7 +664,8 @@ class Dashboard {
 
   onload() {
     $('div.body').removeClass('backColor');
-   }
+    designers.onDashboardLoad();
+  }
 
   render() {
 
@@ -894,6 +895,11 @@ class Step {
         data.cardGroups.push([{
           type: 'policy'
         }])
+        break;
+      case 'prepare-results':
+        // This is where we redirect users after they choose smth in dashboards
+        //@TODO Jan, please feel free to change the right route here if needed
+        routes.quizResults().push();
         break;
 
       default:
@@ -1699,7 +1705,8 @@ class QuizLanding {
           fullName: "Liberal Democrats",
           name: "Lib"
         }
-      ]
+      ],
+      goToDashboard: function(){routes.dashboard({ name: "start" }).push()}
     }, CardTemplates.landingView)
   }
 }

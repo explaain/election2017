@@ -595,7 +595,61 @@ module.exports = {
         "issue-education",
         "issue-$apply"
       ]
-    }
+    },
+    //@TODO: change titles and subtitles
+    "start": {
+      title: "What do you want to do? 🙋",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-against",
+        "issue-for",
+        "party-against",
+        "party-for",
+        "backToQuiz",
+      ]
+    },
+    "issue-for": {
+      title: "Select an issue your are for",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-nhs-for",
+        "issue-immigration-for",
+        "issue-brexit-for",
+        "issue-education-for"
+      ]
+    },
+    "issue-against": {
+      title: "Select an issue your are against",
+      subtitle: "Choose an option below",
+      tasks: [
+        "issue-nhs-against",
+        "issue-immigration-against",
+        "issue-brexit-against",
+        "issue-education-against"
+      ]
+    },
+    "party-for": {
+      title: "Select an party your are for",
+      subtitle: "Choose an option below",
+      tasks: [
+        "party-party1-for",
+        "party-party2-for",
+        "party-party3-for",
+        "party-party4-for",
+        "party-party5-for"
+      ]
+    },
+    "party-against": {
+      title: "Select an party your are against",
+      subtitle: "Choose an option below",
+      tasks: [
+        "party-party1-against",
+        "party-party2-against",
+        "party-party3-against",
+        "party-party4-against",
+        "party-party5-against"
+      ]
+    },
   },
 
   //Tasks are a series of steps, and are chosen from the dashboard
@@ -993,6 +1047,315 @@ module.exports = {
         name: 'question'
       }
     },
+
+    //@TODO: Change colors, labels, icons
+    "issue-against": {
+      label: "Against issue",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'issue-against'
+      }
+    },
+    "issue-for": {
+      label: "For issue",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'issue-for'
+      }
+    },
+    "party-against": {
+      label: "Against party",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'party-against'
+      }
+    },
+    "party-for": {
+      label: "For party",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'party-for'
+      }
+    },
+    "backToQuiz": {
+      label: "Back to quiz",
+      subtype: "multi-submit",
+      color: "#00a2e5",
+      goto: {
+        type: 'quizNew'
+      }
+    },
+
+    //@TODO check dataUpdates and change icons
+    "issue-nhs-against": {
+      label: "Against NHS",
+      icon: 'compass',
+      color: "#42c299",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.nhs.debates.nhs-1.opinion',
+          value: 0
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-nhs-for": {
+      label: "For NHS",
+      icon: 'compass',
+      color: "#42c299",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.nhs.debates.nhs-1.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-immigration-against": {
+      label: "Against Immigration",
+      icon: 'compass',
+      color: "#e74289",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.immigration.debates.immigration-1.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-immigration-for": {
+      label: "For Immigration",
+      icon: 'compass',
+      color: "#e74289",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.immigration.debates.immigration-1.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-brexit-against": {
+      label: "Against Brexit",
+      icon: 'compass',
+      color: "#c042de",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step',
+        name: 'prepare-results'
+      }
+    },
+    "issue-brexit-for": {
+      label: "For Brexit",
+      icon: 'compass',
+      color: "#c042de",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
+          value: 1
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-education-against": {
+      label: "Against Education",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.education.debates.education-1.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "issue-education-for": {
+      label: "For Education",
+      icon: 'compass',
+      color: "#00a2e5",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.education.debates.education-1.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+
+    //@TODO check dataUpdates, update labels and icons
+    "party-party1-against": {
+      label: "Against Labour",
+      icon: 'compass',
+      color: "red",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.labour.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party1-for": {
+      label: "For Labour",
+      icon: 'compass',
+      color: "red",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.labour.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party2-against": {
+      label: "Against Green Party",
+      icon: 'compass',
+      color: "green",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.green.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party2-for": {
+      label: "For Green Party",
+      icon: 'compass',
+      color: "green",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.green.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party3-against": {
+      label: "Against Conservative",
+      icon: 'compass',
+      color: "blue",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.conservative.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party3-for": {
+      label: "For Conservative",
+      icon: 'compass',
+      color: "blue",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.conservative.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party4-against": {
+      label: "Against UK Independent",
+      icon: 'compass',
+      color: "purple",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.ukip.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party4-for": {
+      label: "For UK Independent",
+      icon: 'compass',
+      color: "purple",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.ukip.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party5-against": {
+      label: "Against Lib Dem",
+      icon: 'compass',
+      color: "orange",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.lib-dem.opinion',
+          value: 0,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    },
+    "party-party5-for": {
+      label: "For Lib Dem",
+      icon: 'compass',
+      color: "orange",
+      dataUpdates: [
+        {
+          data: 'user.opinions.issues.partyLiking.debates.lib-dem.opinion',
+          value: 1,
+        }
+      ],
+      goto: {
+        type: 'step', name: 'prepare-results'
+      }
+    }
+    /*
+    "issue-nhs",
+    "issue-immigration",
+    "issue-brexit",
+    "issue-education",
+    */
   },
 
   // Steps are essentially pages
