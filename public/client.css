@@ -2104,3 +2104,19 @@ p.small-link.calculate a:hover {
   border: 1px solid #ff6e73 !important;
   box-shadow: none !important;
 }
+
+a.democracyclub-logo {
+  display: block;
+  margin: 20px;
+}
+a.democracyclub-logo p {
+  font-size: 14px;
+  color: grey;
+}
+a.democracyclub-logo img {
+  height: 40px;
+}
+a.democracyclub-logo:hover p, a.democracyclub-logo:hover img {
+  opacity: 0.7;
+  text-decoration: none;
+}
