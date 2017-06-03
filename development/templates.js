@@ -1846,7 +1846,9 @@ module.exports = function(CardTemplates){
                       "content": "[PUT SOME TEXT HERE]",
                       "condition": "!quizStarted",
                       "attr": {
-                        "href": "/dashboard"
+                        "onclick": {
+                          "var": "goToDashboard"
+                        }
                       }
                     }
                   ]

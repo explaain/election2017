@@ -1699,7 +1699,8 @@ class QuizLanding {
           fullName: "Liberal Democrats",
           name: "Lib"
         }
-      ]
+      ],
+      goToDashboard: function(){routes.dashboard({ name: "start" }).push()}
     }, CardTemplates.landingView)
   }
 }

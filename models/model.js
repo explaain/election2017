@@ -575,6 +575,16 @@ module.exports = {
         "vote-worth"
       ]
     },
+    start: {
+      title: "What do you want to do? 🙋",
+      subtitle: "Choose an option below. You can come back here later to choose another!",
+      tasks: [
+        "issue-against",
+        "issue-for",
+        "party-against",
+        "party-for"
+      ]
+    },
     brexit: {
       title: "What did you want to do about Brexit?",
       subtitle: "Select one option to continue.",
@@ -991,6 +1001,43 @@ module.exports = {
       goto: {
         type: 'step',
         name: 'question'
+      }
+    },
+    //@TODO: Change colors, labels, icons
+    "issue-against": {
+      label: "Against issue",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'issue-against'
+      }
+    },
+    "issue-for": {
+      label: "For issue",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'issue-for'
+      }
+    },
+    "party-against": {
+      label: "Against party",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'party-against'
+      }
+    },
+    "party-for": {
+      label: "For party",
+      icon: 'compass',
+      color: "#00a2e5",
+      goto: {
+        type: 'dashboard',
+        name: 'party-for'
       }
     },
   },
