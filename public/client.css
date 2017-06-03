@@ -2104,22 +2104,6 @@ p.shareText {
 
 .carousel-nav-container {
     margin-bottom: -15px;
-    counter-reset: carousel-nav;
-}
-
-.carousel-nav-item:before {
-    counter-increment: carousel-nav;
-    content: counter(carousel-nav);
-    display: block;
-    background: #DD266A;
-    color: white;
-    border-radius: 100px;
-    width: 17px;
-    height: 17px;
-    line-height: 17px;
-    vertical-align: middle;
-    text-align: center;
-    margin: -17px auto 3px;
 }
 .carousel-nav-item {
     display: inline-block;
@@ -2143,6 +2127,12 @@ p.shareText {
 }
 .card-carousel img {
   display: inline;
+}
+
+.carousel-emoji {
+    font-size: 23px;
+    margin-top: -15px;
+    margin-bottom: 6px;
 }
 
 /* This is tremendously lazy,

@@ -1889,7 +1889,7 @@ module.exports = function(CardTemplates){
       },
       { // Party results
         "dom": ".card.results-top",
-        "condition": "partyResults",
+        "condition": "basicPartyResults",
         "content": [
           {
             "dom": ".card-visible.text-center",
@@ -2091,28 +2091,40 @@ module.exports = function(CardTemplates){
                 "content": [
                   {
                     "dom": "a.carousel-nav-item",
-                    "content": "Vote on principles",
+                    "content": [
+                      {"dom":"div.carousel-emoji","content":"😇"},
+                      {"dom":"div","content":"Basic"}
+                    ],
                     "attr": {
                       "data-carousel-link": "0"
                     }
                   },
                   {
                     "dom": "a.carousel-nav-item",
-                    "content": "Vote tactically",
+                    "content": [
+                      {"dom":"div.carousel-emoji","content":"😎"},
+                      {"dom":"div","content":"Tactical"}
+                    ],
                     "attr": {
                       "data-carousel-link": "1"
                     }
                   },
                   {
                     "dom": "a.carousel-nav-item",
-                    "content": "I hate 'em all",
+                    "content": [
+                      {"dom":"div.carousel-emoji","content":"🍻"},
+                      {"dom":"div","content":"Swap"}
+                    ],
                     "attr": {
                       "data-carousel-link": "2"
                     }
                   },
                   {
                     "dom": "a.carousel-nav-item",
-                    "content": "Swap my vote",
+                    "content": [
+                      {"dom":"div.carousel-emoji","content":"💩"},
+                      {"dom":"div","content":"Spoil"}
+                    ],
                     "attr": {
                       "data-carousel-link": "3"
                     }
@@ -2136,10 +2148,10 @@ module.exports = function(CardTemplates){
                   {
                     "dom": ".card-visible.text-center",
                     "content": [
-                      {
-                        "dom": "div.step-number",
-                        "content": "1"
-                      },
+                      // {
+                      //   "dom": "div.step-number",
+                      //   "content": "1"
+                      // },
                       {
                         "dom": "h2.bestMatchSoFar",
                         "content": "Vote for your best match"
@@ -2154,6 +2166,52 @@ module.exports = function(CardTemplates){
                         ]
                       },
                       {
+                        "dom": "p.postcode-instructions",
+                        "content": "Now see how they'll fare in your local constituency."
+                      },
+                      {
+                        "dom":"form.postcode-form",
+                        "condition": "!isWaiting",
+                        "attr":{
+                          "onsubmit":{
+                            "var":"postcodeSubmit"
+                          }
+                        },
+                        "content":[
+                          {
+                            "dom":"input.form-control",
+                            "attr": {
+                              "autofocus":"true",
+                              "type":"text",
+                              "required": "true",
+                              "pattern": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
+                              "name":"postcode",
+                              "placeholder":"Postcode",
+                              "binding":{
+                                "var":"postcodeBinding"
+                              }
+                            }
+                          },
+                          {
+                            "dom":"button.btn.btn-success",
+                            "attr":{
+                              "type":"submit"
+                            },
+                            "content":"Go!"
+                          }
+                        ]
+                      },
+                      {
+                        "condition": "isWaiting",
+                        "template": "loading"
+                      },
+                      {
+                        "template":"error",
+                        "mapping": [
+                          ["error", "postcodeError"]
+                        ]
+                      },
+                      {
                         "dom": "p.small" // For standardised margin bottom
                       }
                     ]
@@ -2163,50 +2221,36 @@ module.exports = function(CardTemplates){
               // #2: Vote for your best chance
               {
                 "dom": ".card.finalResult.noAnim",
-                "content": [{"template": "yourTacticalMatch"}]
-              },
-              // #3: Spoil your ballot
-              {
-                "dom": ".card.finalResult.NWA.noAnim",
                 "content": [
                   {
-                    "dom": ".card-visible.text-center",
-                    "content": [
-                      {
-                        "dom": "div.step-number",
-                        "content": "3"
-                      },
-                      {
-                        "dom": "h3",
-                        // "condition": "finalResults",
-                        "content": "What if I don't like any of them?"
-                      },
-                      {
-                        "dom": "h4",
-                        // "condition": "finalResults",
-                        "content": "Spoil your ballot!"
-                      },
-                      {
-                        "dom": "img",
-                        "attr": {
-                          "src": "/img/spoilyourballot.gif"
-                        }
-                      }
-                    ]
+                    "template": "yourTacticalMatch"
+                  },
+                  {
+                    "dom": "p.small-link.calculate.onFinalResults",
+                    "condition": "finalResults",
+                    "content":{
+                       "var": "calculateText",
+                       "markdown": "true"
+                     }
+                  },
+                  {
+                    "dom": "p.small.scrollDown",
+                    "condition": "finalResults",
+                    "content": "Scroll down to see how we reached this match"
                   }
                 ]
               },
-              // #4: Swap your vote
+              // #3: Swap your vote
               {
                 "dom": ".card.finalResult.noAnim",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
                     "content": [
-                      {
-                        "dom": "div.step-number",
-                        "content": "4"
-                      },
+                      // {
+                      //   "dom": "div.step-number",
+                      //   "content": "4"
+                      // },
                       {
                         "dom": "h3",
                         // "condition": "finalResults",
@@ -2229,30 +2273,38 @@ module.exports = function(CardTemplates){
                         "dom": "p.small" // For standardised margin bottom
                       }
                     ]
-                  },
-                  // {
-                  //   "template": "registerButton"
-                  // },
+                  }
+                ]
+              },
+              // #4: Spoil your ballot
+              {
+                "dom": ".card.finalResult.NWA.noAnim",
+                "content": [
                   {
-                    "dom": "p.small-link.calculate.onFinalResults",
-                    "condition": "finalResults",
-                    "content":{
-                       "var": "calculateText",
-                       "markdown": "true"
-                     }
-                  },
-                  {
-                    "dom": "p.small.scrollDown",
-                    "condition": "finalResults",
-                    "content": "Scroll down to see how we reached this match"
-                  },
-                  // {
-                  //   "dom": "button",
-                  //   "attr": {
-                  //     "onclick": "getLocalCandidates"
-                  //   },
-                  //   "content": "See Local Candidates"
-                  // }
+                    "dom": ".card-visible.text-center",
+                    "content": [
+                      // {
+                      //   "dom": "div.step-number",
+                      //   "content": "3"
+                      // },
+                      {
+                        "dom": "h3",
+                        // "condition": "finalResults",
+                        "content": "What if I don't like any of them?"
+                      },
+                      {
+                        "dom": "h4",
+                        // "condition": "finalResults",
+                        "content": "Spoil your ballot!"
+                      },
+                      {
+                        "dom": "img",
+                        "attr": {
+                          "src": "/img/spoilyourballot.gif"
+                        }
+                      }
+                    ]
+                  }
                 ]
               }
               /* ///// Carousel ends ///// */
@@ -2344,11 +2396,6 @@ module.exports = function(CardTemplates){
         "content": "1"
       },
       {
-        "dom": "div.step-number",
-        "condition": "showCarouselResults",
-        "content": "2"
-      },
-      {
         "dom": "h2.tactical-top-match",
         "condition": "showStandardResults",
         "content": "Based on where you are and your views, this is your top contender..."
@@ -2358,6 +2405,12 @@ module.exports = function(CardTemplates){
         "condition": "showCarouselResults",
         "content": "Vote tactically, for someone who stands a chance"
       },
+      // {
+      //   "dom": "h1",
+      //   "content": {
+      //     "var": "partiesChartDataTopMatchTactical"
+      //   }
+      // },
       {
         "dom": ".quizPercentages.topLayer.tactical-top-match",
         "condition": "!quizSafeSeat",

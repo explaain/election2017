@@ -26,6 +26,7 @@ var cfg = {
     footerImg: "/img/turnup.png",
     footerClass: "turnupFooter",
     footerLink: "//www.turnup.org.uk/",
+    carousel: true,
     randomise: true,
     numbering: true,
     quizQuestions: allData.getAllData().quizQuestions,
@@ -42,6 +43,7 @@ var cfg = {
     footerLink: '//ge2017.com',
     randomise: true,
     numbering: true,
+    carousel: false,
     prependYesNo: true,
     quizQuestions: allData.getAllData().quizQuestions38Degrees,
     sharing: {
@@ -57,6 +59,7 @@ var cfg = {
     logoClass: "_unilad-logo",
     footerLink: "//www.turnup.org.uk/",
     randomise: true,
+    carousel: false,
     sharing: {
       basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - http://bit.ly/unilad-ge2017 via @UNILAD",
     },
@@ -1710,7 +1713,8 @@ class QuizResults {
   }
 
   render() {
-    return new Quiz({finalResults: true});
+    if(config[SiteBrand].carousel) return new Quiz();
+    else return new Quiz({finalResults: true});
   }
 
 }
@@ -2018,11 +2022,11 @@ class Quiz {
     }
 
     self.reprioritiseTopic = function(topic,i) {
-      console.log(`Changing priority of __${topic}__ from ${quiz.quizTopics[i].highPriority} to ${!quiz.quizTopics[i].highPriority}`);
+      // console.log(`Changing priority of __${topic}__ from ${quiz.quizTopics[i].highPriority} to ${!quiz.quizTopics[i].highPriority}`);
       quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
       var newWeight = quiz.quizTopics[i].highPriority ? 5 : 1;
       Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
-        console.log("!!!!! Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
+        console.log("Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
         model.user.opinions.issues[topic].debates[k].weight = newWeight
       })
       self.recalculateOpinions();
@@ -2030,7 +2034,13 @@ class Quiz {
 
     self.setPriorities = function() {
       qp.prioritiesSet = self.prioritiesSet = true;
-      self.refresh();
+      if(config[SiteBrand].carousel) {
+        console.log("Going to carousel",config[SiteBrand].carousel);
+        routes.quizResults().push(); // go straight to the results page
+      } else {
+        console.log("Going to basic match results",config[SiteBrand].carousel);
+        self.refresh(); // settle for the initial results (still /quiz)
+      }
     }
 
     self.back = function() {
@@ -2130,7 +2140,7 @@ class Quiz {
             photo: fullParty.photo,
             matches: fullParty.matches,
             openMatches: fullParty.openMatches,
-            quizResults: (SiteBrand === "ge2017") || qp.quizResults // Show perc/name in the ge2017 carousel
+            quizResults: config[SiteBrand].carousel || qp.quizResults // Show perc/name in the ge2017 carousel
           });
           console.log('topParty');
           console.log('topParty');
@@ -2216,56 +2226,9 @@ class Quiz {
       self.refresh();
     }
 
-    self.postcodeBinding = [model.user, 'postcode'];
-    self.postcodeSubmit = function(e) {
-      console.log(e);
-      e.stopPropagation();
-      model.user.isWaiting = "postcode-input";
-      self.refresh();
-      api.getContenders(model.user.postcode).then(function(result){
-        if (result.error) {
-          console.log('result.error');
-          console.log(result.error);
-          qp.postcodeError = "Sorry, we didn't recognise that postcode.";
-          self.refresh();
-        } else {
-          qp.constituencyView = true;
-          model.landedOnResult = 1;
-          console.log('result');
-          console.log('result');
-          console.log('result');
-          console.log('result');
-          console.log(result);
-          qp.quizChanceResults = result;
-          delete model.user.isWaiting;
-          trackEvent("Rerouting on Constituency Result",qp.resultsData);
-          routes.quizResults().push();
-        }
-      });
-      return false;
-    }
+    self.calculatePostcodeResults = function() {
+      console.log("Calculating postcode chances at ",model.user.postcode)
 
-    if (self.finalResults == true) {
-      console.log('final!!!');
-      setTimeout(function(){
-        $('.body.quiz').addClass('moving')
-        $('.page-content').addClass('onLoad')
-        var $constituencySlider = $('.card-carousel');
-        $constituencySlider.slick({
-          dots: false,
-          infinite: false,
-          adaptiveHeight: true,
-          centerMode: true,
-          centerPadding: '15px',
-          slidesToShow: 1,
-          arrows: false,
-          // initialSlide: 0
-        });
-        $('.page-content').on('click', '.carousel-nav-item', function() {
-          $constituencySlider.slick('slickGoTo', $(this).attr('data-carousel-link'));
-          $('.card-carousel').attr('data-carousel-current',$(this).attr('data-carousel-link'));
-        });
-      },10);
       qp.standaloneResults = false;
       self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
         if (!(qp.quizChanceResults.parties.filter(function(_party) {
@@ -2368,7 +2331,72 @@ class Quiz {
       //   self.refresh(); //This is not good as it just puts it on repeat!
       // },10)
     }
+
+    self.postcodeBinding = [model.user, 'postcode'];
+    self.postcodeSubmit = function(e) {
+      console.log(e);
+      e.stopPropagation();
+      model.user.isWaiting = "postcode-input";
+      self.refresh();
+      api.getContenders(model.user.postcode).then(function(result){
+        if (result.error) {
+          console.log('result.error');
+          console.log(result.error);
+          qp.postcodeError = "Sorry, we didn't recognise that postcode.";
+          self.refresh();
+        } else {
+          qp.constituencyView = true;
+          model.landedOnResult = 1;
+          console.log(result);
+          qp.quizChanceResults = result;
+          delete model.user.isWaiting;
+          trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          if(config[SiteBrand].carousel) {
+            qp.finalResults = true;
+            self.refresh();
+            self.calculatePostcodeResults();
+            self.refresh();
+            self.slickGoTo(1); // Go to tactical options
+          } else {
+            routes.quizResults().push();
+          }
+        }
+      });
+      return false;
+    }
+
+    if (self.finalResults == true || config[SiteBrand].carousel) {
+      console.log('final!!!');
+      setTimeout(function(){
+        $('.body.quiz').addClass('moving')
+        $('.page-content').addClass('onLoad')
+        var $constituencySlider = $('.card-carousel');
+        $constituencySlider.slick({
+          dots: false,
+          infinite: false,
+          adaptiveHeight: true,
+          centerMode: true,
+          centerPadding: '15px',
+          slidesToShow: 1,
+          arrows: false,
+          // initialSlide: 0
+        });
+
+        self.slickGoTo = function(i) {
+          $constituencySlider.slick('slickGoTo', i);
+          $('.card-carousel').attr('data-carousel-current', i);
+        }
+        $('.page-content').on('click', '.carousel-nav-item', function() {
+          self.slickGoTo( $(this).attr('data-carousel-link') );
+        });
+      },10);
+    }
+
+    if (self.finalResults == true || ( config[SiteBrand].carousel && qp.finalResults) ) {
+      self.calculatePostcodeResults();
+    }
   }
+
   render(){
     const self = this;
     const countriesData = allData.getAllData().countriesData;
@@ -2531,10 +2559,14 @@ class Quiz {
     var partyResults = qp.prioritiesSet && !qp.constituencyView;
 
     return helpers.assembleCards({
-      showStandardInitialResults: SiteBrand !== "ge2017" && qp.quizResults && !self.finalResults,
-      showStandardResults: SiteBrand !== "ge2017" && qp.quizResults && self.finalResults,
-      showCarouselResults: SiteBrand === "ge2017" && qp.prioritiesSet && self.finalResults,
-      showFinalCardNumbers: qp.prioritiesSet && (SiteBrand === "ge2017" ? !self.finalResults : true),
+      // showStandardInitialResults: SiteBrand !== "ge2017" && qp.quizResults && !self.finalResults,
+      // showStandardResults: SiteBrand !== "ge2017" && qp.quizResults && self.finalResults,
+      // showCarouselResults: SiteBrand === "ge2017" && qp.prioritiesSet && self.finalResults,
+      // showFinalCardNumbers: qp.prioritiesSet && (SiteBrand === "ge2017" ? !self.finalResults : true),
+      showStandardInitialResults: !config[SiteBrand].carousel && qp.quizResults && !self.finalResults,
+      showStandardResults: !config[SiteBrand].carousel && qp.quizResults && self.finalResults,
+      showCarouselResults: config[SiteBrand].carousel && qp.prioritiesSet,
+      showFinalCardNumbers: qp.prioritiesSet && (config[SiteBrand].carousel ? !self.finalResults : true),
       topLineConditional: self.quizStarted && self.countrySelected && !partyResults && !qp.quizResults,
       constituencyView: qp.constituencyView,
       setPriorities: self.setPriorities,
@@ -2548,6 +2580,7 @@ class Quiz {
       prioritiesSet: qp.prioritiesSet,
       quizPriorityPage: qp.quizResults && !qp.prioritiesSet,
       partyResults: partyResults,
+      basicPartyResults: partyResults && config[SiteBrand].carousel !== true,
       properResults: self.quizResults && qp.prioritiesSet,
       resultLogo: self.resultsData.logo,
       resultName: self.resultsData.name,
