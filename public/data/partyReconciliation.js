@@ -55,6 +55,6 @@ var partyReconciliationValues = {
   "sinn-fein": "sinn-fein",
   "sdlp-social-democratic-&-labour-party": "sdlp",
   "alliance": "alliance",
-  "plaid-cymru---the-party-of-wales": "plaid",
-  "plaid-cymru---carmarthenshire's-voice": "plaid",
+  "plaid-cymru---the-party-of-wales": "plaid-cymru",
+  "plaid-cymru---carmarthenshire's-voice": "plaid-cymru",
 }

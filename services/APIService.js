@@ -167,6 +167,7 @@ APIService.prototype.getContenders = function(postcode, publicData) {
   var user = {};
   var data = {};
   var forceSwing = false;
+  var myConstituency;
   return loadPostcodeData(postcode)
   .then(function(results) {
     if (results.error) {
@@ -177,6 +178,7 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       console.log(results);
       data = results;
       user = {constituency: results.user.constituency};
+      myConstituency = results.user.constituency;
       forceSwing = allData.getAllData().swingSeatsToForce.indexOf(results.user.constituency.id) > -1 ? true : false;
       return getPartyChances(data);
     }
@@ -207,11 +209,19 @@ APIService.prototype.getContenders = function(postcode, publicData) {
       var topParties = topPartyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
+      //SPECIAL CASES
+      if (myConstituency.id == "E14000953") { //"South West Surrey"
+        partyKeys.splice(1,0,'nha')
+      }
+      if (myConstituency.id == "E14000678") { //"East Devon"
+        partyKeys.splice(1,1,'independent-wright')
+      }
+      //END SPECIAL CASES
       var partiesAll = partyKeys.map(function(partyKey) {
         return getFullParty(partyKey);
       });
-      console.log('topParties');
-      console.log(topParties);
+      console.log('partiesAll');
+      console.log(partiesAll);
       topParties.map(function(party) {
         party.chance = results[party.key].chance;
         return party;

@@ -829,7 +829,7 @@ var partyStances = {
             },
           },
           "38-welfare-2": {
-            question: "Should the bedroom tax be scrapped?",
+            question: "Should the so-called 'bedroom tax' be scrapped?",
             parties: {
               "conservative": {
                 opinion: 0

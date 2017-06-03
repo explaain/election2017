@@ -5,19 +5,19 @@
 <meta name="description" content="Who best represents your views?">
 <!--FACEBOOK-->
 <meta property="og:site_name" content="GE2017">
-<meta property="og:url" content="www.ge2017.com" >
+<meta property="og:url" content="https:<%= params.canonical %>" >
 <meta property="og:title" content="<%= params.share.fb.title %>">
 <meta property="og:description" content="<%= params.share.fb.subtitle %>">
-<meta property="og:image" content="/img/thumbnail-home.jpg" >
+<meta property="og:image" content="<%= params.resourceRoot %><% if(brand=='38degrees'){ %>/img/38degrees_facebook.jpg<% } else{ %>/img/thumbnail-home.jpg<% } %>" >
 <meta property="og:type" content="website" >
-<meta property="og:locale" content="en.GB" >
+<meta property="og:locale" content="en_GB" >
 <!--TWITTER-->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@GE2017dotcom">
 <meta name="twitter:creator" content="@GE2017dotcom">
 <meta name="twitter:title" content="<%= params.share.tw.title %>">
 <meta name="twitter:description" content="<%= params.share.tw.subtitle %>" >
-<meta name="twitter:image" content="http://ge2017.com/img/thumbnail-home.jpg" >
+<meta name="twitter:image" content="<%= params.resourceRoot %><% if(brand=='38degrees'){ %>/img/38degrees_facebook.jpg<% } else{ %>/img/thumbnail-home.jpg<% } %>" >
 <!--GOOGLE+-->
 <link rel="author" href="">
 <link rel="publisher" href="">

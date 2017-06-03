@@ -85,6 +85,8 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
       - spoiling ballot
       - swapping vote
   */
+  req.params.resourceRoot = `https://${req.headers.host}`;
+  req.params.quizHome = `https://${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
   if(req.params.party && req.params.party.includes("-and-")) {
     req.params.party = req.params.party.split("-and-").join(" and ");
@@ -102,12 +104,14 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
       subtitle: `Who best represents your views? ${req.headers.host}/quiz`
     }
   }
-
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
 })
 
 app.get('/quiz', function(req, res, next) {
-  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true });
+  req.params.resourceRoot = `https://${req.headers.host}`;
+  req.params.quizHome = `https://${req.headers.host}/quiz`;
+  req.params.canonical = `//${req.headers.host}/quiz`;
+  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
 });
 
 app.get('/quiz/questions', function(req, res, next) {

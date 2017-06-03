@@ -1993,7 +1993,13 @@ module.exports = function(CardTemplates){
                       {
                         "condition": "isWaiting",
                         "template": "loading"
-                      }
+                      },
+                      {
+                        "template":"error",
+                        "mapping": [
+                          ["error", "postcodeError"]
+                        ]
+                      },
                     ]
                   }
                 ]
@@ -2223,7 +2229,30 @@ module.exports = function(CardTemplates){
                         "dom": "p.small" // For standardised margin bottom
                       }
                     ]
-                  }
+                  },
+                  // {
+                  //   "template": "registerButton"
+                  // },
+                  {
+                    "dom": "p.small-link.calculate.onFinalResults",
+                    "condition": "finalResults",
+                    "content":{
+                       "var": "calculateText",
+                       "markdown": "true"
+                     }
+                  },
+                  {
+                    "dom": "p.small.scrollDown",
+                    "condition": "finalResults",
+                    "content": "Scroll down to see how we reached this match"
+                  },
+                  // {
+                  //   "dom": "button",
+                  //   "attr": {
+                  //     "onclick": "getLocalCandidates"
+                  //   },
+                  //   "content": "See Local Candidates"
+                  // }
                 ]
               }
               /* ///// Carousel ends ///// */
