@@ -4,6 +4,9 @@ module.exports = {
   step: -1,
   // todo: those are temporary here, refactor
   question: '',
+  questions: {
+    questionDB: {}
+  },
   landedOnPostcode: 0,
   landedOnResult: 0,
   landedOnQuizPriority: 0,

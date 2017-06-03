@@ -1709,51 +1709,55 @@ class Quiz {
 
     const self = this;
     const qp = model.user.quizProgress;
+    const mq = model.questions;
 
     MyQuiz = this;
 
-    self.allQuestions = model.questions.questionDB;
-    console.log(qp.questions);
-
     self.getCurrentQuestionNumber = function() {
-      const num = qp.questions.filter(function(q) {
+      return qp.questions.filter(function(q) {
         return q.reached;
       }).length-1;
-
-      console.log('Getting Current Question: ' + num);
-      console.log(qp.questions[num]);
-
-      console.log(qp.questions);
-      return num;
+    }
+    self.getQuestionNumber = function(debate) {
+      return qp.questions.indexOf(qp.questions.filter(function(q) {
+        return q.debate == debate;
+      })[0]);
+    }
+    self.getCurrentQuestion = function() {
+      return qp.questions[self.getCurrentQuestionNumber()];
     }
     self.getQuestion = function(num) {
-      console.log('Getting Question ' + num + ':');
-      console.log(qp.questions[num]);
-
-
-      console.log(qp.questions);
       return qp.questions[num];
     }
+    self.getFullQuestion = function(debate) {
+      return mq.questionDB[debate];
+    }
     self.getQuestionProp = function(num, prop) {
-      console.log('Getting Question [' + num + '].' + prop + ' = ' + qp.questions[num][prop]);
-      console.log(qp.questions[num]);
-
-
-      console.log(qp.questions);
       return qp.questions[num][prop];
+    }
+    self.getBegunQuestions = function() {
+      return qp.questions.filter(function(q) {
+        return q.binary;
+      })
     }
     self.setQuestionProp = function(num, prop, value) {
       qp.questions[num][prop] = value;
-
-      console.log('Setting Question [' + num + '].' + prop + ' = ' + value);
-      console.log(qp.questions[num]);
     }
     self.getDebateIssue = function(debate) {
-
-      console.log(qp.questions);
-      return self.allQuestions[debate].issue;
-
-      console.log('Getting Debate Issue: ' + debate + ' = ' + issue);
+      console.log(debate);
+      console.log(mq.questionDB);
+      return mq.questionDB[debate].issue;
+    }
+    self.getCurrentDebate = function() {
+      return self.getQuestionProp(self.getCurrentQuestionNumber(),'debate');
+    }
+    self.getUserOpinion = function(debate) {
+      try {
+        const issue = self.getDebateIssue(debate);
+        return model.user.opinions.issues[issue].debates[debate].opinion;
+      } catch(e) {
+        return -1;
+      }
     }
     self.storeUserOpinion = function(debate, opinion) {
       const issues = model.user.opinions.issues;
@@ -1762,13 +1766,10 @@ class Quiz {
       const debates = issues[issue].debates;
       if (!debates[debate]) { debates[debate] = { opinion: null } }
       debates[debate].opinion = opinion;
-
-      console.log('Storing User Opinion: ' + issue + ': ' + debate + ' = ' + opinion);
     }
 
 
     const quiz = model.questions;
-    qp.questionPointer = qp.questionPointer ? qp.questionPointer : 0;
     qp.quizStarted = params && params.finalResults ? params.finalResults : qp.quizStarted;
     qp.prioritiesSet = qp.prioritiesSet ? qp.prioritiesSet : false;
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
@@ -1884,19 +1885,19 @@ class Quiz {
         return {
           debate: key,
           reached: false,
-          begun: false
+          binary: false
         }
       })
       qp.questions[0].reached = true;
     }
 
-    self.currentQuestion = quiz.questionDB[qp.questionSeries[qp.questionPointer]];
+    self.currentQuestion = self.getFullQuestion(self.getCurrentDebate());
 
     // Topics for prioritising
     // This needs to run after every question
     // Because topics for weighting cannot include those entirely skipped by users
     self.defineCalculableTopics = function() {
-      if(!qp.answers.length || qp.answers.length < 1) return false;
+      if(self.getBegunQuestions().length < 1) return false;
 
       if(quiz.quizTopics) {
         var oldPriorities = JSON.parse(JSON.stringify(quiz.quizTopics));
@@ -1904,13 +1905,12 @@ class Quiz {
       quiz.quizTopics = new Set(); // for priority labelling
 
       // This will also be used by self.recalculateOpinions
-      qp.calculableQuestions = qp.questionSeries.filter((q,i)=>{
-        // get questions that have not been answered 'false' (i.e. skipped)
-        return typeof qp.answers[i] !== 'undefined' && qp.answers[i] !== false
+      qp.calculableQuestions = self.getBegunQuestions().map(function(_q) {
+        return _q.debate;
       });
 
-      qp.calculableQuestions.forEach(function(q) {
-        quiz.quizTopics.add(quiz.questionDB[q].issue);
+      qp.calculableQuestions.forEach(function(key) {
+        quiz.quizTopics.add(self.getDebateIssue(key));
       })
       quiz.quizTopics = Array.from(quiz.quizTopics);
       quiz.quizTopics.forEach(function(topic,i) {
@@ -1927,10 +1927,9 @@ class Quiz {
     }
 
     self.next = function() {
-      if (qp.questionPointer > 0) qp.startingQuiz = false;
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: qp.answers.length, questionId: qp.questionSeries[qp.questionPointer], answer: qp.answers[qp.answers.length-1], opinion: qp.opinions[qp.questionPointer-1]});
-      // console.log("Quiz",  qp.answers.length,  qp.questionSeries[qp.questionPointer],  quiz.questionDB[qp.questionSeries.length-1],  qp.answers[qp.answers.length-1],  qp.opinions[qp.questionPointer-1] );
-      if(qp.questionPointer < qp.questionSeries.length){
+      if (self.getCurrentQuestionNumber() > 0) qp.startingQuiz = false;
+      trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
+      if(self.getCurrentQuestionNumber() < qp.questions.length){
         // self.updateShareLinks();
         // self.refresh();
       } else {
@@ -1951,20 +1950,18 @@ class Quiz {
     self.answerYes = function(){ self.answer("yes") }
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
-      qp.answers.push(answer);
       self.submitOpinion(answer === "yes" ? 0.8 : 0.2);
-      if (qp.answers.length==qp.questionSeries.length) {
+      if (self.getBegunQuestions().length==self.getBegunQuestions().length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
     }
     self.answerSubquestion = function(answer) {
-      // qp.answers[qp.answers.length-1] = answer;
       self.submitOpinion(answer,true);
       self.next();
     }
     self.skipSubquestion = function() {
-      var opinion = qp.answers[qp.answers.length-1] === "yes" ? 0.8 : 0.2;
+      var opinion = self.getCurrentQuestion().binary === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
       self.next();
     }
@@ -1974,13 +1971,15 @@ class Quiz {
         const num = self.getCurrentQuestionNumber();
         const debate1 = self.getQuestionProp(num, 'debate');
         self.storeUserOpinion(debate1, opinion);
-        self.setQuestionProp(commitToAnswer ? num+1 : num, commitToAnswer ? 'reached' : 'begun', true);
+        if (commitToAnswer) {
+          self.setQuestionProp(num+1, 'reached', true);
+        } else {
+          self.setQuestionProp(num, 'binary', opinion==0.8 ? 'yes' : 'no');
+        }
       }
 
 
       if(commitToAnswer) {
-        qp.opinions.push(opinion);
-        qp.questionPointer++;
         self.refresh();
         self.next();
       } else {
@@ -2022,7 +2021,7 @@ class Quiz {
       var partyMatches = api.getPartyMatches(model);
       var newScores = Object.keys(partyMatches).map(function(partyKey) {
         var party = partyMatches[partyKey];
-        var userOpinionNum = opinion; //commitToAnswer ? qp.opinions[qp.questionPointer-1] : qp.opinions[qp.questionPointer];
+        var userOpinionNum = opinion;
         var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
         var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
         var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
@@ -2079,45 +2078,19 @@ class Quiz {
       qp.quizResults = false;
       qp.quizResultsPage = false;
 
-      if(qp.answers.length > 0) {
+      if(self.getBegunQuestions().length > 0) {
         //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
         const num = self.getCurrentQuestionNumber();
-        self.setQuestionProp(num, self.getQuestion(num).begun ? 'begun' : 'reached', false);
+        self.setQuestionProp(num, self.getQuestionProp(num,'binary') ? 'binary' : 'reached', false);
 
         var now = {
-          yesNo: qp.questionPointer === qp.opinions.length,
-          subQ: typeof qp.answers[qp.questionPointer] === 'string'
+          yesNo: self.getCurrentQuestionNumber() === self.getBegunQuestions().length,
+          subQ: !!self.getCurrentQuestion().binary
         }
         var prev = {
-          subQ: typeof qp.answers[qp.questionPointer-1] === 'number',
-          skipped: qp.answers[qp.questionPointer-1] === false
+          skipped: self.getQuestion(self.getCurrentQuestionNumber()-1).binary === false
         }
-
-        if(now.subQ) {
-          qp.answers.pop(); // reset yes/no
-        } else
-        if(now.yesNo) {
-          qp.questionPointer--; // previous question
-          qp.opinions.pop(); // reset model
-
-          // model.user.opinions.issues = model.user.opinions.issues || {};
-          // var issue = quiz.questionDB[qp.questionSeries[qp.questionPointer]].issue;
-          // var debate = quiz.questionDB[qp.questionSeries[qp.questionPointer]].debate;
-          // if(model.user.opinions.issues[issue]) {
-          //   // console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
-          //   if(model.user.opinions.issues[issue].debates[debate])
-          //     delete model.user.opinions.issues[issue].debates[debate]
-          //
-          //   if(model.user.opinions.issues[issue].debates.length < 1) {
-          //     // console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
-          //     delete model.user.opinions.issues[issue]
-          //   }
-          // }
-
-          if(prev.skipped) {
-            qp.answers.pop();
-          }
-        }
+        
       } else {
         if(qp.prioritiesSet) prioritiesSet = false;
         if(self.countrySelected){
@@ -2138,7 +2111,6 @@ class Quiz {
       self.setQuestionProp(num+1, 'reached', true);
 
       var skipOpinion = false;
-      qp.answers.push(skipOpinion);
       self.submitOpinion(skipOpinion,true);
     }
 
@@ -2374,7 +2346,7 @@ class Quiz {
     const countriesData = allData.getAllData().countriesData;
     const qp = model.user.quizProgress;
     const quiz = model.questions;
-    const subquestions = self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.questionPointer]] : null;
+    const subquestions = self.currentQuestion ? self.currentQuestion.answers[self.getCurrentQuestion().binary] : null;
 
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
@@ -2412,7 +2384,7 @@ class Quiz {
                   return {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
-                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
+                      userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
 
@@ -2446,7 +2418,7 @@ class Quiz {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
-                  const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
+                  const userOpinion = self.getUserOpinion(debate[0]);
 
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
 
@@ -2538,11 +2510,11 @@ class Quiz {
       resultPercentage: self.resultsData.percentage,
       currentQuestionI: self.currentQuestionI,
       currentQuestion: self.currentQuestion,
-      currentQuestionAnswered: qp.answers[qp.questionPointer]!==undefined,
-      currentQuestionYes: qp.answers[qp.questionPointer]==="yes",
-      currentQuestionNo: qp.answers[qp.questionPointer]==="no",
-      currentSubquestion: self.currentQuestion ? self.currentQuestion.answers[qp.answers[qp.questionPointer]] : null,
-      progressBarWidth: ((qp.questionPointer/qp.questionSeries.length)*100) + "%",
+      currentQuestionAnswered: self.getCurrentQuestion().binary,
+      currentQuestionYes: self.getCurrentQuestion().binary==="yes",
+      currentQuestionNo: self.getCurrentQuestion().binary==="no",
+      currentSubquestion: self.currentQuestion ? self.currentQuestion.answers[self.getCurrentQuestion().binary] : null,
+      progressBarWidth: ((self.getCurrentQuestionNumber()/qp.questions.length)*100) + "%",
       answerYes: self.answerYes,
       answerNo: self.answerNo,
       skipSubquestion: self.skipSubquestion,
@@ -2557,7 +2529,7 @@ class Quiz {
       quizStarted: self.quizStarted,
       startStudentCompare: self.startStudentCompare,
       startSingleSentence: self.startSingleSentence,
-      startingQuiz: self.startingQuiz && qp.answers[qp.questionPointer]==undefined,
+      startingQuiz: self.startingQuiz && self.getCurrentQuestion().binary==false,
       nowProgressingThroughQuiz: self.quizStarted && !self.startingQuiz && !self.quizResults,
       safeSeatMessage: safeSeatMessage,
       countrySelected: self.countrySelected,
