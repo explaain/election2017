@@ -6,6 +6,7 @@ var api = require('./services/APIService');
 const Cookies = require('cookies');
 const compression = require('compression');
 var dotenv = require('dotenv').config();
+const request = require("request");
 
 var allData = require('./public/data/allData');
 
@@ -165,6 +166,31 @@ app.get('/:page/*', function (req, res , next) {
     next();
   }
 });
+
+app.post('/proxy/democracyclub/api/candidates', function(req,res,next){
+  //@TODO: some headers must be set, CORS doesn't allow to make a request :(
+  // But it is definitely possible to do...
+  var http = require("http");
+  var options = {
+    hostname: 'candidates.democracyclub.org.uk',
+    port: 80,
+    path: "/api/v0.9/candidates_for_postcode?"+
+    "api_key=" + req.query.apiKey +
+    "&postcode=" + req.query.postcode,
+    method: 'POST',
+    headers: {
+      // something is missing here, not sure what exactly...
+    }
+  };
+  var req = http.request(options, function(res) {
+    res.setEncoding('utf8');
+    res.on('data', function (body) {
+      console.log(body)
+      res.send(JSON.parse(body));
+    });
+  });
+  req.end();
+})
 
 app.use(express.static(path.join(__dirname, 'public')));
 

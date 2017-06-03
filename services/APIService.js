@@ -3,6 +3,9 @@
 var http = require('httpism')
 const q = require("q")
 
+// todo: flush apiKey soon!
+const apiKey = "DHSoK08gLM6tgVlJFleH4bnUiuHPE4DJkKQiSENT";
+
 const allData = require('../public/data/allData');
 
 
@@ -66,29 +69,35 @@ APIService.prototype.getLocalCandidatesResults = function(postcode, userData) {
 
   var data = {};
 
-  return delay(500).then(function(){
-    return loadPostcodeData(postcode)
-    .then(function(results) {
-      if (results.error) {
-        return results;
-      }
-      data = results;
-      var constituency = results.user.constituency
-      data.user = userData || {};
-      data.user.constituency = constituency;
-      data.candidates = [];
-      allData.getAllData().localCandidates.forEach(function(localCandidate){
-        if(localCandidate.gss_code === constituency.id){
-          data.candidates.push(localCandidate);
-        }
-      });
-      return {data: data};
-    }).then(function(results) {
-      console.log('results');
-      console.log('results');
-      console.log(results);
+  return loadPostcodeData(postcode)
+  .then(function(results) {
+    if (results.error) {
       return results;
+    }
+    data = results;
+    var constituency = results.user.constituency
+    data.user = userData || {};
+    data.user.constituency = constituency;
+    /*allData.getAllData().localCandidates.forEach(function(localCandidate){
+      if(localCandidate.gss_code === constituency.id){
+        data.candidates.push(localCandidate);
+      }
+    });*/
+    return http.post(
+      "/proxy/democracyclub/api/candidates?"+
+      "apiKey=" + apiKey +
+      "&postcode=" + postcode
+    ).then(function (res) {
+      data.candidates = res[0].candidates;
+      alert(JSON.stringify(data.candidates))
+      return {data: data};
     })
+  })
+  .then(function(results) {
+    console.log('results');
+    console.log('results');
+    console.log(results);
+    return results;
   })
 }
 
@@ -526,8 +535,6 @@ APIService.prototype.getPartyChances = function(data) {
 
 
 APIService.prototype.loadConstituency = function(postcode) {
-  // todo: flush apiKey soon!
-  const apiKey = "DHSoK08gLM6tgVlJFleH4bnUiuHPE4DJkKQiSENT";
   var url = 'https://mapit.mysociety.org/postcode/' + postcode + '?api_key=' + apiKey;
   return http.get(url)
   .then(function (res) {

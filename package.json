@@ -40,6 +40,7 @@
     "hyperdom-router": "^2.18.0",
     "mocha": "^3.2.0",
     "q": "^1.5.0",
+    "request": "^2.81.0",
     "run-sequence": "^1.2.2",
     "watchify": "^3.7.0"
   }
