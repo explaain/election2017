@@ -1098,7 +1098,7 @@ module.exports = {
     "issue-nhs-against": {
       label: "Against NHS",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#42c299",
       dataUpdates: [
         {
           data: 'user.opinions.issues',
@@ -1112,7 +1112,7 @@ module.exports = {
     "issue-nhs-for": {
       label: "For NHS",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#42c299",
       dataUpdates: [
         {
           data: 'user.opinions.issues',
@@ -1126,7 +1126,7 @@ module.exports = {
     "issue-immigration-against": {
       label: "Against Immigration",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#e74289",
       dataUpdates: [
         {
           data: 'user.opinions.issues',
@@ -1140,7 +1140,7 @@ module.exports = {
     "issue-immigration-for": {
       label: "For Immigration",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#e74289",
       dataUpdates: [
         {
           data: 'user.opinions.issues',
@@ -1154,7 +1154,7 @@ module.exports = {
     "issue-brexit-against": {
       label: "Against Brexit",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#c042de",
       dataUpdates: [
         {
           data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
@@ -1168,7 +1168,7 @@ module.exports = {
     "issue-brexit-for": {
       label: "For Brexit",
       icon: 'compass',
-      color: "#00a2e5",
+      color: "#c042de",
       dataUpdates: [
         {
           data: 'user.opinions.issues',
