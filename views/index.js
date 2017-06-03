@@ -1741,11 +1741,9 @@ class Quiz {
       })
     }
     self.setQuestionProp = function(num, prop, value) {
-      qp.questions[num][prop] = value;
+      if (qp.questions[num]) qp.questions[num][prop] = value;
     }
     self.getDebateIssue = function(debate) {
-      console.log(debate);
-      console.log(mq.questionDB);
       return mq.questionDB[debate].issue;
     }
     self.getCurrentDebate = function() {
@@ -1848,7 +1846,6 @@ class Quiz {
           var indexes = new Set();
           questions.forEach((q,i)=> indexes.add(q.I));
           indexes = Array.from(indexes);
-          // console.log("This group's indexes",indexes);
 
           questions.forEach((q,i,arr) => {
             var randI = indexes[Math.floor(Math.random() * indexes.length)]
@@ -1856,7 +1853,6 @@ class Quiz {
             indexes.splice(indexes.indexOf(randI),1);
           })
         })
-        // console.log("shuffled question order",qp.questionSeries);
       }
       /* ---- */
     }
@@ -1928,10 +1924,10 @@ class Quiz {
 
     self.next = function() {
       if (self.getCurrentQuestionNumber() > 0) qp.startingQuiz = false;
+
       trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
-      if(self.getCurrentQuestionNumber() < qp.questions.length){
-        // self.updateShareLinks();
-        // self.refresh();
+      if(self.getCurrentQuestionNumber() < qp.questions.length-1){
+
       } else {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1)});
         qp.quizResults = true;
@@ -1951,7 +1947,7 @@ class Quiz {
     self.answerNo = function(){ self.answer("no") }
     self.answer = function(answer) {
       self.submitOpinion(answer === "yes" ? 0.8 : 0.2);
-      if (self.getBegunQuestions().length==self.getBegunQuestions().length) {
+      if (self.getBegunQuestions().length==qp.questions.length) {
         qp.nextButtonText = 'See Results >';
       }
       self.next();
@@ -1982,7 +1978,6 @@ class Quiz {
       if(commitToAnswer) {
         self.refresh();
         self.next();
-      } else {
       }
 
       model.user.opinions.issues = model.user.opinions.issues || {};
@@ -1991,19 +1986,6 @@ class Quiz {
 
       if(opinion === false) {
         console.log("Question skipped, won't consider in calculations")
-
-        // Erase from model
-
-        // if(model.user.opinions.issues[issue]) {
-        //   console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
-        //   if(model.user.opinions.issues[issue].debates[debate])
-        //     delete model.user.opinions.issues[issue].debates[debate]
-        //
-        //   if(model.user.opinions.issues[issue].debates.length < 1) {
-        //     console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
-        //     delete model.user.opinions.issues[issue]
-        //   }
-        // }
 
         self.updateShareLinks();
         self.defineCalculableTopics();
@@ -2090,7 +2072,7 @@ class Quiz {
         var prev = {
           skipped: self.getQuestion(self.getCurrentQuestionNumber()-1).binary === false
         }
-        
+
       } else {
         if(qp.prioritiesSet) prioritiesSet = false;
         if(self.countrySelected){
@@ -2373,14 +2355,12 @@ class Quiz {
         if(answeredIssues && answeredIssues.length) {
           answeredIssues.forEach(function(issueObj) {
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
-            // console.log("Issueeeee",issue);
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
                   return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
-                // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
                   return {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
@@ -2406,16 +2386,12 @@ class Quiz {
           const scoresPerIssue = answeredIssues.map(function(issueObj) {
             let running_upweight = 0;
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
-            // console.log("Issueeeee",issue);
-            // console.log("Issueeeee",issue ? issue.description : '');
-            // console.log("!!!! Questions asked for report cards",answeredDebates);
             const score = Object
               .entries(issue.debates)
               .filter(function(debate) {
                   return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
-                  // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
                   const userOpinion = self.getUserOpinion(debate[0]);
