@@ -535,7 +535,7 @@ APIService.prototype.loadConstituency = function(postcode) {
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
       return data.type == 'WMC'
     });
-    console.log('constituency');
+    console.log('API: Found constituency');
     console.log(constituency);
     var refArea = objectAsArray(res.body.areas).filter(function (data) {
       return (data.type == 'OLF' || data.type == 'UTA')
@@ -607,11 +607,11 @@ APIService.prototype.loadPartyStances = function() {
 
 
 var getFullParty = function(partyKey) {
-  console.log(partyKey);
+  // console.log(partyKey);
   var fullParty = allData.getAllData().allParties.filter(function(party) {
     return party.key == partyKey;
   })[0];
-  console.log(fullParty);
+  // console.log(fullParty);
   if (fullParty === undefined) {
     fullParty = {
       key: partyKey,
@@ -634,17 +634,17 @@ var getWinningPartyKey = function(resultParties) {
 }
 
 var reconcilePartyKeys = function(suppliedKey) {
-  console.log('suppliedKey');
-  console.log(suppliedKey);
-  console.log('allData.getAllData().partyReconciliation');
-  console.log(allData.getAllData().partyReconciliation);
+  // console.log('suppliedKey');
+  // console.log(suppliedKey);
+  // console.log('allData.getAllData().partyReconciliation');
+  // console.log(allData.getAllData().partyReconciliation);
   var properKey = allData.getAllData().partyReconciliation[suppliedKey];
   if (properKey === undefined) {
     console.log('Undefined!!');
     properKey = suppliedKey;
   }
-  console.log('properKey');
-  console.log(properKey);
+  // console.log('properKey');
+  // console.log(properKey);
   return properKey;
 }
 

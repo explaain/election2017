@@ -19,6 +19,9 @@ module.exports = {
   featuredTopics: [],
 
   user: {
+    constituency: {
+      name: 'x'
+    },
     postcode: '',
     postcode_uni: '',
     opinions: {

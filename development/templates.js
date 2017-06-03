@@ -2403,17 +2403,14 @@ module.exports = function(CardTemplates){
       {
         "dom": "h2.tactical-top-match",
         "condition": "showCarouselResults",
-        "content": "Vote tactically, for someone who stands a chance"
+        "content": [
+          { "dom": "span", "content": "Your tactical options in "},
+          { "dom": "span", "content": { "var": "constituencyName" } }
+        ]
       },
-      // {
-      //   "dom": "h1",
-      //   "content": {
-      //     "var": "partiesChartDataTopMatchTactical"
-      //   }
-      // },
       {
         "dom": ".quizPercentages.topLayer.tactical-top-match",
-        "condition": "!quizSafeSeat",
+        // "condition": "!quizSafeSeat",
         "content": [
           {
             "loop": "partiesChartDataTopMatchTactical",

@@ -2347,16 +2347,20 @@ class Quiz {
         } else {
           qp.constituencyView = true;
           model.landedOnResult = 1;
-          console.log(result);
+          console.log("Got contenders",result);
           qp.quizChanceResults = result;
           delete model.user.isWaiting;
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          // qp.resultsData.partiesAll
+          // qp.resultsData.partiesAll.filter(p=>p.chance !== undefined)
           if(config[SiteBrand].carousel) {
+            console.log("Gonna go look at BEF",model.user.constituency.name);
             qp.finalResults = true;
-            self.refresh();
+            model.user.constituency.name = result.location;
             self.calculatePostcodeResults();
             self.refresh();
-            self.slickGoTo(1); // Go to tactical options
+            console.log("Gonna go look at AFT",model.user.constituency.name);
+            setTimeout(()=>self.slickGoTo(1),2000);
           } else {
             routes.quizResults().push();
           }
@@ -2383,6 +2387,7 @@ class Quiz {
         });
 
         self.slickGoTo = function(i) {
+          self.refreshComponent();
           $constituencySlider.slick('slickGoTo', i);
           $('.card-carousel').attr('data-carousel-current', i);
         }
@@ -2437,7 +2442,7 @@ class Quiz {
                   return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
-                console.log(debate);
+                // console.log(debate);
                 // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
                   return {
                       question: debate[1].question,
@@ -2445,8 +2450,8 @@ class Quiz {
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])]=="yes" ? 0.8 : 0.2)),
                   };
               })
-            console.log('opinionsPerIssue', party.key);
-            console.log(opinionsPerIssue);
+            // console.log('opinionsPerIssue', party.key);
+            // console.log(opinionsPerIssue);
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
@@ -2478,14 +2483,14 @@ class Quiz {
                   // console.log("scoresPerIssue: Map debate",issueObj.issue,debate[0],model.user.opinions.issues[issueObj.issue]);
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
-                  console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
+                  // console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
                   const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
-                  console.log("----Debate:",debate[0], party.key);
-                  console.log("user::",userOpinion);
-                  console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  // console.log("----Debate:",debate[0], party.key);
+                  // console.log("user::",userOpinion);
+                  // console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
-                  console.log("=>",result);
-                  console.log("----");
+                  // console.log("=>",result);
+                  // console.log("----");
                   return result;
               })
               .reduce(function(a,b) {
@@ -2569,6 +2574,7 @@ class Quiz {
       showFinalCardNumbers: qp.prioritiesSet && (config[SiteBrand].carousel ? !self.finalResults : true),
       topLineConditional: self.quizStarted && self.countrySelected && !partyResults && !qp.quizResults,
       constituencyView: qp.constituencyView,
+      constituencyName: qp.quizChanceResults.location,
       setPriorities: self.setPriorities,
       submitPriorities: self.submitPriorities,
       // quizPrioritiesNotSet: false,

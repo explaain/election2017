@@ -2120,6 +2120,8 @@ p.shareText {
     margin: 1%;
     text-decoration: none !important;
     line-height: 1em;
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
 }
 
 .card-carousel {
