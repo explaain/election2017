@@ -2186,7 +2186,7 @@ class Quiz {
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
-        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
+        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData && shareData.length && shareData.length > 1) {
@@ -2201,7 +2201,7 @@ class Quiz {
         });
         console.log("Twitter tweet",shareData,partyTwitters);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
-        var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
+        var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
         // var partyCandidateStrings = "";
