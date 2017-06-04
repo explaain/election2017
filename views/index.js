@@ -2561,6 +2561,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
         $('.body.quiz').addClass('moving')
         $('.page-content').addClass('onLoad')
         var $constituencySlider = $('.card-carousel');
+
         $constituencySlider.slick({
           dots: false,
           infinite: false,
@@ -2568,20 +2569,22 @@ $graph.addClass(animFlags.tacticalCrown.class)
           centerMode: true,
           centerPadding: '15px',
           slidesToShow: 1,
-          arrows: false,
-          onAfterChange: function(slider,i) {
-            var slideHeight = jQuery(slider.$slides[i] ).height();
-            jQuery(slider.$slider ).height( slideHeight);
-          }
+          arrows: false
         });
 
-        self.slickGoTo = function(i) {
+        $constituencySlider.on('beforeChange', function(event,slick,currentSlide,i) {
           self.refreshComponent();
-          $constituencySlider.slick('slickGoTo', i);
+          // For CSS
           $('.card-carousel-nav').attr('data-carousel-current', i);
           $('.card-carousel').attr('data-carousel-current', i);
+
+          // This card
           $('[data-carousel-link]').removeClass('carousel-selected');
           $(`[data-carousel-link=${i}]`).addClass('carousel-selected');
+        })
+
+        self.slickGoTo = function(i) {
+          $constituencySlider.slick('slickGoTo', i);
         }
 
         $('.page-content').on('click', '.carousel-nav-item', function() {
