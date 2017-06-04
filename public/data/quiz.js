@@ -49,7 +49,7 @@ quiz.questions["38degrees"] = {
      "38-welfare-1",
      "38-welfare-2",
      "38-tax-2",
-     "38-environment-1", //REPLACE WITH INDEPENDENCE Q
+     "38-independence-1", //REPLACE WITH INDEPENDENCE Q
      "38-living-costs-2",
      "38-environment-2",
      "38-economy-2",

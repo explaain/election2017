@@ -700,22 +700,22 @@ var quizQuestions = [
     answers: {
       yes: [
         {
-          label: "",
-          opinion: 1,
+          label: "but only if the UK leaves the single market.",
+          opinion: 0.6,
         },
         {
-          label: "",
+          label: "but only after Brexit talks are complete.",
           opinion: 0.8,
         },
       ],
       no: [
         {
-          label: "",
-          opinion: 0.4
+          label: "the results of the 2014 referendum should be respected.",
+          opinion: 0.2
         },
         {
-          label: "",
-          opinion: 0
+          label: "at least not in the next 10 years.",
+          opinion: 0.4
         },
       ]
     }

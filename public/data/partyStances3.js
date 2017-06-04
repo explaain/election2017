@@ -942,22 +942,25 @@ var partyStances = {
         }
       },
       "independence": {
-        description: "Living Costs",
+        description: "independence",
         debates: {
           "38-independence-1": {
             question: "Do you think there should be another referendum on Scottish independence?",
             parties: {
               "labour": {
-                opinion: 0.8
+                opinion: 0
               },
               "lib-dem": {
-                opinion: 0.8
+                opinion: 0
+              },
+              "conservative": {
+                opinion: 0
               },
               "green": {
-                opinion: 1
+                opinion: 0.6
               },
-              "ukip": {
-                opinion: 0.5
+              "snp": {
+                opinion: 1
               }
             }
           }
