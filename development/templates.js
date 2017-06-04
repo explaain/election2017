@@ -2925,10 +2925,10 @@ module.exports = function(CardTemplates){
         "condition": "nowProgressingThroughQuiz",
         "content": "This is how you've matched with the parties so far."
       },
-      {
-        "dom": ".partyNameSpacer",
-        "condition": "quizResults"
-      }
+      // {
+      //   "dom": ".partyNameSpacer",
+      //   "condition": "quizResults"
+      // }
     ]
   }
   CardTemplates.quizPercentagesParty = {
@@ -2948,7 +2948,7 @@ module.exports = function(CardTemplates){
       "dom": "div.percentagePartyStyleContainer",
       "content": [
         {
-          "dom": "div.tactical.pointer",
+          "dom": "div.tactical.pointer.cardAnim",
           "content": "Vote Tactically"
         },
         {

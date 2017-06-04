@@ -2203,6 +2203,10 @@ p.shareText {
     animation-duration: .3s;
     animation-fill-mode: forwards;
 }
+.card-carousel [data-slick-index="1"] {
+  margin-bottom: 20px;
+}
+
 [data-carousel-link] {
     box-shadow: inset 0px -2px 0px rgba(0,0,0,0.3);
     border: none;
@@ -2280,12 +2284,6 @@ a.democracyclub-logo:hover {
 }
 #tactical-mode.tacticalInit .match1 .tactical.match1,
 #tactical-mode.tacticalInit .match2 .tactical.match2,
-#tactical-mode.tacticalPromote .chosenCandidate .tactical.pointer {
-  display: block;
-  opacity: 1;
-  transition: all 1s ease;
-}
-
 #tactical-mode.tacticalInit {
   transition: height 1s ease !important;
 }
@@ -2331,10 +2329,13 @@ a.democracyclub-logo:hover {
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
-    transition: height 0.3 ease !important;
+    transition: height 0.3s ease !important;
 }
 
 #tactical-mode.tacticalCrown .chosenCandidate .tactical.pointer {
+    display:block;
+    opacity: 1;
+    transition: all 1s ease;
     color: white;
     text-transform: uppercase;
     font-weight: bold;
