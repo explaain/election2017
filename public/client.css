@@ -2523,3 +2523,16 @@ a.democracyclub-logo:hover {
     content: "Here's how you should vote:";
     font-weight: bold;
 }
+
+
+.finalResult .postcode-form input, .finalResult .postcode-form button {
+    height: 45px;
+    width: 150px;
+    max-width: 60%;
+    font-size: 16px;
+}
+.finalResult form.postcode-form button[type="submit"] {
+  width: 80px;
+  max-width: 35%;
+  margin: -5px 0 0 4px;
+}
