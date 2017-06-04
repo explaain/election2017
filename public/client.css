@@ -2141,6 +2141,10 @@ p.shareText {
 
 /* This is tremendously lazy,
   but the templating system's weird conditional scoping/handling is driving me mad */
+.card-carousel-nav {
+  z-index: 999;
+  position: relative;
+}
 .card-carousel-nav ~ div .step-2,
 .card-carousel-nav ~ div .step-3,
 .card-carousel-nav ~ div .step-4 {
