@@ -1971,11 +1971,7 @@ class Quiz {
 
     self.updateScores = function(thisQuestion) {
       model.parties = allData.getAllData().partyStances;
-      const debatesToInclude = self.getBegunQuestions().map(function(q) {
-        return q.debate;
-      })
-      console.log(debatesToInclude);
-      const partyMatches = api.getPartyMatches(model, debatesToInclude);
+      const partyMatches = api.getPartyMatches(model);
 
       var topParties = []
       if (qp.country) {

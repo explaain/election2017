@@ -355,10 +355,10 @@ APIService.prototype.resultAlgorithm = function(data) {
   return totalData;
 }
 
-APIService.prototype.getPartyMatches = function(data, debatesToInclude) {
+APIService.prototype.getPartyMatches = function(data) {
   var partyMatchesByIssue = {},
       partyMatches = {};
-  var agreements = getAgreements(data, debatesToInclude);
+  var agreements = getAgreements(data);
   allData.getAllData().allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
@@ -389,7 +389,7 @@ APIService.prototype.getPartyMatches = function(data, debatesToInclude) {
   return partyMatches;
 }
 
-APIService.prototype.getAgreements = function(data, debatesToInclude) {
+APIService.prototype.getAgreements = function(data) {
   var agreementMatrix = {};
 
   var issues = data.user.opinions.issues;
@@ -401,29 +401,27 @@ APIService.prototype.getAgreements = function(data, debatesToInclude) {
       var debateKeys = Object.keys(debates);
       debateKeys.forEach(function(debateKey) {
         var debate = debates[debateKey];
-        if (!debatesToInclude || debatesToInclude.indexOf(debate) > -1) {
-          try {
-            var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
-            var partyKeys = Object.keys(allPartiesDebate.parties);
-            partyKeys.forEach(function(partyKey) {
-              // console.log('allPartiesDebate.parties[partyKey].opinion');
-              // console.log(allPartiesDebate.parties[partyKey].opinion);
-              if (allPartiesDebate.parties[partyKey] && allPartiesDebate.parties[partyKey].opinion > -1) {
-                createObjectProps(agreementMatrix, [partyKey, issueKey])
-                agreementMatrix[partyKey][issueKey][debateKey] = {
-                  agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
-                  partyOpinion: allPartiesDebate.parties[partyKey].opinion,
-                  userOpinion: debate.opinion,
-                  weight: debate.weight || 1,
-                  description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
-                  // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
-                  // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
-                }
+        try {
+          var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
+          var partyKeys = Object.keys(allPartiesDebate.parties);
+          partyKeys.forEach(function(partyKey) {
+            // console.log('allPartiesDebate.parties[partyKey].opinion');
+            // console.log(allPartiesDebate.parties[partyKey].opinion);
+            if (allPartiesDebate.parties[partyKey] && allPartiesDebate.parties[partyKey].opinion > -1) {
+              createObjectProps(agreementMatrix, [partyKey, issueKey])
+              agreementMatrix[partyKey][issueKey][debateKey] = {
+                agreement: 1 - Math.abs(debate.opinion - allPartiesDebate.parties[partyKey].opinion),
+                partyOpinion: allPartiesDebate.parties[partyKey].opinion,
+                userOpinion: debate.opinion,
+                weight: debate.weight || 1,
+                description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
+                // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
+                // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
               }
-            })
-          } catch (e) {
+            }
+          })
+        } catch (e) {
 
-          }
         }
       })
     } catch(e) {
