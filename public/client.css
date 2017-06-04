@@ -2245,45 +2245,50 @@ p.small-link.calculate a:hover {
   opacity: 0;
   /*transition: all 1s ease;*/
 }
-
-#tactical-mode .match1 .tactical.match1,
-#tactical-mode .match2 .tactical.match2,
-#tactical-mode .chosenCandidate .tactical.pointer {
+#tactical-mode.tacticalInit .match1 .tactical.match1,
+#tactical-mode.tacticalInit .match2 .tactical.match2,
+#tactical-mode.tacticalPromote .chosenCandidate .tactical.pointer {
   display: block;
   opacity: 1;
-  /*transition: all 1s ease;*/
+  transition: all 1s ease;
 }
 
-#tactical-mode { transition: height 1s ease !important; }
-#tactical-mode .quizPercentagesParty {
+#tactical-mode.tacticalInit {
+  transition: height 1s ease !important;
+}
+
+#tactical-mode.tacticalDemote .quizPercentagesParty {
   opacity: 1;
   max-width: none;
 }
 
-#tactical-mode .quizPercentagesParty,
-#tactical-mode .quizPercentagesPartyPodium,
-#tactical-mode .quizPercentagesPartyPercent,
-#tactical-mode .quizPercentagesPartyName {
-    /*opacity: 1 !important;*/
-    /*transition: all 1s ease !important;*/
+/* --
+  Hide the graphy stuff
+*/
+#tactical-mode.tacticalInit .partyFade
+#tactical-mode.tacticalInit .quizPercentagesPartyPodium,
+#tactical-mode.tacticalInit .quizPercentagesPartyPercent,
+#tactical-mode.tacticalInit .quizPercentagesPartyName {
+    opacity: 1;
+    transition: opacity 1s ease !important;
 }
-/* -During */
-#tactical-mode.tactical-mode-initialise .partyFade,
-#tactical-mode.tactical-mode-initialise .quizPercentagesPartyPodium,
-#tactical-mode.tactical-mode-initialise .quizPercentagesPartyPercent,
-#tactical-mode.tactical-mode-initialise .quizPercentagesPartyName {
+#tactical-mode.tacticalGraph .partyFade,
+#tactical-mode.tacticalGraph .quizPercentagesPartyPodium,
+#tactical-mode.tacticalGraph .quizPercentagesPartyPercent,
+#tactical-mode.tacticalGraph .quizPercentagesPartyName {
     opacity: 0 !important;
-    /*transition: all 1s ease !important;*/
+    transition: opacity 1s ease !important;
 }
-/* -After */
-#tactical-mode.tactical-mode-engaged .partyFade,
-#tactical-mode.tactical-mode-engaged .quizPercentagesPartyPodium,
-#tactical-mode.tactical-mode-engaged .quizPercentagesPartyPercent,
-#tactical-mode.tactical-mode-engaged .quizPercentagesPartyName {
+#tactical-mode.tacticalDemote .partyFade,
+#tactical-mode.tacticalDemote .quizPercentagesPartyPodium,
+#tactical-mode.tacticalDemote .quizPercentagesPartyPercent,
+#tactical-mode.tacticalDemote .quizPercentagesPartyName {
+    opacity: 0 !important;
     display: none;
 }
+/* -- */
 
-#tactical-mode .quizPercentages {
+#tactical-mode.tacticalDemote .quizPercentages {
     position: relative;
     width: 100%;
     height: 375px;
@@ -2293,7 +2298,7 @@ p.small-link.calculate a:hover {
     transition: height 0.5 ease !important;
 }
 
-#tactical-mode .chosenCandidate .tactical.pointer {
+#tactical-mode.tacticalCrown .chosenCandidate .tactical.pointer {
     color: white;
     text-transform: uppercase;
     font-weight: bold;
@@ -2310,7 +2315,7 @@ p.small-link.calculate a:hover {
     padding: 2px 6px;
     top: -14px;
 }
-#tactical-mode .chosenCandidate .tactical.pointer:after {
+#tactical-mode.tacticalCrown .chosenCandidate .tactical.pointer:after {
 	top: 100%;
 	left: 50%;
 	border: solid #DD276B;
@@ -2325,7 +2330,7 @@ p.small-link.calculate a:hover {
 	margin-left: -8px;
 }
 
-#tactical-mode .quizPercentagesPartyFace {
+#tactical-mode.tacticalDemote .quizPercentagesPartyFace {
     width: 40px;
     height: 40px;
     max-height: 40px;
@@ -2337,14 +2342,14 @@ p.small-link.calculate a:hover {
     /* For transition to chosenCandidate */
     margin: 0 auto !important;
 }
-#tactical-mode .chanceMatches .quizPercentagesPartyFace {
+#tactical-mode.tacticalPromote .chanceMatches .quizPercentagesPartyFace {
     width: 95px !important;
     height: 95px !important;
     max-height: 95px !important;
     max-width: 95px !important;
     /*transition: all 0.5s ease;*/
 }
-#tactical-mode .chosenCandidate .quizPercentagesPartyFace {
+#tactical-mode.tacticalCrown .chosenCandidate .quizPercentagesPartyFace {
     width: 120px !important;
     height: 120px !important;
     max-height: 120px !important;
@@ -2353,7 +2358,7 @@ p.small-link.calculate a:hover {
     position: relative !important;
 }
 
-#tactical-mode .quizPercentagesParty {
+#tactical-mode.tacticalDemote .quizPercentagesParty {
   display: block;
   z-index: 999;
   width: 40px !important;
@@ -2364,7 +2369,7 @@ p.small-link.calculate a:hover {
   transition: width 0.5s ease, height 0.5s ease;
 }
 
-#tactical-mode .percentagePartyStyleContainer {
+#tactical-mode.tacticalDemote .percentagePartyStyleContainer {
   border: 3px solid transparent !important;
   width: 40px !important;
   height: 40px !important;
@@ -2374,27 +2379,27 @@ p.small-link.calculate a:hover {
   transition: width 0.5 ease, height 0.5 ease !important;
 }
 
-#tactical-mode .chanceMatches .quizPercentagesParty {
+#tactical-mode.tacticalPromote .chanceMatches .quizPercentagesParty {
   padding-top: 0px;
   width: 170px !important;
   height: 180px !important
   border-color: #DD276B !important;
 }
 
-#tactical-mode .chanceMatches .percentagePartyStyleContainer {
+#tactical-mode.tacticalPromote .chanceMatches .percentagePartyStyleContainer {
   width: 100px !important;
   height: 180px !important;
   padding-top: 30px;
   /*transition: width 1s ease, height 1s ease !important;*/
 }
 
-#tactical-mode .chosenCandidate .percentagePartyStyleContainer {
+#tactical-mode.tacticalCrown .chosenCandidate .percentagePartyStyleContainer {
   padding-top: 0px;
   width: 170px !important;
   border-color: #DD276B !important;
 }
 
-#tactical-mode .chanceMatches .quizPercentagesPartyName.absolute {
+#tactical-mode.tacticalPromote .chanceMatches .quizPercentagesPartyName.absolute {
   display: block !important;
   opacity: 1 !important;
   z-index: 999;
@@ -2418,7 +2423,7 @@ p.small-link.calculate a:hover {
     opacity: 0;
     display: none;
 }
-#tactical-mode .tacticalUI {
+#tactical-mode.tacticalGraph .tacticalUI {
     display: block;
     opacity: 1;
     transition: opacity 0.5s ease;
@@ -2464,13 +2469,13 @@ p.small-link.calculate a:hover {
 .tacticalUI .noChance:before {
     content: "Slim chance of winning";
 }
-#tactical-mode .tacticalUI .chanceMatches:before {
+#tactical-mode.tacticalGraph .tacticalUI .chanceMatches:before {
     margin-top: 50px;
     content: "Looks like there are no parties you agree with that stand a chance. Check the other voting options.";
     opacity: 0;
     transition: all 1s ease;
 }
-#tactical-mode.safeseat + .tacticalUI .chanceMatches:before {
+#tactical-mode.tacticalGraph.safeseat + .tacticalUI .chanceMatches:before {
   opacity: 1;
   transition: all 1s ease;
 }
