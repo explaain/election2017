@@ -2116,7 +2116,7 @@ class Quiz {
         NB: This will send users from Iframed quizes (e.g. unilad, 38degrees?) back to the standalone quiz (with branding)
       */
       var partyTags = {
-        'labour': '@Labour',
+        'labour': '@UKLabour',
         'lib-dem': '@LibDems',
         'conservative': '@Conservatives',
         'ukip': '@UKIP',
@@ -2560,10 +2560,11 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   /* Draw the whole chosen box thingy */
                   $thisParty.addClass("chosenCandidate")
                   $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
+                  var summarySentence;
                   if (consideredParties[consideredParties.length-1] == p.key) {
-                    const summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
+                    summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    const summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence)
                 }

@@ -2143,7 +2143,7 @@ p.shareText {
 
 .carousel-emoji {
     font-size: 23px;
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 }
 
 /* This is tremendously lazy,
@@ -2563,4 +2563,11 @@ img.spoil {
 }
 img.swapvote {
   width: 70%;
+}
+.summarySentence {
+  transition: transform 0.5s;
+  -webkit-transition: transform 0.5s;
+}
+.animation-opening {
+  transform: scale(0);
 }

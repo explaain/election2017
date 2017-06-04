@@ -2299,7 +2299,7 @@ module.exports = function(CardTemplates){
                         "content": [
                           {
                             "dom": "span",
-                            "content": "In a safe seat but willing to vote for another party other than your top match? Consider [vote swapping](http://api.explaain.com/Detail/59348485d238f700115da9f6)"
+                            "content": "In a safe seat but willing to vote for another party other than your top match? Consider "
                           },
                           {
                             "dom": "a",
@@ -2311,18 +2311,26 @@ module.exports = function(CardTemplates){
                         ]
                       },
                       {
-                        "dom": "a.swapvote",
+                        "dom": "a.swapvote.btn.btn-primary",
                         "attr": {
                           "href": "https://www.swapmyvote.uk",
                           "target": "_blank"
                         },
-                        "content": [{
-                          "dom": "img.swapvote",
-                          "attr": {
-                            "src": "/img/swapmyvote.png",
-                          }
-                        }]
+                        "content": "Swap My Vote >"
                       },
+                      // {
+                      //   "dom": "a.swapvote",
+                      //   "attr": {
+                      //     "href": "https://www.swapmyvote.uk",
+                      //     "target": "_blank"
+                      //   },
+                      //   "content": [{
+                      //     "dom": "img.swapvote",
+                      //     "attr": {
+                      //       "src": "/img/swapmyvote.png",
+                      //     }
+                      //   }]
+                      // },
                       {
                         "dom": "p.small" // For standardised margin bottom
                       }
@@ -2512,7 +2520,7 @@ module.exports = function(CardTemplates){
         "content": "Tactical options in your area"
       },
       {
-        "dom": "p.tactical-top-match.summarySentence",
+        "dom": "p.tactical-top-match.summarySentence.animation-opening",
         "condition": "showCarouselResults",
         "content": ""
       },
