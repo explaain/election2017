@@ -2279,6 +2279,9 @@ p.small-link.calculate a:hover {
     opacity: 0 !important;
     transition: opacity 1s ease !important;
 }
+#tactical-mode.tacticalGraph .quizPercentagesPartyFace {
+    bottom: 0 !important;
+}
 #tactical-mode.tacticalDemote .partyFade,
 #tactical-mode.tacticalDemote .quizPercentagesPartyPodium,
 #tactical-mode.tacticalDemote .quizPercentagesPartyPercent,
@@ -2469,13 +2472,16 @@ p.small-link.calculate a:hover {
 .tacticalUI .noChance:before {
     content: "Slim chance of winning";
 }
-#tactical-mode.tacticalGraph .tacticalUI .chanceMatches:before {
+
+#tactical-mode .tacticalUI .chanceMatches:before {
     margin-top: 50px;
     content: "Looks like there are no parties you agree with that stand a chance. Check the other voting options.";
     opacity: 0;
     transition: all 1s ease;
+    color: #444444;
 }
-#tactical-mode.tacticalGraph.safeseat + .tacticalUI .chanceMatches:before {
+
+#tactical-mode.tacticalGraph.safeseat .tacticalUI .chanceMatches:before {
   opacity: 1;
   transition: all 1s ease;
 }

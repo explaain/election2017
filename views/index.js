@@ -2379,9 +2379,11 @@ class Quiz {
             self.slickGoTo(1);
             var $graph = $(".tactical-top-match ~ .tacticalBreakdown .quizPercentageContainer").first();
             $graph.attr("id","tactical-mode");
-            Object.keys(animFlags).forEach(x=>{
-              $graph.removeClass(x)
-            });
+
+            // Reset graph keyframes
+            // Object.keys(animFlags).forEach(x=>{
+            //   $graph.removeClass(x)
+            // });
 
             /////// Begin sick tactical results animation
 $graph.addClass(animFlags.tacticalInit);
