@@ -1791,6 +1791,9 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
   margin: 3.5em 2em 1.5em;
 }
 
+.card-carousel .postcode-instructions {
+  margin-bottom: 20px; /* For when postcode disappears */
+}
 .body.quiz._unilad .postcode-instructions {
   display: none;
 }
@@ -2324,7 +2327,7 @@ a.democracyclub-logo:hover {
 #tactical-mode.tacticalDemote .quizPercentages {
     position: relative;
     width: 100%;
-    height: 375px;
+    height: 380px;
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
@@ -2451,7 +2454,7 @@ a.democracyclub-logo:hover {
 .tacticalUI {
     position: absolute;
     width: 100%;
-    height: 375px;
+    height: 380px;
     top: 0;
     opacity: 0;
     display: none;
@@ -2471,7 +2474,7 @@ a.democracyclub-logo:hover {
 }
 
 .tacticalUI .chanceMatches {
-    height: 200px;
+    height: 205px;
     position: relative;
 }
 

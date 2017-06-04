@@ -2300,6 +2300,7 @@ class Quiz {
           delete model.user.isWaiting;
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
           if(config[SiteBrand].carousel) {
+            $(".tacticalPostcode, .postcode-form").hide(); // Remove after we make reanimation not janky
             $(".constituencyTacticalInfo").hide();
             $(".constituencyTacticalInfo").show();
             console.log("Constituency tac anim BEF",self.constituencyName);
@@ -2312,6 +2313,7 @@ class Quiz {
             self.slickGoTo(1);
             var $graph = $(".constituencyTacticalInfo .quizPercentageContainer").first();
             if(!$graph) {
+              return false;
               console.log("Couldn't find thingy");
             }
 
@@ -2362,9 +2364,9 @@ $graph.addClass(animFlags.tacticalGraph.class);
                   var percParty = qp.country.parties.find((q)=>q.key==p.key);
                   if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
                     console.log("Removing",p.key,"from play")
-                    $graph.find(`[data-party-key=${p.key}]`).remove();
+                    $graph.find(`[data-party-key=${p.key}]`).hide();
                     return false; // User entered a postcode outside her chosen country
-                  }
+                  } else $graph.find(`[data-party-key=${p.key}]`).show();
                   // } else $graph.find(`[data-party-key=${p.key}]`).show();
                   result.partiesAll[i].percentage = parseInt(percParty.percentage);
                   consideredParties.push(result.partiesAll[i]);
@@ -2380,24 +2382,24 @@ $graph.addClass(animFlags.tacticalGraph.class);
                   if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
                   if(kill) {
                     console.log("Killed because wrong country",$(this).attr('data-party-key'));
-                    $(this).remove();
-                  }
+                    $(this).hide();
+                  } else $(this).show()
                 });
                 consideredParties.sort((b,a)=>b.percentage - a.percentage);
 
-                var futureHeight = 375;
+                var futureHeight = 380;
                 var boxes = {
                   chanceMatches: {
                     items: [],
                     top: 0,
-                    bottom: 200,
+                    bottom: 205,
                     left: 0,
                     right: $graph.width(),
                     itemSize: 133 + 10
                   },
                   noChance: {
                     items: [],
-                    top: 200,
+                    top: 205,
                     bottom: futureHeight,
                     left: 0,
                     right: $graph.width() / 2,
@@ -2405,7 +2407,7 @@ $graph.addClass(animFlags.tacticalGraph.class);
                   },
                   noMatch: {
                     items: [],
-                    top: 200,
+                    top: 205,
                     bottom: futureHeight,
                     left: $graph.width() / 2,
                     right: $graph.width(),

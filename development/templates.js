@@ -2592,6 +2592,7 @@ module.exports = function(CardTemplates){
         ]
       },
       {
+        "dom": "div.tacticalPostcode",
         "condition": "showCarouselResults",
         "template": "postcodeInput"
       }
