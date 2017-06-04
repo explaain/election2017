@@ -1903,19 +1903,6 @@ module.exports = function(CardTemplates){
           }
         ]
       },
-      {
-        "dom": "span.pickAVotingOption",
-        "condition": "showCarouselResults",
-        "content": "Pick a voting option or"
-      },
-      {
-        "dom": "a.btn.btn-default.retake",
-        "attr": {
-          "href": "/quiz"
-        },
-        "condition": "quizResults",
-        "content": "⟲ Retake Quiz"
-      },
       { // Party results
         "dom": ".card.results-top",
         "condition": "basicPartyResults",
@@ -2360,6 +2347,19 @@ module.exports = function(CardTemplates){
               }
               /* ///// Carousel ends ///// */
             ]
+          },
+          {
+            "dom": "span.pickAVotingOption",
+            "condition": "showCarouselResults",
+            "content": "or"
+          },
+          {
+            "dom": "a.btn.btn-default.retake",
+            "attr": {
+              "href": "/quiz"
+            },
+            "condition": "quizResults",
+            "content": "⟲ Retake Quiz"
           },
           {
             "condition": "standardProcessGraph",

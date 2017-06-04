@@ -1680,7 +1680,7 @@ a:hover .quizPercentagesPartyFace {
   padding: 20px;
 }
 .retake {
-  margin: 10px 0 0;
+  margin: 30px 0 -5px;
   font-weight: 600;
   color: #777;
 }
@@ -2169,8 +2169,8 @@ p.shareText {
 .pickAVotingOption + a {
     vertical-align: middle;
     display: inline-block;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin-top: 35px;
+    margin-bottom: 0px;
 }
 
 .slick-slide:first-child .card-visible {
@@ -2518,10 +2518,6 @@ a.democracyclub-logo:hover {
 
 .slick-slide .seeHowAlt {
     display: none;
-}
-.slick-slide .tacticalBreakdown:before {
-    content: "On balance, here’s how your vote is best used:";
-    font-weight: bold;
 }
 
 
