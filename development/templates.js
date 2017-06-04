@@ -2172,7 +2172,7 @@ module.exports = function(CardTemplates){
               */
               // #1: Vote for your top
               {
-                "dom": ".card.finalResult.noAnim",
+                "dom": ".card.finalResult.noAnim.basic",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
@@ -2183,12 +2183,30 @@ module.exports = function(CardTemplates){
                       // },
                       {
                         "dom": "h2.bestMatchSoFar",
-                        "content": "Your best match"
+                        "content": [
+                          {
+                            "dom": "span",
+                            "content": "You matched with "
+                          },
+                          {
+                            "dom": "span",
+                            "content": {
+                              "var": "topPartyName"
+                            },
+                            "attr": {
+                              "style": {
+                                "color": {
+                                  "var": "topPartyColor"
+                                }
+                              }
+                            },
+                          }
+                        ]
                       },
-                      {
-                        "dom": "p.bestMatchSoFar",
-                        "content": "Based on your quiz results, this is who you’re most like"
-                      },
+                      // {
+                      //   "dom": "p.bestMatchSoFar",
+                      //   "content": "Based on your quiz results, this is who you’re most like"
+                      // },
                       {
                         "dom": ".quizPercentages.topLayer",
                         "content": [
@@ -2198,12 +2216,12 @@ module.exports = function(CardTemplates){
                           }
                         ]
                       },
-                      {
-                        "dom": "p.small" // For standardised margin bottom
-                      },
+                      // {
+                      //   "dom": "p.small" // For standardised margin bottom
+                      // },
                       {
                         "dom": "h2.postcode-instructions",
-                        "content": "But see if they stand a chance of winning where you live"
+                        "content": "But see if they stand a chance of winning where you live:"
                       },
                       {
                         "dom":"form.postcode-form",
@@ -2233,7 +2251,7 @@ module.exports = function(CardTemplates){
                             "attr":{
                               "type":"submit"
                             },
-                            "content":"Go!"
+                            "content":"Go >"
                           }
                         ]
                       },
@@ -2333,7 +2351,7 @@ module.exports = function(CardTemplates){
                       {
                         "dom": "img",
                         "attr": {
-                          "src": "/img/spoilyourballot.gif"
+                          "src": "/img/spoil.png"
                         }
                       }
                     ]
