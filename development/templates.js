@@ -2296,8 +2296,19 @@ module.exports = function(CardTemplates){
                       },
                       {
                         "dom": "p",
-                        "content": "In a safe seat but willing to vote for another party other than your top match? Consider [vote swapping](http://api.explaain.com/Detail/59348485d238f700115da9f6)",
-                        "markdown": "true"
+                        "content": [
+                          {
+                            "dom": "span",
+                            "content": "In a safe seat but willing to vote for another party other than your top match? Consider [vote swapping](http://api.explaain.com/Detail/59348485d238f700115da9f6)"
+                          },
+                          {
+                            "dom": "a",
+                            "content": "vote swapping",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/59348485d238f700115da9f6"
+                            },
+                          },
+                        ]
                       },
                       {
                         "dom": "a.swapvote",
@@ -2337,8 +2348,19 @@ module.exports = function(CardTemplates){
                       },
                       {
                         "dom": "p",
-                        "content": "Not voting changes nothing. Spoling your ballot does, [here’s why](http://api.explaain.com/Detail/593484e7d238f700115da9f8).",
-                        "markdown": "true"
+                        "content": [
+                          {
+                            "dom": "span",
+                            "content": "Not voting changes nothing. Spoling your ballot does, "
+                          },
+                          {
+                            "dom": "a",
+                            "content": "here’s why",
+                            "attr": {
+                              "href": "http://api.explaain.com/Detail/593484e7d238f700115da9f8"
+                            },
+                          },
+                        ]
                       },
                       // {
                       //   "dom": "h4",
@@ -2490,12 +2512,12 @@ module.exports = function(CardTemplates){
         "content": "Tactical options in your area"
       },
       {
-        "dom": "p.tactical-top-match",
+        "dom": "p.tactical-top-match.summarySentence",
         "condition": "showCarouselResults",
-        "content": "On balance, here’s how your vote is best used:"
+        "content": ""
       },
       {
-        "dom": "a.tactical-top-match.small.explaain-link",
+        "dom": "a.tactical-top-match.small.explaain-link.whatDoesThisMean.opacity-0",
         "condition": "showCarouselResults",
         "content": "What does this mean?",
         "attr": {

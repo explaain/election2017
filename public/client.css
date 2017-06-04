@@ -1,3 +1,7 @@
+.opacity-0 {
+  opacity: 0;
+}
+
 body.embed {
   background: transparent;
 }
@@ -2546,7 +2550,7 @@ a.democracyclub-logo:hover {
   display: none;
 }
 
-p.bestMatchSoFar {
+.card.noAnim p {
   padding: 0 20px;
 }
 img.spoil {
