@@ -2557,3 +2557,6 @@ img.spoil {
 .card.tactical .card-visible {
   overflow: hidden;
 }
+img.swapvote {
+  width: 70%;
+}

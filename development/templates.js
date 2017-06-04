@@ -2349,19 +2349,6 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "span.pickAVotingOption",
-            "condition": "showCarouselResults",
-            "content": "or"
-          },
-          {
-            "dom": "a.btn.btn-default.retake",
-            "attr": {
-              "href": "/quiz"
-            },
-            "condition": "quizResults",
-            "content": "⟲ Retake Quiz"
-          },
-          {
             "condition": "standardProcessGraph",
             "dom": "div",
             "content": [
@@ -2396,6 +2383,19 @@ module.exports = function(CardTemplates){
                 ]
               }
             ]
+          },
+          {
+            "dom": "span.pickAVotingOption",
+            "condition": "showCarouselResults",
+            "content": "or"
+          },
+          {
+            "dom": "a.btn.btn-default.retake",
+            "attr": {
+              "href": "/quiz"
+            },
+            "condition": "quizResults",
+            "content": "⟲ Retake Quiz"
           },
           {
             "dom": ".card.finalResult",
@@ -2949,7 +2949,7 @@ module.exports = function(CardTemplates){
       "content": [
         {
           "dom": "div.tactical.pointer.cardAnim",
-          "content": "Vote Tactically"
+          "content": "Vote Tactically For"
         },
         {
           "dom": "div.tactical.match1",
