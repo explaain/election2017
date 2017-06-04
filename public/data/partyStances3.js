@@ -940,6 +940,28 @@ var partyStances = {
             }
           }
         }
+      },
+      "independence": {
+        description: "Living Costs",
+        debates: {
+          "38-independence-1": {
+            question: "Do you think there should be another referendum on Scottish independence?",
+            parties: {
+              "labour": {
+                opinion: 0.8
+              },
+              "lib-dem": {
+                opinion: 0.8
+              },
+              "green": {
+                opinion: 1
+              },
+              "ukip": {
+                opinion: 0.5
+              }
+            }
+          }
+        }
       }
     }
   }
