@@ -2324,12 +2324,14 @@ class Quiz {
               noMatch: 'noMatch',
               noChance: 'noChance',
               chanceMatches: 'chanceMatches',
-              chosenCandidate: 'chosenCandidate'
+              chosenCandidate: 'chosenCandidate',
+              prepareForDislocation: 'prepareForDislocation',
+              dislocated: 'dislocated'
             }
 
             var animFlags = {
               tacticalInit:    { class: 'tacticalInit',    delay: 500 },
-              tacticalGraph:   { class: 'tacticalGraph',   delay: 1000 },
+              tacticalGraph:   { class: 'tacticalGraph',   delay: 500 }, //Delay from hiding graph to moving categorised item
               tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories
               tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories - this one is used to stagger
               tacticalCrown:   { class: 'tacticalCrown',   delay: 800 }
@@ -2338,6 +2340,123 @@ class Quiz {
             var futureHeight = 380;
             var safeSeat = false;
 
+            // Calculate
+            /////
+
+            var consideredParties = [];
+            result.partiesAll.forEach((p,i) => {
+              var percParty = qp.country.parties.find((q)=>q.key==p.key);
+              if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
+                console.log("Removing",p.key,"from play")
+                $graph.find(`[data-party-key=${p.key}]`).hide();
+                return false; // User entered a postcode outside her chosen country
+              } else $graph.find(`[data-party-key=${p.key}]`).show();
+              // } else $graph.find(`[data-party-key=${p.key}]`).show();
+              result.partiesAll[i].percentage = parseInt(percParty.percentage);
+              consideredParties.push(result.partiesAll[i]);
+              // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
+            });
+            // User entered a postcode outside her chosen country
+            $graph.find("[data-party-key]").each(function() {
+              Object.keys(partyModifiers).forEach(x=>{
+                $(this).removeClass(x)
+              });
+
+              var kill = true;
+              if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
+              if(kill) {
+                console.log("Killed because wrong country",$(this).attr('data-party-key'));
+                $(this).hide();
+              } else $(this).show()
+            });
+            consideredParties.sort((b,a)=>b.percentage - a.percentage);
+
+            var boxes = {
+              chanceMatches: {
+                items: [],
+                top: 0,
+                bottom: 205,
+                left: 0,
+                right: $graph.width(),
+                itemSize: 133 + 10
+              },
+              noChance: {
+                items: [],
+                top: 205,
+                bottom: futureHeight,
+                left: 0,
+                right: $graph.width() / 2,
+                itemSize: 43 + 10
+              },
+              noMatch: {
+                items: [],
+                top: 205,
+                bottom: futureHeight,
+                left: $graph.width() / 2,
+                right: $graph.width(),
+                itemSize: 43 + 10
+              }
+            }
+
+            // #1: Calculate new positions for each face
+            var items = [];
+
+            //--1c: The runnings
+            var chanceMatches = []; // Top match by default
+            const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
+            console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
+            consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
+              var topMatch = consideredParties[consideredParties.length-1];
+              if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
+            });
+
+            safeSeat = chanceMatches.length == 0;
+            if(safeSeat) $graph.addClass('safeseat')
+            else $graph.removeClass('safeseat')
+
+            chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
+            //--1a: No chance
+            var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
+            noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+            //--1b: No match
+            var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
+            noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
+            //
+            console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
+
+            function registerAnim(p,i,category) {
+              var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+              if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+              var itemData = category === 'chanceMatches' ? {
+                key: p.key,
+                box: category,
+                css: {
+                  left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
+                  width: boxes[category].right/chanceMatches.length,
+                  top: 15 + boxes[category].top
+                }
+              } : {
+                key: p.key,
+                box: category,
+                css: {
+                  left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
+                  top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
+                  width: "auto"
+                }
+              };
+
+              $thisParty.attr('data-left', itemData.left);
+              $thisParty.attr('data-top', itemData.top);
+              // $thisParty.addClass("tac");
+              $thisParty.addClass(itemData.box);
+              // if(category === 'chanceMatches') {
+              // } else
+              items.push(itemData);
+              boxes[category].items.push(Object.assign(p,itemData))
+              console.log("Registered for anim",p.key,itemData)
+            }
+
+            /* Let's do this */
             setTimeout(function() {
             /////// Begin sick tactical results animation
 console.groupEnd();
@@ -2363,174 +2482,59 @@ self.slickRefresh(); // Force slick to update height
 
               function partyInitialAnimations() {
 
-                //// Absolutely position things, update the UI
-                // Start the positioning
-                $graph.find("[data-party-key]").each(function() {
-                  var $face = $(this).find(".quizPercentagesPartyFace");
-                  var $graphContainer = $graph.find('.quizPercentages');
-                  var staticPosition = {
-                    top: $face.get(0).getBoundingClientRect().top - $graphContainer.get(0).getBoundingClientRect().top,
-                    left: $face.get(0).getBoundingClientRect().left - $graphContainer.get(0).getBoundingClientRect().left
-                  }
-                  console.log("Getting static posn of",$(this).attr('data-party-key'), staticPosition, $(this), $face, $graphContainer);
-                  $(this).css(staticPosition);
-                });
-
-                function getOffset(el) {
-                    var _x = 0;
-                    var _y = 0;
-                    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
-                        _x += el.offsetLeft - el.scrollLeft;
-                        _y += el.offsetTop - el.scrollTop;
-                        el = el.offsetParent;
-                    }
-                    return { top: _y, left: _x };
-                }
-
-                /////
-
-                var consideredParties = [];
-                result.partiesAll.forEach((p,i) => {
-                  var percParty = qp.country.parties.find((q)=>q.key==p.key);
-                  if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
-                    console.log("Removing",p.key,"from play")
-                    $graph.find(`[data-party-key=${p.key}]`).hide();
-                    return false; // User entered a postcode outside her chosen country
-                  } else $graph.find(`[data-party-key=${p.key}]`).show();
-                  // } else $graph.find(`[data-party-key=${p.key}]`).show();
-                  result.partiesAll[i].percentage = parseInt(percParty.percentage);
-                  consideredParties.push(result.partiesAll[i]);
-                  // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
-                });
-                // User entered a postcode outside her chosen country
-                $graph.find("[data-party-key]").each(function() {
-                  Object.keys(partyModifiers).forEach(x=>{
-                    $(this).removeClass(x)
-                  });
-
-                  var kill = true;
-                  if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
-                  if(kill) {
-                    console.log("Killed because wrong country",$(this).attr('data-party-key'));
-                    $(this).hide();
-                  } else $(this).show()
-                });
-                consideredParties.sort((b,a)=>b.percentage - a.percentage);
-
-                var boxes = {
-                  chanceMatches: {
-                    items: [],
-                    top: 0,
-                    bottom: 205,
-                    left: 0,
-                    right: $graph.width(),
-                    itemSize: 133 + 10
-                  },
-                  noChance: {
-                    items: [],
-                    top: 205,
-                    bottom: futureHeight,
-                    left: 0,
-                    right: $graph.width() / 2,
-                    itemSize: 43 + 10
-                  },
-                  noMatch: {
-                    items: [],
-                    top: 205,
-                    bottom: futureHeight,
-                    left: $graph.width() / 2,
-                    right: $graph.width(),
-                    itemSize: 43 + 10
-                  }
-                }
-
-                // #1: Calculate new positions for each face
-                var items = [];
-
-                //--1c: The runnings
-                var chanceMatches = []; // Top match by default
-                const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
-                console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
-                consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
-                  var topMatch = consideredParties[consideredParties.length-1];
-                  if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
-                });
-
-                safeSeat = chanceMatches.length == 0;
-                if(safeSeat) $graph.addClass('safeseat')
-                else $graph.removeClass('safeseat')
-
-                chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
-                //--1a: No chance
-                var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
-                //--1b: No match
-                var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
-                //
-                console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
-
-                function registerAnim(p,i,category) {
-                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                  var itemData = category === 'chanceMatches' ? {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
-                      width: boxes[category].right/chanceMatches.length,
-                      top: 15 + boxes[category].top
-                    }
-                  } : {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
-                      top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
-                      width: "auto"
-                    }
-                  };
-
-                  $thisParty.attr('data-left', itemData.left);
-                  $thisParty.attr('data-top', itemData.top);
-                  // $thisParty.addClass("tac");
-                  $thisParty.addClass(itemData.box);
-                  // if(category === 'chanceMatches') {
-                  // } else
-                  items.push(itemData);
-                  boxes[category].items.push(Object.assign(p,itemData))
-                  console.log("Registered for anim",p.key,itemData)
-                }
-
 console.groupEnd();
 console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
 $graph.addClass(animFlags.tacticalDemote.class);
 self.slickRefresh(); // Force slick to update height
                 //--3a: Anim Phase the playas
                 // Stagger their animation by 1.5s
-                var phases = ['noChance','noMatch','chanceMatches'];
-                var stagger = 0;
-                phases.forEach((category)=> {
-                  setTimeout(function() {
-                    console.log("Animating group:",category,boxes[category].items)
-                    boxes[category].items.forEach((p)=>{
-                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                      console.log("Animating",p.key)
-                      $thisParty.animate(p.css, animFlags.tacticalPromote.delay, function() {
-                        // Make sure it sticks with !important flag
-                        if(p.css.width !== undefined) {
-                          console.log("Enforcing width on",p.key)
-                          $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
-                        }
-                        // At the end (hopefully after 3000ms)
-                        if(category === 'chanceMatches') announceMainCandidates();
-                      });
-                    })
-                  },stagger);
-                  stagger += animFlags.tacticalPromote.delay;
-                })
-                console.log("Running anims",items)
+
+                categoriseItemsAnim();
+
+                function categoriseItemsAnim() {
+                  var phases = ['noChance','noMatch','chanceMatches'];
+                  var stagger = 0;
+                  phases.forEach((category)=> {
+                    setTimeout(function() {
+                      console.log("Animating group:",category,boxes[category].items)
+                      boxes[category].items.forEach((p)=>{
+                        var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                        if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                        console.log("Animating",p.key)
+                        $thisParty.addClass(partyModifiers.prepareForDislocation)
+
+                        setTimeout(function() {
+                          $thisParty.addClass(partyModifiers.dislocated)
+
+                          // Absolutely position this party
+                          $graph.find("[data-party-key]").each(function() {
+                            var $face = $(this);
+                            var $graphContainer = $graph.find('.quizPercentages');
+                            var staticPosition = {
+                              top: $face.get(0).getBoundingClientRect().top - $graphContainer.get(0).getBoundingClientRect().top,
+                              left: $face.get(0).getBoundingClientRect().left - $graphContainer.get(0).getBoundingClientRect().left
+                            }
+                            console.log("Getting static posn of",$(this).attr('data-party-key'), staticPosition, $(this), $face, $graphContainer);
+                            $(this).css(staticPosition);
+                          });
+
+                          // Now animate to new position
+                          $thisParty.animate(p.css, animFlags.tacticalPromote.delay, function() {
+                            // Make sure it sticks with !important flag
+                            if(p.css.width !== undefined) {
+                              console.log("Enforcing width on",p.key)
+                              $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
+                            }
+                            // At the end (hopefully after 3000ms)
+                            if(category === 'chanceMatches') announceMainCandidates();
+                          });
+                        },animFlags.tacticalGraph.delay)
+                      })
+                    },stagger);
+                    stagger += animFlags.tacticalGraph.delay + animFlags.tacticalPromote.delay;
+                  })
+                  console.log("Running anims",items)
+                }
 
                 // #4: Centre the remaining candidates
                 var announceWinner = false;
@@ -2614,7 +2618,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
           self.slickGoTo( $(this).attr('data-carousel-link') );
         });
 
-        self.slickGoTo(0) // Initialise all the slicky classy stuffs
+        self.slickGoTo(1) // Initialise all the slicky classy stuffs
       },10);
     }
 
