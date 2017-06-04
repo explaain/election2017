@@ -2925,10 +2925,10 @@ module.exports = function(CardTemplates){
         "condition": "nowProgressingThroughQuiz",
         "content": "This is how you've matched with the parties so far."
       },
-      {
-        "dom": ".partyNameSpacer",
-        "condition": "quizResults"
-      }
+      // {
+      //   "dom": ".partyNameSpacer",
+      //   "condition": "quizResults"
+      // }
     ]
   }
   CardTemplates.quizPercentagesParty = {
