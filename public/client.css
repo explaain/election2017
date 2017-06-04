@@ -2136,12 +2136,15 @@ p.shareText {
 
 .carousel-emoji {
     font-size: 23px;
-    margin-top: -15px;
     margin-bottom: 6px;
 }
 
 /* This is tremendously lazy,
   but the templating system's weird conditional scoping/handling is driving me mad */
+.card-carousel-nav {
+  z-index: 999;
+  position: relative;
+}
 .card-carousel-nav ~ div .step-2,
 .card-carousel-nav ~ div .step-3,
 .card-carousel-nav ~ div .step-4 {
@@ -2170,9 +2173,12 @@ p.shareText {
     margin-bottom: 10px;
 }
 
+.slick-slide:first-child .card-visible {
+    margin-bottom: 0 !important;
+}
 /* Hide tactical voting, normally */
 /* Hide tactical voting, normally */
-.card-carousel + .card.percentageHeads {
+.card-carousel + div .card.percentageHeads {
     /*transition: all 0.2s ease;*/
     display: none;
     opacity: 0;
@@ -2180,10 +2186,13 @@ p.shareText {
     animation-duration: .3s;
     animation-fill-mode: forwards;*/
 }
-.card-carousel[data-carousel-current="0"] + .card.percentageHeads,
+.card-carousel + div .card.percentageHeads .card-visible {
+  margin-top: 35px;
+}
+.card-carousel[data-carousel-current="0"] + div .card.percentageHeads,
 /* Hide for tactical option */
-.card-carousel[data-carousel-current="2"] + .card.percentageHeads,
-.card-carousel[data-carousel-current="3"] + .card.percentageHeads {
+.card-carousel[data-carousel-current="2"] + div .card.percentageHeads,
+.card-carousel[data-carousel-current="3"] + div .card.percentageHeads {
     /*transition: all 0.2s ease;*/
     display: block;
     opacity: 1;
@@ -2255,6 +2264,9 @@ a.democracyclub-logo:hover {
   Tactical animation
 */
 /* -Before */
+.constituencyTacticalInfo {
+  display: none;
+}
 
 .tactical.match1,
 .tactical.match2,
