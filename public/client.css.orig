@@ -2233,6 +2233,7 @@ p.small-link.calculate a:hover {
   box-shadow: none !important;
 }
 
+<<<<<<< HEAD
 a.democracyclub-logo {
   display: block;
   margin: 20px;
@@ -2247,10 +2248,7 @@ a.democracyclub-logo img {
 a.democracyclub-logo:hover {
   opacity: 0.7;
   text-decoration: none;
-}
-
-
-
+=======
 /* ----
   Tactical animation
 */
@@ -2499,4 +2497,5 @@ a.democracyclub-logo:hover {
 .slick-slide .tacticalBreakdown:before {
     content: "Here's how you should vote:";
     font-weight: bold;
+>>>>>>> feature/carousel
 }

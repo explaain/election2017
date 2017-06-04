@@ -509,8 +509,11 @@ APIService.prototype.loadConstituency = function(postcode) {
     var constituency = objectAsArray(res.body.areas).filter(function (data) {
       return data.type == 'WMC'
     });
+<<<<<<< HEAD
+=======
     console.log('API: Found constituency');
     console.log(constituency);
+>>>>>>> feature/carousel
     var refArea = objectAsArray(res.body.areas).filter(function (data) {
       return (data.type == 'OLF' || data.type == 'UTA')
     });

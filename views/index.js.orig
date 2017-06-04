@@ -1955,10 +1955,125 @@ class Quiz {
     self.skipSubquestion = function() {
       var opinion = self.getCurrentQuestion().binary === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
+<<<<<<< HEAD
     }
 
     self.skipQuestion = function() {
       self.submitOpinion(false, true);
+=======
+      self.next();
+    }
+
+    self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
+      if(commitToAnswer) {
+        console.log("Next Q")
+        qp.opinions.push(opinion);
+        qp.questionPointer++;
+        self.refresh();
+        self.next();
+      } else {
+        console.log("Same Q")
+      }
+
+      model.user.opinions.issues = model.user.opinions.issues || {};
+      var issue = thisQuestion.issue;
+      var debate = thisQuestion.debate;
+
+      if(opinion === false) {
+        console.log("Question skipped, won't consider in calculations")
+
+        // Erase from model
+
+        // if(model.user.opinions.issues[issue]) {
+        //   console.log("LEN BEF",model.user.opinions.issues[issue].debates.length)
+        //   if(model.user.opinions.issues[issue].debates[debate])
+        //     delete model.user.opinions.issues[issue].debates[debate]
+        //
+        //   if(model.user.opinions.issues[issue].debates.length < 1) {
+        //     console.log("LEN AFT",model.user.opinions.issues[issue].debates.length)
+        //     delete model.user.opinions.issues[issue]
+        //   }
+        // }
+
+        self.updateShareLinks();
+        self.defineCalculableTopics();
+        self.refresh();
+        self.next();
+        return false;
+      }
+
+      model.user.opinions.issues[issue] = model.user.opinions.issues[issue] || {};
+      model.user.opinions.issues[issue].debates = model.user.opinions.issues[issue].debates || {};
+      model.user.opinions.issues[issue].debates[debate] = model.user.opinions.issues[issue].debates[debate] || {};
+      model.user.opinions.issues[issue].debates[debate].opinion = opinion;
+
+      model.parties = allData.getAllData().partyStances;
+      var partyMatches = api.getPartyMatches(model);
+      var newScores = Object.keys(partyMatches).map(function(partyKey) {
+        var party = partyMatches[partyKey];
+        var userOpinionNum = opinion; //commitToAnswer ? qp.opinions[qp.questionPointer-1] : qp.opinions[qp.questionPointer];
+        var partyOpinionObj = model.parties.opinions.issues[issue].debates[debate].parties[partyKey];
+        var partyOpinionNum = partyOpinionObj ? partyOpinionObj.opinion : null;
+        var matchScore = partyOpinionNum ? 1 - Math.abs(userOpinionNum - partyOpinionNum) : 0.5;
+
+        if (model.parties.opinions.issues[issue].debates[debate].parties[partyKey] && partyOpinionNum > -1) {
+          var userOpinion = getOpinionText(thisQuestion, opinion);
+          var partyOpinion = getOpinionText(thisQuestion, partyOpinionNum) || -1;
+          var newMatch =  {
+            question: thisQuestion.question,
+            userOpinion: userOpinion,
+            partyOpinion: partyOpinion,
+            isMatch: userOpinion == partyOpinion,
+            matchScore: matchScore
+          }
+        }
+        var newScore = {
+          key: partyKey,
+          percentage: /*(SiteBrand=='38degrees') ?  parseInt(matchScore*100) : */ parseInt(party.match*100),
+          newMatch: newMatch ? newMatch : undefined
+        }
+        return newScore;
+      });
+      console.log('newScores');
+      console.log(newScores);
+      self.defineCalculableTopics();
+      self.updatePartyPercentages(newScores);
+      self.updateShareLinks();
+      self.refresh();
+    }
+
+    self.recalculateOpinions = function() {
+      // Clear opinions
+      model.user.quizProgress.opinions = [];
+      // Now resubmit them, mocking  currentQuestion  as  quiz.questionDB[q]
+      qp.calculableQuestions.forEach((q) => {
+        var mq = model.user.opinions.issues[quiz.questionDB[q].issue].debates[q];
+        console.log("Recalculating question "+mq.debate+" with weighting "+mq.weight)
+        self.submitOpinion(mq.opinion, true, quiz.questionDB[q]);
+      });
+    }
+
+    self.reprioritiseTopic = function(topic,i) {
+      // console.log(`Changing priority of __${topic}__ from ${quiz.quizTopics[i].highPriority} to ${!quiz.quizTopics[i].highPriority}`);
+      quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
+      var newWeight = quiz.quizTopics[i].highPriority ? 5 : 1;
+      Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
+        console.log("Changing priority",topic,k,newWeight,"of",model.user.opinions.issues[topic].debates);
+        model.user.opinions.issues[topic].debates[k].weight = newWeight
+      })
+      self.recalculateOpinions();
+    }
+
+    self.setPriorities = function() {
+      qp.prioritiesSet = self.prioritiesSet = true;
+      if(config[SiteBrand].carousel) {
+        console.log("Going to carousel",config[SiteBrand].carousel);
+        routes.quizResults().push(); // go straight to the results page
+      } else {
+        console.log("Going to basic match results",config[SiteBrand].carousel);
+        self.refresh(); // settle for the initial results (still /quiz)
+      }
+>>>>>>> feature/carousel
     }
 
     self.back = function() {
@@ -2127,7 +2242,10 @@ class Quiz {
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
-      console.log("Results data for sharing",shareData);
+<<<<<<< HEAD
+=======
+      // console.log("Results data for sharing",shareData);
+>>>>>>> feature/carousel
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
@@ -2155,11 +2273,15 @@ class Quiz {
         // partyNames.  ${X} (${qp.localCandidateData.filter((x)=>x.party_name === party.name]})
         // var twitterTossUpMsg = `It's a draw between ${X} (${qp.localCandidateData.filter((x)=>x.party_name === x)}) and ${Y} (${localCandidates[Y]}) in ${constituency}.`;
       }
-      console.log("Share string",tweet);
+<<<<<<< HEAD
+=======
+      // console.log("Share string",tweet);
+>>>>>>> feature/carousel
 
       self.refresh();
     }
 
+<<<<<<< HEAD
     self.postcodeBinding = [model.user, 'postcode'];
     self.postcodeSubmit = function(e) {
       e.stopPropagation();
@@ -2181,380 +2303,397 @@ class Quiz {
       return false;
     }
 
+    if (self.finalResults == true) {
+      setTimeout(function(){
+        $('.body.quiz').addClass('moving')}
+      ,10);
+=======
     self.calculatePostcodeResults = function() {
       console.log("Calculating postcode chances at ",model.user.postcode)
 
-      if (self.finalResults == true) {
-        console.log('final!!!');
-        setTimeout(function(){
-          $('.body.quiz').addClass('moving')}
-        ,10);
-        qp.standaloneResults = false;
-        self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
-          if (!(qp.quizChanceResults.parties.filter(function(_party) {
-            return party.key == _party.key
-          }).length)) {
-            if (SiteBrand != '38degrees')
-              party.faded = true;
-          }
-          return party;
-        })
-        :
-        [];
-
-        self.partiesChartDataChances = qp.country ? qp.country.parties.filter(function(party) {
-          return qp.quizChanceResults.parties.filter(function(_party) {
-            return party.key == _party.key
-          }).length;
-        })
-        :
-        [];
-
-        var tempMaxParty = {percentage: 0};
-        self.partiesChartDataChances.forEach(function(party) {
-          if (parseInt(party.percentage) > parseInt(tempMaxParty.percentage)) {
-            tempMaxParty = {
-              color: party.color,
-              photo: party.photo,
-              name: party.fullName,
-              key: party.key,
-              percentage: party.percentage,
-              percentageText: party.percentageText + " Match",
-              matches: party.matches,
-              openMatches: party.openMatches,
-              quizResults: party.quizResults
-            }
-            // tempMaxParty = party;
-            // tempMaxParty.name = tempMaxParty.fullName;
-          }
-        });
-        qp.partiesChartDataTopMatchTactical = [tempMaxParty]
-
-        qp.partiesHybridList = qp.quizChanceResults.partiesAll.slice(0,5);
-        var count = 0;
-        var badges = [
-          '1st',
-          '2nd',
-          '3rd',
-          '4th',
-          '5th'
-        ]
-        qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
-          var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
-          if (!fullParty)
-            return {};
-
-          party.photo = fullParty.photo;
-          party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
-            return party.key == _party.key;
-          }).length > 0;
-          party.matchClass = party.isMatch ? 'isMatch' : '';
-          party.badgeText = badges[count];
-          party.openMatches = fullParty.openMatches;
-          count++;
-          return party;
-        });
-
-        qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
-        if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
-          getResults('localCandidates')
-          .then(function(results) {
-            qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
-              candidate.image_url = candidate.image_url || '/img/person.png';
-              return candidate;
-            });
-
-            qp.country.parties.forEach(function(party) {
-              if (qp.localCandidateData.filter(function(candidate) {
-                return party.dClubNames.indexOf(candidate.party_name) > -1;
-              }).length == 0) {
-                party.faded = true;
-              }
-            })
-            self.refresh();
-          })
+>>>>>>> feature/carousel
+      qp.standaloneResults = false;
+      self.partiesChartData = qp.country ? self.partiesChartData.map(function(party) {
+        if (!(qp.quizChanceResults.parties.filter(function(_party) {
+          return party.key == _party.key
+        }).length)) {
+          if (SiteBrand != '38degrees')
+            party.faded = true;
         }
-        // setTimeout(function() {
-        //   self.refresh(); //This is not good as it just puts it on repeat!
-        // },10)
+        return party;
+      })
+      :
+      [];
+
+      self.partiesChartDataChances = qp.country ? qp.country.parties.filter(function(party) {
+        return qp.quizChanceResults.parties.filter(function(_party) {
+          return party.key == _party.key
+        }).length;
+      })
+      :
+      [];
+
+      var tempMaxParty = {percentage: 0};
+      self.partiesChartDataChances.forEach(function(party) {
+        if (parseInt(party.percentage) > parseInt(tempMaxParty.percentage)) {
+          tempMaxParty = {
+            color: party.color,
+            photo: party.photo,
+            name: party.fullName,
+            key: party.key,
+            percentage: party.percentage,
+            percentageText: party.percentageText + " Match",
+            matches: party.matches,
+            openMatches: party.openMatches,
+            quizResults: party.quizResults
+          }
+          // tempMaxParty = party;
+          // tempMaxParty.name = tempMaxParty.fullName;
+        }
+      });
+      qp.partiesChartDataTopMatchTactical = [tempMaxParty]
+
+      qp.partiesHybridList = qp.quizChanceResults.partiesAll.slice(0,5);
+      var count = 0;
+      var badges = [
+        '1st',
+        '2nd',
+        '3rd',
+        '4th',
+        '5th'
+      ]
+      qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
+        var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
+        if (!fullParty)
+          return {};
+
+<<<<<<< HEAD
+=======
+        // console.log('fullParty');
+        // console.log(fullParty);
+        // console.log('party, fullParty');
+        // console.log(party, fullParty);
+>>>>>>> feature/carousel
+        party.photo = fullParty.photo;
+        party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
+          return party.key == _party.key;
+        }).length > 0;
+        party.matchClass = party.isMatch ? 'isMatch' : '';
+        party.badgeText = badges[count];
+        party.openMatches = fullParty.openMatches;
+        count++;
+        return party;
+      });
+
+      qp.quizSafeSeat = self.partiesChartDataChances.length==1 ? true : false;
+      if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
+        getResults('localCandidates')
+        .then(function(results) {
+<<<<<<< HEAD
+=======
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
+          console.log('results')
+          console.log(results)
+>>>>>>> feature/carousel
+          qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
+            candidate.image_url = candidate.image_url || '/img/person.png';
+            return candidate;
+          });
+
+          qp.country.parties.forEach(function(party) {
+            if (qp.localCandidateData.filter(function(candidate) {
+              return party.dClubNames.indexOf(candidate.party_name) > -1;
+            }).length == 0) {
+              party.faded = true;
+            }
+          })
+          self.refresh();
+        })
       }
+      // setTimeout(function() {
+      //   self.refresh(); //This is not good as it just puts it on repeat!
+      // },10)
+    }
 
-      self.postcodeBinding = [model.user, 'postcode'];
-      self.postcodeSubmit = function(e) {
-        console.log(e);
-        e.stopPropagation();
-        model.user.isWaiting = "postcode-input";
-        self.refresh();
-        api.getContenders(model.user.postcode).then(function(result) {
-          if (result.error) {
-            console.log('result.error');
-            console.log(result.error);
-            qp.postcodeError = "Sorry, we didn't recognise that postcode.";
+    self.postcodeBinding = [model.user, 'postcode'];
+    self.postcodeSubmit = function(e) {
+      console.log(e);
+      e.stopPropagation();
+      model.user.isWaiting = "postcode-input";
+      self.refresh();
+      api.getContenders(model.user.postcode).then(function(result) {
+        if (result.error) {
+          console.log('result.error');
+          console.log(result.error);
+          qp.postcodeError = "Sorry, we didn't recognise that postcode.";
+          self.refresh();
+        } else {
+          qp.constituencyView = true;
+          model.landedOnResult = 1;
+          console.log("Got contenders",result);
+          qp.quizChanceResults = result;
+          delete model.user.isWaiting;
+          trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          if(config[SiteBrand].carousel) {
+            console.log("Gonna go look at BEF",self.constituencyName);
+            qp.finalResults = true;
+            model.user.constituency.name = result.location;
+            self.constituencyName = result.location;
+            self.calculatePostcodeResults();
             self.refresh();
-          } else {
-            qp.constituencyView = true;
-            model.landedOnResult = 1;
-            console.log("Got contenders",result);
-            qp.quizChanceResults = result;
-            delete model.user.isWaiting;
-            trackEvent("Rerouting on Constituency Result",qp.resultsData);
-            if(config[SiteBrand].carousel) {
-              console.log("Gonna go look at BEF",self.constituencyName);
-              qp.finalResults = true;
-              model.user.constituency.name = result.location;
-              self.constituencyName = result.location;
-              self.calculatePostcodeResults();
-              self.refresh();
-              console.log("Gonna go look at AFT",self.constituencyName);
-              setTimeout(()=>{
-                self.slickGoTo(1);
+            console.log("Gonna go look at AFT",self.constituencyName);
+            setTimeout(()=>{
+              self.slickGoTo(1);
 
-                var partyModifiers = {
-                  noMatch: 'noMatch',
-                  noChance: 'noChance',
-                  chanceMatches: 'chanceMatches',
-                  chosenCandidate: 'chosenCandidate'
+              var partyModifiers = {
+                noMatch: 'noMatch',
+                noChance: 'noChance',
+                chanceMatches: 'chanceMatches',
+                chosenCandidate: 'chosenCandidate'
+              }
+
+              /////// Begin sick tactical results animation
+              var $graph = $(".tactical-top-match ~ .tacticalBreakdown .quizPercentageContainer").first();
+              $graph.attr("id","tactical-mode");
+              $graph.addClass("tactical-mode-initialise");
+
+              var consideredParties = [];
+              result.partiesAll.forEach((p,i) => {
+                var percParty = qp.country.parties.find((q)=>q.key==p.key);
+                if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
+                  console.log("Removing",p.key,"from play")
+                  $graph.find(`[data-party-key=${p.key}]`).remove();
+                  return false; // User entered a postcode outside her chosen country
                 }
-
-                /////// Begin sick tactical results animation
-                var $graph = $(".tactical-top-match ~ .tacticalBreakdown .quizPercentageContainer").first();
-                $graph.attr("id","tactical-mode");
-                $graph.addClass("tactical-mode-initialise");
-
-                var consideredParties = [];
-                result.partiesAll.forEach((p,i) => {
-                  var percParty = qp.country.parties.find((q)=>q.key==p.key);
-                  if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
-                    console.log("Removing",p.key,"from play")
-                    $graph.find(`[data-party-key=${p.key}]`).remove();
-                    return false; // User entered a postcode outside her chosen country
-                  }
-                  // } else $graph.find(`[data-party-key=${p.key}]`).show();
-                  result.partiesAll[i].percentage = parseInt(percParty.percentage);
-                  consideredParties.push(result.partiesAll[i]);
-                  console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
+                // } else $graph.find(`[data-party-key=${p.key}]`).show();
+                result.partiesAll[i].percentage = parseInt(percParty.percentage);
+                consideredParties.push(result.partiesAll[i]);
+                console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
+              });
+              // User entered a postcode outside her chosen country
+              $graph.children(".quizPercentagesParty").each(function() {
+                Object.keys(partyModifiers).forEach(x=>{
+                  console.log("Clearing",x,p.key)
+                  $(this).removeClass(x)
                 });
-                // User entered a postcode outside her chosen country
+
+                var kill = true;
+                if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
+                if(kill) $(this).remove();
+              });
+              consideredParties.sort((b,a)=>b.percentage - a.percentage);
+
+              console.log("Going tactical 😎",consideredParties);
+
+              var futureHeight = 375;
+              var boxes = {
+                chanceMatches: {
+                  items: [],
+                  top: 0,
+                  bottom: 200,
+                  left: 0,
+                  right: $graph.width(),
+                  itemSize: 130 + 10
+                },
+                noChance: {
+                  items: [],
+                  top: 200,
+                  bottom: futureHeight,
+                  left: 0,
+                  right: $graph.width() / 2,
+                  itemSize: 40 + 10
+                },
+                noMatch: {
+                  items: [],
+                  top: 200,
+                  bottom: futureHeight,
+                  left: $graph.width() / 2,
+                  right: $graph.width(),
+                  itemSize: 40 + 10
+                }
+              }
+
+              // #1: Calculate new positions for each face
+              var items = [];
+
+              //--1c: The runnings
+              var chanceMatches = []; // Top match by default
+              const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
+              console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
+              consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
+                var topMatch = consideredParties[consideredParties.length-1];
+                if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
+              });
+
+              safeSeat = chanceMatches.length == 0;
+              if(safeSeat) $graph.addClass('safeseat')
+              else $graph.removeClass('safeseat')
+
+              chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
+              //--1a: No chance
+              var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
+              noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+              //--1b: No match
+              var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
+              noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
+              //
+              console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
+
+              function registerAnim(p,i,category) {
+                var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                var itemData = category === 'chanceMatches' ? {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
+                    width: boxes[category].right/chanceMatches.length,
+                    top: 15 + boxes[category].top
+                  }
+                } : {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
+                    top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize)
+                  }
+                };
+
+                $thisParty.attr('data-left', itemData.left);
+                $thisParty.attr('data-top', itemData.top);
+                // $thisParty.addClass("tac");
+                $thisParty.addClass(itemData.box);
+                // if(category === 'chanceMatches') {
+                // } else
+                items.push(itemData);
+                boxes[category].items.push(p.key)
+                console.log("Registered for anim",p.key,itemData)
+              }
+
+              self.slickGoTo(1); // Force slick to update height
+              setTimeout(startAnimation, 1000); // Pause to adjust
+
+              var safeSeat = false;
+              function startAnimation() {
+                self.slickGoTo(1); // Force slick to update height
+
+                // #2: Absolutely position faces
                 $graph.children(".quizPercentagesParty").each(function() {
-                  Object.keys(partyModifiers).forEach(x=>{
-                    console.log("Clearing",x,p.key)
-                    $(this).removeClass(x)
+                  $(this).css({
+                    top: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top- $graph.get(0).getBoundingClientRect().top,
+                    left: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left - $graph.get(0).getBoundingClientRect().left
                   });
-
-                  var kill = true;
-                  if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
-                  if(kill) $(this).remove();
                 });
-                consideredParties.sort((b,a)=>b.percentage - a.percentage);
 
-                console.log("Going tactical 😎",consideredParties);
-
-                var futureHeight = 375;
-                var boxes = {
-                  chanceMatches: {
-                    items: [],
-                    top: 0,
-                    bottom: 200,
-                    left: 0,
-                    right: $graph.width(),
-                    itemSize: 130 + 10
-                  },
-                  noChance: {
-                    items: [],
-                    top: 200,
-                    bottom: futureHeight,
-                    left: 0,
-                    right: $graph.width() / 2,
-                    itemSize: 40 + 10
-                  },
-                  noMatch: {
-                    items: [],
-                    top: 200,
-                    bottom: futureHeight,
-                    left: $graph.width() / 2,
-                    right: $graph.width(),
-                    itemSize: 40 + 10
-                  }
+                function getOffset(el) {
+                    var _x = 0;
+                    var _y = 0;
+                    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+                        _x += el.offsetLeft - el.scrollLeft;
+                        _y += el.offsetTop - el.scrollTop;
+                        el = el.offsetParent;
+                    }
+                    return { top: _y, left: _x };
                 }
 
-                // #1: Calculate new positions for each face
-                var items = [];
-
-                //--1c: The runnings
-                var chanceMatches = []; // Top match by default
-                const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
-                console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
-                consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
-                  var topMatch = consideredParties[consideredParties.length-1];
-                  if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
-                });
-
-                safeSeat = chanceMatches.length == 0;
-                if(safeSeat) $graph.addClass('safeseat')
-                else $graph.removeClass('safeseat')
-
-                chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
-                //--1a: No chance
-                var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
-                //--1b: No match
-                var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
-                //
-                console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
-
-                function registerAnim(p,i,category) {
+                // #3: Oscar Mike
+                //--3a: Start the game
+                $graph.css({height: futureHeight});
+                $graph.addClass("tactical-mode-engaged");
+                self.slickGoTo(1); // Force slick to update height
+                //--3a: Animate the playas
+                console.log("Running anims",items)
+                items.forEach((p) => {
                   var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
                   if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                  var itemData = category === 'chanceMatches' ? {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
-                      width: boxes[category].right/chanceMatches.length,
-                      top: 15 + boxes[category].top
+                  console.log("Animating",p.key)
+                  // $thisParty.addClass("tac-go");
+                  $thisParty.animate(p.css, 1000, function() {
+                    // Make sure it sticks with !important flag
+                    if(p.css.width !== undefined) {
+                      console.log("Enforcing width on",p.key)
+                      $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
                     }
-                  } : {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
-                      top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize)
-                    }
-                  };
-
-                  $thisParty.attr('data-left', itemData.left);
-                  $thisParty.attr('data-top', itemData.top);
-                  // $thisParty.addClass("tac");
-                  $thisParty.addClass(itemData.box);
-                  // if(category === 'chanceMatches') {
-                  // } else
-                  items.push(itemData);
-                  boxes[category].items.push(p.key)
-                  console.log("Registered for anim",p.key,itemData)
-                }
-
-                self.slickGoTo(1); // Force slick to update height
-                setTimeout(startAnimation, 1000); // Pause to adjust
-
-                var safeSeat = false;
-                function startAnimation() {
-                  self.slickGoTo(1); // Force slick to update height
-
-                  // #2: Absolutely position faces
-                  $graph.children(".quizPercentagesParty").each(function() {
-                    $(this).css({
-                      top: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top- $graph.get(0).getBoundingClientRect().top,
-                      left: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left - $graph.get(0).getBoundingClientRect().left
-                    });
+                    announceMainCandidates()
                   });
+                })
 
-                  function getOffset(el) {
-                      var _x = 0;
-                      var _y = 0;
-                      while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
-                          _x += el.offsetLeft - el.scrollLeft;
-                          _y += el.offsetTop - el.scrollTop;
-                          el = el.offsetParent;
+                // #4: Centre the remaining candidates
+                var announceWinner = false;
+                function announceMainCandidates() {
+                  if(announceWinner === false) {
+                    /* Categorising animations done */
+                    console.log("Running final phase of anim");
+                    announceWinner = true;
+                    chanceMatches.forEach((p)=> {
+                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                      if(p.badgeText == "1st") {
+                        console.log(p.key,"has been chosen!")
+                        setTimeout(()=>crownTheParty(p), 1500);
                       }
-                      return { top: _y, left: _x };
-                  }
-
-                  // #3: Oscar Mike
-                  //--3a: Start the game
-                  $graph.css({height: futureHeight});
-                  $graph.addClass("tactical-mode-engaged");
-                  self.slickGoTo(1); // Force slick to update height
-                  //--3a: Animate the playas
-                  console.log("Running anims",items)
-                  items.forEach((p) => {
-                    var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                    if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                    console.log("Animating",p.key)
-                    // $thisParty.addClass("tac-go");
-                    $thisParty.animate(p.css, 1000, function() {
-                      // Make sure it sticks with !important flag
-                      if(p.css.width !== undefined) {
-                        console.log("Enforcing width on",p.key)
-                        $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
-                      }
-                      announceMainCandidates()
-                    });
-                  })
-
-                  // #4: Centre the remaining candidates
-                  var announceWinner = false;
-                  function announceMainCandidates() {
-                    if(announceWinner === false) {
-                      /* Categorising animations done */
-                      console.log("Running final phase of anim");
-                      announceWinner = true;
-                      chanceMatches.forEach((p)=> {
-                        var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                        if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                        if(p.badgeText == "1st") {
-                          console.log(p.key,"has been chosen!")
-                          setTimeout(()=>crownTheParty(p), 1500);
-                        }
-                      })
-                    }
-                  }
-
-                  // #5: Embellish the tactical option
-                  function crownTheParty(p) {
-                    var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                    if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                    /* Draw the whole chosen box thingy */
-                    $thisParty.addClass("chosenCandidate")
+                    })
                   }
                 }
-              },200)
-            } else {
-              routes.quizResults().push();
-            }
+
+                // #5: Embellish the tactical option
+                function crownTheParty(p) {
+                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                  /* Draw the whole chosen box thingy */
+                  $thisParty.addClass("chosenCandidate")
+                }
+              }
+            },200)
+          } else {
+            routes.quizResults().push();
+          }
+        }
+      });
+      return false;
+    }
+
+    if (self.finalResults == true || config[SiteBrand].carousel) {
+      console.log('final!!!');
+      setTimeout(function(){
+        $('.body.quiz').addClass('moving')
+        $('.page-content').addClass('onLoad')
+        var $constituencySlider = $('.card-carousel');
+        $constituencySlider.slick({
+          dots: false,
+          infinite: false,
+          adaptiveHeight: true,
+          centerMode: true,
+          centerPadding: '15px',
+          slidesToShow: 1,
+          arrows: false,
+          onAfterChange: function(slider,i) {
+            var slideHeight = jQuery(slider.$slides[i] ).height();
+            jQuery(slider.$slider ).height( slideHeight);
           }
         });
-        return false;
-      }
 
-      if (self.finalResults == true || config[SiteBrand].carousel) {
-        console.log('final!!!');
-        setTimeout(function(){
-          $('.body.quiz').addClass('moving')
-          $('.page-content').addClass('onLoad')
-          var $constituencySlider = $('.card-carousel');
-          $constituencySlider.slick({
-            dots: false,
-            infinite: false,
-            adaptiveHeight: true,
-            centerMode: true,
-            centerPadding: '15px',
-            slidesToShow: 1,
-            arrows: false,
-            onAfterChange: function(slider,i) {
-              var slideHeight = jQuery(slider.$slides[i] ).height();
-              jQuery(slider.$slider ).height( slideHeight);
-            }
-          });
+        self.slickGoTo = function(i) {
+          self.refreshComponent();
+          $constituencySlider.slick('slickGoTo', i);
+          $('.card-carousel-nav').attr('data-carousel-current', i);
+          $('.card-carousel').attr('data-carousel-current', i);
+          $('[data-carousel-link]').removeClass('carousel-selected');
+          $(`[data-carousel-link=${i}]`).addClass('carousel-selected');
+        }
 
-          self.slickGoTo = function(i) {
-            self.refreshComponent();
-            $constituencySlider.slick('slickGoTo', i);
-            $('.card-carousel-nav').attr('data-carousel-current', i);
-            $('.card-carousel').attr('data-carousel-current', i);
-            $('[data-carousel-link]').removeClass('carousel-selected');
-            $(`[data-carousel-link=${i}]`).addClass('carousel-selected');
-          }
+        $('.page-content').on('click', '.carousel-nav-item', function() {
+          self.slickGoTo( $(this).attr('data-carousel-link') );
+        });
+      },10);
+    }
 
-          $('.page-content').on('click', '.carousel-nav-item', function() {
-            self.slickGoTo( $(this).attr('data-carousel-link') );
-          });
-        },10);
-      }
-
-      if (self.finalResults == true || ( config[SiteBrand].carousel && qp.finalResults) ) {
-        self.calculatePostcodeResults();
-      }
+    if (self.finalResults == true || ( config[SiteBrand].carousel && qp.finalResults) ) {
+      self.calculatePostcodeResults();
     }
   }
 
@@ -2596,12 +2735,22 @@ class Quiz {
                   return answeredDebates.includes(debate[0]);
               })
               .map(function(debate) {
+<<<<<<< HEAD
+=======
+                // console.log(debate);
+                // console.log(`Querying for ${debate[0]} opinion of ${party.key}`,debate[1].parties);
+>>>>>>> feature/carousel
                   return {
                       question: debate[1].question,
                       partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
+<<<<<<< HEAD
+=======
+            // console.log('opinionsPerIssue', party.key);
+            // console.log(opinionsPerIssue);
+>>>>>>> feature/carousel
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
@@ -2629,16 +2778,32 @@ class Quiz {
               .map(function(debate) {
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
+<<<<<<< HEAD
                   const userOpinion = self.getUserOpinion(debate[0]);
 
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
 
+=======
+                  // console.log(qp.questionSeries.indexOf(debate[0]), qp.answers[qp.questionSeries.indexOf(debate[0])], qp.answers);
+                  const userOpinion = qp.opinions[qp.questionSeries.indexOf(debate[0])] || (qp.answers[qp.questionSeries.indexOf(debate[0])] === "yes" ? 0.8 : 0.2);
+                  // console.log("----Debate:",debate[0], party.key);
+                  // console.log("user::",userOpinion);
+                  // console.log("party:",debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5);
+                  var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
+                  // console.log("=>",result);
+                  // console.log("----");
+>>>>>>> feature/carousel
                   return result;
               })
               .reduce(function(a,b) {
                   return a + b;
               })
 
+<<<<<<< HEAD
+=======
+            // console.log('ISSUE', issue, issueObj);
+
+>>>>>>> feature/carousel
             return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' };
           });
 

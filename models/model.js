@@ -22,6 +22,9 @@ module.exports = {
   featuredTopics: [],
 
   user: {
+    constituency: {
+      name: ' unset'
+    },
     postcode: '',
     postcode_uni: '',
     opinions: {

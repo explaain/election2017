@@ -2654,12 +2654,54 @@ module.exports = function(CardTemplates){
     }
   }
   CardTemplates.quizPercentagesWrapper = {
-    "dom": "div",
+    "dom": "div.quizPercentagesWrapperInner",
     "content": [
       {
-        "dom": ".card.percentageHeads",
+        "dom": "div.step-number.step-2",
+        "condition": "prioritiesSet",
+        "content": "2"
+      },
+      {
+        "dom": "h2.seeHowAlt",
+        "condition": "quizResultsPage",
+        "content": "Here is how you matched the major parties' manifestos overall:"
+      },
+      {
+        "dom": "h2.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Here is how you matched the major parties' manifestos overall"
+      },
+      {
+        "dom": "h3.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Your party matches:"
+      },
+      {
+        "dom": "p.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Click on the faces to find out more"
+      },
+      {
+        "dom": "h2.breakdown",
+        "condition": "finalResults",
+        "content": "Here's a breakdown of the people you can vote for in your area:"
+      },
+      {
+        "dom": "p.small.tactical-info",
+        "condition": "finalResults",
+        "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
+      },
+      {
+        "dom": "h3.inTheLead",
+        "condition": "finalResults",
+        "content": "In the lead in your area:"
+      },
+      {
+        "dom": ".quizPercentages.middleLayer.basic-top-match",
+        "condition": "finalResults",
         "content": [
           {
+<<<<<<< HEAD
             "dom": ".card-visible.text-center",
             "content": [
               {
@@ -2720,10 +2762,28 @@ module.exports = function(CardTemplates){
                 "condition": "finalResults",
                 "content": "Parties not standing in your area are greyed out."
               },
+              {
+                "dom": "p.small.tactical-info",
+                "condition": "finalResults",
+                "content": "We’ve greyed out the parties who are unlikely to unseat the 2015 winning party due to the margin by which they won."
+              },
             ]
           }
+=======
+            "loop": "partiesChartDataTopMatch",
+            "content": [{"template": "quizPercentagesParty"}]
+          },
+>>>>>>> feature/carousel
         ]
-      }
+      },
+      {
+        "template": "quizPercentages"
+      },
+      {
+        "dom": "p.small.tactical-info-2",
+        "condition": "finalResults",
+        "content": "Parties not standing in your area are greyed out."
+      },
     ]
   }
   CardTemplates.quizPercentages = {
@@ -2793,6 +2853,8 @@ module.exports = function(CardTemplates){
         ]
       },
       {
+<<<<<<< HEAD
+=======
         "dom": "div.tacticalUI",
         // "condition": "finalResults", // !!!
         "content": [
@@ -2817,6 +2879,7 @@ module.exports = function(CardTemplates){
         "content": "As you’re in a safe seat we’ve greyed out the parties who are unlikely to unseat the 2015 winning party due to the margin by which they won."
       },
       {
+>>>>>>> feature/carousel
         "dom": "p.info-text",
         "condition": "nowProgressingThroughQuiz",
         "content": "This is how you've matched with the parties so far."
