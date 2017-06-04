@@ -2386,14 +2386,14 @@ class Quiz {
             /////// Begin sick tactical results animation
 $graph.addClass(animFlags.tacticalInit);
 console.groupEnd();
-console.group("Animate 0");
+console.group("Anim Phase 0");
 
             self.slickGoTo(1); // Force slick to update height
             setTimeout(partyInitialAnimations, 2000); // Pause to adjust
 
 $graph.addClass(animFlags.tacticalGraph);
 console.groupEnd();
-console.group("Animate 1: graph");
+console.group("Anim Phase 1: graph");
 
             self.slickGoTo(1); // Force slick to update height
 
@@ -2419,8 +2419,10 @@ console.group("Animate 1: graph");
                 });
 
                 var kill = true;
-                if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
-                console.log("Killed because wrong country",$(this).attr('data-party-key'));
+                if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) {
+                  kill = false;
+                  console.log("Killed because wrong country",$(this).attr('data-party-key'));
+                }
                 if(kill) $(this).remove();
               });
               consideredParties.sort((b,a)=>b.percentage - a.percentage);
@@ -2513,14 +2515,14 @@ console.group("Animate 1: graph");
                 console.log("Registered for anim",p.key,itemData)
               }
 
-              self.slickGoTo(1); // Force slick to update height
-
-              // #2: Absolutely position faces
-              $graph.children(".quizPercentagesParty").each(function() {
-                $(this).css({
-                  top: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top- $graph.get(0).getBoundingClientRect().top,
-                  left: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left - $graph.get(0).getBoundingClientRect().left
-                });
+              // #2: Start the positioning
+              $graph.find("[data-party-key]").each(function() {
+                var staticPosition = {
+                  top: $(this).find(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top - $graph.get(0).getBoundingClientRect().top,
+                  left: $(this).find(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left - $graph.get(0).getBoundingClientRect().left
+                }
+                console.log("Static position",$(this).attr('data-party-key'),staticPosition,$(this).find(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top, $graph.get(0).getBoundingClientRect().top,$(this).find(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left, $graph.get(0).getBoundingClientRect().left);
+                $(this).css(staticPosition);
               });
 
               function getOffset(el) {
@@ -2534,14 +2536,14 @@ console.group("Animate 1: graph");
                   return { top: _y, left: _x };
               }
 
-              // #3: Oscar Mike
-              //--3a: Start the game
               $graph.css({height: futureHeight});
+              self.slickGoTo(1); // Force slick to update height
+
 $graph.addClass(animFlags.tacticalDemote);
 console.groupEnd();
-console.group("Animate 2: demote");
+console.group("Anim Phase 2: demote");
               self.slickGoTo(1); // Force slick to update height
-              //--3a: Animate the playas
+              //--3a: Anim Phase the playas
               console.log("Running anims",items)
               items.forEach((p) => {
                 var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
@@ -2568,7 +2570,7 @@ console.group("Animate 2: demote");
 
 $graph.addClass(animFlags.tacticalPromote)
 console.groupEnd();
-console.group("Animate 3: promote");
+console.group("Anim Phase 3: promote");
                   chanceMatches.forEach((p)=> {
                     var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
                     if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
@@ -2584,7 +2586,7 @@ console.group("Animate 3: promote");
               function crownTheParty(p) {
 $graph.addClass(animFlags.tacticalCrown)
 console.groupEnd();
-console.group("Animate 4: crown");
+console.group("Anim Phase 4: crown");
                 var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
                 if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                 /* Draw the whole chosen box thingy */
