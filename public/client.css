@@ -2172,7 +2172,7 @@ p.shareText {
 
 /* Hide tactical voting, normally */
 /* Hide tactical voting, normally */
-.card-carousel + .tacticalBreakdown {
+.card-carousel + .card.percentageHeads {
     /*transition: all 0.2s ease;*/
     display: none;
     opacity: 0;
@@ -2180,10 +2180,10 @@ p.shareText {
     animation-duration: .3s;
     animation-fill-mode: forwards;*/
 }
-.card-carousel[data-carousel-current="0"] + .tacticalBreakdown,
+.card-carousel[data-carousel-current="0"] + .card.percentageHeads,
 /* Hide for tactical option */
-.card-carousel[data-carousel-current="2"] + .tacticalBreakdown,
-.card-carousel[data-carousel-current="3"] + .tacticalBreakdown {
+.card-carousel[data-carousel-current="2"] + .card.percentageHeads,
+.card-carousel[data-carousel-current="3"] + .card.percentageHeads {
     /*transition: all 0.2s ease;*/
     display: block;
     opacity: 1;

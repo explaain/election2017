@@ -2341,7 +2341,7 @@ module.exports = function(CardTemplates){
           },
           {
             "condition": "standardProcessGraph",
-            "dom": "div.tacticalBreakdown",
+            "dom": "div",
             "content": [
               {
                 "dom": ".card.percentageHeads",
@@ -2486,6 +2486,71 @@ module.exports = function(CardTemplates){
             }
           }
         ]
+      },
+      {
+        "dom": "h2.hybrid-top-match",
+        "content": "Here’s a prediction of the election results in your area"
+      },
+      {
+        "dom": ".quizPercentages.hybrid-top-match",
+        "content": [
+          {
+            "loop": "partiesHybridList",
+            "content": [
+              {
+                "dom": "a.quizPercentagesParty.inline.discard-card-style",
+                "attr": {
+                  "onclick": {
+                    "var": "openMatches"
+                  },
+                  "class": {
+                    "var": "matchClass"
+                  }
+                },
+                "content": [
+                  {
+                    "dom": ".quizPercentagesPartyBadge",
+                    "condition": "badgeText",
+                    "content": {
+                      "var": "badgeText"
+                    }
+                  },
+                  {
+                    "dom": ".quizPercentagesPartyFace.inline",
+                    "attr": {
+                      "style": {
+                        "background-image": {
+                          "var": "photo"
+                        },
+                        "background-color": {
+                          "var": "color"
+                        },
+                      }
+                    }
+                  },
+                  {
+                    "dom": ".quizPercentagesPartyMatch",
+                    "condition": "isMatch",
+                    "content": "Your Match"
+                  },
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "dom": "p.small-link.calculate",
+        "condition": "finalResults",
+        "content":{
+           "var": "calculateText",
+           "markdown": "true"
+         }
+      },
+      {
+        "dom": "p.small.scrollDown",
+        "condition": "finalResults",
+        "content": "Scroll down to see how we reached this match"
       },
       {
         "dom": "div.tacticalBreakdown",
@@ -2654,76 +2719,66 @@ module.exports = function(CardTemplates){
     }
   }
   CardTemplates.quizPercentagesWrapper = {
-    "dom": "div",
+    "dom": "div.quizPercentagesWrapperInner",
     "content": [
       {
-        "dom": ".card.percentageHeads",
+        "dom": "div.step-number.step-2",
+        "condition": "prioritiesSet",
+        "content": "2"
+      },
+      {
+        "dom": "h2.seeHowAlt",
+        "condition": "quizResultsPage",
+        "content": "Here is how you matched the major parties' manifestos overall:"
+      },
+      {
+        "dom": "h2.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Here is how you matched the major parties' manifestos overall"
+      },
+      {
+        "dom": "h3.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Your party matches:"
+      },
+      {
+        "dom": "p.seeHow",
+        "condition": "prioritiesSet",
+        "content": "Click on the faces to find out more"
+      },
+      {
+        "dom": "h2.breakdown",
+        "condition": "finalResults",
+        "content": "Here's a breakdown of the people you can vote for in your area:"
+      },
+      {
+        "dom": "p.small.tactical-info",
+        "condition": "finalResults",
+        "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
+      },
+      {
+        "dom": "h3.inTheLead",
+        "condition": "finalResults",
+        "content": "In the lead in your area:"
+      },
+      {
+        "dom": ".quizPercentages.middleLayer.basic-top-match",
+        "condition": "finalResults",
         "content": [
           {
-            "dom": ".card-visible.text-center",
-            "content": [
-              {
-                "dom": "div.step-number.step-2",
-                "condition": "prioritiesSet",
-                "content": "2"
-              },
-              {
-                "dom": "h2.seeHowAlt",
-                "condition": "quizResultsPage",
-                "content": "Here is how you matched the major parties' manifestos overall:"
-              },
-              {
-                "dom": "h2.seeHow",
-                "condition": "prioritiesSet",
-                "content": "Here is how you matched the major parties' manifestos overall"
-              },
-              {
-                "dom": "h3.seeHow",
-                "condition": "prioritiesSet",
-                "content": "Your party matches:"
-              },
-              {
-                "dom": "p.seeHow",
-                "condition": "prioritiesSet",
-                "content": "Click on the faces to find out more"
-              },
-              {
-                "dom": "h2.breakdown",
-                "condition": "finalResults",
-                "content": "Here's a breakdown of the people you can vote for in your area:"
-              },
-              {
-                "dom": "p.small.tactical-info",
-                "condition": "finalResults",
-                "content": "We’ve used local polls, past results and betting odds to show you who is currently standing the highest chance of winning where you are."
-              },
-              {
-                "dom": "h3.inTheLead",
-                "condition": "finalResults",
-                "content": "In the lead in your area:"
-              },
-              {
-                "dom": ".quizPercentages.middleLayer.basic-top-match",
-                "condition": "finalResults",
-                "content": [
-                  {
-                    "loop": "partiesChartDataTopMatch",
-                    "content": [{"template": "quizPercentagesParty"}]
-                  },
-                ]
-              },
-              {
-                "template": "quizPercentages"
-              },
-              {
-                "dom": "p.small.tactical-info-2",
-                "condition": "finalResults",
-                "content": "Parties not standing in your area are greyed out."
-              },
-            ]
-          }
+            "loop": "partiesChartDataTopMatch",
+            "content": [{"template": "quizPercentagesParty"}]
+          },
         ]
-      }
+      },
+      {
+        "template": "quizPercentages"
+      },
+      {
+        "dom": "p.small.tactical-info-2",
+        "condition": "finalResults",
+        "content": "Parties not standing in your area are greyed out."
+      },
     ]
   }
   CardTemplates.quizPercentages = {
