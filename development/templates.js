@@ -2349,7 +2349,7 @@ module.exports = function(CardTemplates){
                         "content": "Spoil your ballot!"
                       },
                       {
-                        "dom": "img",
+                        "dom": "img.spoil",
                         "attr": {
                           "src": "/img/spoil.png"
                         }
@@ -2478,6 +2478,19 @@ module.exports = function(CardTemplates){
         "dom": "h2.tactical-top-match",
         "condition": "showCarouselResults",
         "content": "Tactical options in your area"
+      },
+      {
+        "dom": "p.tactical-top-match",
+        "condition": "showCarouselResults",
+        "content": "On balance, here’s how your vote is best used:"
+      },
+      {
+        "dom": "a.tactical-top-match.small.explaain-link",
+        "condition": "showCarouselResults",
+        "content": "What does this mean?",
+        "attr": {
+          "href": "http://api.explaain.com/Detail/5934671dd238f700115da9f5"
+        }
       },
       {
         "dom": "div.constituencyTacticalInfo.cardAnim",
