@@ -2116,7 +2116,7 @@ a.democracyclub-logo p {
 a.democracyclub-logo img {
   height: 40px;
 }
-a.democracyclub-logo:hover p, a.democracyclub-logo:hover img {
+a.democracyclub-logo:hover {
   opacity: 0.7;
   text-decoration: none;
 }

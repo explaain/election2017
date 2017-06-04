@@ -2274,9 +2274,14 @@ module.exports = function(CardTemplates){
                         "content": [{"template": "localCandidatePlate"}]
                       },
                       {
+                        "dom": "div.clearfix",
+                        "content": ""
+                      },
+                      {
                         "dom": "a.democracyclub-logo",
                         "attr": {
-                          "href": "https://democracyclub.org.uk/"
+                          "href": "https://democracyclub.org.uk/",
+                          "target": "_blank"
                         },
                         "content": [
                           {
@@ -2290,10 +2295,6 @@ module.exports = function(CardTemplates){
                             }
                           }
                         ]
-                      },
-                      {
-                        "dom": "div.clearfix",
-                        "content": ""
                       }
                     ]
                   }
