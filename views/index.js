@@ -2325,9 +2325,9 @@ class Quiz {
             }
 
             var animFlags = {
-              tacticalInit:    { class: 'tacticalInit',    delay: 1000 },
+              tacticalInit:    { class: 'tacticalInit',    delay: 500 },
               tacticalGraph:   { class: 'tacticalGraph',   delay: 1500 },
-              tacticalDemote:  { class: 'tacticalDemote',  delay: 2000 },
+              tacticalDemote:  { class: 'tacticalDemote',  delay: 1750 },
               tacticalPromote: { class: 'tacticalPromote', delay: 2000 },
               tacticalCrown:   { class: 'tacticalCrown',   delay: 1500 }
             }
@@ -2467,7 +2467,7 @@ $graph.addClass(animFlags.tacticalGraph.class);
                   // if(category === 'chanceMatches') {
                   // } else
                   items.push(itemData);
-                  boxes[category].items.push(p.key)
+                  boxes[category].items.push(Object.assign(p,itemData))
                   console.log("Registered for anim",p.key,itemData)
                 }
 
@@ -2500,21 +2500,31 @@ $graph.addClass(animFlags.tacticalDemote.class);
 $graph.css({height: futureHeight});
 self.slickGoTo(1); // Force slick to update height
                 //--3a: Anim Phase the playas
-                console.log("Running anims",items)
-                items.forEach((p) => {
-                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                  console.log("Animating",p.key)
-                  // $thisParty.addClass("tac-go");
-                  $thisParty.animate(p.css, animFlags.tacticalPromote.delay, function() {
-                    // Make sure it sticks with !important flag
-                    if(p.css.width !== undefined) {
-                      console.log("Enforcing width on",p.key)
-                      $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
-                    }
-                    announceMainCandidates()
-                  });
+                // Stagger their animation by 1.5s
+                var phases = ['noChance','noMatch','chanceMatches'];
+                var stagger = 0;
+                phases.forEach((category)=> {
+                  setTimeout(function() {
+                    console.log("Animating group:",category,boxes[category].items)
+                    boxes[category].items.forEach((p)=>{
+                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                      console.log("Animating",p.key)
+                      // $thisParty.addClass("tac-go");
+                      $thisParty.animate(p.css, animFlags.tacticalPromote.delay, function() {
+                        // Make sure it sticks with !important flag
+                        if(p.css.width !== undefined) {
+                          console.log("Enforcing width on",p.key)
+                          $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
+                        }
+                        // At the end (hopefully after 3000ms)
+                        if(category === 'chanceMatches') announceMainCandidates();
+                      });
+                    })
+                  },stagger);
+                  stagger += 1500;
                 })
+                console.log("Running anims",items)
 
                 // #4: Centre the remaining candidates
                 var announceWinner = false;
@@ -2529,14 +2539,6 @@ console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
 $graph.addClass(animFlags.tacticalPromote.class)
 self.slickGoTo(1); // Force slick to update height
 
-                    // chanceMatches.forEach((p)=> {
-                    //   var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                    //   if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                    //   if(p.badgeText == "1st") {
-                    //     console.log(p.key,"has been chosen!")
-                    //     setTimeout(()=>crownTheParty(p), animFlags.tacticalCrown.delay);
-                    //   }
-                    // })
                     chanceMatches.sort((b,a)=>b.percentage - a.percentage)
                     setTimeout(()=>crownTheParty(chanceMatches[0]), animFlags.tacticalCrown.delay);
                   }
