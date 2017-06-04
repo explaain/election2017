@@ -2203,9 +2203,6 @@ p.shareText {
     animation-duration: .3s;
     animation-fill-mode: forwards;
 }
-.card-carousel [data-slick-index="1"] {
-  margin-bottom: 20px;
-}
 
 [data-carousel-link] {
     box-shadow: inset 0px -2px 0px rgba(0,0,0,0.3);
