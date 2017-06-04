@@ -1732,6 +1732,7 @@ class Quiz {
     qp.constituencyView = qp.constituencyView ? qp.constituencyView : false;
     qp.quizResults = qp.quizResults ? qp.quizResults : false;
     self.countrySelected = params && params.finalResults ? params.finalResults : self.countrySelected;
+    self.constituencyName = JSON.parse(JSON.stringify(model.user.constituency)).name
     self.quizStarted = qp.quizStarted;
     self.quizResults = qp.quizResults;
     self.quizSafeSeat = qp.quizSafeSeat;
@@ -2192,7 +2193,7 @@ class Quiz {
 
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
-      console.log("Results data for sharing",shareData);
+      // console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
@@ -2209,7 +2210,7 @@ class Quiz {
           console.log(p.name,p.key,partyTags[p.key]);
           partyTwitters.push(partyTags[p.key] || p.name);
         });
-        console.log("Twitter tweet",shareData,partyTwitters);
+        // console.log("Twitter tweet",shareData,partyTwitters);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
         var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 #bbcqt ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
@@ -2221,7 +2222,7 @@ class Quiz {
         // partyNames.  ${X} (${qp.localCandidateData.filter((x)=>x.party_name === party.name]})
         // var twitterTossUpMsg = `It's a draw between ${X} (${qp.localCandidateData.filter((x)=>x.party_name === x)}) and ${Y} (${localCandidates[Y]}) in ${constituency}.`;
       }
-      console.log("Share string",tweet);
+      // console.log("Share string",tweet);
 
       self.refresh();
     }
@@ -2285,10 +2286,10 @@ class Quiz {
         if (!fullParty)
           return {};
 
-        console.log('fullParty');
-        console.log(fullParty);
-        console.log('party, fullParty');
-        console.log(party, fullParty);
+        // console.log('fullParty');
+        // console.log(fullParty);
+        // console.log('party, fullParty');
+        // console.log(party, fullParty);
         party.photo = fullParty.photo;
         party.isMatch = self.partiesChartDataTopMatch.filter(function(_party) {
           return party.key == _party.key;
@@ -2305,11 +2306,11 @@ class Quiz {
       if (model.user.postcode.length && !qp.localCandidateData || !qp.localCandidateData.length) {
         getResults('localCandidates')
         .then(function(results) {
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log('results')
-          console.log('results')
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
+          // console.log('results')
           console.log('results')
           console.log(results)
           qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
@@ -2338,7 +2339,7 @@ class Quiz {
       e.stopPropagation();
       model.user.isWaiting = "postcode-input";
       self.refresh();
-      api.getContenders(model.user.postcode).then(function(result){
+      api.getContenders(model.user.postcode).then(function(result) {
         if (result.error) {
           console.log('result.error');
           console.log(result.error);
@@ -2351,16 +2352,217 @@ class Quiz {
           qp.quizChanceResults = result;
           delete model.user.isWaiting;
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
-          // qp.resultsData.partiesAll
-          // qp.resultsData.partiesAll.filter(p=>p.chance !== undefined)
           if(config[SiteBrand].carousel) {
-            console.log("Gonna go look at BEF",model.user.constituency.name);
+            console.log("Gonna go look at BEF",self.constituencyName);
             qp.finalResults = true;
             model.user.constituency.name = result.location;
+            self.constituencyName = result.location;
             self.calculatePostcodeResults();
             self.refresh();
-            console.log("Gonna go look at AFT",model.user.constituency.name);
-            setTimeout(()=>self.slickGoTo(1),2000);
+            console.log("Gonna go look at AFT",self.constituencyName);
+            setTimeout(()=>{
+              self.slickGoTo(1);
+
+              var partyModifiers = {
+                noMatch: 'noMatch',
+                noChance: 'noChance',
+                chanceMatches: 'chanceMatches',
+                chosenCandidate: 'chosenCandidate'
+              }
+
+              /////// Begin sick tactical results animation
+              var $graph = $(".tactical-top-match ~ .tacticalBreakdown .quizPercentageContainer").first();
+              $graph.attr("id","tactical-mode");
+              $graph.addClass("tactical-mode-initialise");
+
+              var consideredParties = [];
+              result.partiesAll.forEach((p,i) => {
+                var percParty = qp.country.parties.find((q)=>q.key==p.key);
+                if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
+                  console.log("Removing",p.key,"from play")
+                  $graph.find(`[data-party-key=${p.key}]`).remove();
+                  return false; // User entered a postcode outside her chosen country
+                }
+                // } else $graph.find(`[data-party-key=${p.key}]`).show();
+                result.partiesAll[i].percentage = parseInt(percParty.percentage);
+                consideredParties.push(result.partiesAll[i]);
+                console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
+              });
+              // User entered a postcode outside her chosen country
+              $graph.children(".quizPercentagesParty").each(function() {
+                Object.keys(partyModifiers).forEach(x=>{
+                  console.log("Clearing",x,p.key)
+                  $(this).removeClass(x)
+                });
+
+                var kill = true;
+                if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
+                if(kill) $(this).remove();
+              });
+              consideredParties.sort((b,a)=>b.percentage - a.percentage);
+
+              console.log("Going tactical 😎",consideredParties);
+
+              var futureHeight = 375;
+              var boxes = {
+                chanceMatches: {
+                  items: [],
+                  top: 0,
+                  bottom: 200,
+                  left: 0,
+                  right: $graph.width(),
+                  itemSize: 130 + 10
+                },
+                noChance: {
+                  items: [],
+                  top: 200,
+                  bottom: futureHeight,
+                  left: 0,
+                  right: $graph.width() / 2,
+                  itemSize: 40 + 10
+                },
+                noMatch: {
+                  items: [],
+                  top: 200,
+                  bottom: futureHeight,
+                  left: $graph.width() / 2,
+                  right: $graph.width(),
+                  itemSize: 40 + 10
+                }
+              }
+
+              // #1: Calculate new positions for each face
+              var items = [];
+
+              //--1c: The runnings
+              var chanceMatches = []; // Top match by default
+              const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
+              console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
+              consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
+                var topMatch = consideredParties[consideredParties.length-1];
+                if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
+              });
+
+              safeSeat = chanceMatches.length == 0;
+              if(safeSeat) $graph.addClass('safeseat')
+              else $graph.removeClass('safeseat')
+
+              chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
+              //--1a: No chance
+              var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
+              noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+              //--1b: No match
+              var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
+              noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
+              //
+              console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
+
+              function registerAnim(p,i,category) {
+                var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                var itemData = category === 'chanceMatches' ? {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
+                    width: boxes[category].right/chanceMatches.length,
+                    top: 15 + boxes[category].top
+                  }
+                } : {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
+                    top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize)
+                  }
+                };
+
+                $thisParty.attr('data-left', itemData.left);
+                $thisParty.attr('data-top', itemData.top);
+                // $thisParty.addClass("tac");
+                $thisParty.addClass(itemData.box);
+                // if(category === 'chanceMatches') {
+                // } else
+                items.push(itemData);
+                boxes[category].items.push(p.key)
+                console.log("Registered for anim",p.key,itemData)
+              }
+
+              self.slickGoTo(1); // Force slick to update height
+              setTimeout(startAnimation, 1000); // Pause to adjust
+
+              var safeSeat = false;
+              function startAnimation() {
+                self.slickGoTo(1); // Force slick to update height
+
+                // #2: Absolutely position faces
+                $graph.children(".quizPercentagesParty").each(function() {
+                  $(this).css({
+                    top: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().top- $graph.get(0).getBoundingClientRect().top,
+                    left: $(this).children(".quizPercentagesPartyFace").get(0).getBoundingClientRect().left - $graph.get(0).getBoundingClientRect().left
+                  });
+                });
+
+                function getOffset(el) {
+                    var _x = 0;
+                    var _y = 0;
+                    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+                        _x += el.offsetLeft - el.scrollLeft;
+                        _y += el.offsetTop - el.scrollTop;
+                        el = el.offsetParent;
+                    }
+                    return { top: _y, left: _x };
+                }
+
+                // #3: Oscar Mike
+                //--3a: Start the game
+                $graph.css({height: futureHeight});
+                $graph.addClass("tactical-mode-engaged");
+                self.slickGoTo(1); // Force slick to update height
+                //--3a: Animate the playas
+                console.log("Running anims",items)
+                items.forEach((p) => {
+                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                  console.log("Animating",p.key)
+                  // $thisParty.addClass("tac-go");
+                  $thisParty.animate(p.css, 1000, function() {
+                    // Make sure it sticks with !important flag
+                    if(p.css.width !== undefined) {
+                      console.log("Enforcing width on",p.key)
+                      $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
+                    }
+                    announceMainCandidates()
+                  });
+                })
+
+                // #4: Centre the remaining candidates
+                var announceWinner = false;
+                function announceMainCandidates() {
+                  if(announceWinner === false) {
+                    /* Categorising animations done */
+                    console.log("Running final phase of anim");
+                    announceWinner = true;
+                    chanceMatches.forEach((p)=> {
+                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                      if(p.badgeText == "1st") {
+                        console.log(p.key,"has been chosen!")
+                        setTimeout(()=>crownTheParty(p), 1500);
+                      }
+                    })
+                  }
+                }
+
+                // #5: Embellish the tactical option
+                function crownTheParty(p) {
+                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                  /* Draw the whole chosen box thingy */
+                  $thisParty.addClass("chosenCandidate")
+                }
+              }
+            },200)
           } else {
             routes.quizResults().push();
           }
@@ -2383,14 +2585,21 @@ class Quiz {
           centerPadding: '15px',
           slidesToShow: 1,
           arrows: false,
-          // initialSlide: 0
+          onAfterChange: function(slider,i) {
+            var slideHeight = jQuery(slider.$slides[i] ).height();
+            jQuery(slider.$slider ).height( slideHeight);
+          }
         });
 
         self.slickGoTo = function(i) {
           self.refreshComponent();
           $constituencySlider.slick('slickGoTo', i);
+          $('.card-carousel-nav').attr('data-carousel-current', i);
           $('.card-carousel').attr('data-carousel-current', i);
+          $('[data-carousel-link]').removeClass('carousel-selected');
+          $(`[data-carousel-link=${i}]`).addClass('carousel-selected');
         }
+
         $('.page-content').on('click', '.carousel-nav-item', function() {
           self.slickGoTo( $(this).attr('data-carousel-link') );
         });
@@ -2568,13 +2777,15 @@ class Quiz {
       // showStandardResults: SiteBrand !== "ge2017" && qp.quizResults && self.finalResults,
       // showCarouselResults: SiteBrand === "ge2017" && qp.prioritiesSet && self.finalResults,
       // showFinalCardNumbers: qp.prioritiesSet && (SiteBrand === "ge2017" ? !self.finalResults : true),
+      standardProcessGraph: self.countrySelected && (!config[SiteBrand].carousel || config[SiteBrand].carousel && (qp.quizResults || !self.finalResults)),
       showStandardInitialResults: !config[SiteBrand].carousel && qp.quizResults && !self.finalResults,
       showStandardResults: !config[SiteBrand].carousel && qp.quizResults && self.finalResults,
       showCarouselResults: config[SiteBrand].carousel && qp.prioritiesSet,
       showFinalCardNumbers: qp.prioritiesSet && (config[SiteBrand].carousel ? !self.finalResults : true),
       topLineConditional: self.quizStarted && self.countrySelected && !partyResults && !qp.quizResults,
       constituencyView: qp.constituencyView,
-      constituencyName: qp.quizChanceResults.location,
+      // constituencyName: qp.quizChanceResults.location,
+      constituencyName: self.constituencyName,
       setPriorities: self.setPriorities,
       submitPriorities: self.submitPriorities,
       // quizPrioritiesNotSet: false,

@@ -20,7 +20,7 @@ module.exports = {
 
   user: {
     constituency: {
-      name: 'x'
+      name: ' unset'
     },
     postcode: '',
     postcode_uni: '',
