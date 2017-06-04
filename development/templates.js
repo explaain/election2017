@@ -2292,7 +2292,12 @@ module.exports = function(CardTemplates){
                       {
                         "dom": "h3",
                         // "condition": "finalResults",
-                        "content": "What if I don't like any of them?"
+                        "content": "Swap my vote"
+                      },
+                      {
+                        "dom": "p",
+                        "content": "In a safe seat but willing to vote for another party other than your top match? Consider [vote swapping](http://api.explaain.com/Detail/59348485d238f700115da9f6)",
+                        "markdown": "true"
                       },
                       {
                         "dom": "a.swapvote",
@@ -2328,13 +2333,18 @@ module.exports = function(CardTemplates){
                       {
                         "dom": "h3",
                         // "condition": "finalResults",
-                        "content": "What if I don't like any of them?"
+                        "content": "Spoil my ballot!"
                       },
                       {
-                        "dom": "h4",
-                        // "condition": "finalResults",
-                        "content": "Spoil your ballot!"
+                        "dom": "p",
+                        "content": "Not voting changes nothing. Spoling your ballot does, [here’s why](http://api.explaain.com/Detail/593484e7d238f700115da9f8).",
+                        "markdown": "true"
                       },
+                      // {
+                      //   "dom": "h4",
+                      //   // "condition": "finalResults",
+                      //   "content": ""
+                      // },
                       {
                         "dom": "img.spoil",
                         "attr": {
