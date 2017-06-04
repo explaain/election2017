@@ -2301,6 +2301,7 @@ class Quiz {
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
           if(config[SiteBrand].carousel) {
             $(".tacticalPostcode, .postcode-form").hide(); // Remove after we make reanimation not janky
+            $("h2.postcode-instructions").hide();
             $(".constituencyTacticalInfo").hide();
             $(".constituencyTacticalInfo").show();
             console.log("Constituency tac anim BEF",self.constituencyName);
@@ -2711,7 +2712,9 @@ $graph.addClass(animFlags.tacticalCrown.class)
           });
 
           party.openMatches = function(){
+            console.log(party);
             var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
+            console.log(tempKey);
             var tempCard = {
               '@id': tempKey,
               '@type': 'IssueMatch',
@@ -2720,6 +2723,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                issues: scoresPerIssue,
                links: allCardKeys
             };
+            console.log(tempCard);
 
             var allCards = Object.values(actual_issue_cards).map(function(obj) {
               return obj.card;

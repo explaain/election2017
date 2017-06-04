@@ -2414,7 +2414,7 @@ a.democracyclub-logo:hover {
   width: 40px !important;
   height: 40px !important;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 10px;
   margin: 0 auto;
   transition: width 0.5 ease, height 0.5 ease !important;
 }
@@ -2472,8 +2472,8 @@ a.democracyclub-logo:hover {
 
 .tacticalUI .box {
     padding: 50px;
-    border: 1px solid #EEE;
-    border-radius: 4px;
+    border-top: 1px solid #EEE;
+    /*border-radius: 4px;*/
     background: white;
 }
 
@@ -2489,6 +2489,9 @@ a.democracyclub-logo:hover {
     float: left;
     position: relative;
     background: #FAFAFA;
+}
+.tacticalUI .noMatch {
+  border-left: 1px solid #EEE;
 }
 .tacticalUI .chanceMatches:before,
 .tacticalUI .noMatch:before,
@@ -2552,4 +2555,8 @@ p.bestMatchSoFar {
 img.spoil {
   width: 100%;
   padding: 0 20px 20px;
+}
+
+.card.tactical .card-visible {
+  overflow: hidden;
 }
