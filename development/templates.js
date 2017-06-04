@@ -2522,6 +2522,11 @@ module.exports = function(CardTemplates){
                 "condition": "finalResults",
                 "content": "Parties not standing in your area are greyed out."
               },
+              {
+                "dom": "p.small.tactical-info",
+                "condition": "finalResults",
+                "content": "We’ve greyed out the parties who are unlikely to unseat the 2015 winning party due to the margin by which they won."
+              },
             ]
           }
         ]
@@ -2593,11 +2598,6 @@ module.exports = function(CardTemplates){
             "content": [{"template": "quizPercentagesParty"}]
           }
         ]
-      },
-      {
-        "dom": "p.info-text.fading-info",
-        "condition": "finalResults",
-        "content": "As you’re in a safe seat we’ve greyed out the parties who are unlikely to unseat the 2015 winning party due to the margin by which they won."
       },
       {
         "dom": "p.info-text",
