@@ -2793,6 +2793,8 @@ $graph.addClass(animFlags.tacticalCrown.class)
       partiesChartData: self.partiesChartData,
       partiesChartDataChances: self.partiesChartDataChances,
       partiesChartDataTopMatch: qp.partiesChartDataTopMatch, //Temporary
+      topPartyName: qp.partiesChartDataTopMatch[0] ? qp.partiesChartDataTopMatch[0].name : null, //Temporary
+      topPartyColor: qp.partiesChartDataTopMatch[0] ? qp.partiesChartDataTopMatch[0].color : null, //Temporary
       partiesChartDataTopMatchTactical: qp.partiesChartDataTopMatchTactical,
       partiesHybridList: qp.partiesHybridList,
       // openMatches: self.openMatches,

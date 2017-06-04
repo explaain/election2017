@@ -696,7 +696,7 @@ var quizQuestions = [
     randomiseGroup: "remainder",
     issue: "independence",
     debate: "38-independence-1",
-    helperCard:"",
+    helperCard:"http://api.explaain.com/Detail/593461d7d238f700115da9f4",
     answers: {
       yes: [
         {

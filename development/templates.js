@@ -1903,19 +1903,6 @@ module.exports = function(CardTemplates){
           }
         ]
       },
-      {
-        "dom": "span.pickAVotingOption",
-        "condition": "showCarouselResults",
-        "content": "Pick a voting option or"
-      },
-      {
-        "dom": "a.btn.btn-default.retake",
-        "attr": {
-          "href": "/quiz"
-        },
-        "condition": "quizResults",
-        "content": "⟲ Retake Quiz"
-      },
       { // Party results
         "dom": ".card.results-top",
         "condition": "basicPartyResults",
@@ -2172,7 +2159,7 @@ module.exports = function(CardTemplates){
               */
               // #1: Vote for your top
               {
-                "dom": ".card.finalResult.noAnim",
+                "dom": ".card.finalResult.noAnim.basic.large-postcode",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
@@ -2183,12 +2170,30 @@ module.exports = function(CardTemplates){
                       // },
                       {
                         "dom": "h2.bestMatchSoFar",
-                        "content": "Your best match"
+                        "content": [
+                          {
+                            "dom": "span",
+                            "content": "You matched with "
+                          },
+                          {
+                            "dom": "span",
+                            "content": {
+                              "var": "topPartyName"
+                            },
+                            "attr": {
+                              "style": {
+                                "color": {
+                                  "var": "topPartyColor"
+                                }
+                              }
+                            },
+                          }
+                        ]
                       },
-                      {
-                        "dom": "p.bestMatchSoFar",
-                        "content": "Based on your quiz results, this is who you’re most like"
-                      },
+                      // {
+                      //   "dom": "p.bestMatchSoFar",
+                      //   "content": "Based on your quiz results, this is who you’re most like"
+                      // },
                       {
                         "dom": ".quizPercentages.topLayer",
                         "content": [
@@ -2198,12 +2203,12 @@ module.exports = function(CardTemplates){
                           }
                         ]
                       },
-                      {
-                        "dom": "p.small" // For standardised margin bottom
-                      },
+                      // {
+                      //   "dom": "p.small" // For standardised margin bottom
+                      // },
                       {
                         "dom": "h2.postcode-instructions",
-                        "content": "But see if they stand a chance of winning where you live"
+                        "content": "But see if they stand a chance of winning where you live:"
                       },
                       {
                         "dom":"form.postcode-form",
@@ -2233,7 +2238,7 @@ module.exports = function(CardTemplates){
                             "attr":{
                               "type":"submit"
                             },
-                            "content":"Go!"
+                            "content":"Go >"
                           }
                         ]
                       },
@@ -2253,7 +2258,7 @@ module.exports = function(CardTemplates){
               },
               // #2: Vote for your best chance
               {
-                "dom": ".card.noAnim",
+                "dom": ".card.noAnim.tactical.large-postcode",
                 "content": [
                   {
                     "template": "yourTacticalMatch"
@@ -2331,9 +2336,9 @@ module.exports = function(CardTemplates){
                         "content": "Spoil your ballot!"
                       },
                       {
-                        "dom": "img",
+                        "dom": "img.spoil",
                         "attr": {
-                          "src": "/img/spoilyourballot.gif"
+                          "src": "/img/spoil.png"
                         }
                       }
                     ]
@@ -2342,6 +2347,19 @@ module.exports = function(CardTemplates){
               }
               /* ///// Carousel ends ///// */
             ]
+          },
+          {
+            "dom": "span.pickAVotingOption",
+            "condition": "showCarouselResults",
+            "content": "or"
+          },
+          {
+            "dom": "a.btn.btn-default.retake",
+            "attr": {
+              "href": "/quiz"
+            },
+            "condition": "quizResults",
+            "content": "⟲ Retake Quiz"
           },
           {
             "condition": "standardProcessGraph",
@@ -2460,6 +2478,19 @@ module.exports = function(CardTemplates){
         "dom": "h2.tactical-top-match",
         "condition": "showCarouselResults",
         "content": "Tactical options in your area"
+      },
+      {
+        "dom": "p.tactical-top-match",
+        "condition": "showCarouselResults",
+        "content": "On balance, here’s how your vote is best used:"
+      },
+      {
+        "dom": "a.tactical-top-match.small.explaain-link",
+        "condition": "showCarouselResults",
+        "content": "What does this mean?",
+        "attr": {
+          "href": "http://api.explaain.com/Detail/5934671dd238f700115da9f5"
+        }
       },
       {
         "dom": "div.constituencyTacticalInfo.cardAnim",
