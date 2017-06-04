@@ -2300,6 +2300,21 @@ class Quiz {
           delete model.user.isWaiting;
           trackEvent("Rerouting on Constituency Result",qp.resultsData);
           if(config[SiteBrand].carousel) {
+            $(".constituencyTacticalInfo").hide();
+            $(".constituencyTacticalInfo").show();
+            console.log("Constituency tac anim BEF",self.constituencyName);
+            qp.finalResults = true;
+            model.user.constituency.name = result.location;
+            self.constituencyName = result.location;
+            self.calculatePostcodeResults();
+            self.refresh();
+            console.log("Constituency tac anim AFT",self.constituencyName);
+            self.slickGoTo(1);
+            var $graph = $(".constituencyTacticalInfo .quizPercentageContainer").first();
+            if(!$graph) {
+              console.log("Couldn't find thingy");
+            }
+
             console.log("Going tactical 😎 in",result.location);
 
             var partyModifiers = {
@@ -2318,16 +2333,6 @@ class Quiz {
             }
 
             var safeSeat = false;
-
-            console.log("Constituency tac anim BEF",self.constituencyName);
-            qp.finalResults = true;
-            model.user.constituency.name = result.location;
-            self.constituencyName = result.location;
-            self.calculatePostcodeResults();
-            self.refresh();
-            console.log("Constituency tac anim AFT",self.constituencyName);
-            self.slickGoTo(1);
-            var $graph = $(".tactical-top-match ~ .tacticalBreakdown .quizPercentageContainer").first();
 
             setTimeout(function() {
             /////// Begin sick tactical results animation

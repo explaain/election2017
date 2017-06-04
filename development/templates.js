@@ -2453,130 +2453,143 @@ module.exports = function(CardTemplates){
     "dom": ".card-visible.text-center",
     "content": [
       {
-        "dom": "div.step-number",
-        "condition": "showStandardResults",
-        "content": "1"
-      },
-      {
-        "dom": "h2.tactical-top-match",
-        "condition": "showStandardResults",
-        "content": "Based on where you are and your views, this is your top contender..."
-      },
-      {
         "dom": "h2.tactical-top-match",
         "condition": "showCarouselResults",
         "content": "Tactical options in your area"
       },
       {
-        "template": "postcodeInput"
-      },
-      {
-        "dom": ".quizSafeSeatText.topLayer.tactical-top-match",
-        "condition": "quizSafeSeat",
+        "dom": "div.constituencyTacticalInfo.cardAnim",
+        // "condition": "constituencyTacticalInfo",
         "content": [
           {
-            "dom": "h2.pink",
-            "content": "You're in a safe seat"
+            "dom": "h1",
+            "content": {
+              "var": "constituencyTacticalInfo"
+            }
           },
           {
-            "dom": "p.explaained",
-            "content": {
-              "var": "safeSeatMessage",
-              "markdown": true
-            }
-          }
-        ]
-      },
-      {
-        "dom": "h2.hybrid-top-match",
-        "content": "Here’s a prediction of the election results in your area"
-      },
-      {
-        "dom": ".quizPercentages.hybrid-top-match",
-        "content": [
+            "dom": "div.step-number",
+            "condition": "showStandardResults",
+            "content": "1"
+          },
           {
-            "loop": "partiesHybridList",
+            "dom": "h2.tactical-top-match",
+            "condition": "showStandardResults",
+            "content": "Based on where you are and your views, this is your top contender..."
+          },
+          {
+            "dom": ".quizSafeSeatText.topLayer.tactical-top-match",
+            "condition": "quizSafeSeat",
             "content": [
               {
-                "dom": "a.quizPercentagesParty.inline.discard-card-style",
-                "attr": {
-                  "onclick": {
-                    "var": "openMatches"
-                  },
-                  "class": {
-                    "var": "matchClass"
-                  }
-                },
+                "dom": "h2.pink",
+                "content": "You're in a safe seat"
+              },
+              {
+                "dom": "p.explaained",
+                "content": {
+                  "var": "safeSeatMessage",
+                  "markdown": true
+                }
+              }
+            ]
+          },
+          {
+            "dom": "h2.hybrid-top-match",
+            "content": "Here’s a prediction of the election results in your area"
+          },
+          {
+            "dom": ".quizPercentages.hybrid-top-match",
+            "content": [
+              {
+                "loop": "partiesHybridList",
                 "content": [
                   {
-                    "dom": ".quizPercentagesPartyBadge",
-                    "condition": "badgeText",
-                    "content": {
-                      "var": "badgeText"
-                    }
-                  },
-                  {
-                    "dom": ".quizPercentagesPartyFace.inline",
+                    "dom": "a.quizPercentagesParty.inline.discard-card-style",
                     "attr": {
-                      "style": {
-                        "background-image": {
-                          "var": "photo"
-                        },
-                        "background-color": {
-                          "var": "color"
-                        },
+                      "onclick": {
+                        "var": "openMatches"
+                      },
+                      "class": {
+                        "var": "matchClass"
                       }
-                    }
-                  },
-                  {
-                    "dom": ".quizPercentagesPartyMatch",
-                    "condition": "isMatch",
-                    "content": "Your Match"
-                  },
+                    },
+                    "content": [
+                      {
+                        "dom": ".quizPercentagesPartyBadge",
+                        "condition": "badgeText",
+                        "content": {
+                          "var": "badgeText"
+                        }
+                      },
+                      {
+                        "dom": ".quizPercentagesPartyFace.inline",
+                        "attr": {
+                          "style": {
+                            "background-image": {
+                              "var": "photo"
+                            },
+                            "background-color": {
+                              "var": "color"
+                            },
+                          }
+                        }
+                      },
+                      {
+                        "dom": ".quizPercentagesPartyMatch",
+                        "condition": "isMatch",
+                        "content": "Your Match"
+                      },
+                    ]
+                  }
                 ]
               }
             ]
+          },
+          {
+            "dom": "p.small-link.calculate",
+            "condition": "finalResults",
+            "content":{
+               "var": "calculateText",
+               "markdown": "true"
+             }
+          },
+          {
+            "dom": "p.small.scrollDown",
+            "condition": "finalResults",
+            "content": "Scroll down to see how we reached this match"
+          },
+          {
+            "dom": "div.tacticalBreakdown",
+            "condition": "!quizSafeSeat",
+            "content": [{
+              "template": "quizPercentagesWrapper",
+              "mapping": [
+                ["data", "partiesChartData"],
+                ["chancesData", "partiesChartDataChances"],
+                ["openMatches", "openMatches"],
+                ["quizResults", "quizResults"],
+                ["finalResults", "finalResults"],
+                ["quizResultsPage", "quizResultsPage"],
+                ["prioritiesSet", "prioritiesSet"],
+                ["resultLogo", "resultLogo"],
+                ["resultName", "resultName"],
+                ["resultPercentage", "resultPercentage"],
+                ["postcodeSubmit", "postcodeSubmit"],
+                ["postcodeBinding", "postcodeBinding"],
+                ["isWaiting", "isWaiting"],
+                ["startingQuiz", "startingQuiz"],
+                ["nowProgressingThroughQuiz", "nowProgressingThroughQuiz"],
+                ["partiesChartDataTopMatch", "partiesChartDataTopMatch"],
+                ["partiesChartDataTopMatchTactical", "partiesChartDataTopMatchTactical"]
+              ]
+            }]
           }
         ]
       },
       {
-        "dom": "p.small-link.calculate",
-        "condition": "finalResults",
-        "content":{
-           "var": "calculateText",
-           "markdown": "true"
-         }
-      },
-      {
-        "dom": "p.small.scrollDown",
-        "condition": "finalResults",
-        "content": "Scroll down to see how we reached this match"
-      },
-      {
-        "dom": "div.tacticalBreakdown",
-        "condition": "!quizSafeSeat",
-        "content": [{
-          "template": "quizPercentagesWrapper",
-          "mapping": [
-            ["data", "partiesChartData"],
-            ["chancesData", "partiesChartDataChances"],
-            ["openMatches", "openMatches"],
-            ["quizResults", "quizResults"],
-            ["finalResults", "finalResults"],
-            ["quizResultsPage", "quizResultsPage"],
-            ["prioritiesSet", "prioritiesSet"],
-            ["resultLogo", "resultLogo"],
-            ["resultName", "resultName"],
-            ["resultPercentage", "resultPercentage"],
-            ["postcodeSubmit", "postcodeSubmit"],
-            ["postcodeBinding", "postcodeBinding"],
-            ["isWaiting", "isWaiting"],
-            ["startingQuiz", "startingQuiz"],
-            ["nowProgressingThroughQuiz", "nowProgressingThroughQuiz"],
-            ["partiesChartDataTopMatch", "partiesChartDataTopMatch"],
-            ["partiesChartDataTopMatchTactical", "partiesChartDataTopMatchTactical"]
-          ]
-        }]
+        "condition": "showCarouselResults",
+        "template": "postcodeInput"
       }
     ]
   },

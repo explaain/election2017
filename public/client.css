@@ -2264,6 +2264,9 @@ a.democracyclub-logo:hover {
   Tactical animation
 */
 /* -Before */
+.constituencyTacticalInfo {
+  display: none;
+}
 
 .tactical.match1,
 .tactical.match2,
