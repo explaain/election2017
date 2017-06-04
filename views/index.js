@@ -2529,14 +2529,16 @@ console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
 $graph.addClass(animFlags.tacticalPromote.class)
 self.slickGoTo(1); // Force slick to update height
 
-                    chanceMatches.forEach((p)=> {
-                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                      if(p.badgeText == "1st") {
-                        console.log(p.key,"has been chosen!")
-                        setTimeout(()=>crownTheParty(p), animFlags.tacticalCrown.delay);
-                      }
-                    })
+                    // chanceMatches.forEach((p)=> {
+                    //   var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                    //   if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                    //   if(p.badgeText == "1st") {
+                    //     console.log(p.key,"has been chosen!")
+                    //     setTimeout(()=>crownTheParty(p), animFlags.tacticalCrown.delay);
+                    //   }
+                    // })
+                    chanceMatches.sort((b,a)=>b.percentage - a.percentage)
+                    setTimeout(()=>crownTheParty(chanceMatches[0]), animFlags.tacticalCrown.delay);
                   }
                 }
 
