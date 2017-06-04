@@ -2038,7 +2038,7 @@ span.t-featured {
 }
 
 .body.quiz._ge2017 a.quizPercentagesParty {
-  pointer-events: none;
+  /*pointer-events: none;*/
 }
 /*.body.quiz._ge2017 a.quizPercentagesParty:nth-child(3){
   margin-top: 70px;
