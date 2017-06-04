@@ -2172,7 +2172,7 @@ module.exports = function(CardTemplates){
               */
               // #1: Vote for your top
               {
-                "dom": ".card.finalResult.noAnim.basic",
+                "dom": ".card.finalResult.noAnim.basic.large-postcode",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
@@ -2271,7 +2271,7 @@ module.exports = function(CardTemplates){
               },
               // #2: Vote for your best chance
               {
-                "dom": ".card.noAnim",
+                "dom": ".card.noAnim.tactical.large-postcode",
                 "content": [
                   {
                     "template": "yourTacticalMatch"
