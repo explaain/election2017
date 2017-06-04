@@ -1159,8 +1159,8 @@ module.exports = {
       color: "#c042de",
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
-          value: 0,
+          data: 'user.opinions.issues.eu.debates.eu-1.opinion',
+          value: 1
         }
       ],
       goto: {
@@ -1174,8 +1174,8 @@ module.exports = {
       color: "#c042de",
       dataUpdates: [
         {
-          data: 'user.opinions.issues.brexit.debates.brexit-1.opinion',
-          value: 1
+          data: 'user.opinions.issues.eu.debates.eu-1.opinion',
+          value: 0
         }
       ],
       goto: {
