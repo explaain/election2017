@@ -2183,7 +2183,11 @@ module.exports = function(CardTemplates){
                       // },
                       {
                         "dom": "h2.bestMatchSoFar",
-                        "content": "Here's your best match"
+                        "content": "Your best match"
+                      },
+                      {
+                        "dom": "p.bestMatchSoFar",
+                        "content": "Based on your quiz results, this is who you’re most like"
                       },
                       {
                         "dom": ".quizPercentages.topLayer",
@@ -2199,7 +2203,7 @@ module.exports = function(CardTemplates){
                       },
                       {
                         "dom": "h2.postcode-instructions",
-                        "content": "Now see how they'll fare in your local constituency:"
+                        "content": "But see if they stand a chance of winning where you live"
                       },
                       {
                         "dom":"form.postcode-form",
