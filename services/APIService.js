@@ -356,9 +356,11 @@ APIService.prototype.resultAlgorithm = function(data) {
 }
 
 APIService.prototype.getPartyMatches = function(data, debatesToInclude) {
+  console.log(debatesToInclude);
   var partyMatchesByIssue = {},
       partyMatches = {};
   var agreements = getAgreements(data, debatesToInclude);
+  console.log(agreements);
   allData.getAllData().allParties.forEach(function(party) {
     var partyKey = party.key;
     partyMatchesByIssue[partyKey] = [];
@@ -401,7 +403,10 @@ APIService.prototype.getAgreements = function(data, debatesToInclude) {
       var debateKeys = Object.keys(debates);
       debateKeys.forEach(function(debateKey) {
         var debate = debates[debateKey];
-        if (!debatesToInclude || debatesToInclude.indexOf(debate) > -1) {
+        console.log(debateKey);
+        console.log(debatesToInclude.indexOf(debateKey));
+        if (!debatesToInclude || debatesToInclude.indexOf(debateKey) > -1) {
+          console.log('made it');
           try {
             var allPartiesDebate = data.parties.opinions.issues[issueKey].debates[debateKey];
             var partyKeys = Object.keys(allPartiesDebate.parties);
@@ -415,7 +420,7 @@ APIService.prototype.getAgreements = function(data, debatesToInclude) {
                   partyOpinion: allPartiesDebate.parties[partyKey].opinion,
                   userOpinion: debate.opinion,
                   weight: debate.weight || 1,
-                  description: allPartiesDebate.parties[partyKey].description || ("You both agree on " + allPartiesDebate.description),
+                  description: allPartiesDebate.parties[partyKey].description || (allPartiesDebate.description ? ("You both agree on " + allPartiesDebate.description) : null),
                   // question: data.user.opinions.issues[issueKey].debates[debateKey].question || "",
                   // userOpinionDescription: data.user.opinions.issues[issueKey].debates[debateKey].
                 }
