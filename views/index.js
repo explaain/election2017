@@ -2566,7 +2566,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   } else {
                     summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
-                  $('.summarySentence').html(summarySentence)
+                  $('.summarySentence').html(summarySentence).removeClass('animation-opening');
                 }
               }
             }, animFlags.tacticalInit.delay);
