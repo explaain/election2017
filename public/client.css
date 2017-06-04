@@ -2331,7 +2331,7 @@ a.democracyclub-logo:hover {
     padding: 0 !important;
     margin: 0 !important;
     overflow: visible !important;
-    transition: height 0.3 ease !important;
+    transition: height 0.3s ease !important;
 }
 
 #tactical-mode.tacticalCrown .chosenCandidate .tactical.pointer {

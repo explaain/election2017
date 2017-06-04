@@ -2334,6 +2334,7 @@ class Quiz {
               tacticalCrown:   { class: 'tacticalCrown',   delay: 1500 }
             }
 
+            var futureHeight = 380;
             var safeSeat = false;
 
             setTimeout(function() {
@@ -2352,13 +2353,14 @@ $graph.addClass(animFlags.tacticalInit.class);
               setTimeout(function() {
 console.groupEnd();
 console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
+
 $graph.addClass(animFlags.tacticalGraph.class);
-                self.slickGoTo(1); // Force slick to update height
+$graph.css('height',futureHeight);
+self.slickRefresh(); // Force slick to update height
                 setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
               }, animFlags.tacticalGraph.delay); // Pause to adjust
 
               function partyInitialAnimations() {
-                self.slickGoTo(1); // Force slick to update height
                 var consideredParties = [];
                 result.partiesAll.forEach((p,i) => {
                   var percParty = qp.country.parties.find((q)=>q.key==p.key);
@@ -2387,7 +2389,6 @@ $graph.addClass(animFlags.tacticalGraph.class);
                 });
                 consideredParties.sort((b,a)=>b.percentage - a.percentage);
 
-                var futureHeight = 380;
                 var boxes = {
                   chanceMatches: {
                     items: [],
@@ -2499,8 +2500,7 @@ $graph.addClass(animFlags.tacticalGraph.class);
 console.groupEnd();
 console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
 $graph.addClass(animFlags.tacticalDemote.class);
-$graph.css({height: futureHeight});
-self.slickGoTo(1); // Force slick to update height
+self.slickRefresh(); // Force slick to update height
                 //--3a: Anim Phase the playas
                 // Stagger their animation by 1.5s
                 var phases = ['noChance','noMatch','chanceMatches'];
@@ -2539,7 +2539,7 @@ self.slickGoTo(1); // Force slick to update height
 console.groupEnd();
 console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
 $graph.addClass(animFlags.tacticalPromote.class)
-self.slickGoTo(1); // Force slick to update height
+self.slickRefresh(); // Force slick to update height
 
                     chanceMatches.sort((b,a)=>b.percentage - a.percentage)
                     setTimeout(()=>crownTheParty(chanceMatches[0]), animFlags.tacticalCrown.delay);
@@ -2596,6 +2596,14 @@ $graph.addClass(animFlags.tacticalCrown.class)
 
         self.slickGoTo = function(i) {
           $constituencySlider.slick('slickGoTo', i);
+        }
+
+        self.slickRefresh = function() {
+          // This is all pretty janky stuffs
+          // $constituencySlider.find(".slick-slide").height("auto");
+          // $constituencySlider.slick("setOption", '', '', true);
+          // $constituencySlider.child('.').height().height());
+          $constituencySlider.slick('setPosition');
         }
 
         $('.page-content').on('click', '.carousel-nav-item', function() {
