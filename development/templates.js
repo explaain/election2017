@@ -2948,7 +2948,7 @@ module.exports = function(CardTemplates){
       "dom": "div.percentagePartyStyleContainer",
       "content": [
         {
-          "dom": "div.tactical.pointer",
+          "dom": "div.tactical.pointer.cardAnim",
           "content": "Vote Tactically"
         },
         {
