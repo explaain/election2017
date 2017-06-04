@@ -7,6 +7,7 @@ var partyReconciliation = require('./partyReconciliation');
 var partyStances = require('./partyStances3');
 var partyStances2 = require('./partyStances2');
 var partyStories = require('./partyStories');
+var quiz = require('./quiz');
 var quizQuestions = require('./quizQuestions');
 var quizQuestions38Degrees = require('./quizQuestions38Degrees');
 var swingSeatsToForce = require('./swingSeatsToForce');
@@ -25,8 +26,9 @@ module.exports = {
       partyReconciliation: partyReconciliation.getData(),
       partyStances: partyStances.getData(),
       partyStories: partyStories.getData(),
+      quiz: quiz.getData(),
       quizQuestions: quizQuestions.getData(),
-      quizQuestions38Degrees: quizQuestions38Degrees.getData(),
+      // quizQuestions38Degrees: quizQuestions38Degrees.getData(),
       swingSeatsToForce: swingSeatsToForce.getData(),
       countriesData: countriesData.getData(),
       ukData: ukData.getData(),

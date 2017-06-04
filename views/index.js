@@ -28,7 +28,8 @@ var cfg = {
     footerLink: "//www.turnup.org.uk/",
     randomise: true,
     numbering: true,
-    quizQuestions: allData.getAllData().quizQuestions,
+    quizQuestions: allData.getAllData().quiz.questions["ge2017"],
+    quizQuestionList: allData.getAllData().quizQuestions,
     sharing: {
       basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - ge2017.com",
     },
@@ -43,7 +44,8 @@ var cfg = {
     randomise: true,
     numbering: true,
     prependYesNo: true,
-    quizQuestions: allData.getAllData().quizQuestions38Degrees,
+    quizQuestions: allData.getAllData().quiz.questions["38degrees"],
+    quizQuestionList: allData.getAllData().quizQuestions38Degrees,
     sharing: {
       basicTwitter: "Take the @38_degrees #GE2017 quiz to find your match + see local candidates 👉 38degrees.ge2017.com",
       basicTwitterImg: "https://38degrees.ge2017.com/img/38degrees_facebook.jpg",
@@ -80,9 +82,6 @@ if (!Object.entries) {
 		return reduce(keys(O), (e, k) => concat(e, typeof k === 'string' && isEnumerable(O, k) ? [[k, O[k]]] : []), []);
 	};
 }
-
-
-
 
 
 
@@ -1731,7 +1730,7 @@ class Quiz {
       })[0]);
     }
     self.getCurrentQuestion = function() {
-      return qp.questions[self.getCurrentQuestionNumber()];
+      return qp.questions[self.getCurrentQuestionNumber()] || {};
     }
     self.getQuestion = function(num) {
       return qp.questions[num];
@@ -1820,8 +1819,14 @@ class Quiz {
     }
 
     // Initialise quiz questions
-    if(!quiz.quizQuestions) {
-      quiz.quizQuestions = config[SiteBrand].quizQuestions;
+    if(qp.startingQuiz && !quiz.quizQuestions) {
+      const questionKeys = config[SiteBrand].quizQuestions[qp.country.code] || config[SiteBrand].quizQuestions.all;
+      quiz.quizQuestions = questionKeys.map(function(debate) {
+        return allData.getAllData().quizQuestions.filter(function(q) {
+          return q.debate == debate;
+        })[0];
+      });
+      console.log(quiz.quizQuestions);
 
     	var initialOrder = []; // holds the question order, as loaded from file
     	quiz.questionDB = {} // holds the question objects
@@ -1836,7 +1841,7 @@ class Quiz {
     	var randomiseGroups = Array.from(randomiseGroupsSet);
 
       qp.questionSeries = initialOrder;
-      quiz.questionDB = JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions));
+      quiz.questionDB = JSON.parse(JSON.stringify(quiz.quizQuestions));
 
       /* ---
         Shuffle questions
@@ -1863,37 +1868,40 @@ class Quiz {
       /* ---- */
     }
 
-    quiz.questionDB = {};
-    JSON.parse(JSON.stringify(config[SiteBrand].quizQuestions)).forEach((q) => quiz.questionDB[q.debate] = q);
+    if (quiz.quizQuestions) {
+      quiz.questionDB = {};
+      JSON.parse(JSON.stringify(quiz.quizQuestions)).forEach((q) => quiz.questionDB[q.debate] = q);
 
-    if(config[SiteBrand].numbering) {
-      qp.questionSeries.forEach((k,i) => {
-        quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
-      })
-    }
-    if(config[SiteBrand].prependYesNo) {
-      qp.questionSeries.forEach((k,i) => {
-        quiz.questionDB[k].answers.yes.forEach((a,j) => {
-          a.label = "Yes, " + a.label
+      if(config[SiteBrand].numbering) {
+        qp.questionSeries.forEach((k,i) => {
+          quiz.questionDB[k].question = (i+1)+". "+quiz.questionDB[k].question;
         })
-        quiz.questionDB[k].answers.no.forEach((a,j) => {
-          a.label = "No, " + a.label
+      }
+      if(config[SiteBrand].prependYesNo) {
+        qp.questionSeries.forEach((k,i) => {
+          quiz.questionDB[k].answers.yes.forEach((a,j) => {
+            a.label = "Yes, " + a.label
+          })
+          quiz.questionDB[k].answers.no.forEach((a,j) => {
+            a.label = "No, " + a.label
+          })
         })
-      })
+      }
+
+      if (!qp.questions.length) {
+        qp.questions = qp.questionSeries.map(function(key) {
+          return {
+            debate: key,
+            reached: false,
+            binary: false
+          }
+        })
+        qp.questions[0].reached = true;
+      }
+
+      self.currentQuestion = self.getFullQuestion(self.getCurrentDebate());
     }
 
-    if (!qp.questions.length) {
-      qp.questions = qp.questionSeries.map(function(key) {
-        return {
-          debate: key,
-          reached: false,
-          binary: false
-        }
-      })
-      qp.questions[0].reached = true;
-    }
-
-    self.currentQuestion = self.getFullQuestion(self.getCurrentDebate());
 
     // Topics for prioritising
     // This needs to run after every question
@@ -1974,9 +1982,7 @@ class Quiz {
       const debatesToInclude = self.getBegunQuestions().map(function(q) {
         return q.debate;
       })
-      console.log(debatesToInclude);
       const partyMatches = api.getPartyMatches(model, debatesToInclude);
-      console.log(partyMatches);
 
       var topParties = []
       if (qp.country) {
