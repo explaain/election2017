@@ -1958,7 +1958,8 @@ span.t-featured {
 .body._38degrees .quizPercentages.middleLayer:not(.basic-top-match),
 .body._38degrees h2.breakdown,
 .body._38degrees p.small.tactical-info,
-.body._38degrees h3.inTheLead {
+.body._38degrees h3.inTheLead,
+.body._38degrees .card.collaboration {
   display: none;
 }
 
@@ -2667,4 +2668,23 @@ img.swapvote {
 }
 .slideHint {
   display: none;
+}
+.card.collaboration p {
+  margin: 20px;
+}
+.card.collaboration a.btn {
+  margin: 0 10px 20px;
+  width: calc(50% - 30px);
+  min-height: 55px;
+}
+.card.collaboration a.btn:hover,
+.card.collaboration a.btn:active {
+  background: white;
+  opacity: 0.7;
+}
+.card.collaboration a.btn.btn-large {
+  width: 80%;
+}
+.card.collaboration a img {
+  max-width: 90%;
 }

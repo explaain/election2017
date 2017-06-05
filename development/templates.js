@@ -2433,19 +2433,6 @@ module.exports = function(CardTemplates){
             ]
           },
           {
-            "dom": "span.pickAVotingOption",
-            "condition": "showCarouselResults",
-            "content": "or"
-          },
-          {
-            "dom": "a.btn.btn-default.retake",
-            "attr": {
-              "href": "/quiz"
-            },
-            "condition": "quizResults",
-            "content": "⟲ Retake Quiz"
-          },
-          {
             "dom": ".card.finalResult",
             "condition": "finalResults",
             "content": [
@@ -2503,6 +2490,91 @@ module.exports = function(CardTemplates){
                 ]
               }
             ],
+          },
+          {
+            "dom": ".card.collaboration",
+            "content": [
+              {
+                "dom": ".card-visible.text-center",
+                "content": [
+                  {
+                    "dom": "h2",
+                    "content": "Be an expert"
+                  },
+                  {
+                    "dom": "p",
+                    "content": "Check out Vote For Policies to expand your knowledge and compare policies side by side:"
+                  },
+                  {
+                    "dom": "a.btn.btn-default.btn-large",
+                    "attr": {
+                      "href": "http://bit.ly/ge2017-voteforpolicies",
+                      "target": "_blank"
+                    },
+                    "content": [
+                      {
+                        "dom": "img",
+                        "attr": {
+                          "src": "/img/voteforpolicies.jpg"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "dom": "p",
+                    "content": "Other sites to check out:"
+                  },
+                  {
+                    "dom": "div",
+                    "content": [
+                      {
+                        "dom": "a.btn.btn-default",
+                        "attr": {
+                          "href": "http://bit.ly/ge2017-represent",
+                          "target": "_blank"
+                        },
+                        "content": [
+                          {
+                            "dom": "img",
+                            "attr": {
+                              "src": "/img/represent.jpg"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "dom": "a.btn.btn-default",
+                        "attr": {
+                          "href": "http://bit.ly/ge2017-positiondial",
+                          "target": "_blank"
+                        },
+                        "content": [
+                          {
+                            "dom": "img",
+                            "attr": {
+                              "src": "/img/positiondial.png"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "dom": "span.pickAVotingOption",
+            "condition": "showCarouselResults",
+            "content": "or"
+          },
+          {
+            "dom": "a.btn.btn-default.retake",
+            "attr": {
+              "href": "/quiz"
+            },
+            "condition": "quizResults",
+            "content": "⟲ Retake Quiz"
           },
           {
             "condition": "prioritiesSet",
