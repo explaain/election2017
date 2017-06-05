@@ -1427,7 +1427,7 @@ p.waiting-text {
   position: relative;
   height:160px;
   padding: 10px 0;
-  margin: 50px 0 20px;
+  margin: 50px 0 40px;
 }
 
 .quizPercentagesParty {
@@ -1813,6 +1813,9 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 }
 .body.quiz._ge2017 .bestMatch {
   display: none;
+}
+.bestMatchSoFar {
+  min-height: 30px;
 }
 
 
