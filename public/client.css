@@ -2324,14 +2324,14 @@ a.democracyclub-logo:hover {
 #tactical-mode.tacticalInit .quizPercentagesPartyPercent,
 #tactical-mode.tacticalInit .quizPercentagesPartyName {
     opacity: 1;
-    transition: opacity 0.5s ease !important;
+    transition: opacity 0.75s ease !important;
 }
 #tactical-mode.tacticalGraph .partyFade,
 #tactical-mode.tacticalGraph .quizPercentagesPartyPodium,
 #tactical-mode.tacticalGraph .quizPercentagesPartyPercent,
 #tactical-mode.tacticalGraph .quizPercentagesPartyName {
     opacity: 0 !important;
-    transition: opacity 0.5s ease !important;
+    transition: opacity 0.75s ease !important;
 }
 /*#tactical-mode.tacticalGraph .quizPercentagesPartyFace {
     bottom: 0 !important;

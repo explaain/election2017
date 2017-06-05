@@ -2311,6 +2311,9 @@ class Quiz {
           qp.postcodeError = "Sorry, we didn't recognise that postcode.";
           self.refresh();
         } else {
+
+          self.slickGoTo(1);
+
           qp.constituencyView = true;
           model.landedOnResult = 1;
           console.log("Got contenders",result);
@@ -2322,6 +2325,13 @@ class Quiz {
             $("h2.postcode-instructions").hide();
             $(".constituencyTacticalInfo").hide();
             $(".constituencyTacticalInfo").show();
+
+            // AFADAjsodjodjqo
+            // self.slickGoTo(1);
+            // self.slickGoTo(1);
+            // self.slickGoTo(1);
+            // self.slickRefresh();
+
             console.log("Constituency tac anim BEF",self.constituencyName);
             qp.finalResults = true;
             model.user.constituency.name = result.location;
@@ -2329,7 +2339,7 @@ class Quiz {
             self.calculatePostcodeResults();
             self.refresh();
             console.log("Constituency tac anim AFT",self.constituencyName);
-            self.slickGoTo(1);
+
             var $graph = $(".constituencyTacticalInfo .quizPercentageContainer").first();
             if(!$graph) {
               return false;
@@ -2349,8 +2359,8 @@ class Quiz {
             var animFlags = {
               safe:            { class: 'safe' },
               battle:          { class: 'battle' },
-              tacticalInit:    { class: 'tacticalInit',    delay: 850 },
-              tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
+              tacticalInit:    { class: 'tacticalInit',    delay: 750 },
+              tacticalGraph:   { class: 'tacticalGraph',   delay: 750 },
               tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
               tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories going up
               tacticalCrown:   { class: 'tacticalCrown',   delay: 500 }
@@ -2505,6 +2515,10 @@ class Quiz {
 
             safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
 
+// Just in case...
+// self.slickGoTo(1);
+// self.slickGoTo(1);
+// self.slickGoTo(1);
             setTimeout(function() {
             /////// Begin sick tactical results animation
 console.groupEnd();
@@ -2520,7 +2534,7 @@ self.slickRefresh(); // Force slick to update height
 console.groupEnd();
 console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
 $graph.addClass(animFlags.tacticalGraph.class);
-self.slickRefresh(); // Force slick to update height
+// self.slickRefresh(); // Force slick to update height
 
                 if(safeSeat) {
                   $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
@@ -2552,7 +2566,7 @@ self.slickRefresh(); // Force slick to update height
 console.groupEnd();
 console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
 $graph.addClass(animFlags.tacticalDemote.class);
-self.slickRefresh(); // Force slick to update height
+// self.slickRefresh(); // Force slick to update height
                 //--3a: Anim Phase the playas
                 // Stagger their animation by 1.5s
                 var stagger = 0;
@@ -2591,7 +2605,7 @@ self.slickRefresh(); // Force slick to update height
 console.groupEnd();
 console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
 $graph.addClass(animFlags.tacticalPromote.class)
-self.slickRefresh(); // Force slick to update height
+// self.slickRefresh(); // Force slick to update height
 
                     setTimeout(()=>crownTheParty(tacticalChoice), animFlags.tacticalCrown.delay);
                   }
