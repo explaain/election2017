@@ -2530,7 +2530,9 @@ a.democracyclub-logo:hover {
 .slick-slide .seeHowAlt {
     display: none;
 }
-
+.slick-list {
+  transition: height 0.3s ease !important;
+}
 
 .card.large-postcode .postcode-form input, .card.large-postcode .postcode-form button {
     height: 45px;

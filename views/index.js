@@ -2567,6 +2567,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                     summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
+self.slickRefresh(); // Force slick to update height
                 }
               }
             }, animFlags.tacticalInit.delay);
@@ -2616,6 +2617,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
           // $constituencySlider.slick("setOption", '', '', true);
           // $constituencySlider.child('.').height().height());
           $constituencySlider.slick('setPosition');
+          $constituencySlider.find(".slick-list").height($(".slick-current").outerHeight()+20);
         }
 
         $('.page-content').on('click', '.carousel-nav-item', function() {
