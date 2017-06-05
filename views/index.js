@@ -2460,12 +2460,17 @@ class Quiz {
                 key: p.key,
                 box: category,
                 css: {
-                  left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
-                  top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
+                  multipleOf3: Math.ceil(boxes[category].items.length/3),
+                  left: 15 + boxes[category].left + (rowOf3(boxes[category].items.length) * boxes[category].itemSize),
+                  top: 65 + boxes[category].top + (Math.floor(boxes[category].items.length/3) * boxes[category].itemSize),
                   width: "auto"
                 }
               };
 
+              function rowOf3(i) {
+                let multipleOf3 = Math.ceil(i/3);
+                return 3-((multipleOf3*3)-i)-1
+              }
               $thisParty.attr('data-left', itemData.css.left);
               $thisParty.attr('data-top', itemData.css.top);
               // $thisParty.addClass("tac");
