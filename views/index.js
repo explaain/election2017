@@ -2366,6 +2366,118 @@ class Quiz {
               });
             }
 
+            /////
+
+            var consideredParties = [];
+            result.partiesAll.forEach((p,i) => {
+              var percParty = qp.country.parties.find((q)=>q.key==p.key);
+              if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
+                console.log("Removing",p.key,"from play")
+                $graph.find(`[data-party-key=${p.key}]`).hide();
+                return false; // User entered a postcode outside her chosen country
+              } else $graph.find(`[data-party-key=${p.key}]`).show();
+              // } else $graph.find(`[data-party-key=${p.key}]`).show();
+              result.partiesAll[i].percentage = parseInt(percParty.percentage);
+              consideredParties.push(result.partiesAll[i]);
+              // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
+            });
+            // User entered a postcode outside her chosen country
+            $graph.find("[data-party-key]").each(function() {
+              var kill = true;
+              if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
+              if(kill) {
+                console.log("Killed because wrong country",$(this).attr('data-party-key'));
+                $(this).hide();
+              } else $(this).show()
+            });
+            consideredParties.sort((b,a)=>b.percentage - a.percentage);
+
+            var boxes = {
+              chanceMatches: {
+                items: [],
+                top: 0,
+                bottom: 205,
+                left: 0,
+                right: $graph.width(),
+                itemSize: 133 + 10
+              },
+              noChance: {
+                items: [],
+                top: 205,
+                bottom: futureHeight,
+                left: 0,
+                right: $graph.width() / 2,
+                itemSize: 43 + 10
+              },
+              noMatch: {
+                items: [],
+                top: 205,
+                bottom: futureHeight,
+                left: $graph.width() / 2,
+                right: $graph.width(),
+                itemSize: 43 + 10
+              }
+            }
+
+            // #1: Calculate new positions for each face
+            var items = [];
+
+            //--1c: The runnings
+            var chanceMatches = []; // Top match by default
+            const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
+            console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
+            consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
+              var topMatch = consideredParties[consideredParties.length-1];
+              if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
+            });
+
+            safeSeat = chanceMatches.length == 0;
+            if(safeSeat) $graph.addClass('safeseat')
+            else $graph.removeClass('safeseat')
+
+            chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
+            //--1a: No chance
+            var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
+            noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+            //--1b: No match
+            var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
+            noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
+            //
+            console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
+
+            function registerAnim(p,i,category) {
+              var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+              if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+              var itemData = category === 'chanceMatches' ? {
+                key: p.key,
+                box: category,
+                css: {
+                  left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
+                  width: boxes[category].right/chanceMatches.length,
+                  top: 15 + boxes[category].top
+                }
+              } : {
+                key: p.key,
+                box: category,
+                css: {
+                  left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
+                  top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
+                  width: "auto"
+                }
+              };
+
+              $thisParty.attr('data-left', itemData.css.left);
+              $thisParty.attr('data-top', itemData.css.top);
+              // $thisParty.addClass("tac");
+              $thisParty.addClass(itemData.box);
+              // if(category === 'chanceMatches') {
+              // } else
+              items.push(itemData);
+              boxes[category].items.push(Object.assign(p,itemData))
+              console.log("Registered for anim",p.key,itemData)
+            }
+
+
             setTimeout(function() {
             /////// Begin sick tactical results animation
 console.groupEnd();
@@ -2400,130 +2512,18 @@ self.slickRefresh(); // Force slick to update height
                   $(this).css(staticPosition);
                 });
 
-                /////
-
-                var consideredParties = [];
-                result.partiesAll.forEach((p,i) => {
-                  var percParty = qp.country.parties.find((q)=>q.key==p.key);
-                  if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
-                    console.log("Removing",p.key,"from play")
-                    $graph.find(`[data-party-key=${p.key}]`).hide();
-                    return false; // User entered a postcode outside her chosen country
-                  } else $graph.find(`[data-party-key=${p.key}]`).show();
-                  // } else $graph.find(`[data-party-key=${p.key}]`).show();
-                  result.partiesAll[i].percentage = parseInt(percParty.percentage);
-                  consideredParties.push(result.partiesAll[i]);
-                  // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
-                });
-                // User entered a postcode outside her chosen country
-                $graph.find("[data-party-key]").each(function() {
-                  var kill = true;
-                  if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
-                  if(kill) {
-                    console.log("Killed because wrong country",$(this).attr('data-party-key'));
-                    $(this).hide();
-                  } else $(this).show()
-                });
-                consideredParties.sort((b,a)=>b.percentage - a.percentage);
-
-                var boxes = {
-                  chanceMatches: {
-                    items: [],
-                    top: 0,
-                    bottom: 205,
-                    left: 0,
-                    right: $graph.width(),
-                    itemSize: 133 + 10
-                  },
-                  noChance: {
-                    items: [],
-                    top: 205,
-                    bottom: futureHeight,
-                    left: 0,
-                    right: $graph.width() / 2,
-                    itemSize: 43 + 10
-                  },
-                  noMatch: {
-                    items: [],
-                    top: 205,
-                    bottom: futureHeight,
-                    left: $graph.width() / 2,
-                    right: $graph.width(),
-                    itemSize: 43 + 10
-                  }
-                }
-
-                // #1: Calculate new positions for each face
-                var items = [];
-
-                //--1c: The runnings
-                var chanceMatches = []; // Top match by default
-                const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
-                console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
-                consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
-                  var topMatch = consideredParties[consideredParties.length-1];
-                  if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
-                });
-
-                safeSeat = chanceMatches.length == 0;
-                if(safeSeat) $graph.addClass('safeseat')
-                else $graph.removeClass('safeseat')
-
-                chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
-                //--1a: No chance
-                var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
-                //--1b: No match
-                var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
-                noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
-                //
-                console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
-
-                function registerAnim(p,i,category) {
-                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
-                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                  var itemData = category === 'chanceMatches' ? {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
-                      width: boxes[category].right/chanceMatches.length,
-                      top: 15 + boxes[category].top
-                    }
-                  } : {
-                    key: p.key,
-                    box: category,
-                    css: {
-                      left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
-                      top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
-                      width: "auto"
-                    }
-                  };
-
-                  $thisParty.attr('data-left', itemData.left);
-                  $thisParty.attr('data-top', itemData.top);
-                  // $thisParty.addClass("tac");
-                  $thisParty.addClass(itemData.box);
-                  // if(category === 'chanceMatches') {
-                  // } else
-                  items.push(itemData);
-                  boxes[category].items.push(Object.assign(p,itemData))
-                  console.log("Registered for anim",p.key,itemData)
-                }
-
 console.groupEnd();
 console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
 $graph.addClass(animFlags.tacticalDemote.class);
 self.slickRefresh(); // Force slick to update height
                 //--3a: Anim Phase the playas
                 // Stagger their animation by 1.5s
-                var phases = [
+                var stagger = 0;
+                [
                   {name: "noMatch", flag: "tacticalDemote"},
                   {name: "noChance", flag: "tacticalDemote"},
                   {name: "chanceMatches", flag: "tacticalPromote"}
-                ]
-                var stagger = 0;
-                phases.forEach((category)=> {
+                ].forEach((category)=> {
                   setTimeout(function() {
                     console.log("Animating group:",category,boxes[category.name].items)
                     boxes[category.name].items.forEach((p)=>{
