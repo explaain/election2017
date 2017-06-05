@@ -2613,7 +2613,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   if (myTopParties.length==1 && consideredParties[0].key == p.key) {
                     summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we suggest you consider voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
 self.slickRefresh(); // Force slick to update height
