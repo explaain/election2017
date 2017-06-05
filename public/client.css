@@ -2561,6 +2561,9 @@ a.democracyclub-logo:hover {
     transition: all 1.5s ease;
     color: #444444;
 }
+#tactical-mode.unappealing .tacticalUI .chanceMatches:before {
+  content: "Looks like there are no parties you agree with that stand a chance. Check the other voting options." !important;
+}
 
 #tactical-mode.tacticalGraph.safe .tacticalUI .chanceMatches:before {
   opacity: 1;

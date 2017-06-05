@@ -2363,6 +2363,7 @@ class Quiz {
             var animFlags = {
               safe:            { class: 'safe' },
               battle:          { class: 'battle' },
+              unappealing:     { class: 'unappealing' },
               tacticalInit:    { class: 'tacticalInit',    delay: 750 },
               tacticalGraph:   { class: 'tacticalGraph',   delay: 750 },
               tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
@@ -2518,6 +2519,8 @@ class Quiz {
             }
 
             safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
+            var unappealingSeat = chanceMatches.length === 0;
+
 
 // Just in case...
 // self.slickGoTo(1);
@@ -2528,7 +2531,7 @@ class Quiz {
 console.groupEnd();
 console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
 $graph.addClass(animFlags.tacticalInit.class);
-if(!safeSeat) $graph.css('height',futureHeight);
+if(!safeSeat && !unappealingSeat) $graph.css('height',futureHeight);
 else $graph.css('height',200);
 self.slickRefresh(); // Force slick to update height
               $graph.attr("id","tactical-mode");
@@ -2543,6 +2546,10 @@ $graph.addClass(animFlags.tacticalGraph.class);
                 if(safeSeat) {
                   $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
                   $graph.addClass(animFlags.safe.class)
+                  return false;
+                } else if(unappealingSeat) {
+                  $graph.addClass(animFlags.safe.class)
+                  $graph.addClass(animFlags.unappealing.class)
                   return false;
                 } else {
                   $graph.removeClass(animFlags.battle.class)
