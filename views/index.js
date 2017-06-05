@@ -2338,17 +2338,27 @@ class Quiz {
             var futureHeight = 380;
             var safeSeat = false;
 
+            // Undoes all the animations
+            function resetGraph() {
+              // Reset graph keyframes
+              Object.keys(animFlags).forEach(x=>{
+                $graph.removeClass(x.class)
+              });
+
+              $graph.find("[data-party-key]").each(function() {
+                Object.keys(partyModifiers).forEach(x=>{
+                  $(this).removeClass(x)
+                });
+                $(this).attr("style","");
+              });
+            }
+
             setTimeout(function() {
             /////// Begin sick tactical results animation
 console.groupEnd();
 console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
 $graph.addClass(animFlags.tacticalInit.class);
               $graph.attr("id","tactical-mode");
-
-              // Reset graph keyframes
-              // Object.keys(animFlags).forEach(x=>{
-              //   $graph.removeClass(x)
-              // });
 
               /////// Begin sick tactical results animation
               setTimeout(function() {
@@ -2404,10 +2414,6 @@ self.slickRefresh(); // Force slick to update height
                 });
                 // User entered a postcode outside her chosen country
                 $graph.find("[data-party-key]").each(function() {
-                  Object.keys(partyModifiers).forEach(x=>{
-                    $(this).removeClass(x)
-                  });
-
                   var kill = true;
                   if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
                   if(kill) {
