@@ -2559,7 +2559,7 @@ a.democracyclub-logo:hover {
     color: #444444;
 }
 
-#tactical-mode.tacticalGraph.safeseat .tacticalUI .chanceMatches:before {
+#tactical-mode.tacticalGraph.safe .tacticalUI .chanceMatches:before {
   opacity: 1;
   transition: all 1.5s ease;
 }
@@ -2613,4 +2613,14 @@ img.swapvote {
 .btn-large {
   padding: 12px 30px;
   font-size: 16px;
+}
+
+#tactical-mode.safe .quizPercentages {
+    opacity: 0;
+    height: 0;
+    transition: all 1s ease;
+}
+#tactical-mode.safe .tacticalUI .secondaryBoxes {
+    opacity: 0;
+    transition: opacity 1s ease;
 }

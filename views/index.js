@@ -2341,6 +2341,8 @@ class Quiz {
             }
 
             var animFlags = {
+              safe:            { class: 'safe' },
+              battle:          { class: 'battle' },
               tacticalInit:    { class: 'tacticalInit',    delay: 850 },
               tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
               tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
@@ -2390,7 +2392,7 @@ class Quiz {
                 $(this).hide();
               } else $(this).show()
             });
-            consideredParties.sort((b,a)=>b.percentage - a.percentage);
+            consideredParties.sort((a,b)=>b.percentage - a.percentage);
 
             var boxes = {
               chanceMatches: {
@@ -2421,29 +2423,42 @@ class Quiz {
 
             // #1: Calculate new positions for each face
             var items = [];
+            const MATCH_THRESHOLD = (consideredParties[0].percentage - consideredParties[consideredParties.length-1].percentage) / 2;
+            console.log("Matching on threshold (top - bottom / 2)",MATCH_THRESHOLD)
+            var topMatches = consideredParties.filter(p=>p.percentage == consideredParties[0].percentage);
+
+            //--1a: No chance
+            var noChance = consideredParties.filter(p=>typeof p.chance !== 'number');
+            noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+
+            //--1b: No match
+            var noMatch = consideredParties.filter(p=> (
+              topMatches[0].percentage - p.percentage > MATCH_THRESHOLD
+              && noChance.filter(q=>q.key==p.key).length === 0
+            ));
+            noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
 
             //--1c: The runnings
-            var chanceMatches = []; // Top match by default
-            const IS_A_MATCH_THRESHOLD = (consideredParties[consideredParties.length-1].percentage - consideredParties[0].percentage) / 2;
-            console.log("Matching on threshold (top - bottom / 2)",IS_A_MATCH_THRESHOLD)
-            consideredParties.filter(p => typeof p.chance === 'number').forEach(p => {
-              var topMatch = consideredParties[consideredParties.length-1];
-              if(topMatch.percentage - p.percentage < IS_A_MATCH_THRESHOLD) chanceMatches.push(p)
-            });
-
-            safeSeat = chanceMatches.length == 0;
-            if(safeSeat) $graph.addClass('safeseat')
-            else $graph.removeClass('safeseat')
-
+            // Has a chance
+            // Is a high match
+            var chanceMatches = consideredParties.filter(p => (
+              typeof p.chance === 'number'
+              && topMatches[0].percentage - p.percentage < MATCH_THRESHOLD
+              && noChance.filter(q=>q.key==p.key).length === 0
+              && noMatch.filter(q=>q.key==p.key).length === 0
+            ));
+            chanceMatches.sort((a,b)=>b.percentage - a.percentage);
+            var tacticalChoice = chanceMatches[0];
             chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
-            //--1a: No chance
-            var noChance = consideredParties.filter(p=>typeof p.chance !== 'number' && chanceMatches.filter(q=>q.key==p.key).length === 0);
-            noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
-            //--1b: No match
-            var noMatch = consideredParties.filter(p=> !p.isMatch && noChance.filter(q=>q.key==p.key).length === 0 && chanceMatches.filter(q=>q.key==p.key).length === 0);
-            noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
-            //
-            console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
+
+            console.log("Anim",{
+              consideredParties: consideredParties,
+              noChance: noChance,
+              noMatch: noMatch,
+              chanceMatches: chanceMatches,
+              tacticalChoice: tacticalChoice,
+              topMatches: topMatches
+            });
 
             function registerAnim(p,i,category) {
               var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
@@ -2482,13 +2497,15 @@ class Quiz {
               console.log("Registered for anim",p.key,itemData)
             }
 
+            safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
 
             setTimeout(function() {
             /////// Begin sick tactical results animation
 console.groupEnd();
 console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
 $graph.addClass(animFlags.tacticalInit.class);
-$graph.css('height',futureHeight);
+if(!safeSeat) $graph.css('height',futureHeight);
+else $graph.css('height',200);
 self.slickRefresh(); // Force slick to update height
               $graph.attr("id","tactical-mode");
 
@@ -2496,9 +2513,17 @@ self.slickRefresh(); // Force slick to update height
               setTimeout(function() {
 console.groupEnd();
 console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
-
 $graph.addClass(animFlags.tacticalGraph.class);
 self.slickRefresh(); // Force slick to update height
+
+                if(safeSeat) {
+                  $graph.addClass(animFlags.safe.class)
+                  return false;
+                } else {
+                  $graph.removeClass(animFlags.battle.class)
+                }
+                self.slickRefresh()
+
                 setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
               }, animFlags.tacticalGraph.delay); // Pause to adjust
 
@@ -2561,8 +2586,7 @@ console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
 $graph.addClass(animFlags.tacticalPromote.class)
 self.slickRefresh(); // Force slick to update height
 
-                    chanceMatches.sort((b,a)=>b.percentage - a.percentage)
-                    setTimeout(()=>crownTheParty(chanceMatches[0]), animFlags.tacticalCrown.delay);
+                    setTimeout(()=>crownTheParty(tacticalChoice), animFlags.tacticalCrown.delay);
                   }
                 }
 
@@ -2574,13 +2598,13 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
                   if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                   /* Draw the whole chosen box thingy */
-                  $thisParty.addClass("chosenCandidate")
+                  $thisParty.addClass(partyModifiers.chosenCandidate)
                   $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
                   var summarySentence;
                   console.log(consideredParties);
-                  const myTopParties = consideredParties.filter(function(_p){return _p.percentage == consideredParties[consideredParties.length-1].percentage}).map(function(_p){return _p.name});
-                  if (myTopParties.length==1 && consideredParties[consideredParties.length-1] == p.key) {
-                    summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
+                  const myTopParties = topMatches.map(function(_p){ return _p.name });
+                  if (myTopParties.length==1 && typeof topMatches[0].chance === 'number') {
+                    summarySentence = `Good news! Your top match <span style="font-weight: bold; color: ${p.color}">${p.name.replace(' Party', '')}</span> stands a chance in your area so it's worth giving them your vote.`
                   } else {
                     summarySentence = 'The ' + myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
