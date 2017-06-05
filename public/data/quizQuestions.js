@@ -47,7 +47,7 @@ var quizQuestions = [
          opinion: 1
        },
        {
-         label: "Yes, but only for certain degrees",
+         label: "Yes, but only for certain degrees.",
          opinion: 0.6
        }
      ],
@@ -127,7 +127,7 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "Yes, but only for certain professions. ",
+         label: "Yes, but only for certain professions.",
          opinion: 0.6
        },
        {
@@ -159,7 +159,7 @@ var quizQuestions = [
          opinion: 0.9
        },
        {
-         label: "Yes, as government shouldn't tell people what to do",
+         label: "Yes, as the government shouldn't tell people what to do.",
          opinion: 1
        }
      ],
@@ -232,7 +232,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should the government own utlilites like the railway, post office and water companies?",
+   question: "Should the government own utilites like the railway, post office and water companies?",
    issue: "public-services",
    randomiseGroup: 1,
    debate: "public-services-1",
@@ -253,7 +253,7 @@ var quizQuestions = [
          opinion: 0.5
        },
        {
-         label: "No, we should sell more things to the private companies.",
+         label: "No, we should sell more things to private companies.",
          opinion: 0
        }
      ]
@@ -277,7 +277,7 @@ var quizQuestions = [
      ],
      no: [
        {
-         label: "No, assess on an individual basis.",
+         label: "No, they should be assessed on an individual basis.",
          opinion: 0.2
        },
        {
@@ -299,7 +299,7 @@ var quizQuestions = [
          opinion: 1
        },
        {
-         label: "Yes, it should be around 1p in the £ pound more.",
+         label: "Yes, it should be around 1p in the pound more.",
          opinion: 0.8
        }
      ],
@@ -323,7 +323,7 @@ var quizQuestions = [
    answers: {
      yes: [
        {
-         label: "Yes, and it should be when any ally asks us to.",
+         label: "Yes, when any ally asks us to.",
          opinion: 1
        },
        {
@@ -478,11 +478,11 @@ var quizQuestions = [
       ],
       no: [
         {
-          label: "the ban should remain be periodically reassessed. ",
+          label: "the ban should remain be periodically reassessed.",
           opinion: 0.2
         },
         {
-          label: "there should be no vote, fox hunting should remain illegal. ",
+          label: "there should be no vote, fox hunting should remain illegal.",
           opinion: 0
         },
       ]
@@ -536,11 +536,11 @@ var quizQuestions = [
       ],
       no: [
         {
-          label: "we should use them but only under strict controls. ",
+          label: "we should use them but only under strict controls.",
           opinion: 0.4,
         },
         {
-          label: "we should use them more frequently on certain crops. ",
+          label: "we should use them more frequently on certain crops.",
           opinion: 0,
         },
       ]
@@ -617,7 +617,7 @@ var quizQuestions = [
           opinion: 1,
         },
         {
-          label: "because of its impact on climate change and the local environment. ",
+          label: "because of its impact on climate change and the local environment.",
           opinion: 0.8,
         },
       ],
