@@ -2343,9 +2343,9 @@ class Quiz {
             var animFlags = {
               tacticalInit:    { class: 'tacticalInit',    delay: 850 },
               tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
-              tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories going down
-              tacticalPromote: { class: 'tacticalPromote', delay: 300 }, //Animation categories going up
-              tacticalCrown:   { class: 'tacticalCrown',   delay: 200 }
+              tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
+              tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories going up
+              tacticalCrown:   { class: 'tacticalCrown',   delay: 500 }
             }
 
             var futureHeight = 380;
@@ -2373,10 +2373,10 @@ class Quiz {
               var percParty = qp.country.parties.find((q)=>q.key==p.key);
               if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
                 console.log("Removing",p.key,"from play")
-                $graph.find(`[data-party-key=${p.key}]`).hide();
+                $graph.find(`[data-party-key='${p.key}']`).hide();
                 return false; // User entered a postcode outside her chosen country
-              } else $graph.find(`[data-party-key=${p.key}]`).show();
-              // } else $graph.find(`[data-party-key=${p.key}]`).show();
+              } else $graph.find(`[data-party-key='${p.key}']`).show();
+              // } else $graph.find(`[data-party-key='${p.key}']`).show();
               result.partiesAll[i].percentage = parseInt(percParty.percentage);
               consideredParties.push(result.partiesAll[i]);
               // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
@@ -2446,7 +2446,7 @@ class Quiz {
             console.log("Anim for","nomatch",noMatch,"nochance",noChance,"chancematch",chanceMatches);
 
             function registerAnim(p,i,category) {
-              var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+              var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
               if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
               var itemData = category === 'chanceMatches' ? {
                 key: p.key,
@@ -2460,12 +2460,17 @@ class Quiz {
                 key: p.key,
                 box: category,
                 css: {
-                  left: 15 + boxes[category].left + (Math.floor(boxes[category].items.length/2) * boxes[category].itemSize),
-                  top: 65 + boxes[category].top + (Math.ceil(boxes[category].items.length % 2 ? 1 : 0) * boxes[category].itemSize),
+                  multipleOf3: Math.ceil(boxes[category].items.length/3),
+                  left: 15 + boxes[category].left + (rowOf3(boxes[category].items.length) * boxes[category].itemSize),
+                  top: 65 + boxes[category].top + (Math.floor(boxes[category].items.length/3) * boxes[category].itemSize),
                   width: "auto"
                 }
               };
 
+              function rowOf3(i) {
+                let multipleOf3 = Math.ceil(i/3);
+                return 3-((multipleOf3*3)-i)-1
+              }
               $thisParty.attr('data-left', itemData.css.left);
               $thisParty.attr('data-top', itemData.css.top);
               // $thisParty.addClass("tac");
@@ -2527,9 +2532,10 @@ self.slickRefresh(); // Force slick to update height
                   setTimeout(function() {
                     console.log("Animating group:",category,boxes[category.name].items)
                     boxes[category.name].items.forEach((p)=>{
-                      var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                      var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
                       if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                       console.log("Animating",p.key)
+                      $('.tacticalUI .box.'+category.name).addClass('flash');
                       $thisParty.addClass(partyModifiers.dislocated)
                       $thisParty.animate(p.css, animFlags[category.flag].delay, function() {
                         // At the end (hopefully after 3000ms ish)
@@ -2565,7 +2571,7 @@ self.slickRefresh(); // Force slick to update height
 console.groupEnd();
 console.group("Anim Phase 4: crown",animFlags.tacticalCrown.class);
 $graph.addClass(animFlags.tacticalCrown.class)
-                  var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
+                  var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
                   if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                   /* Draw the whole chosen box thingy */
                   $thisParty.addClass("chosenCandidate")
