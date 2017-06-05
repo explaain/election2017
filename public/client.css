@@ -2292,7 +2292,9 @@ a.democracyclub-logo:hover {
   Tactical animation
 */
 /* -Before */
-.constituencyTacticalInfo {
+
+/* Shown by jQuery */
+.card-carousel .constituencyTacticalInfo {
   display: none;
 }
 

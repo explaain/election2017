@@ -2631,7 +2631,7 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "div.tacticalBreakdown",
-            "condition": "!quizSafeSeat",
+            "condition": "showCarouselResults",
             "content": [{
               "template": "quizPercentagesWrapper",
               "mapping": [
