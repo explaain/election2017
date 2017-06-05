@@ -2169,26 +2169,7 @@ module.exports = function(CardTemplates){
                       //   "content": "1"
                       // },
                       {
-                        "dom": "h2.bestMatchSoFar",
-                        "content": [
-                          {
-                            "dom": "span",
-                            "content": "You matched with "
-                          },
-                          {
-                            "dom": "span",
-                            "content": {
-                              "var": "topPartyName"
-                            },
-                            "attr": {
-                              "style": {
-                                "color": {
-                                  "var": "topPartyColor"
-                                }
-                              }
-                            },
-                          }
-                        ]
+                        "dom": "h2.bestMatchSoFar"
                       },
                       // {
                       //   "dom": "p.bestMatchSoFar",
