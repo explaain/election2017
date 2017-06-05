@@ -2538,12 +2538,6 @@ module.exports = function(CardTemplates){
         // "condition": "constituencyTacticalInfo",
         "content": [
           {
-            "dom": "h1",
-            "content": {
-              "var": "constituencyTacticalInfo"
-            }
-          },
-          {
             "dom": "div.step-number",
             "condition": "showStandardResults",
             "content": "1"
@@ -2945,6 +2939,7 @@ module.exports = function(CardTemplates){
             "dom": "div.box.chanceMatches"
           },
           {
+            "dom": "div.secondaryBoxes",
             "content": [
               {
                 "dom": "div.box.noChance"
