@@ -2232,7 +2232,23 @@ module.exports = function(CardTemplates){
                         "mapping": [
                           ["error", "postcodeError"]
                         ]
-                      }
+                      },
+                      {
+                        "dom": ".action-buttons",
+                        "content": [
+                          {
+                            "dom": "p.shareText.basic",
+                            "content": "Share your results:"
+                          },
+                          {
+                            "template": "shareButtons",
+                            "mapping": [
+                              ["facebookShareHref", "facebookShareAlignmentHref"],
+                              ["twitterShareHref", "twitterShareAlignmentHref"]
+                            ]
+                          },
+                        ]
+                      },
                     ]
                   }
                 ]

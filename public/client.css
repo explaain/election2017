@@ -2108,6 +2108,9 @@ span.t-featured {
 p.shareText {
   margin: 50px 0 -40px;
 }
+p.shareText.basic {
+  margin: 30px 0 -10px;
+}
 .bestMatchSoFar + .basic-top-match {
   height: auto !important;
 }
