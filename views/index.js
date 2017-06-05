@@ -2517,7 +2517,7 @@ class Quiz {
               console.log("Registered for anim",p.key,itemData)
             }
 
-            safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
+            safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2 || chanceMatches.length === 0;
 
 // Just in case...
 // self.slickGoTo(1);
