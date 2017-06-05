@@ -356,6 +356,7 @@ APIService.prototype.resultAlgorithm = function(data) {
 }
 
 APIService.prototype.getPartyMatches = function(data, debatesToInclude) {
+  console.log('getPartyMatches');
   console.log(debatesToInclude);
   var partyMatchesByIssue = {},
       partyMatches = {};
