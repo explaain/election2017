@@ -2324,15 +2324,16 @@ class Quiz {
               noMatch: 'noMatch',
               noChance: 'noChance',
               chanceMatches: 'chanceMatches',
-              chosenCandidate: 'chosenCandidate'
+              chosenCandidate: 'chosenCandidate',
+              dislocated: 'dislocated'
             }
 
             var animFlags = {
-              tacticalInit:    { class: 'tacticalInit',    delay: 500 },
-              tacticalGraph:   { class: 'tacticalGraph',   delay: 1000 },
-              tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories
-              tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories - this one is used to stagger
-              tacticalCrown:   { class: 'tacticalCrown',   delay: 800 }
+              tacticalInit:    { class: 'tacticalInit',    delay: 850 },
+              tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
+              tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories going down
+              tacticalPromote: { class: 'tacticalPromote', delay: 300 }, //Animation categories going up
+              tacticalCrown:   { class: 'tacticalCrown',   delay: 200 }
             }
 
             var futureHeight = 380;
@@ -2358,6 +2359,8 @@ class Quiz {
 console.groupEnd();
 console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
 $graph.addClass(animFlags.tacticalInit.class);
+$graph.css('height',futureHeight);
+self.slickRefresh(); // Force slick to update height
               $graph.attr("id","tactical-mode");
 
               /////// Begin sick tactical results animation
@@ -2366,7 +2369,6 @@ console.groupEnd();
 console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
 
 $graph.addClass(animFlags.tacticalGraph.class);
-$graph.css('height',futureHeight);
 self.slickRefresh(); // Force slick to update height
                 setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
               }, animFlags.tacticalGraph.delay); // Pause to adjust
@@ -2514,27 +2516,28 @@ $graph.addClass(animFlags.tacticalDemote.class);
 self.slickRefresh(); // Force slick to update height
                 //--3a: Anim Phase the playas
                 // Stagger their animation by 1.5s
-                var phases = ['noChance','noMatch','chanceMatches'];
+                var phases = [
+                  {name: "noMatch", flag: "tacticalDemote"},
+                  {name: "noChance", flag: "tacticalDemote"},
+                  {name: "chanceMatches", flag: "tacticalPromote"}
+                ]
                 var stagger = 0;
                 phases.forEach((category)=> {
                   setTimeout(function() {
-                    console.log("Animating group:",category,boxes[category].items)
-                    boxes[category].items.forEach((p)=>{
+                    console.log("Animating group:",category,boxes[category.name].items)
+                    boxes[category.name].items.forEach((p)=>{
                       var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
                       if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                       console.log("Animating",p.key)
-                      $thisParty.animate(p.css, animFlags.tacticalPromote.delay, function() {
-                        // Make sure it sticks with !important flag
-                        if(p.css.width !== undefined) {
-                          console.log("Enforcing width on",p.key)
-                          $thisParty.get(0).style.setProperty('width', p.css.width+"px", 'important');
-                        }
-                        // At the end (hopefully after 3000ms)
-                        if(category === 'chanceMatches') announceMainCandidates();
+                      $thisParty.addClass(partyModifiers.dislocated)
+                      $thisParty.animate(p.css, animFlags[category.flag].delay, function() {
+                        // At the end (hopefully after 3000ms ish)
+                        console.log(category.name,category.name == 'chanceMatches')
+                        if(category.name == 'chanceMatches') announceMainCandidates();
                       });
                     })
                   },stagger);
-                  stagger += animFlags.tacticalPromote.delay;
+                  stagger += animFlags[category.flag].delay;
                 })
                 console.log("Running anims",items)
 

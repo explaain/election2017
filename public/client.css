@@ -2306,18 +2306,18 @@ a.democracyclub-logo:hover {
 #tactical-mode.tacticalInit .quizPercentagesPartyPercent,
 #tactical-mode.tacticalInit .quizPercentagesPartyName {
     opacity: 1;
-    transition: opacity 1.5s ease !important;
+    transition: opacity 0.5s ease !important;
 }
 #tactical-mode.tacticalGraph .partyFade,
 #tactical-mode.tacticalGraph .quizPercentagesPartyPodium,
 #tactical-mode.tacticalGraph .quizPercentagesPartyPercent,
 #tactical-mode.tacticalGraph .quizPercentagesPartyName {
     opacity: 0 !important;
-    transition: opacity 1.5s ease !important;
+    transition: opacity 0.5s ease !important;
 }
-#tactical-mode.tacticalGraph .quizPercentagesPartyFace {
+/*#tactical-mode.tacticalGraph .quizPercentagesPartyFace {
     bottom: 0 !important;
-}
+}*/
 #tactical-mode.tacticalDemote .partyFade,
 #tactical-mode.tacticalDemote .quizPercentagesPartyPodium,
 #tactical-mode.tacticalDemote .quizPercentagesPartyPercent,
@@ -2335,6 +2335,10 @@ a.democracyclub-logo:hover {
     margin: 0 !important;
     overflow: visible !important;
     transition: height 0.3s ease !important;
+}
+
+#tactical-mode.tacticalDemote .quizPercentagesParty {
+  overflow: visible !important;
 }
 
 #tactical-mode.tacticalCrown .chosenCandidate .tactical.pointer {
@@ -2384,13 +2388,13 @@ a.democracyclub-logo:hover {
     /* For transition to chosenCandidate */
     margin: 0 auto !important;
 }
-#tactical-mode .chanceMatches .quizPercentagesPartyFace {
+#tactical-mode .chanceMatches.dislocated .quizPercentagesPartyFace {
     width: 95px !important;
     height: 95px !important;
     max-height: 95px !important;
     max-width: 95px !important;
 }
-#tactical-mode.tacticalCrown .chosenCandidate .quizPercentagesPartyFace {
+#tactical-mode .chosenCandidate.dislocated .quizPercentagesPartyFace {
     width: 120px !important;
     height: 120px !important;
     max-height: 120px !important;
@@ -2402,45 +2406,48 @@ a.democracyclub-logo:hover {
 #tactical-mode.tacticalDemote .quizPercentagesParty {
   display: block;
   z-index: 999;
-  width: 40px !important;
+  width: 40px;
   height: 40px !important;
   padding: 0 !important;
   margin: 0 !important;
   position: absolute;
   transition: width 0.5s ease, height 0.5s ease;
 }
+#tactical-mode.tacticalDemote .dislocated.chanceMatches.quizPercentagesParty { /* To center the thing without jank */
+  transition: none !important;
+  width: auto;
+}
 
 #tactical-mode.tacticalDemote .percentagePartyStyleContainer {
   border: 3px solid transparent !important;
-  width: 40px !important;
-  height: 40px !important;
+  width: 40px;
+  height: 40px;
   text-align: center;
   border-radius: 10px;
   margin: 0 auto;
-  transition: width 0.5 ease, height 0.5 ease !important;
+  transition: width 0.2s ease, height 0.2s ease !important;
 }
 
-#tactical-mode .chanceMatches .quizPercentagesParty {
+#tactical-mode .chanceMatches.dislocated.quizPercentagesParty {
   padding-top: 0px;
-  width: 170px !important;
-  height: 180px !important
-  border-color: #DD276B !important;
+  /*width: 170px !important;*/
+  /*height: 180px !important*/
 }
 
-#tactical-mode .chanceMatches .percentagePartyStyleContainer {
-  width: 100px !important;
-  height: 180px !important;
+#tactical-mode .chanceMatches.dislocated .percentagePartyStyleContainer {
+  width: 100px;
+  height: 180px;
   padding-top: 30px;
   /*transition: width 1s ease, height 1s ease !important;*/
 }
 
-#tactical-mode.tacticalCrown .chosenCandidate .percentagePartyStyleContainer {
+#tactical-mode .chosenCandidate.dislocated .percentagePartyStyleContainer {
   padding-top: 0px;
-  width: 170px !important;
+  width: 170px;
   border-color: #DD276B !important;
 }
 
-#tactical-mode .chanceMatches .quizPercentagesPartyName.absolute {
+#tactical-mode .chanceMatches.dislocated .quizPercentagesPartyName.absolute {
   display: block !important;
   opacity: 1 !important;
   z-index: 999;
