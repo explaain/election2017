@@ -2548,10 +2548,12 @@ $graph.addClass(animFlags.tacticalGraph.class);
                 if(safeSeat) {
                   $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
                   $graph.addClass(animFlags.safe.class)
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else if(unappealingSeat) {
                   $graph.addClass(animFlags.safe.class)
                   $graph.addClass(animFlags.unappealing.class)
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else {
                   $graph.removeClass(animFlags.battle.class)
@@ -2643,7 +2645,9 @@ $graph.addClass(animFlags.tacticalCrown.class)
                     summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we suggest you consider voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
-self.slickRefresh(); // Force slick to update height
+                  self.slickRefresh(); // Force slick to update height
+
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
                 }
               }
             }, animFlags.tacticalInit.delay);
