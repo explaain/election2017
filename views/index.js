@@ -2312,11 +2312,13 @@ class Quiz {
           self.refresh();
         } else {
 
-          $(".slideHint").show();
-          $(".slideHint").on("click", function() {
+          if(config[SiteBrand].carousel) {
+            $(".slideHint").show();
+            $(".slideHint").on("click", function() {
+              self.slickGoTo(1);
+            })
             self.slickGoTo(1);
-          })
-          self.slickGoTo(1);
+          }
 
           qp.constituencyView = true;
           model.landedOnResult = 1;
