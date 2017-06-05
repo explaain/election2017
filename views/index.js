@@ -2055,10 +2055,16 @@ class Quiz {
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
       trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
 
+      var endOfQuestions = false;
+
       qp.startingQuiz = false;
 
       const num = self.getCurrentQuestionNumber();
       const debate1 = self.getQuestionProp(num, 'debate');
+
+      if (num >= qp.questions.length-1 && ( opinion===false || self.getQuestionProp(num,'binary') )) {
+        endOfQuestions = true;
+      }
 
       if (opinion === false || commitToAnswer) {
         self.setQuestionProp(num+1, 'reached', true);
@@ -2077,7 +2083,7 @@ class Quiz {
 
       self.updateScores(thisQuestion);
 
-      if (num >= qp.questions.length-1) {
+      if (endOfQuestions) {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1)});
         qp.quizResults = true;
         qp.quizResultsPage = true;
@@ -2602,11 +2608,11 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
                   var summarySentence;
                   console.log(consideredParties);
-                  const myTopParties = topMatches.map(function(_p){ return _p.name });
-                  if (myTopParties.length==1 && typeof topMatches[0].chance === 'number') {
-                    summarySentence = `Good news! Your top match <span style="font-weight: bold; color: ${p.color}">${p.name.replace(' Party', '')}</span> stands a chance in your area so it's worth giving them your vote.`
+                  const myTopParties = topMatches.map(function(_p){return _p.name});
+                  if (myTopParties.length==1 && consideredParties[0].key == p.key) {
+                    summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    summarySentence = 'The ' + myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
 self.slickRefresh(); // Force slick to update height
@@ -2766,29 +2772,35 @@ self.slickRefresh(); // Force slick to update height
             return obj.key;
           });
 
-          party.openMatches = function(){
+          party.openMatches = function(e){
+            console.log('party.openMatches');
+            console.log(e);
+            EEE = e;
             console.log(party);
-            var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
-            console.log(tempKey);
-            var tempCard = {
-              '@id': tempKey,
-              '@type': 'IssueMatch',
-               name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
-              //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
-               issues: scoresPerIssue,
-               links: allCardKeys
-            };
-            console.log(tempCard);
+            if (e.path.filter(function(_p) {return _p.tagName=="A" && _p.className.includes('quizPercentagesParty')}).length > 0) {
+              e.stopPropagation();
+              var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
+              console.log(tempKey);
+              var tempCard = {
+                '@id': tempKey,
+                '@type': 'IssueMatch',
+                name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+                //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
+                issues: scoresPerIssue,
+                links: allCardKeys
+              };
+              console.log(tempCard);
 
-            var allCards = Object.values(actual_issue_cards).map(function(obj) {
-              return obj.card;
-            });
+              var allCards = Object.values(actual_issue_cards).map(function(obj) {
+                return obj.card;
+              });
 
-            allCards.push(tempCard);
+              allCards.push(tempCard);
 
-            explaain.addClientCards(allCards);
-            // explaain.showOverlay(allCardKeys[0]);
-            explaain.showOverlay(tempKey);
+              explaain.addClientCards(allCards);
+              // explaain.showOverlay(allCardKeys[0]);
+              explaain.showOverlay(tempKey);
+            }
           }
         }
 

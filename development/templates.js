@@ -2232,7 +2232,23 @@ module.exports = function(CardTemplates){
                         "mapping": [
                           ["error", "postcodeError"]
                         ]
-                      }
+                      },
+                      {
+                        "dom": ".action-buttons",
+                        "content": [
+                          {
+                            "dom": "p.shareText.basic",
+                            "content": "Share your results:"
+                          },
+                          {
+                            "template": "shareButtons",
+                            "mapping": [
+                              ["facebookShareHref", "facebookShareAlignmentHref"],
+                              ["twitterShareHref", "twitterShareAlignmentHref"]
+                            ]
+                          },
+                        ]
+                      },
                     ]
                   }
                 ]
@@ -2954,9 +2970,9 @@ module.exports = function(CardTemplates){
   CardTemplates.quizPercentagesParty = {
     "dom": "a.quizPercentagesParty.discard-card-style",
     "attr": {
-      // "onclick": {
-      //   "var": "openMatches"
-      // },
+      "onclick": {
+        "var": "openMatches"
+      },
       "class": {
         "var": "matchClass"
       },
