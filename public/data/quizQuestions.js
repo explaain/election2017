@@ -204,7 +204,7 @@ var quizQuestions = [
    }
  },
  {
-   question: "Should there be a second EU referendum on the terms of leaving ?",
+   question: "Should there be a second EU referendum on the terms of leaving?",
    issue: "eu",
    randomiseGroup: 1,
    debate: "eu-2",
@@ -215,7 +215,7 @@ var quizQuestions = [
          opinion: 1
        },
        {
-         label: "Yes, but alongside a seperate vote by MPs.",
+         label: "Yes, but alongside a separate vote by MPs.",
          opinion: 1
        }
      ],
