@@ -2523,6 +2523,7 @@ $graph.addClass(animFlags.tacticalGraph.class);
 self.slickRefresh(); // Force slick to update height
 
                 if(safeSeat) {
+                  $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
                   $graph.addClass(animFlags.safe.class)
                   return false;
                 } else {

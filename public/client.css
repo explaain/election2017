@@ -2563,7 +2563,7 @@ a.democracyclub-logo:hover {
 
 #tactical-mode .tacticalUI .chanceMatches:before {
     margin-top: 50px;
-    content: "Looks like there are no parties you agree with that stand a chance. Check the other voting options.";
+    content: "This is a solid " attr(data-safe-party-name) " safe seat, so tactical voting won't work. Check out your other voting options.";
     opacity: 0;
     transition: all 1.5s ease;
     color: #444444;
