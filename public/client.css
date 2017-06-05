@@ -2637,3 +2637,6 @@ img.swapvote {
 .card-carousel .postcode-instructions {
     margin: 0.5em 0 !important;
 }
+.slideHint {
+  display: none;
+}

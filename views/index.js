@@ -2312,6 +2312,7 @@ class Quiz {
           self.refresh();
         } else {
 
+          $(".slideHint").show();
           self.slickGoTo(1);
 
           qp.constituencyView = true;

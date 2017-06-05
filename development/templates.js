@@ -2192,54 +2192,54 @@ module.exports = function(CardTemplates){
                         "content": "But see if they stand a chance of winning where you live"
                       },
                       {
-                        "dom": "h3.postcode-instructions",
+                        "dom": "h3.postcode-instructions.slideHint",
                         "content": [
                           {"dom":"span", "content": "Slide right"},
                           {"dom":"span.bigEmoji", "content": "👉"}
                         ]
                       },
-                      // {
-                      //   "dom":"form.postcode-form",
-                      //   "condition": "!isWaiting",
-                      //   "attr":{
-                      //     "onsubmit":{
-                      //       "var":"postcodeSubmit"
-                      //     }
-                      //   },
-                      //   "content":[
-                      //     {
-                      //       "dom":"input.form-control",
-                      //       "attr": {
-                      //         "autofocus":"true",
-                      //         "type":"text",
-                      //         "required": "true",
-                      //         "pattern": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
-                      //         "name":"postcode",
-                      //         "placeholder":"Postcode",
-                      //         "binding":{
-                      //           "var":"postcodeBinding"
-                      //         }
-                      //       }
-                      //     },
-                      //     {
-                      //       "dom":"button.btn.btn-success",
-                      //       "attr":{
-                      //         "type":"submit"
-                      //       },
-                      //       "content":"Go >"
-                      //     }
-                      //   ]
-                      // },
-                      // {
-                      //   "condition": "isWaiting",
-                      //   "template": "loading"
-                      // },
-                      // {
-                      //   "template":"error",
-                      //   "mapping": [
-                      //     ["error", "postcodeError"]
-                      //   ]
-                      // },
+                      {
+                        "dom":"form.postcode-form",
+                        "condition": "!isWaiting",
+                        "attr":{
+                          "onsubmit":{
+                            "var":"postcodeSubmit"
+                          }
+                        },
+                        "content":[
+                          {
+                            "dom":"input.form-control",
+                            "attr": {
+                              "autofocus":"true",
+                              "type":"text",
+                              "required": "true",
+                              "pattern": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
+                              "name":"postcode",
+                              "placeholder":"Postcode",
+                              "binding":{
+                                "var":"postcodeBinding"
+                              }
+                            }
+                          },
+                          {
+                            "dom":"button.btn.btn-success",
+                            "attr":{
+                              "type":"submit"
+                            },
+                            "content":"Go >"
+                          }
+                        ]
+                      },
+                      {
+                        "condition": "isWaiting",
+                        "template": "loading"
+                      },
+                      {
+                        "template":"error",
+                        "mapping": [
+                          ["error", "postcodeError"]
+                        ]
+                      },
                       {
                         "dom": ".action-buttons",
                         "content": [
