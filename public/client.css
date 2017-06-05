@@ -2627,3 +2627,13 @@ img.swapvote {
     opacity: 0;
     transition: opacity 1s ease;
 }
+
+.bigEmoji {
+    margin-left: 6px;
+    line-height: 0.5em;
+    font-size: 40px;
+    vertical-align: text-top;
+}
+.card-carousel .postcode-instructions {
+    margin: 0.5em 0 !important;
+}
