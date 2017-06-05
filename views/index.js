@@ -2748,30 +2748,35 @@ self.slickRefresh(); // Force slick to update height
             return obj.key;
           });
 
-          party.openMatches = function(){
+          party.openMatches = function(e){
             console.log('party.openMatches');
+            console.log(e);
+            EEE = e;
             console.log(party);
-            var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
-            console.log(tempKey);
-            var tempCard = {
-              '@id': tempKey,
-              '@type': 'IssueMatch',
-               name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
-              //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
-               issues: scoresPerIssue,
-               links: allCardKeys
-            };
-            console.log(tempCard);
+            if (e.path.filter(function(_p) {return _p.tagName=="A" && _p.className.includes('quizPercentagesParty')}).length > 0) {
+              e.stopPropagation();
+              var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
+              console.log(tempKey);
+              var tempCard = {
+                '@id': tempKey,
+                '@type': 'IssueMatch',
+                name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+                //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
+                issues: scoresPerIssue,
+                links: allCardKeys
+              };
+              console.log(tempCard);
 
-            var allCards = Object.values(actual_issue_cards).map(function(obj) {
-              return obj.card;
-            });
+              var allCards = Object.values(actual_issue_cards).map(function(obj) {
+                return obj.card;
+              });
 
-            allCards.push(tempCard);
+              allCards.push(tempCard);
 
-            explaain.addClientCards(allCards);
-            // explaain.showOverlay(allCardKeys[0]);
-            explaain.showOverlay(tempKey);
+              explaain.addClientCards(allCards);
+              // explaain.showOverlay(allCardKeys[0]);
+              explaain.showOverlay(tempKey);
+            }
           }
         }
 

@@ -2959,9 +2959,9 @@ module.exports = function(CardTemplates){
   CardTemplates.quizPercentagesParty = {
     "dom": "a.quizPercentagesParty.discard-card-style",
     "attr": {
-      // "onclick": {
-      //   "var": "openMatches"
-      // },
+      "onclick": {
+        "var": "openMatches"
+      },
       "class": {
         "var": "matchClass"
       },
