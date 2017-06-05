@@ -2943,16 +2943,38 @@ module.exports = function(CardTemplates){
         // "condition": "finalResults", // !!!
         "content": [
           {
+            "dom": "h1.outOfLuck",
+            "content": "You're out of luck!"
+          },
+          {
             "dom": "div.box.chanceMatches"
           },
           {
             "dom": "div.secondaryBoxes",
             "content": [
               {
-                "dom": "div.box.noChance"
+                "dom": "div.box.noChance",
+                "content": [
+                  {
+                    "dom": "a.explaain-link",
+                    "content": "Slim chance of winning",
+                    "attr": {
+                      "href": "http://api.explaain.com/Detail/59106472116f53001109340c"
+                    }
+                  }
+                ]
               },
               {
-                "dom": "div.box.noMatch"
+                "dom": "div.box.noMatch",
+                "content": [
+                  {
+                    "dom": "a.explaain-link",
+                    "content": "Don't match your views",
+                    "attr": {
+                      "href": "http://api.explaain.com/Detail/5934ffb6d238f700115da9fa"
+                    }
+                  }
+                ]
               }
             ]
           }

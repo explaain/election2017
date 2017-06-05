@@ -2497,7 +2497,7 @@ a.democracyclub-logo:hover {
 }
 
 .tacticalUI .box {
-    padding: 50px;
+    padding: 15px;
     border-top: 1px solid #EEE;
     /*border-radius: 4px;*/
     background: white;
@@ -2533,10 +2533,10 @@ a.democracyclub-logo:hover {
     font-weight: bold;
 }
 .tacticalUI .noMatch:before {
-    content: "Don't match your views";
+    /*content: "Don't match your views";*/
 }
 .tacticalUI .noChance:before {
-    content: "Slim chance of winning";
+    /*content: "Slim chance of winning";*/
 }
 .flash:before {
   animation: flash 2s 1;
@@ -2563,6 +2563,31 @@ a.democracyclub-logo:hover {
 }
 #tactical-mode.unappealing .tacticalUI .chanceMatches:before {
   content: "Looks like there are no parties you agree with that stand a chance. Check the other voting options." !important;
+}
+
+#tactical-mode.unappealing, #tactical-mode.safe {
+  margin-top: 0;
+}
+/*#tactical-mode.unappealing:before, #tactical-mode.safe:before {
+  content: "You're out of luck";
+  font-size: "22px";
+  color: '#dd2569';
+  font-weight: bold;
+}*/
+#tactical-mode.unappealing .tacticalUI .chanceMatches, #tactical-mode.safe .tacticalUI .chanceMatches {
+  border: none;
+  padding-top: 0;
+}
+#tactical-mode.unappealing .tacticalUI .chanceMatches:before, #tactical-mode.safe .tacticalUI .chanceMatches:before {
+  margin-top: 20px;
+}
+#tactical-mode .tacticalUI h1.outOfLuck {
+  display: none;
+  margin-top: -20px;
+  color: #ff2569;
+}
+#tactical-mode.unappealing .tacticalUI h1.outOfLuck, #tactical-mode.safe .tacticalUI h1.outOfLuck {
+  display: block;
 }
 
 #tactical-mode.tacticalGraph.safe .tacticalUI .chanceMatches:before {
