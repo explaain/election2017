@@ -1991,8 +1991,10 @@ class Quiz {
 
       var topParties = []
       if (qp.country) {
+        console.log(qp.country.parties);
         qp.country.parties.forEach(function(party) {
           const _party = partyMatches[party.key];
+          console.log(_party);
           if (_party) {
             party.percentage = parseInt(_party.match*100) + '%';
             party.percentageText = parseInt(_party.match*100) + '%';
@@ -2005,13 +2007,23 @@ class Quiz {
                 question: thisQuestion.question
               }
             })
+            console.log('party');
+            console.log(party);
+            console.log(parseInt(party.percentage)>0);
+            console.log(topParties[0] ? party.percentage == topParties[0].percentage : false);
             if (!topParties.length || party.percentage > topParties[0].percentage) {
+              console.log(!topParties.length);
+              console.log(party.percentage);
+              console.log(topParties[0]);
               topParties = [party];
-            } else if (party.percentage>0 && party.percentage == topParties[0].percentage) {
+            } else if (parseInt(party.percentage)>0 && party.percentage == topParties[0].percentage) {
               topParties.push(party);
+              console.log(topParties);
             }
           }
         })
+        console.log('topParties');
+        console.log(topParties);
 
         qp.resultsData = [];
         topParties.map(function(topParty) {
@@ -2043,7 +2055,7 @@ class Quiz {
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
       trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
 
-      if (self.getCurrentQuestionNumber() > 0) qp.startingQuiz = false;
+      qp.startingQuiz = false;
 
       const num = self.getCurrentQuestionNumber();
       const debate1 = self.getQuestionProp(num, 'debate');
@@ -2559,10 +2571,12 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   $thisParty.addClass("chosenCandidate")
                   $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
                   var summarySentence;
-                  if (consideredParties[consideredParties.length-1] == p.key) {
+                  console.log(consideredParties);
+                  const myTopParties = consideredParties.filter(function(_p){return _p.percentage == consideredParties[consideredParties.length-1].percentage}).map(function(_p){return _p.name});
+                  if (myTopParties.length==1 && consideredParties[consideredParties.length-1] == p.key) {
                     summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = 'The ' + myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
 self.slickRefresh(); // Force slick to update height
@@ -2623,6 +2637,9 @@ self.slickRefresh(); // Force slick to update height
         });
 
         self.slickGoTo(0) // Initialise all the slicky classy stuffs
+
+        console.log("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+        $('h2.bestMatchSoFar').html("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
       },10);
     }
 
@@ -2755,6 +2772,7 @@ self.slickRefresh(); // Force slick to update height
             party.percentageText = "0%";
           })
           qp.startingQuiz = true;
+          console.log(1);
         }
       })
     })
