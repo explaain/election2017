@@ -2313,6 +2313,9 @@ class Quiz {
         } else {
 
           $(".slideHint").show();
+          $(".slideHint").on("click", function() {
+            self.slickGoTo(1);
+          })
           self.slickGoTo(1);
 
           qp.constituencyView = true;
