@@ -2317,7 +2317,7 @@ module.exports = function(CardTemplates){
                       {
                         "dom": "a.swapvote.btn.btn-primary.btn-large",
                         "attr": {
-                          "href": "https://www.swapmyvote.uk",
+                          "href": "http://bit.ly/swapmyvote",
                           "target": "_blank"
                         },
                         "content": "Swap My Vote >"
