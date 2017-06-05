@@ -2652,6 +2652,9 @@ self.slickRefresh(); // Force slick to update height
 
         console.log("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
         $('h2.bestMatchSoFar').html("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+        setTimeout(function(){
+          $('.card-carousel').slick('setPosition');
+        },100);
       },10);
     }
 

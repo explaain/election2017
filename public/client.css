@@ -1429,6 +1429,9 @@ p.waiting-text {
   padding: 10px 0;
   margin: 50px 0 20px;
 }
+.body._ge2017 .quizPercentages {
+  margin: 50px 0 40px;
+}
 
 .quizPercentagesParty {
   height:calc(100% - 40px);
