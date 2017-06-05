@@ -2011,7 +2011,7 @@ class Quiz {
             console.log(party);
             console.log(parseInt(party.percentage)>0);
             console.log(topParties[0] ? party.percentage == topParties[0].percentage : false);
-            if (!topParties.length || party.percentage > topParties[0].percentage) {
+            if (!topParties.length || parseInt(party.percentage) > parseInt(topParties[0].percentage)) {
               console.log(!topParties.length);
               console.log(party.percentage);
               console.log(topParties[0]);
