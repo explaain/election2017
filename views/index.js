@@ -2343,9 +2343,9 @@ class Quiz {
             var animFlags = {
               tacticalInit:    { class: 'tacticalInit',    delay: 850 },
               tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
-              tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories going down
-              tacticalPromote: { class: 'tacticalPromote', delay: 300 }, //Animation categories going up
-              tacticalCrown:   { class: 'tacticalCrown',   delay: 200 }
+              tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
+              tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories going up
+              tacticalCrown:   { class: 'tacticalCrown',   delay: 500 }
             }
 
             var futureHeight = 380;
@@ -2530,6 +2530,7 @@ self.slickRefresh(); // Force slick to update height
                       var $thisParty = $graph.find(`[data-party-key=${p.key}]`);
                       if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
                       console.log("Animating",p.key)
+                      $('.tacticalUI .box.'+category.name).addClass('flash');
                       $thisParty.addClass(partyModifiers.dislocated)
                       $thisParty.animate(p.css, animFlags[category.flag].delay, function() {
                         // At the end (hopefully after 3000ms ish)

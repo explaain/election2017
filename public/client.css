@@ -2535,6 +2535,21 @@ a.democracyclub-logo:hover {
 .tacticalUI .noChance:before {
     content: "Slim chance of winning";
 }
+.flash:before {
+  animation: flash 2s 1;
+}
+
+@keyframes flash {
+  0% {
+    color: #CCC;
+  }
+  5% {
+    color: maroon;
+  }
+  100% {
+    color: #CCC;
+  }
+}
 
 #tactical-mode .tacticalUI .chanceMatches:before {
     margin-top: 50px;
