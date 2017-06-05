@@ -49,7 +49,7 @@ var cfg = {
     quizQuestions: allData.getAllData().quiz.questions["38degrees"],
     quizQuestionList: allData.getAllData().quizQuestions38Degrees,
     sharing: {
-      basicTwitter: "Take the @38_degrees #GE2017 quiz to find your match + see local candidates 👉 38degrees.ge2017.com",
+      basicTwitter: "Take the @38_degrees #GE2017 quiz with @GE2017dotcom to find your match + see local candidates 👉 38degrees.ge2017.com",
       basicTwitterImg: "https://38degrees.ge2017.com/img/38degrees_facebook.jpg",
       /* shareMetaDescription is not yet used - this object needs to be defined in Node! */
       shareMetaDescription: "Who should you vote for in the #GeneralElection2017? Compare parties, explore the main issues, and see who’s standing where you live",
@@ -2149,7 +2149,7 @@ class Quiz {
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
-        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies. Who should you vote for? #GE2017 ${sharePath}`;
+        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies on @GE2017dotcom. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData && shareData.length && shareData.length > 1) {
