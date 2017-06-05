@@ -2192,7 +2192,9 @@ class Quiz {
           model.landedOnResult = 1;
           qp.quizChanceResults = result;
           delete model.user.isWaiting;
-          trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          var analyticsData = qp.resultsData;
+          analyticsData.constituency = model.user.constituency.name;
+          trackEvent("Rerouting on Constituency Result",analyticsData);
           routes.quizResults().push();
         }
       });
@@ -2325,7 +2327,9 @@ class Quiz {
           console.log("Got contenders",result);
           qp.quizChanceResults = result;
           delete model.user.isWaiting;
-          trackEvent("Rerouting on Constituency Result",qp.resultsData);
+          var analyticsData = qp.resultsData;
+          analyticsData.constituency = model.user.constituency.name;
+          trackEvent("Rerouting on Constituency Result",analyticsData);
           if(config[SiteBrand].carousel) {
             $(".tacticalPostcode, .postcode-form").hide(); // Remove after we make reanimation not janky
             $("h2.postcode-instructions").hide();
@@ -2548,12 +2552,12 @@ $graph.addClass(animFlags.tacticalGraph.class);
                 if(safeSeat) {
                   $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
                   $graph.addClass(animFlags.safe.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else if(unappealingSeat) {
                   $graph.addClass(animFlags.safe.class)
                   $graph.addClass(animFlags.unappealing.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else {
                   $graph.removeClass(animFlags.battle.class)
@@ -2647,7 +2651,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
                   self.slickRefresh(); // Force slick to update height
 
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
                 }
               }
             }, animFlags.tacticalInit.delay);
