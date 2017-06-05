@@ -2194,7 +2194,7 @@ module.exports = function(CardTemplates){
                       {
                         "dom": "h3.postcode-instructions.slideHint",
                         "content": [
-                          {"dom":"span", "content": "Slide right"},
+                          {"dom":"span", "content": "Slide right to see your tactical options"},
                           {"dom":"span.bigEmoji", "content": "👉"}
                         ]
                       },
