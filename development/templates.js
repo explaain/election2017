@@ -1785,43 +1785,43 @@ module.exports = function(CardTemplates){
                 {
                   "dom": ".card-visible.text-center",
                   "content": [
-                    {
-                      "dom": "h2",
-                      "content": "Student? Find out where you should vote."
-                    },
-                    {
-                      "dom": "p",
-                      "content": "Compare your postcodes to see where your vote has most impact."
-                    },
-                    {
-                      "dom": "a.btn.btn-primary",
-                      "content": "Find out >",
-                      "condition": "!quizStarted",
-                      "attr": {
-                        // "onclick": {
-                        //   "var": "startStudentCompare"
-                        // }
-                        "href": "/students"
-                      }
-                    }
                     // {
                     //   "dom": "h2",
-                    //   "content": "I know what I want my vote to do"
+                    //   "content": "Student? Find out where you should vote."
                     // },
                     // {
                     //   "dom": "p",
-                    //   "content": "Just tell me what’s possible"
+                    //   "content": "Compare your postcodes to see where your vote has most impact."
                     // },
                     // {
-                    //   "dom": "button.btn.btn-primary",
+                    //   "dom": "a.btn.btn-primary",
                     //   "content": "Find out >",
                     //   "condition": "!quizStarted",
                     //   "attr": {
-                    //     "onclick": {
-                    //       "var": "startSingleSentence"
-                    //     }
+                    //     // "onclick": {
+                    //     //   "var": "startStudentCompare"
+                    //     // }
+                    //     "href": "/students"
                     //   }
                     // }
+                    {
+                      "dom": "h2",
+                      "content": "I know what I want my vote to do"
+                    },
+                    {
+                      "dom": "p",
+                      "content": "Just tell me what’s possible"
+                    },
+                    {
+                      "dom": "a.btn.btn-primary",
+                      "content": "Find Out ",
+                      "condition": "!quizStarted",
+                      "attr": {
+                        "onclick": {
+                          "var": "goToDashboard"
+                        }
+                      }
+                    }
                   ]
                 }
               ]
@@ -2002,7 +2002,7 @@ module.exports = function(CardTemplates){
                             "attr":{
                               "type":"submit"
                             },
-                            "content":"Go!"
+                            "content":"Go >"
                           }
                         ]
                       },
@@ -2436,6 +2436,34 @@ module.exports = function(CardTemplates){
             "dom": "span.pickAVotingOption",
             "condition": "showCarouselResults",
             "content": "or"
+          },
+          {
+            "dom": ".card.quiz-extra",
+            "content": [
+              {
+                "dom": ".card-visible.text-center",
+                "content": [
+                  {
+                    "dom": "h2",
+                    "content": "Want to focus on one thing?"
+                  },
+                  {
+                    "dom": "p",
+                    "content": "Click here"
+                  },
+                  {
+                    "dom": "a.btn.btn-primary",
+                    "content": "Find Out ",
+                    "condition": "!quizStarted",
+                    "attr": {
+                      "onclick": {
+                        "var": "goToDashboard"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
           },
           {
             "dom": "a.btn.btn-default.retake",
