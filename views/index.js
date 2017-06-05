@@ -2055,10 +2055,16 @@ class Quiz {
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
       trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
 
+      var endOfQuestions = false;
+
       qp.startingQuiz = false;
 
       const num = self.getCurrentQuestionNumber();
       const debate1 = self.getQuestionProp(num, 'debate');
+
+      if (num >= qp.questions.length-1 && self.getQuestionProp(num,'binary')) {
+        endOfQuestions = true;
+      }
 
       if (opinion === false || commitToAnswer) {
         self.setQuestionProp(num+1, 'reached', true);
@@ -2077,7 +2083,7 @@ class Quiz {
 
       self.updateScores(thisQuestion);
 
-      if (num >= qp.questions.length-1) {
+      if (endOfQuestions) {
         trackEvent("Results Got",{type: "Quiz", party: qp.resultsData[0].name, percentage: qp.resultsData[0].percentage, isDraw: (qp.resultsData.length>1)});
         qp.quizResults = true;
         qp.quizResultsPage = true;
