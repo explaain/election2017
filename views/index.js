@@ -2062,7 +2062,7 @@ class Quiz {
       const num = self.getCurrentQuestionNumber();
       const debate1 = self.getQuestionProp(num, 'debate');
 
-      if (num >= qp.questions.length-1 && self.getQuestionProp(num,'binary')) {
+      if (num >= qp.questions.length-1 && ( opinion===false || self.getQuestionProp(num,'binary') )) {
         endOfQuestions = true;
       }
 
@@ -2749,6 +2749,7 @@ self.slickRefresh(); // Force slick to update height
           });
 
           party.openMatches = function(){
+            console.log('party.openMatches');
             console.log(party);
             var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
             console.log(tempKey);
