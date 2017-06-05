@@ -2564,7 +2564,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   if (consideredParties[consideredParties.length-1] == p.key) {
                     summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    summarySentence = consideredParties[consideredParties.length-1].name.replace(' Party', '') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = consideredParties[consideredParties.length-1].name.replace('Conservative', 'The Conservatives') + ' don\'t stand much of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
                 }

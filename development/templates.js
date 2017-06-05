@@ -2302,7 +2302,7 @@ module.exports = function(CardTemplates){
                             "content": "In a safe seat but willing to vote for another party other than your top match? Consider "
                           },
                           {
-                            "dom": "a",
+                            "dom": "a.explaain-link",
                             "content": "vote swapping",
                             "attr": {
                               "href": "http://api.explaain.com/Detail/59348485d238f700115da9f6"
@@ -2311,7 +2311,7 @@ module.exports = function(CardTemplates){
                         ]
                       },
                       {
-                        "dom": "a.swapvote.btn.btn-primary",
+                        "dom": "a.swapvote.btn.btn-primary.btn-large",
                         "attr": {
                           "href": "https://www.swapmyvote.uk",
                           "target": "_blank"
@@ -2340,7 +2340,7 @@ module.exports = function(CardTemplates){
               },
               // #4: Spoil your ballot
               {
-                "dom": ".card.NWA.noAnim",
+                "dom": ".card.noAnim",
                 "content": [
                   {
                     "dom": ".card-visible.text-center",
@@ -2359,16 +2359,20 @@ module.exports = function(CardTemplates){
                         "content": [
                           {
                             "dom": "span",
-                            "content": "Not voting changes nothing. Spoling your ballot does, "
+                            "content": "Not voting changes nothing. Spoiling your ballot does, "
                           },
                           {
-                            "dom": "a",
+                            "dom": "a.explaain-link",
                             "content": "here’s why",
                             "attr": {
                               "href": "http://api.explaain.com/Detail/593484e7d238f700115da9f8"
                             },
                           },
                         ]
+                      },
+                      {
+                        "dom": "p",
+                        "content": "Below is the correct way to spoil your ballot."
                       },
                       // {
                       //   "dom": "h4",

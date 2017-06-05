@@ -2113,6 +2113,7 @@ p.shareText {
 /* Final result: Carousel stuffs */
 
 .carousel-nav-container {
+    margin-top: 10px;
     margin-bottom: -15px;
 }
 .carousel-nav-item {
@@ -2132,6 +2133,20 @@ p.shareText {
     line-height: 1em;
     /*border-bottom-left-radius: 9px;
     border-bottom-right-radius: 9px;*/
+}
+.carousel-nav-item.carousel-selected:after {
+  border: solid #DD276B;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(213, 0, 0, 0);
+  border-top-color: #DD276B;
+  border-width: 8px;
+  margin-left: -8px;
+  position: absolute;
+  margin-top: 5px;
 }
 
 .card-carousel {
@@ -2570,4 +2585,8 @@ img.swapvote {
 }
 .animation-opening {
   transform: scale(0);
+}
+.btn-large {
+  padding: 12px 30px;
+  font-size: 16px;
 }
