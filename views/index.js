@@ -2573,10 +2573,10 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   var summarySentence;
                   console.log(consideredParties);
                   const myTopParties = consideredParties.filter(function(_p){return _p.percentage == consideredParties[consideredParties.length-1].percentage}).map(function(_p){return _p.name});
-                  if (myTopParties.length==1 && consideredParties[consideredParties.length-1] == p.key) {
+                  if (myTopParties.length==1 && consideredParties[consideredParties.length-1].key == p.key) {
                     summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
                   } else {
-                    summarySentence = 'The ' + myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we recommend voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
 self.slickRefresh(); // Force slick to update height
