@@ -4,6 +4,7 @@ const
 gulp = require('gulp'),
 JSuglify = require('gulp-uglify'),
 CSSuglify = require('gulp-uglifycss'),
+autoprefixer = require('gulp-autoprefixer'),
 browserify = require('gulp-browserify'),
 concat = require('gulp-concat'),
 babel = require('gulp-babel'),
@@ -112,6 +113,10 @@ gulp.task('js-pack-production', function(){
 gulp.task('css-pack-production', function(){
   return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
+  .pipe(autoprefixer({
+		browsers: ['last 2 versions'],
+		cascade: false
+	}))
   .pipe(CSSuglify())
   .pipe(gulp.dest('public'));
 });
@@ -151,6 +156,10 @@ gulp.task('js-pack-development', function(){
 gulp.task('css-pack-development', function(){
   return gulp.src(CSSFiles)
   .pipe(concat('compiled.css'))
+  .pipe(autoprefixer({
+		browsers: ['last 2 versions'],
+		cascade: false
+	}))
   .pipe(gulp.dest('public'));
 });
 
