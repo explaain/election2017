@@ -641,24 +641,24 @@ var quizQuestions = [
     helperCard:"//api.explaain.com/Detail/5929a8dac3fde500115269b1",
     answers: {
       yes: [
-        {
-          label: "annual net migration should be in the tens of thousands.",
-          opinion: 0.95,
-        },
-        {
-          label: "but net migration should be zero, not thousands.",
-          opinion: 1,
-        },
-      ],
-      no: [
-        {
-          label: "net migration should be zero.",
-          opinion: 0.4,
-        },
-        {
-          label: "there should be no official target.",
-          opinion: 0
-        },
+         {
+           label: "annual net migraiton should be in the tens of thousands.",
+           opinion: 0.8,
+         },
+         {
+           label: "in fact net migration should be zero, not thousands.",
+           opinion: 1,
+         },
+       ],
+       no: [
+         {
+           label: "but it should be reduced.",
+           opinion: 0.4,
+         },
+         {
+           label: "there should be no official target.",
+           opinion: 0.2
+         },
       ]
     }
   },
