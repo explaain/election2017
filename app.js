@@ -91,11 +91,11 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
   req.params.share = {
     fb: {
       title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
-      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+      subtitle: `Who best represents your views? #GE2017`
     },
     tw: {
       title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
-      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+      subtitle: `Who best represents your views? #GE2017`
     }
   }
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
@@ -109,11 +109,11 @@ app.get('/tactical/:party?/:constituency?', function(req, res, next) {
   req.params.share = {
     fb: {
       title: `I'm voting tactically for ${req.params.party} in ${req.params.constituency}.`,
-      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+      subtitle: `Who best represents your views? #GE2017`
     },
     tw: {
       title: `I'm voting tactically for ${req.params.party} in ${req.params.constituency}.`,
-      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+      subtitle: `Who best represents your views? #GE2017`
     }
   }
   res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
