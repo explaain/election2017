@@ -2157,6 +2157,12 @@ p.shareText.basic {
   position: absolute;
   margin-top: 5px;
 }
+/*.carousel-nav-item.carousel-selected:hover:after {
+  border-top-color: #E0427E;
+}*/
+.carousel-nav-item.carousel-selected:active:after {
+  border-top-color: #C11255;
+}
 
 .card-carousel {
   margin: 0 -15px 20px;
