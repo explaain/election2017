@@ -2264,11 +2264,7 @@ class Quiz {
           '4th',
           '5th'
         ]
-        qp.partiesHybridList = qp.partiesHybridList.filter(p=>{
-          return qp.quizChanceResults.parties.filter(function(_party) {
-            return p.key == _party.key
-          }).length
-        }).map(function(party) {
+        qp.partiesHybridList = qp.partiesHybridList.map(function(party) {
           var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
           if (!fullParty)
             return {};
