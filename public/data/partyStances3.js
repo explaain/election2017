@@ -790,16 +790,16 @@ var partyStances = {
             }
           },
           "38-immigration-2": {
-            question: "Should net migration be less than 100,000 per year?",
+            question: "Should we be trying to reduce immigration below 100,000 extra new arrivals per year?",
             parties: {
               "conservative": {
-                opinion: 1
+                opinion: 0.95
               },
               "labour": {
                 opinion: 0
               },
               "ukip": {
-                opinion: 0.5
+                opinion: 1
               }
             }
           }

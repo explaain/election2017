@@ -642,8 +642,8 @@ var quizQuestions = [
     answers: {
       yes: [
         {
-          label: "annual net migraiton should be in the tens of thousands.",
-          opinion: 1,
+          label: "annual net migration should be in the tens of thousands.",
+          opinion: 0.95,
         },
         {
           label: "but net migration should be zero, not thousands.",
