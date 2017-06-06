@@ -2726,11 +2726,14 @@ $graph.addClass(animFlags.tacticalCrown.class)
 
         self.slickGoTo(0) // Initialise all the slicky classy stuffs
 
-        console.log("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
-        $('h2.bestMatchSoFar').html("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
-        setTimeout(function(){
-          $('.card-carousel').slick('setPosition');
-        },500);
+        //JE: I would have thought this whole section shouldn't happen yet but for now I'm stopping console errors with this extra test:
+        if (qp.resultsData.length) {
+          console.log("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+          $('h2.bestMatchSoFar').html("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+          setTimeout(function(){
+            $('.card-carousel').slick('setPosition');
+          },500);
+        }
       },10);
     }
 
