@@ -25,7 +25,7 @@ var cfg = {
     logoClass: "ge2017-logo",
     footerImg: "/img/turnup.png",
     footerClass: "turnupFooter",
-    footerLink: "//www.turnup.org.uk/",
+    footerLink: "http://www.turnup.org.uk/",
     carousel: true,
     randomise: true,
     numbering: true,
