@@ -67,6 +67,15 @@ var cfg = {
     },
   }
 }
+var partyTags = {
+  'labour': '@UKLabour',
+  'lib-dem': '@LibDems',
+  'conservative': '@Conservatives',
+  'ukip': '@UKIP',
+  'green': '@TheGreenParty',
+  'plaid-cymru': '@Plaid_Cymru',
+  'snp': '@theSNP'
+}
 
 //POLYFILL
 const reduce = Function.bind.call(Function.call, Array.prototype.reduce);
@@ -2133,23 +2142,13 @@ class Quiz {
       /* ---
         NB: This will send users from Iframed quizes (e.g. unilad, 38degrees?) back to the standalone quiz (with branding)
       */
-      var partyTags = {
-        'labour': '@UKLabour',
-        'lib-dem': '@LibDems',
-        'conservative': '@Conservatives',
-        'ukip': '@UKIP',
-        'green': '@TheGreenParty',
-        'plaid-cymru': '@Plaid_Cymru',
-        'snp': '@theSNP'
-      }
-
       var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
       var shareData = model.user.quizProgress.resultsData;
       console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
-        var tweet = `I support ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies on @GE2017dotcom. Who should you vote for? #GE2017 ${sharePath}`;
+        var tweet = `I matched ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies on @GE2017dotcom. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData && shareData.length && shareData.length > 1) {
@@ -2163,7 +2162,7 @@ class Quiz {
         });
         // console.log("Twitter tweet",shareData,partyTwitters);
         var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
-        var tweet = `I equally support ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`;
+        var tweet = `I equally matched ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
         // var partyCandidateStrings = "";
@@ -2650,6 +2649,13 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   }
                   $('.summarySentence').html(summarySentence).removeClass('animation-opening');
                   self.slickRefresh(); // Force slick to update height
+
+                  // Update share links
+                  var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
+                  var sharePath = `http://${subdomain}ge2017.com/tactical/${encodeURIComponent(p.name)}/${encodeURIComponent(model.user.constituency.name)}`;
+                  var tweet = `I'm voting tactically for ${partyTags[p.key] || p.name} in ${model.user.constituency.name}. Who should you vote for? #GE2017 ${sharePath} via @GE2017dotcom`;
+                  $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
+                  $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
 
                   trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
                 }

@@ -1231,7 +1231,7 @@ module.exports = function(CardTemplates){
           }
         },
         {
-          "dom": "a.discard-card-style",
+          "dom": "a.discard-card-style.facebookShareLink",
           "attr": {
             "target":"_blank",
             "href": {
@@ -1255,7 +1255,7 @@ module.exports = function(CardTemplates){
           ]
         },
         {
-          "dom": "a.discard-card-style",
+          "dom": "a.discard-card-style.twitterShareLink",
           "attr": {
             "target":"_blank",
             "href": {
@@ -2603,6 +2603,10 @@ module.exports = function(CardTemplates){
         "dom": "p.tactical-top-match.summarySentence.animation-opening",
         "condition": "showCarouselResults",
         "content": ""
+      },
+      {
+        "dom": ".cardAnim.tacticalSharing",
+        "template": "shareButtons"
       },
       {
         "dom": "a.tactical-top-match.small.explaain-link.whatDoesThisMean.opacity-0",

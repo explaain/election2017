@@ -78,13 +78,6 @@ app.get('/policy', function(req, res, next) {
 });
 
 app.get('/shared/:party?/:percentage?', function(req, res, next) {
-  /*
-    Need different share URL formats for:
-      - tactical voting
-      - principled voting
-      - spoiling ballot
-      - swapping vote
-  */
   req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `https://${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
@@ -96,11 +89,28 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
   }
   req.params.share = {
     fb: {
-      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies`,
-      subtitle: `Who best represents your views?`
+      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies. Who should you vote for? #GE2017`,
+      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
     },
     tw: {
-      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies`,
+      title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies. Who should you vote for? #GE2017`,
+      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+    }
+  }
+  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+})
+
+app.get('/tactical/:party?/:location?', function(req, res, next) {
+  req.params.resourceRoot = `https://${req.headers.host}`;
+  req.params.quizHome = `https://${req.headers.host}/quiz`;
+  req.params.canonical = `//${req.headers.host}/tactical/${req.params.party}`;
+  req.params.share = {
+    fb: {
+      title: `I'm voting tactically for ${req.params.party} in ${req.params.constituency}. Who should you vote for? #GE2017`,
+      subtitle: `Who best represents your views? ${req.headers.host}/quiz`
+    },
+    tw: {
+      title: `I'm voting tactically for ${req.params.party} in ${req.params.constituency}. Who should you vote for? #GE2017`,
       subtitle: `Who best represents your views? ${req.headers.host}/quiz`
     }
   }
