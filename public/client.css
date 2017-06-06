@@ -2702,6 +2702,9 @@ img.swapvote {
   background: #f6f6f6;
 }
 
-.summarySentence.animation-opening ~ .cardAnim.tacticalSharing {
+.cardAnim.tacticalSharing {
     display: none;
+}
+.animated-tactical-result ~ .cardAnim.tacticalSharing {
+  display: block;
 }
