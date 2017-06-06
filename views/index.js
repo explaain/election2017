@@ -2265,9 +2265,9 @@ class Quiz {
           '5th'
         ]
         qp.partiesHybridList = qp.partiesHybridList.filter(p=>{
-          return qp.quizChanceResults.parties.filter(function(_party) {
-            return p.key == _party.key
-          }).length
+          if (qp.localCandidateData.filter(function(candidate) {
+            return p.dClubNames.indexOf(candidate.party_name) > -1;
+          }).length > 0) return p;
         }).map(function(party) {
           var fullParty = qp.country.parties.filter(function(_party){return party.key==_party.key})[0] || allData.getAllData().allParties.filter(function(_party){return party.key==_party.key})[0];
           if (!fullParty)
@@ -2421,12 +2421,14 @@ class Quiz {
             });
 
             // Hide parties that aren't running in this seat;
-            consideredParties = consideredParties.filter(p=>{
-              return qp.quizChanceResults.parties.filter(function(_party) {
-                return p.key == _party.key
-              }).length
-            });
-            
+            // JEREMY: for some reason qp.localCandidateData is empty.
+            // console.log("Parties running here",qp.localCandidateData);
+            // consideredParties = consideredParties.filter(p=>{
+            //   if (qp.localCandidateData.filter(function(candidate) {
+            //     return p.dClubNames.indexOf(candidate.party_name) > -1;
+            //   }).length > 0) return p;
+            // });
+
             // User entered a postcode outside her chosen country
             $graph.find("[data-party-key]").each(function() {
               var kill = true;
