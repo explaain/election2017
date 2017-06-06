@@ -2419,6 +2419,14 @@ class Quiz {
               consideredParties.push(result.partiesAll[i]);
               // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
             });
+
+            // Hide parties that aren't running in this seat;
+            consideredParties = consideredParties.filter(p=>{
+              return qp.quizChanceResults.parties.filter(function(_party) {
+                return p.key == _party.key
+              }).length
+            });
+            
             // User entered a postcode outside her chosen country
             $graph.find("[data-party-key]").each(function() {
               var kill = true;
