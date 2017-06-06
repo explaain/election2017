@@ -2686,6 +2686,9 @@ $graph.addClass(animFlags.tacticalCrown.class)
           $('.card-carousel-nav').attr('data-carousel-current', i);
           $('.card-carousel').attr('data-carousel-current', i);
 
+          // Track carousel views
+          trackEvent("Carousel slider "+i,{currentSlide: currentSlide, nextSlide: i});
+
           // This card
           $('[data-carousel-link]').removeClass('carousel-selected');
           $(`[data-carousel-link=${i}]`).addClass('carousel-selected');
