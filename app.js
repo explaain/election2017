@@ -105,7 +105,7 @@ app.get('/tactical/:party?/:constituency?', function(req, res, next) {
   req.params.validShare = req.params.party && req.params.constituency && isNaN(req.params.constituency);
   req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `https://${req.headers.host}/quiz`;
-  req.params.canonical = `//${req.headers.host}/tactical/${req.params.party}`;
+  req.params.canonical = `//${req.headers.host}/tactical/${req.params.party}/${req.params.constituency}`;
   req.params.share = {
     fb: {
       title: `I'm voting tactically for ${req.params.party} in ${req.params.constituency}.`,
