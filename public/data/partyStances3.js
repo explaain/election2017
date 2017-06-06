@@ -592,7 +592,7 @@ var partyStances = {
                 opinion: 0.5
               },
               "snp": {
-                opinion: 0.2
+                opinion: 1
               }
             }
           },
