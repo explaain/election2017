@@ -2688,3 +2688,10 @@ img.swapvote {
 .card.collaboration a img {
   max-width: 90%;
 }
+
+#ifBrowser {
+  text-align: center;
+  color: grey;
+  padding: 40px 0 20px;
+  background: #f6f6f6;
+}
