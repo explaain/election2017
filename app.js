@@ -78,6 +78,7 @@ app.get('/policy', function(req, res, next) {
 });
 
 app.get('/shared/:party?/:percentage?', function(req, res, next) {
+  req.params.validShare = req.params.party && typeof req.params.percentage !== 'undefined' && !isNaN(req.params.percentage);
   req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `https://${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/shared/${req.params.party}/${req.params.percentage}`;
@@ -101,6 +102,7 @@ app.get('/shared/:party?/:percentage?', function(req, res, next) {
 })
 
 app.get('/tactical/:party?/:constituency?', function(req, res, next) {
+  req.params.validShare = req.params.party && req.params.constituency && isNaN(req.params.constituency);
   req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.quizHome = `https://${req.headers.host}/quiz`;
   req.params.canonical = `//${req.headers.host}/tactical/${req.params.party}`;
