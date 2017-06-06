@@ -14,12 +14,11 @@
     <link href="//fonts.googleapis.com/css?family=Lato:400,600,700,900" rel="stylesheet" type="text/css" />
     <link href="//fonts.googleapis.com/css?family=Rubik:300,400,500,700,900" rel="stylesheet">
     <link href="/compiled.css?v=<%=NOCACHE%>" rel="stylesheet" type="text/css" />
-    <link href="/client.css?v=<%=NOCACHE%>" rel="stylesheet" type="text/css" />
+    <!-- <link href="/client.css?v=<%=NOCACHE%>" rel="stylesheet" type="text/css" /> -->
 
     <%- include partials/favicons.ejs %>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
-
 
     <% if(typeof params !== 'undefined' && params.party && params.percentage) { %>
       <%- include partials/meta-quizresults.ejs %>
