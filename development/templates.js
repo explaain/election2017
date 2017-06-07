@@ -3310,6 +3310,12 @@ module.exports = function(CardTemplates){
                 "dom": ".card-visible.text-center",
                 "content": [
                   {
+                    "dom": "img._unilad-logo.starter-logo",
+                    "attr": {
+                      "src": "/img/unilad_lone.png"
+                    }
+                  },
+                  {
                     "dom": "h2",
                     "content": "Have you decided who you're voting for?"
                   },
