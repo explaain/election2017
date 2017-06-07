@@ -1745,6 +1745,9 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
+        if ('parentIFrame' in window) {
+        	parentIFrame.size(1100); // Set height to 100px
+        }
         routes.quizNew().push();
       },
       // Quiz collapses
