@@ -2722,3 +2722,8 @@ body > div.body.quizStarter ~ #ifBrowser {
 .body.quizStarter > div.main > div.page-content {
     min-height: 0;
 }
+
+
+.starter-logo {
+  width: 60%;
+}
