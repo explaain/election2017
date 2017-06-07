@@ -2873,6 +2873,8 @@ class Quiz {
     const quiz = model.questions;
     const subquestions = self.currentQuestion ? self.currentQuestion.answers[self.getCurrentQuestion().binary] : null;
 
+    $("#ifBrowser").remove();
+
     // On Landing Page button click
     if((self.beginTheQuiz || !self.params) && !qp.hasStarted) {
       qp.hasStarted = true;
