@@ -1769,6 +1769,9 @@ class QuizStarter {
       answerYes: function() {
         // Maybe we need an iframe message here, to collapse the frame?
         $('body').animate({height:0}, 200);
+        if ('parentIFrame' in window) {
+          parentIFrame.size(0);
+        }
       }
     }, CardTemplates.quizStarter)
   }
