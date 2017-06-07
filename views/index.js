@@ -2268,7 +2268,7 @@ class Quiz {
           if (!(qp.quizChanceResults.parties.filter(function(_party) {
             return party.key == _party.key
           }).length)) {
-            // if (SiteBrand != '38degrees')
+            if (SiteBrand != '38degrees')
               party.faded = true;
           }
           return party;
