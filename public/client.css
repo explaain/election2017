@@ -1811,7 +1811,7 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 .body.quiz._unilad .bestMatchSoFar {
   display: none;
 }
-.body.quiz._ge2017 .bestMatch {
+.body.quiz:not(_38degrees) .bestMatch {
   display: none;
 }
 .bestMatchSoFar {
@@ -1819,7 +1819,7 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 }
 
 
-.body.quiz._ge2017 .resultTips {
+.body.quiz:not(_38degrees) .resultTips {
   display: none;
 }
 
@@ -2063,17 +2063,17 @@ span.t-featured {
   margin: 50px 20px 0px;
 }
 
-.body.quiz._ge2017 a.quizPercentagesParty {
+.body.quiz:not(_38degrees) a.quizPercentagesParty {
   /*pointer-events: none;*/
 }
-/*.body.quiz._ge2017 a.quizPercentagesParty:nth-child(3){
+/*.body.quiz:not(_38degrees) a.quizPercentagesParty:nth-child(3){
   margin-top: 70px;
 }*/
 .body.quiz._38degrees a.quizPercentagesParty {
   /*pointer-events: none;*/
 }
 
-.body.quiz._ge2017 p.small-link.calculate.onFinalResults {
+.body.quiz:not(_38degrees) p.small-link.calculate.onFinalResults {
   margin: 60px 0 -20px;
 }
 
