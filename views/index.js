@@ -2006,10 +2006,8 @@ class Quiz {
 
       var topParties = []
       if (qp.country) {
-        console.log(qp.country.parties);
         qp.country.parties.forEach(function(party) {
           const _party = partyMatches[party.key];
-          console.log(_party);
           if (_party) {
             party.percentage = parseInt(_party.match*100) + '%';
             party.percentageText = parseInt(_party.match*100) + '%';
@@ -2022,23 +2020,13 @@ class Quiz {
                 question: thisQuestion.question
               }
             })
-            console.log('party');
-            console.log(party);
-            console.log(parseInt(party.percentage)>0);
-            console.log(topParties[0] ? party.percentage == topParties[0].percentage : false);
             if (!topParties.length || parseInt(party.percentage) > parseInt(topParties[0].percentage)) {
-              console.log(!topParties.length);
-              console.log(party.percentage);
-              console.log(topParties[0]);
               topParties = [party];
             } else if (parseInt(party.percentage)>0 && party.percentage == topParties[0].percentage) {
               topParties.push(party);
-              console.log(topParties);
             }
           }
         })
-        console.log('topParties');
-        console.log(topParties);
 
         qp.resultsData = [];
         topParties.map(function(topParty) {
@@ -2485,6 +2473,7 @@ class Quiz {
                 return _p.key == key;
               }).length > 0;
             }
+            console.log("partyInList('A Party!', consideredParties)");
             console.log(partyInList('labour', consideredParties));
             console.log(partyInList('labour', chanceMatches));
             console.log(partyInList('conservative', consideredParties));
@@ -2495,7 +2484,9 @@ class Quiz {
             console.log(partyInList('green', chanceMatches));
             console.log(partyInList('ukip', consideredParties));
             console.log(partyInList('ukip', chanceMatches));
-            const topTwoException = partyInList(consideredParties[0].key, chanceMatches) && partyInList(consideredParties[1].key, chanceMatches);
+            const topTwoException = chanceMatches.length > 1 && partyInList(chanceMatches[0].key, consideredParties) && partyInList(chanceMatches[1].key, consideredParties);
+            console.log('consideredParties');
+            console.log(consideredParties);
             console.log('topTwoException');
             console.log(topTwoException);
             var tacticalChoice = topTwoException ? chanceMatches[0] : chanceMatches[1];
@@ -2575,12 +2566,12 @@ $graph.addClass(animFlags.tacticalGraph.class);
                 if(safeSeat) {
                   $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
                   $graph.addClass(animFlags.safe.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: qp.country.code, country: qp.country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else if(unappealingSeat) {
                   $graph.addClass(animFlags.safe.class)
                   $graph.addClass(animFlags.unappealing.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: qp.country.code, country: qp.country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
                   return false;
                 } else {
                   $graph.removeClass(animFlags.battle.class)
@@ -2682,7 +2673,7 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
                   $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
 
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
+                  trackEvent("Tactial Result Received",{type: "Quiz", code: qp.country.code, country: qp.country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
                 }
               }
             }, animFlags.tacticalInit.delay);
@@ -2851,18 +2842,13 @@ $graph.addClass(animFlags.tacticalCrown.class)
             return s !== null;
           });
 
-          console.log('scoresPerIssue');
-          console.log(scoresPerIssue);
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
             return obj.key;
           });
 
           party.openMatches = function(e){
-            console.log('party.openMatches');
-            console.log(e);
             EEE = e;
-            console.log(party);
             if (e.path.filter(function(_p) {return _p.tagName=="A" && _p.className.includes('quizPercentagesParty')}).length > 0) {
               e.stopPropagation();
               var tempKey = '//api.explaain.com/IssueMatch/' + party.key;
