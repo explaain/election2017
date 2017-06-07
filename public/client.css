@@ -2686,3 +2686,39 @@ img.swapvote {
 .animated-tactical-result ~ .cardAnim.tacticalSharing {
   display: block;
 }
+
+/* */
+.quizStarter .toplogo,
+.quizStarter .top-strip {
+    display: none;
+}
+
+body > div.body.quizStarter {
+    padding: 10px 0;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+body > div.body.quizStarter .quizTopLine {
+    display: none !important;
+}
+
+body > div.body.quizStarter .step {
+    padding-bottom: 0 !important;
+}
+
+body > div.body.quizStarter .card {
+    margin: 0 !important;
+}
+
+body > div.body.quizStarter ~ #ifBrowser {
+    display: none !important;
+}
+
+.quizStarter .quizAnswerYesNo {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+.body.quizStarter > div.main > div.page-content {
+    min-height: 0;
+}

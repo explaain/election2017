@@ -173,19 +173,15 @@ class App {
 
     if (Embed) {
 
-      if(embedSwitch) {
-        // Put quizStarter stuff here, minus the header/footer
-      } else {
-        var params = {
-          name: StepName
-        }
-        var step = new Step(params);
-        return h('div',step);
+      var params = {
+        name: StepName
       }
+      var step = new Step(params);
+      return h('div',step);
 
     } else {
 
-      return h('div.body' + (SiteBrand ? '._' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : ''),
+      return h('div.body' + (SiteBrand ? '._' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : '') + (embedSwitch ? "."+embedSwitch : ''),
         h('div.main',
           h('div.top-strip'),
 
@@ -1742,14 +1738,25 @@ class QuizStarter {
   }
 
   render() {
+    $(document).ready(function() {
+      $("footer").remove();
+    })
+
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
+        if ('parentIFrame' in window) {
+          parentIFrame.size(1100); // Set height to 1100px
+        }
+        $(".body").removeClass("quizStarter");
+        console.log($(".quizStarter").removeClass("quizStarter"))
         routes.quizNew().push();
       },
       // Quiz collapses
       answerYes: function() {
         // Maybe we need an iframe message here, to collapse the frame?
+        $(".card").remove();
+        $('.quizStarter').animate({padding:0}, 200);
         $('body').animate({height:0}, 200);
       }
     }, CardTemplates.quizStarter)
