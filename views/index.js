@@ -1745,21 +1745,19 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
-        if ('parentIFrame' in window) {
-          parentIFrame.size(1100); // Set height to 1100px
-        }
+        if ('parentIFrame' in window) parentIFrame.size(1100)
         $(".body").removeClass("quizStarter");
         console.log($(".quizStarter").removeClass("quizStarter"))
         routes.quizNew().push();
       },
       // Quiz collapses
       answerYes: function() {
-        if ('parentIFrame' in window) {
-          parentIFrame.size(0); // Set height to 0px
-        }
+        if ('parentIFrame' in window) parentIFrame.size(0);
         $(".card").remove();
         $('.quizStarter').animate({padding:0}, 200);
-        $('body').animate({height:0}, 200);
+        $('body').animate({height:0}, 200, function() {
+          if ('parentIFrame' in window) parentIFrame.close()
+        });
       }
     }, CardTemplates.quizStarter)
   }
