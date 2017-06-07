@@ -2480,7 +2480,25 @@ class Quiz {
               && noMatch.filter(q=>q.key==p.key).length === 0
             ));
             chanceMatches.sort((a,b)=>b.percentage - a.percentage);
-            var tacticalChoice = chanceMatches[0];
+            const partyInList = function(key, list) {
+              return list.filter(function(_p) {
+                return _p.key == key;
+              }).length > 0;
+            }
+            console.log(partyInList('labour', consideredParties));
+            console.log(partyInList('labour', chanceMatches));
+            console.log(partyInList('conservative', consideredParties));
+            console.log(partyInList('conservative', chanceMatches));
+            console.log(partyInList('lib-dem', consideredParties));
+            console.log(partyInList('lib-dem', chanceMatches));
+            console.log(partyInList('green', consideredParties));
+            console.log(partyInList('green', chanceMatches));
+            console.log(partyInList('ukip', consideredParties));
+            console.log(partyInList('ukip', chanceMatches));
+            const topTwoException = partyInList(consideredParties[0].key, chanceMatches) && partyInList(consideredParties[1].key, chanceMatches);
+            console.log('topTwoException');
+            console.log(topTwoException);
+            var tacticalChoice = topTwoException ? chanceMatches[0] : chanceMatches[1];
             chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
 
             console.log("Anim",{
@@ -2777,7 +2795,6 @@ $graph.addClass(animFlags.tacticalCrown.class)
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                console.log(debate[1].parties[party.key]);
                 return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
               })
               .map(function(debate) {
@@ -2787,8 +2804,6 @@ $graph.addClass(animFlags.tacticalCrown.class)
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
-
-            console.log(party.key, opinionsPerIssue);
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
