@@ -1760,6 +1760,11 @@ class QuizStarter {
         $(".card").remove();
         $('.quizStarter').animate({padding:0}, 200);
         $('body').animate({height:0}, 200);
+        setTimeout(function() {
+          if ('parentIFrame' in window) {
+          	parentIFrame.close();
+          }
+        },1000)
       }
     }, CardTemplates.quizStarter)
   }
