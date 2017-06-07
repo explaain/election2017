@@ -49,6 +49,7 @@ const JSIndex = [
 const JSFiles = [
   'public/js/jquery.min.js',
   'public/js/slick.min.js',
+  'public/js/iframeResizer.contentWindow.min.js',
   'tmp/explaain.js',
   'tmp/index.js',
 ];
