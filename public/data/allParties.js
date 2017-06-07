@@ -132,13 +132,19 @@ var allParties = [
     name: "National Health Action Party",
     color: "#176da6",
     colorLight: "#176da6",
-    photo: "/img/leader-faces/irvine.png"
+    photo: "/img/leader-faces/irvine.png",
+    dClubNames: [
+      "National Health Action Party"
+    ]
   },
   {
     key: "independent-wright",
     name: "Claire Wright (Independent)",
     color: "lightgrey",
     colorLight: "lightgrey",
-    photo: "/img/leader-faces/wright.png"
+    photo: "/img/leader-faces/wright.png",
+    dClubNames: [
+      "Claire Wright"
+    ]
   }
 ];
