@@ -2905,7 +2905,7 @@ class Quiz {
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
+                return answeredDebates.includes(debate[0]) //&& debate[1].parties[party.key];
               })
               .map(function(debate) {
                   return {
