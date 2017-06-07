@@ -464,11 +464,14 @@ var partyStances = {
           "38-environment-2": {
             question: "Should we ban pesticides which kill bees?",
             parties: {
+              "green": {
+                opinion: 1
+              },
               "labour": {
                 opinion: 1
               },
               "lib-dem": {
-                opinion: 0.8
+                opinion: 1
               },
               "ukip": {
                 opinion: 0.5
