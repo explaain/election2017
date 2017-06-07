@@ -2694,7 +2694,7 @@ img.swapvote {
 }
 
 body > div.body.quizStarter {
-    padding: 10px 0 !important;
+    padding: 10px 0;
     height: auto !important;
     min-height: 0 !important;
 }
