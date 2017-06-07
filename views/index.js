@@ -1841,6 +1841,11 @@ class Quiz {
     self.getQuestionProp = function(num, prop) {
       return qp.questions[num][prop];
     }
+    self.getReachedQuestions = function() {
+      return qp.questions.filter(function(q) {
+        return q.reached;
+      })
+    }
     self.getBegunQuestions = function() {
       return qp.questions.filter(function(q) {
         return q.binary;
@@ -2052,16 +2057,14 @@ class Quiz {
       var opinion = self.getCurrentQuestion().binary === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
     }
-
     self.skipQuestion = function() {
       self.submitOpinion(false, true);
     }
-
     self.back = function() {
       qp.quizResults = false;
       qp.quizResultsPage = false;
 
-      if(self.getBegunQuestions().length > 0) {
+      if(self.getReachedQuestions().length > 0) {
         //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
         const num = self.getCurrentQuestionNumber();
         self.setQuestionProp(num, self.getQuestionProp(num,'binary') ? 'binary' : 'reached', false);
@@ -2505,6 +2508,7 @@ class Quiz {
               });
 
               // User entered a postcode outside her chosen country
+              var killedParties = 0;
               $graph.find("[data-party-key]").each(function() {
                 var kill = true;
                 var isInCountry = false;
@@ -2518,26 +2522,28 @@ class Quiz {
                   console.log($(this).attr('data-party-key')+" just wasn't meant to be here...");
                 }
                 if(kill) {
+                  killedParties++;
                   if(isInCountry) {
                     console.log(`Filter: Hid ${$(this).attr('data-party-key')} because wrong constituency`);
-                    $(this).animate({opacity:0.2},animFlags.tacticalGraph.delay*0.5,function() {
-                    // Just fade it to show it's still considered, although not present in the constituency
-                    });
+                    // $(this).animate({opacity:0.2},animFlags.tacticalGraph.delay*0.5,function() {
+                    // // Just fade it to show it's still considered, although not present in the constituency
+                    // });
                   } else {
                     console.log(`Filter: Killed ${$(this).attr('data-party-key')} because wrong country`);
-                    // Hide and then remove, this is a foreign party.
-                    $(this).animate({opacity:0},animFlags.tacticalGraph.delay*0.5,function() {
-                      $(this).remove();
-                      consideredParties = consideredParties.filter(p=>{
-                        return qp.localCandidateData.filter(function(candidate) {
-                          return p.dClubNames.indexOf(candidate.party_name) > -1;
-                        }).length > 0
-                      });
-                    });
                   }
+                  // Hide and then remove, this is a foreign party.
+                  $(this).animate({opacity:0},animFlags.tacticalGraph.delay*0.5,function() {
+                    $(this).remove();
+                    consideredParties = consideredParties.filter(p=>{
+                      return qp.localCandidateData.filter(function(candidate) {
+                        return p.dClubNames.indexOf(candidate.party_name) > -1;
+                      }).length > 0
+                    });
+                  });
                 }
               });
               consideredParties.sort((a,b)=>b.percentage - a.percentage);
+              if(killedParties > 0) $(".secondaryBoxes").addClass('fadedParties');
 
               var boxes = {
                 chanceMatches: {
@@ -2904,7 +2910,7 @@ class Quiz {
               .map(function(debate) {
                   return {
                       question: debate[1].question,
-                      partyOpinion: debate[1].parties[party.key] && typeof debate[1].parties[party.key] === 'number' ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
+                      partyOpinion: debate[1].parties[party.key] ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
@@ -2932,7 +2938,7 @@ class Quiz {
               .filter(function(debate) {
                   return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
               });
-            if (score.length) {
+            if (score.length && score.length > 0) {
               score = score
                 .map(function(debate) {
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
