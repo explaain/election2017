@@ -2906,12 +2906,12 @@ class Quiz {
               .entries(issue.debates)
               .filter(function(debate) {
                 console.log(debate[1].parties[party.key]);
-                return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
+                return answeredDebates.includes(debate[0]) //&& debate[1].parties[party.key];
               })
               .map(function(debate) {
                   return {
                       question: debate[1].question,
-                      partyOpinion: debate[1].parties[party.key] ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
+                      partyOpinion: debate[1].parties[party.key] && typeof debate[1].parties[party.key] === 'number' ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
