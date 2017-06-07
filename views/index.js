@@ -2517,6 +2517,7 @@ class Quiz {
               });
 
               // User entered a postcode outside her chosen country
+              var killedParties = 0;
               $graph.find("[data-party-key]").each(function() {
                 var kill = true;
                 var isInCountry = false;
@@ -2530,26 +2531,28 @@ class Quiz {
                   console.log($(this).attr('data-party-key')+" just wasn't meant to be here...");
                 }
                 if(kill) {
+                  killedParties++;
                   if(isInCountry) {
                     console.log(`Filter: Hid ${$(this).attr('data-party-key')} because wrong constituency`);
-                    $(this).animate({opacity:0.2},animFlags.tacticalGraph.delay*0.5,function() {
-                    // Just fade it to show it's still considered, although not present in the constituency
-                    });
+                    // $(this).animate({opacity:0.2},animFlags.tacticalGraph.delay*0.5,function() {
+                    // // Just fade it to show it's still considered, although not present in the constituency
+                    // });
                   } else {
                     console.log(`Filter: Killed ${$(this).attr('data-party-key')} because wrong country`);
-                    // Hide and then remove, this is a foreign party.
-                    $(this).animate({opacity:0},animFlags.tacticalGraph.delay*0.5,function() {
-                      $(this).remove();
-                      consideredParties = consideredParties.filter(p=>{
-                        return qp.localCandidateData.filter(function(candidate) {
-                          return p.dClubNames.indexOf(candidate.party_name) > -1;
-                        }).length > 0
-                      });
-                    });
                   }
+                  // Hide and then remove, this is a foreign party.
+                  $(this).animate({opacity:0},animFlags.tacticalGraph.delay*0.5,function() {
+                    $(this).remove();
+                    consideredParties = consideredParties.filter(p=>{
+                      return qp.localCandidateData.filter(function(candidate) {
+                        return p.dClubNames.indexOf(candidate.party_name) > -1;
+                      }).length > 0
+                    });
+                  });
                 }
               });
               consideredParties.sort((a,b)=>b.percentage - a.percentage);
+              if(killedParties > 0) $(".secondaryBoxes").addClass('fadedParties');
 
               var boxes = {
                 chanceMatches: {
