@@ -2914,7 +2914,7 @@ class Quiz {
               .map(function(debate) {
                   return {
                       question: debate[1].question,
-                      partyOpinion: debate[1].parties[party.key] && typeof debate[1].parties[party.key] === 'number' ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
+                      partyOpinion: debate[1].parties[party.key] ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
@@ -2944,7 +2944,7 @@ class Quiz {
               .filter(function(debate) {
                   return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
               });
-            if (score.length) {
+            if (score.length && score.length > 0) {
               score = score
                 .map(function(debate) {
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
