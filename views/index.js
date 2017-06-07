@@ -157,6 +157,8 @@ class App {
         GoSquaredTracker('track');
         TrackingWithGoSquared = true;
         console.log('Now Tracking');
+      } else {
+        console.log('Not Tracking!');
       }
     }
 
@@ -1781,6 +1783,8 @@ class QuizStarter {
             GoSquaredTracker('track');
             TrackingWithGoSquared == true;
             console.log('Now Tracking');
+          } else {
+            console.log('Not Tracking!');
           }
         }
         routes.quizNew().push();
