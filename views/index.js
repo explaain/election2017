@@ -2208,6 +2208,7 @@ class Quiz {
 
     self.setPriorities = function() {
       qp.prioritiesSet = self.prioritiesSet = true;
+      trackEvent("Final results",{type: "Quiz", party: qp.resultsData.name, percentage: parseInt(qp.resultsData.percentage)});
       self.refresh();
     }
 
