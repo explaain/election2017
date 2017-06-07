@@ -2694,11 +2694,24 @@ img.swapvote {
 }
 
 body > div.body.quizStarter {
+    padding: 10px 0 !important;
     height: auto !important;
     min-height: 0 !important;
 }
 
-body > div.body.quizStarter ~ .ifBrowser {
+body > div.body.quizStarter .quizTopLine {
+    display: none !important;
+}
+
+body > div.body.quizStarter .step {
+    padding-bottom: 0 !important;
+}
+
+body > div.body.quizStarter .card {
+    margin: 0 !important;
+}
+
+body > div.body.quizStarter ~ #ifBrowser {
     display: none !important;
 }
 
