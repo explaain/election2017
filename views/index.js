@@ -1759,6 +1759,7 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
+        $('.quizStarter').animate({padding:0}, 200);
         if ('parentIFrame' in window) {
           parentIFrame.size(1100); // Set height to 1100px
         }
