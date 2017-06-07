@@ -2201,7 +2201,14 @@ class Quiz {
 
     self.setPriorities = function() {
       qp.prioritiesSet = self.prioritiesSet = true;
-      trackEvent("Final results",{type: "Quiz", party: qp.resultsData.name, percentage: parseInt(qp.resultsData.percentage)});
+      console.log(qp);
+      var reportData = {
+        type: "Quiz",
+        party: qp.resultsData[0].name,
+        percentage: parseInt(qp.resultsData[0].percentage)
+      };
+      console.log("Reporting",reportData)
+      trackEvent("Final results",reportData);
       self.refresh();
     }
 
