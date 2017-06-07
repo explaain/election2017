@@ -2493,6 +2493,7 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": ".card.collaboration",
+            "condition": "showCarouselResults",
             "content": [
               {
                 "dom": ".card-visible.text-center",

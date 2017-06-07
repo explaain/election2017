@@ -1587,7 +1587,7 @@ a:hover .quizPercentagesPartyFace {
   /*margin: 0;*/
 }
 
-.body._unilad .or, .body._unilad .card.quiz-extra, .body._38degrees .or, .body._38degrees .card.quiz-extra {
+.body._38degrees .or, .body._38degrees .card.quiz-extra {
   display: none;
 }
 
@@ -1703,7 +1703,7 @@ a:hover .quizPercentagesPartyFace {
   margin-top: 50px;
 }
 
-.body:not(._unilad) .questions .quizResults {
+.body .questions .quizResults {
   display: none;
 }
 
@@ -1800,17 +1800,7 @@ a.turnupFooter:hover, a.ge2017Footer:hover {
 .card-carousel .postcode-instructions {
   margin-bottom: 20px; /* For when postcode disappears */
 }
-.body.quiz._unilad .postcode-instructions {
-  display: none;
-}
-.body.quiz._unilad .postcode-form {
-  display: none;
-}
 
-
-.body.quiz._unilad .bestMatchSoFar {
-  display: none;
-}
 .body.quiz:not(_38degrees) .bestMatch {
   display: none;
 }
@@ -1874,15 +1864,6 @@ h2.seeHow {
   /*display: none;*/
 }
 
-.body.quiz._unilad .card.results-top {
-  display: none;
-}
-.body.quiz._unilad h2.seeHow {
-  display: none;
-}
-.body.quiz._unilad .step-number {
-  display: none;
-}
 
 .body.quiz footer a.ge2017Footer img {
   height: 50px;
@@ -2041,9 +2022,6 @@ span.t-featured {
   margin-top: 50px;
 }
 
-.body:not(._unilad) .oldResultsFormat {
-  display: none;
-}
 .toplogo {
     text-align: center !important;
 }

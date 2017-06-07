@@ -61,7 +61,7 @@ var cfg = {
     logoClass: "_unilad-logo",
     footerLink: "//www.turnup.org.uk/",
     randomise: true,
-    carousel: false,
+    carousel: true,
     sharing: {
       basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - http://bit.ly/unilad-ge2017 via @UNILAD",
     },
