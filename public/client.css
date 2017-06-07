@@ -2686,3 +2686,23 @@ img.swapvote {
 .animated-tactical-result ~ .cardAnim.tacticalSharing {
   display: block;
 }
+
+/* */
+.quizStarter .toplogo,
+.quizStarter .top-strip {
+    display: none;
+}
+
+body > div.body.quizStarter {
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+body > div.body.quizStarter ~ .ifBrowser {
+    display: none !important;
+}
+
+.quizStarter .quizAnswerYesNo {
+    margin-top: 0;
+    margin-bottom: 25px;
+}

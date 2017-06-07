@@ -175,6 +175,25 @@ class App {
 
       if(embedSwitch) {
         // Put quizStarter stuff here, minus the header/footer
+        switch(embedSwitch) {
+          case "quizStarter":
+            return h('div.body' + (SiteBrand ? '._' + SiteBrand : '') + (Standalone==true ? '.standalone' : '') + (QuizPage==true ? '.quiz' : '') + (embedSwitch ? "."+embedSwitch : ''),
+              h('div.main',
+                h('div.top-strip'),
+
+                  this.header,
+
+                  // h('div.page-content',
+
+                  routes.quizStarter(function() {
+                    var step = new Step({name: 'quizStarter'});
+                    return h('div',step);
+                  }) // organic
+                // )
+              )
+            )
+            break;
+        }
       } else {
         var params = {
           name: StepName
@@ -330,11 +349,6 @@ class App {
             routes.quizLandingTactical.under(landingPage), // from fb - tactical
 
             routes.quizNew(landingPage), // organic
-
-            routes.quizStarter(function() {
-              var step = new Step({name: 'quizStarter'});
-              return h('div',step);
-            }), // organic
 
             routes.quiz(function (params) {
               var params = {
@@ -1745,6 +1759,9 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
+        if ('parentIFrame' in window) {
+          parentIFrame.size(1100); // Set height to 1100px
+        }
         routes.quizNew().push();
       },
       // Quiz collapses
