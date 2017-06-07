@@ -2219,7 +2219,7 @@ class Quiz {
           if (!(qp.quizChanceResults.parties.filter(function(_party) {
             return party.key == _party.key
           }).length)) {
-            if (SiteBrand != '38degrees')
+            // if (SiteBrand != '38degrees')
               party.faded = true;
           }
           return party;
@@ -2421,267 +2421,278 @@ class Quiz {
             });
 
             // Hide parties that aren't running in this seat;
-            // JEREMY: for some reason qp.localCandidateData is empty.
-            // console.log("Parties running here",qp.localCandidateData);
-            // consideredParties = consideredParties.filter(p=>{
-            //   if (qp.localCandidateData.filter(function(candidate) {
-            //     return p.dClubNames.indexOf(candidate.party_name) > -1;
-            //   }).length > 0) return p;
-            // });
+            console.log("Parties running here", qp.localCandidateData);getResults('localCandidates')
+            .then(function(results) {
+              qp.localCandidateData = model.user.results[model.user.results.length-1][0][0].mainResults.map(function(candidate){
+                candidate.image_url = candidate.image_url || '/img/person.png';
+                return candidate;
+              });
+              consideredParties = consideredParties.filter(p=>{
+                return qp.localCandidateData.filter(function(candidate) {
+                  return p.dClubNames.indexOf(candidate.party_name) > -1;
+                }).length
+                // At the moment the deletion is jarring.
+                // Or we could mark them as faded, and then style them to opacity / fade out slowly
+                // p.faded = !qp.localCandidateData.filter(function(candidate) {
+                //   return p.dClubNames.indexOf(candidate.party_name) > -1;
+                // }).length > 0
+                // return p;
+              });
 
-            // User entered a postcode outside her chosen country
-            $graph.find("[data-party-key]").each(function() {
-              var kill = true;
-              if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
-              if(kill) {
-                console.log("Killed because wrong country",$(this).attr('data-party-key'));
-                $(this).hide();
-              } else $(this).show()
-            });
-            consideredParties.sort((a,b)=>b.percentage - a.percentage);
+              // User entered a postcode outside her chosen country
+              $graph.find("[data-party-key]").each(function() {
+                var kill = true;
+                if(consideredParties.find(p=>p.key==$(this).attr('data-party-key'))) kill = false;
+                if(kill) {
+                  console.log("Killed because wrong country",$(this).attr('data-party-key'));
+                  $(this).hide();
+                } else $(this).show()
+              });
+              consideredParties.sort((a,b)=>b.percentage - a.percentage);
 
-            var boxes = {
-              chanceMatches: {
-                items: [],
-                top: 0,
-                bottom: 205,
-                left: 0,
-                right: $graph.width(),
-                itemSize: 133 + 10
-              },
-              noChance: {
-                items: [],
-                top: 205,
-                bottom: futureHeight,
-                left: 0,
-                right: $graph.width() / 2,
-                itemSize: 43 + 10
-              },
-              noMatch: {
-                items: [],
-                top: 205,
-                bottom: futureHeight,
-                left: $graph.width() / 2,
-                right: $graph.width(),
-                itemSize: 43 + 10
-              }
-            }
-
-            // #1: Calculate new positions for each face
-            var items = [];
-            const MATCH_THRESHOLD = (consideredParties[0].percentage - consideredParties[consideredParties.length-1].percentage) / 2;
-            console.log("Matching on threshold (top - bottom / 2)",MATCH_THRESHOLD)
-            var topMatches = consideredParties.filter(p=>p.percentage == consideredParties[0].percentage);
-
-            //--1a: No chance
-            var noChance = consideredParties.filter(p=>typeof p.chance !== 'number');
-            noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
-
-            //--1b: No match
-            var noMatch = consideredParties.filter(p=> (
-              topMatches[0].percentage - p.percentage > MATCH_THRESHOLD
-              && noChance.filter(q=>q.key==p.key).length === 0
-            ));
-            noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
-
-            //--1c: The runnings
-            // Has a chance
-            // Is a high match
-            var chanceMatches = consideredParties.filter(p => (
-              typeof p.chance === 'number'
-              && topMatches[0].percentage - p.percentage < MATCH_THRESHOLD
-              && noChance.filter(q=>q.key==p.key).length === 0
-              && noMatch.filter(q=>q.key==p.key).length === 0
-            ));
-            chanceMatches.sort((a,b)=>b.percentage - a.percentage);
-            var tacticalChoice = chanceMatches[0];
-            chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
-
-            console.log("Anim",{
-              consideredParties: consideredParties,
-              noChance: noChance,
-              noMatch: noMatch,
-              chanceMatches: chanceMatches,
-              tacticalChoice: tacticalChoice,
-              topMatches: topMatches
-            });
-
-            function registerAnim(p,i,category) {
-              var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
-              if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-              var itemData = category === 'chanceMatches' ? {
-                key: p.key,
-                box: category,
-                css: {
-                  left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
-                  width: boxes[category].right/chanceMatches.length,
-                  top: 15 + boxes[category].top
+              var boxes = {
+                chanceMatches: {
+                  items: [],
+                  top: 0,
+                  bottom: 205,
+                  left: 0,
+                  right: $graph.width(),
+                  itemSize: 133 + 10
+                },
+                noChance: {
+                  items: [],
+                  top: 205,
+                  bottom: futureHeight,
+                  left: 0,
+                  right: $graph.width() / 2,
+                  itemSize: 43 + 10
+                },
+                noMatch: {
+                  items: [],
+                  top: 205,
+                  bottom: futureHeight,
+                  left: $graph.width() / 2,
+                  right: $graph.width(),
+                  itemSize: 43 + 10
                 }
-              } : {
-                key: p.key,
-                box: category,
-                css: {
-                  multipleOf3: Math.ceil(boxes[category].items.length/3),
-                  left: 15 + boxes[category].left + (rowOf3(boxes[category].items.length) * boxes[category].itemSize),
-                  top: 65 + boxes[category].top + (Math.floor(boxes[category].items.length/3) * boxes[category].itemSize),
-                  width: "auto"
-                }
-              };
-
-              function rowOf3(i) {
-                let multipleOf3 = Math.ceil(i/3);
-                return 3-((multipleOf3*3)-i)-1
               }
-              $thisParty.attr('data-left', itemData.css.left);
-              $thisParty.attr('data-top', itemData.css.top);
-              // $thisParty.addClass("tac");
-              $thisParty.addClass(itemData.box);
-              // if(category === 'chanceMatches') {
-              // } else
-              items.push(itemData);
-              boxes[category].items.push(Object.assign(p,itemData))
-              console.log("Registered for anim",p.key,itemData)
-            }
 
-            safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
-            var unappealingSeat = chanceMatches.length === 0;
+              // #1: Calculate new positions for each face
+              var items = [];
+              const MATCH_THRESHOLD = (consideredParties[0].percentage - consideredParties[consideredParties.length-1].percentage) / 2;
+              console.log("Matching on threshold (top - bottom / 2)",MATCH_THRESHOLD)
+              var topMatches = consideredParties.filter(p=>p.percentage == consideredParties[0].percentage);
+
+              //--1a: No chance
+              var noChance = consideredParties.filter(p=>typeof p.chance !== 'number');
+              noChance.forEach((p,i)=>registerAnim(p,i,"noChance"));
+
+              //--1b: No match
+              var noMatch = consideredParties.filter(p=> (
+                topMatches[0].percentage - p.percentage > MATCH_THRESHOLD
+                && noChance.filter(q=>q.key==p.key).length === 0
+              ));
+              noMatch.forEach((p,i)=>registerAnim(p,i,"noMatch"));
+
+              //--1c: The runnings
+              // Has a chance
+              // Is a high match
+              var chanceMatches = consideredParties.filter(p => (
+                typeof p.chance === 'number'
+                && topMatches[0].percentage - p.percentage < MATCH_THRESHOLD
+                && noChance.filter(q=>q.key==p.key).length === 0
+                && noMatch.filter(q=>q.key==p.key).length === 0
+              ));
+              chanceMatches.sort((a,b)=>b.percentage - a.percentage);
+              var tacticalChoice = chanceMatches[0];
+              chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
+
+              console.log("Anim",{
+                consideredParties: consideredParties,
+                noChance: noChance,
+                noMatch: noMatch,
+                chanceMatches: chanceMatches,
+                tacticalChoice: tacticalChoice,
+                topMatches: topMatches
+              });
+
+              function registerAnim(p,i,category) {
+                var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
+                if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                var itemData = category === 'chanceMatches' ? {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    left: boxes[category].left + boxes[category].items.length * (boxes[category].right/chanceMatches.length),
+                    width: boxes[category].right/chanceMatches.length,
+                    top: 15 + boxes[category].top
+                  }
+                } : {
+                  key: p.key,
+                  box: category,
+                  css: {
+                    multipleOf3: Math.ceil(boxes[category].items.length/3),
+                    left: 15 + boxes[category].left + (rowOf3(boxes[category].items.length) * boxes[category].itemSize),
+                    top: 65 + boxes[category].top + (Math.floor(boxes[category].items.length/3) * boxes[category].itemSize),
+                    width: "auto"
+                  }
+                };
+
+                function rowOf3(i) {
+                  let multipleOf3 = Math.ceil(i/3);
+                  return 3-((multipleOf3*3)-i)-1
+                }
+                $thisParty.attr('data-left', itemData.css.left);
+                $thisParty.attr('data-top', itemData.css.top);
+                // $thisParty.addClass("tac");
+                $thisParty.addClass(itemData.box);
+                // if(category === 'chanceMatches') {
+                // } else
+                items.push(itemData);
+                boxes[category].items.push(Object.assign(p,itemData))
+                console.log("Registered for anim",p.key,itemData)
+              }
+
+              safeSeat = consideredParties.filter(p => typeof p.chance === 'number').length < 2;
+              var unappealingSeat = chanceMatches.length === 0;
 
 
-// Just in case...
-// self.slickGoTo(1);
-// self.slickGoTo(1);
-// self.slickGoTo(1);
-            setTimeout(function() {
-            /////// Begin sick tactical results animation
-console.groupEnd();
-console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
-$graph.addClass(animFlags.tacticalInit.class);
-if(!safeSeat && !unappealingSeat) $graph.css('height',futureHeight);
-else $graph.css('height',200);
-self.slickRefresh(); // Force slick to update height
-              $graph.attr("id","tactical-mode");
-
-              /////// Begin sick tactical results animation
+  // Just in case...
+  // self.slickGoTo(1);
+  // self.slickGoTo(1);
+  // self.slickGoTo(1);
               setTimeout(function() {
-console.groupEnd();
-console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
-$graph.addClass(animFlags.tacticalGraph.class);
-// self.slickRefresh(); // Force slick to update height
+              /////// Begin sick tactical results animation
+  console.groupEnd();
+  console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
+  $graph.addClass(animFlags.tacticalInit.class);
+  if(!safeSeat && !unappealingSeat) $graph.css('height',futureHeight);
+  else $graph.css('height',200);
+  self.slickRefresh(); // Force slick to update height
+                $graph.attr("id","tactical-mode");
 
-                if(safeSeat) {
-                  $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
-                  $graph.addClass(animFlags.safe.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
-                  return false;
-                } else if(unappealingSeat) {
-                  $graph.addClass(animFlags.safe.class)
-                  $graph.addClass(animFlags.unappealing.class)
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
-                  return false;
-                } else {
-                  $graph.removeClass(animFlags.battle.class)
-                }
-                self.slickRefresh()
+                /////// Begin sick tactical results animation
+                setTimeout(function() {
+  console.groupEnd();
+  console.group("Anim Phase 1: graph",animFlags.tacticalGraph.class);
+  $graph.addClass(animFlags.tacticalGraph.class);
+  // self.slickRefresh(); // Force slick to update height
 
-                setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
-              }, animFlags.tacticalGraph.delay); // Pause to adjust
-
-              function partyInitialAnimations() {
-
-                //// Absolutely position things, update the UI
-                // Start the positioning
-                $graph.find("[data-party-key]").each(function() {
-                  var $face = $(this).find(".quizPercentagesPartyFace");
-                  var $graphContainer = $graph.find('.quizPercentages');
-                  var staticPosition = {
-                    top: $face.get(0).getBoundingClientRect().top - $graphContainer.get(0).getBoundingClientRect().top,
-                    left: $face.get(0).getBoundingClientRect().left - $graphContainer.get(0).getBoundingClientRect().left
-                  }
-                  console.log("Getting static posn of",$(this).attr('data-party-key'), staticPosition, $(this), $face, $graphContainer);
-                  $(this).css(staticPosition);
-                });
-
-console.groupEnd();
-console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
-$graph.addClass(animFlags.tacticalDemote.class);
-// self.slickRefresh(); // Force slick to update height
-                //--3a: Anim Phase the playas
-                // Stagger their animation by 1.5s
-                var stagger = 0;
-                [
-                  {name: "noMatch", flag: "tacticalDemote"},
-                  {name: "noChance", flag: "tacticalDemote"},
-                  {name: "chanceMatches", flag: "tacticalPromote"}
-                ].forEach((category)=> {
-                  setTimeout(function() {
-                    console.log("Animating group:",category,boxes[category.name].items)
-                    boxes[category.name].items.forEach((p)=>{
-                      var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
-                      if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                      console.log("Animating",p.key)
-                      $('.tacticalUI .box.'+category.name).addClass('flash');
-                      $thisParty.addClass(partyModifiers.dislocated)
-                      $thisParty.animate(p.css, animFlags[category.flag].delay, function() {
-                        // At the end (hopefully after 3000ms ish)
-                        console.log(category.name,category.name == 'chanceMatches')
-                        if(category.name == 'chanceMatches') announceMainCandidates();
-                      });
-                    })
-                  },stagger);
-                  stagger += animFlags[category.flag].delay;
-                })
-                console.log("Running anims",items)
-
-                // #4: Centre the remaining candidates
-                var announceWinner = false;
-                function announceMainCandidates() {
-                  if(announceWinner === false) {
-                    /* Categorising animations done */
-                    console.log("Running final phase of anim");
-                    announceWinner = true;
-
-console.groupEnd();
-console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
-$graph.addClass(animFlags.tacticalPromote.class)
-// self.slickRefresh(); // Force slick to update height
-
-                    setTimeout(()=>crownTheParty(tacticalChoice), animFlags.tacticalCrown.delay);
-                  }
-                }
-
-                // #5: Embellish the tactical option
-                function crownTheParty(p) {
-console.groupEnd();
-console.group("Anim Phase 4: crown",animFlags.tacticalCrown.class);
-$graph.addClass(animFlags.tacticalCrown.class)
-                  var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
-                  if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
-                  /* Draw the whole chosen box thingy */
-                  $thisParty.addClass(partyModifiers.chosenCandidate)
-                  $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
-                  var summarySentence;
-                  console.log(consideredParties);
-                  const myTopParties = topMatches.map(function(_p){return _p.name});
-                  if (myTopParties.length==1 && consideredParties[0].key == p.key) {
-                    summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
+                  if(safeSeat) {
+                    $graph.find(".tacticalUI .chanceMatches").attr('data-safe-party-name',consideredParties.find(p => typeof p.chance === 'number').name)
+                    $graph.addClass(animFlags.safe.class)
+                    trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'Safe Seat', tacticalParty: p.name, opinionMatch});
+                    return false;
+                  } else if(unappealingSeat) {
+                    $graph.addClass(animFlags.safe.class)
+                    $graph.addClass(animFlags.unappealing.class)
+                    trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: false, resultType: 'No Appealing Feasible Parties', tacticalParty: p.name, opinionMatch});
+                    return false;
                   } else {
-                    summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we suggest you consider voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    $graph.removeClass(animFlags.battle.class)
                   }
-                  $('.summarySentence').html(summarySentence).removeClass('animation-opening');
-                  $('.summarySentence').addClass('animated-tactical-result');
-                  self.slickRefresh(); // Force slick to update height
+                  self.slickRefresh()
 
-                  // Update share links
-                  var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
-                  var sharePath = `http://${subdomain}ge2017.com/tactical/${encodeURIComponent(p.name)}/${encodeURIComponent(model.user.constituency.name)}`;
-                  var tweet = `I'm voting tactically for ${partyTags[p.key] || p.name} in ${model.user.constituency.name}. Who should you vote for? #GE2017 ${sharePath} via @GE2017dotcom`;
-                  $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
-                  $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
+                  setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
+                }, animFlags.tacticalGraph.delay); // Pause to adjust
 
-                  trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
+                function partyInitialAnimations() {
+
+                  //// Absolutely position things, update the UI
+                  // Start the positioning
+                  $graph.find("[data-party-key]").each(function() {
+                    var $face = $(this).find(".quizPercentagesPartyFace");
+                    var $graphContainer = $graph.find('.quizPercentages');
+                    var staticPosition = {
+                      top: $face.get(0).getBoundingClientRect().top - $graphContainer.get(0).getBoundingClientRect().top,
+                      left: $face.get(0).getBoundingClientRect().left - $graphContainer.get(0).getBoundingClientRect().left
+                    }
+                    console.log("Getting static posn of",$(this).attr('data-party-key'), staticPosition, $(this), $face, $graphContainer);
+                    $(this).css(staticPosition);
+                  });
+
+  console.groupEnd();
+  console.group("Anim Phase 2: demotion",animFlags.tacticalDemote.class);
+  $graph.addClass(animFlags.tacticalDemote.class);
+  // self.slickRefresh(); // Force slick to update height
+                  //--3a: Anim Phase the playas
+                  // Stagger their animation by 1.5s
+                  var stagger = 0;
+                  [
+                    {name: "noMatch", flag: "tacticalDemote"},
+                    {name: "noChance", flag: "tacticalDemote"},
+                    {name: "chanceMatches", flag: "tacticalPromote"}
+                  ].forEach((category)=> {
+                    setTimeout(function() {
+                      console.log("Animating group:",category,boxes[category.name].items)
+                      boxes[category.name].items.forEach((p)=>{
+                        var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
+                        if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                        console.log("Animating",p.key)
+                        $('.tacticalUI .box.'+category.name).addClass('flash');
+                        $thisParty.addClass(partyModifiers.dislocated)
+                        $thisParty.animate(p.css, animFlags[category.flag].delay, function() {
+                          // At the end (hopefully after 3000ms ish)
+                          console.log(category.name,category.name == 'chanceMatches')
+                          if(category.name == 'chanceMatches') announceMainCandidates();
+                        });
+                      })
+                    },stagger);
+                    stagger += animFlags[category.flag].delay;
+                  })
+                  console.log("Running anims",items)
+
+                  // #4: Centre the remaining candidates
+                  var announceWinner = false;
+                  function announceMainCandidates() {
+                    if(announceWinner === false) {
+                      /* Categorising animations done */
+                      console.log("Running final phase of anim");
+                      announceWinner = true;
+
+  console.groupEnd();
+  console.group("Anim Phase 3: promote",animFlags.tacticalPromote.class);
+  $graph.addClass(animFlags.tacticalPromote.class)
+  // self.slickRefresh(); // Force slick to update height
+
+                      setTimeout(()=>crownTheParty(tacticalChoice), animFlags.tacticalCrown.delay);
+                    }
+                  }
+
+                  // #5: Embellish the tactical option
+                  function crownTheParty(p) {
+  console.groupEnd();
+  console.group("Anim Phase 4: crown",animFlags.tacticalCrown.class);
+  $graph.addClass(animFlags.tacticalCrown.class)
+                    var $thisParty = $graph.find(`[data-party-key='${p.key}']`);
+                    if($thisParty.length == 0) { console.log("Couldn't find",p,$thisParty); return false; }
+                    /* Draw the whole chosen box thingy */
+                    $thisParty.addClass(partyModifiers.chosenCandidate)
+                    $('a.tactical-top-match.whatDoesThisMean').removeClass('opacity-0');
+                    var summarySentence;
+                    console.log(consideredParties);
+                    const myTopParties = topMatches.map(function(_p){return _p.name});
+                    if (myTopParties.length==1 && consideredParties[0].key == p.key) {
+                      summarySentence = 'Good news! Your top match <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span> stands a chance in your area so you may as well vote for them.'
+                    } else {
+                      summarySentence = /*'The ' + */myTopParties.filter(function(_p){console.log(_p);console.log(p);return _p != p.name}).join(' and ') + ' stand less of a chance in ' + model.user.constituency.name + ' so we suggest you consider voting <span style="font-weight: bold; color: ' + p.color + '">' + p.name.replace(' Party', '') + '</span>';
+                    }
+                    $('.summarySentence').html(summarySentence).removeClass('animation-opening');
+                    $('.summarySentence').addClass('animated-tactical-result');
+                    self.slickRefresh(); // Force slick to update height
+
+                    // Update share links
+                    var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
+                    var sharePath = `http://${subdomain}ge2017.com/tactical/${encodeURIComponent(p.name)}/${encodeURIComponent(model.user.constituency.name)}`;
+                    var tweet = `I'm voting tactically for ${partyTags[p.key] || p.name} in ${model.user.constituency.name}. Who should you vote for? #GE2017 ${sharePath} via @GE2017dotcom`;
+                    $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
+                    $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
+
+                    trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
+                  }
                 }
-              }
-            }, animFlags.tacticalInit.delay);
+              }, animFlags.tacticalInit.delay);
+            });
           } else {
             routes.quizResults().push();
           }
