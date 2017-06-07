@@ -1587,7 +1587,7 @@ a:hover .quizPercentagesPartyFace {
   /*margin: 0;*/
 }
 
-.body._38degrees .or, .body._38degrees .card.quiz-extra {
+.body._38degrees .or, .body._38degrees .card.quiz-extra, .body._unilad .or, .body._unilad .card.quiz-extra {
   display: none;
 }
 
