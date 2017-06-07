@@ -140,7 +140,7 @@ const routes = {
   quiz: router.route('/quiz/questions'),
   quizResults: router.route('/results'),
   policy: router.route('/policy'),
-  starter: router.route('/starter'),
+  quizStarter: router.route('/starter'),
 };
 
 router.start();
@@ -173,11 +173,15 @@ class App {
 
     if (Embed) {
 
-      var params = {
-        name: StepName
+      if(embedSwitch) {
+        // Put quizStarter stuff here, minus the header/footer
+      } else {
+        var params = {
+          name: StepName
+        }
+        var step = new Step(params);
+        return h('div',step);
       }
-      var step = new Step(params);
-      return h('div',step);
 
     } else {
 
@@ -327,7 +331,10 @@ class App {
 
             routes.quizNew(landingPage), // organic
 
-            routes.starter({name: 'starter'}), // organic
+            routes.quizStarter(function() {
+              var step = new Step({name: 'quizStarter'});
+              return h('div',step);
+            }), // organic
 
             routes.quiz(function (params) {
               var params = {
@@ -411,6 +418,9 @@ class Footer {
       footerContents = quizFooterContents
     });
     routes.quizNew(function (params) {
+      footerContents = quizFooterContents
+    });
+    routes.quizStarter(function (params) {
       footerContents = quizFooterContents
     });
     routes.quizLanding(function (params) {
@@ -760,6 +770,9 @@ class Step {
       case 'quizLanding':
         break;
 
+      case 'quizStarter':
+        break;
+
       case 'quiz':
         break;
 
@@ -967,6 +980,9 @@ class Step {
     switch (self.params.name) {
       case 'quizLanding':
         return (new QuizLanding())
+        break;
+      case 'quizStarter':
+        return (new QuizStarter())
         break;
       case 'quiz':
         return (new Quiz())
@@ -1717,6 +1733,26 @@ class QuizLanding {
       ],
       goToDashboard: function(){routes.dashboard({ name: "start" }).push()}
     }, CardTemplates.landingView)
+  }
+}
+
+class QuizStarter {
+  constructor(params) {
+
+  }
+
+  render() {
+    return helpers.assembleCards({
+      // Quiz appears!
+      answerNo: function() {
+        routes.quizNew().push();
+      },
+      // Quiz collapses
+      answerYes: function() {
+        // Maybe we need an iframe message here, to collapse the frame?
+        $('body').animate({height:0}, 200);
+      }
+    }, CardTemplates.quizStarter)
   }
 }
 

@@ -130,7 +130,7 @@ app.get('/starter', function(req, res, next) {
   req.params.resourceRoot = `https://${req.headers.host}`;
   req.params.starterHome = `https://${req.headers.host}/starter`;
   req.params.canonical = `//${req.headers.host}/starter`;
-  res.render('index', { standalone: true, embed: false, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+  res.render('index', { standalone: true, embed: false, embedSwitch: 'quizStarter', brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
 });
 
 app.get('/quiz/questions', function(req, res, next) {

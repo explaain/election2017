@@ -3291,4 +3291,51 @@ module.exports = function(CardTemplates){
       }
     ]
   };
+  CardTemplates.quizStarter = {
+    "dom": "section.step",
+    "content": [
+      {
+        "dom": ".quizTopLine",
+        "content": [
+          { "dom": "div.spacer" }
+        ],
+      },
+      {
+        "dom": "div.quizStarter",
+        "content": [
+          {
+            "dom": ".card",
+            "content": [
+              {
+                "dom": ".card-visible.text-center",
+                "content": [
+                  {
+                    "dom": "h2",
+                    "content": "Have you decided who you're voting for?"
+                  },
+                  // {
+                  //   "dom": "a.helper-text.explaain-link",
+                  //   "condition": "question.helperCard",
+                  //   "content": "What does this mean?",
+                  //   "attr": {
+                  //     "href": {
+                  //       "var": "question.helperCard"
+                  //     }
+                  //   }
+                  // },
+                  {
+                    "template": "quizQuestionYesNo",
+                    "mapping": [
+                      ["answerNo","answerNo"],
+                      ["answerYes","answerYes"]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 };
