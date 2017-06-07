@@ -2777,7 +2777,8 @@ $graph.addClass(animFlags.tacticalCrown.class)
             const opinionsPerIssue = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return answeredDebates.includes(debate[0]);
+                console.log(debate[1].parties[party.key]);
+                return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
               })
               .map(function(debate) {
                   return {
@@ -2786,6 +2787,8 @@ $graph.addClass(animFlags.tacticalCrown.class)
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
+
+            console.log(party.key, opinionsPerIssue);
 
             var ltempKey = '//api.explaain.com/QuizMatch/' + party.key + "_" + issueObj.issue;
             var ltempCard = {
@@ -2805,12 +2808,14 @@ $graph.addClass(animFlags.tacticalCrown.class)
           const scoresPerIssue = answeredIssues.map(function(issueObj) {
             let running_upweight = 0;
             var issue = allData.getAllData().partyStances.opinions.issues[issueObj.issue];
-            const score = Object
+            var score = Object
               .entries(issue.debates)
               .filter(function(debate) {
-                  return answeredDebates.includes(debate[0]);
-              })
-              .map(function(debate) {
+                  return answeredDebates.includes(debate[0]) && debate[1].parties[party.key];
+              });
+            if (score.length) {
+              score = score
+                .map(function(debate) {
                   const upweight = model.user.opinions.issues[issueObj.issue].debates[debate[0]].weight || 1;
                   running_upweight += upweight;
                   const userOpinion = self.getUserOpinion(debate[0]);
@@ -2818,13 +2823,21 @@ $graph.addClass(animFlags.tacticalCrown.class)
                   var result = upweight * (1 - Math.abs((debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5) - userOpinion));
 
                   return result;
-              })
-              .reduce(function(a,b) {
+                })
+                .reduce(function(a,b) {
                   return a + b;
-              })
+                })
+            } else {
+              score = -1;
+            }
 
-            return { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' };
+            return score != -1 ? { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' } : null;
+          }).filter(function(s) {
+            return s !== null;
           });
+
+          console.log('scoresPerIssue');
+          console.log(scoresPerIssue);
 
           var allCardKeys = Object.values(actual_issue_cards).map(function(obj) {
             return obj.key;
