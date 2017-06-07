@@ -2459,10 +2459,10 @@ class Quiz {
               battle:          { class: 'battle' },
               unappealing:     { class: 'unappealing' },
               tacticalInit:    { class: 'tacticalInit',    delay: 750 },
-              tacticalGraph:   { class: 'tacticalGraph',   delay: 750 },
-              tacticalDemote:  { class: 'tacticalDemote',  delay: 700 }, //Animation categories going down
+              tacticalGraph:   { class: 'tacticalGraph',   delay: 500 },
+              tacticalDemote:  { class: 'tacticalDemote',  delay: 500 }, //Animation categories going down
               tacticalPromote: { class: 'tacticalPromote', delay: 500 }, //Animation categories going up
-              tacticalCrown:   { class: 'tacticalCrown',   delay: 500 }
+              tacticalCrown:   { class: 'tacticalCrown',   delay: 300 }
             }
 
             var futureHeight = 380;
@@ -2489,14 +2489,14 @@ class Quiz {
             result.partiesAll.forEach((p,i) => {
               var percParty = qp.country.parties.find((q)=>q.key==p.key);
               if(qp.country.parties.find(q=>q.key===p.key) === undefined || !percParty) {
-                console.log("Removing",p.key,"from play")
-                $graph.find(`[data-party-key='${p.key}']`).hide();
+                // This is basically all dealt with below
+                // console.log("Removing",p.key,"from play")
+                // $graph.find(`[data-party-key='${p.key}']`).hide();
                 return false; // User entered a postcode outside her chosen country
-              } else $graph.find(`[data-party-key='${p.key}']`).show();
-              // } else $graph.find(`[data-party-key='${p.key}']`).show();
+              } //else $graph.find(`[data-party-key='${p.key}']`).show();
+
               result.partiesAll[i].percentage = parseInt(percParty.percentage);
               consideredParties.push(result.partiesAll[i]);
-              // console.log(p.key, result.partiesAll[i].percentage, qp.country.parties.find((q)=>q.key==p.key), qp.country.parties)
             });
 
             // Hide parties that aren't running in this seat;
@@ -2516,28 +2516,35 @@ class Quiz {
               // User entered a postcode outside her chosen country
               $graph.find("[data-party-key]").each(function() {
                 var kill = true;
+                var isInCountry = false;
                 var thisPartyData = consideredParties.find(p=>p.key==$(this).attr('data-party-key'));
+                isInCountry = thisPartyData ? true : false;
                 if(thisPartyData && thisPartyData.faded === false) {
                   console.log("Considering kill...",thisPartyData.key,thisPartyData)
                   console.log("Party in constituency?",thisPartyData.faded);
                   kill = false;
                 } else {
-                  console.log("Party wasn't just wasn't meant to be here...");
+                  console.log($(this).attr('data-party-key')+" just wasn't meant to be here...");
                 }
                 if(kill) {
-                  console.log(`Killed ${$(this).attr('data-party-key')} because wrong country/constituency`);
-                  $(this).animate({opacity:0.2},function() {
-
-                    // After they've faded out...
-                    // $(this).remove();
-                    // consideredParties = consideredParties.filter(p=>{
-                    //   return qp.localCandidateData.filter(function(candidate) {
-                    //     return p.dClubNames.indexOf(candidate.party_name) > -1;
-                    //   }).length > 0
-                    // });
-
-                  });
-                } else $(this).show()
+                  if(isInCountry) {
+                    console.log(`Filter: Hid ${$(this).attr('data-party-key')} because wrong constituency`);
+                    $(this).animate({opacity:0.2},animFlags.tacticalGraph.delay*0.5,function() {
+                    // Just fade it to show it's still considered, although not present in the constituency
+                    });
+                  } else {
+                    console.log(`Filter: Killed ${$(this).attr('data-party-key')} because wrong country`);
+                    // Hide and then remove, this is a foreign party.
+                    $(this).animate({opacity:0},animFlags.tacticalGraph.delay*0.5,function() {
+                      $(this).remove();
+                      consideredParties = consideredParties.filter(p=>{
+                        return qp.localCandidateData.filter(function(candidate) {
+                          return p.dClubNames.indexOf(candidate.party_name) > -1;
+                        }).length > 0
+                      });
+                    });
+                  }
+                }
               });
               consideredParties.sort((a,b)=>b.percentage - a.percentage);
 
@@ -2658,7 +2665,7 @@ class Quiz {
   console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
   $graph.addClass(animFlags.tacticalInit.class);
   if(!safeSeat && !unappealingSeat) $graph.css('height',futureHeight);
-  else $graph.css('height',200);
+  else $graph.css('height',animFlags.tacticalGraph.delay*0.5);
   self.slickRefresh(); // Force slick to update height
                 $graph.attr("id","tactical-mode");
 
@@ -2685,7 +2692,7 @@ class Quiz {
                   self.slickRefresh()
 
                   setTimeout(partyInitialAnimations, animFlags.tacticalDemote.delay); // Pause to adjust
-                }, animFlags.tacticalGraph.delay); // Pause to adjust
+                }, animFlags.tacticalGraph.delay*0.5); // Pause to adjust
 
                 function partyInitialAnimations() {
 
