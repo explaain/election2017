@@ -2598,23 +2598,8 @@ class Quiz {
                 return _p.key == key;
               }).length > 0;
             }
-            console.log("partyInList('A Party!', consideredParties)");
-            console.log(partyInList('labour', consideredParties));
-            console.log(partyInList('labour', chanceMatches));
-            console.log(partyInList('conservative', consideredParties));
-            console.log(partyInList('conservative', chanceMatches));
-            console.log(partyInList('lib-dem', consideredParties));
-            console.log(partyInList('lib-dem', chanceMatches));
-            console.log(partyInList('green', consideredParties));
-            console.log(partyInList('green', chanceMatches));
-            console.log(partyInList('ukip', consideredParties));
-            console.log(partyInList('ukip', chanceMatches));
             const topTwoException = chanceMatches.length > 1 && partyInList(chanceMatches[0].key, consideredParties) && partyInList(chanceMatches[1].key, consideredParties);
-            console.log('consideredParties');
-            console.log(consideredParties);
-            console.log('topTwoException');
-            console.log(topTwoException);
-            var tacticalChoice = topTwoException ? chanceMatches[0] : chanceMatches[1];
+            var tacticalChoice = topTwoException ? topMatches[0] : chanceMatches[0];
             chanceMatches.forEach((p,i)=>registerAnim(p,i,"chanceMatches"));
 
               console.log("Anim",{
@@ -2798,7 +2783,7 @@ class Quiz {
                     $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
                     $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
 
-                    trackEvent("Tactial Result Received",{type: "Quiz", code: country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
+                    trackEvent("Tactial Result Received",{type: "Quiz", code: qp.country.code, country: country.label, constituency: model.user.constituency.name, tacticalOptions: true, resultType: 'Tactical Options', tacticalParty: p.name, opinionMatch});
                   }
                 }
               }, animFlags.tacticalInit.delay);
