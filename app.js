@@ -60,9 +60,11 @@ app.get('/', function(req, res, next) {
   res.redirect(301,"/quiz");
   // res.render('index', { standalone: false, embed: false, embedSwitch: null,  brand: process.env.SITE_BRAND || 'ge2017', step: '', phrase: '', quiz: false });
 });
+
 app.get('/students/', function(req, res, next) {
   res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'postcode-compare', phrase: '', quiz: false });
 });
+
 //This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
 app.get('/student/', function(req, res, next) {
   res.redirect(301,"/students");
