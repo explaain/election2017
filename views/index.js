@@ -2911,7 +2911,7 @@ class Quiz {
               .map(function(debate) {
                   return {
                       question: debate[1].question,
-                      partyOpinion: getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key] ? debate[1].parties[party.key].opinion : 0.5),
+                      partyOpinion: debate[1].parties[party.key] ? getOpinionText(model.questions.questionDB[debate[0]], debate[1].parties[party.key].opinion) : "No position on this question.",
                       userOpinion: getOpinionText(model.questions.questionDB[debate[0]], self.getUserOpinion(debate[0])),
                   };
               })
