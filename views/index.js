@@ -139,7 +139,8 @@ const routes = {
   quizNew: router.route('/quiz'),
   quiz: router.route('/quiz/questions'),
   quizResults: router.route('/results'),
-  policy: router.route('/policy')
+  policy: router.route('/policy'),
+  starter: router.route('/starter'),
 };
 
 router.start();
@@ -325,6 +326,8 @@ class App {
             routes.quizLandingTactical.under(landingPage), // from fb - tactical
 
             routes.quizNew(landingPage), // organic
+
+            routes.starter({name: 'starter'}), // organic
 
             routes.quiz(function (params) {
               var params = {
