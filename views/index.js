@@ -1841,6 +1841,11 @@ class Quiz {
     self.getQuestionProp = function(num, prop) {
       return qp.questions[num][prop];
     }
+    self.getReachedQuestions = function() {
+      return qp.questions.filter(function(q) {
+        return q.reached;
+      })
+    }
     self.getBegunQuestions = function() {
       return qp.questions.filter(function(q) {
         return q.binary;
@@ -2052,16 +2057,14 @@ class Quiz {
       var opinion = self.getCurrentQuestion().binary === "yes" ? 0.8 : 0.2;
       self.submitOpinion(opinion,true);
     }
-
     self.skipQuestion = function() {
       self.submitOpinion(false, true);
     }
-
     self.back = function() {
       qp.quizResults = false;
       qp.quizResultsPage = false;
 
-      if(self.getBegunQuestions().length > 0) {
+      if(self.getReachedQuestions().length > 0) {
         //We don't remove opinions so the calculation needs to only include opinions that relate to completed quiz questions!
         const num = self.getCurrentQuestionNumber();
         self.setQuestionProp(num, self.getQuestionProp(num,'binary') ? 'binary' : 'reached', false);
