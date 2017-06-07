@@ -2665,7 +2665,7 @@ class Quiz {
   console.group("Anim Phase 0: initialise",animFlags.tacticalInit.class);
   $graph.addClass(animFlags.tacticalInit.class);
   if(!safeSeat && !unappealingSeat) $graph.css('height',futureHeight);
-  else $graph.css('height',animFlags.tacticalGraph.delay*0.5);
+  else $graph.css('height',200);
   self.slickRefresh(); // Force slick to update height
                 $graph.attr("id","tactical-mode");
 
