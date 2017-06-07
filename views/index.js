@@ -2959,7 +2959,11 @@ class Quiz {
               score = -1;
             }
 
-            return score != -1 ? { name: issue ? issue.description : issueObj.issue, link: actual_issue_cards[issueObj.issue].key, score: Math.round(100*score/running_upweight) + '%' } : null;
+            return {
+              name: issue ? issue.description : issueObj.issue,
+              link: actual_issue_cards[issueObj.issue].key,
+              score: score != -1 ? Math.round(100*score/running_upweight) + '%' : "No opinions"
+            };
           }).filter(function(s) {
             return s !== null;
           });
