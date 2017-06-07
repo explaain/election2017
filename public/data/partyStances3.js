@@ -102,6 +102,9 @@ var partyStances = {
               },
               "snp": {
                 opinion: 0
+              },
+              "green": {
+                opinion: 0
               }
             }
           }
@@ -458,6 +461,9 @@ var partyStances = {
               },
               "snp": {
                 opinion: 0.5
+              },
+              "green": {
+                opinion: 0
               }
             }
           },
@@ -804,7 +810,7 @@ var partyStances = {
               "ukip": {
                 opinion: 1
               },
-              "greens": {
+              "green": {
                 opinion: 0.2
               },
               "lib-dem": {
