@@ -1745,6 +1745,7 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
+        trackEvent("Unilad Answer No");
         var counter = 0;
         var attemptEnlarge = function() {
           try {
@@ -1770,6 +1771,7 @@ class QuizStarter {
       },
       // Quiz collapses
       answerYes: function() {
+        trackEvent("Unilad Answer Yes");
         var attemptClose = function() {
           try {
             console.log('trying');
