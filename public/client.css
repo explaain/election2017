@@ -2725,5 +2725,6 @@ body > div.body.quizStarter ~ #ifBrowser {
 
 
 .starter-logo {
-  width: 60%;
+  height: 30px;
+  margin-top: 20px;
 }
