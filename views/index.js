@@ -1754,7 +1754,9 @@ class QuizStarter {
       },
       // Quiz collapses
       answerYes: function() {
-        // Maybe we need an iframe message here, to collapse the frame?
+        if ('parentIFrame' in window) {
+          parentIFrame.size(0); // Set height to 0px
+        }
         $(".card").remove();
         $('.quizStarter').animate({padding:0}, 200);
         $('body').animate({height:0}, 200);
