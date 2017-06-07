@@ -1745,22 +1745,52 @@ class QuizStarter {
     return helpers.assembleCards({
       // Quiz appears!
       answerNo: function() {
-        if ('parentIFrame' in window) parentIFrame.size(1100)
+        var counter = 0;
+        var attemptEnlarge = function() {
+          try {
+            console.log('trying');
+            if ('parentIFrame' in window) parentIFrame.sendMessage({size: 770})
+            if (counter<10) {
+              setTimeout(function() {
+                counter++;
+                attemptEnlarge();
+              },1000)
+            }
+          } catch(e) {
+            console.log('failed...');
+            setTimeout(function() {
+              attemptEnlarge();
+            },1000)
+          }
+        }
+        attemptEnlarge();
         $(".body").removeClass("quizStarter");
         console.log($(".quizStarter").removeClass("quizStarter"))
         routes.quizNew().push();
       },
       // Quiz collapses
       answerYes: function() {
-        if ('parentIFrame' in window) parentIFrame.size(0);
+        var attemptClose = function() {
+          try {
+            console.log('trying');
+            if ('parentIFrame' in window) parentIFrame.sendMessage({size: 0})
+            setTimeout(function() {
+              if ('parentIFrame' in window) {
+                parentIFrame.sendMessage({close: true})
+              	// parentIFrame.close();
+              }
+            },1000)
+          } catch(e) {
+            console.log('failed...');
+            setTimeout(function() {
+              attemptEnlarge();
+            },1000)
+          }
+        }
+        attemptClose();
         $(".card").remove();
         $('.quizStarter').animate({padding:0}, 200);
         $('body').animate({height:0}, 200);
-        setTimeout(function() {
-          if ('parentIFrame' in window) {
-          	parentIFrame.close();
-          }
-        },1000)
       }
     }, CardTemplates.quizStarter)
   }
