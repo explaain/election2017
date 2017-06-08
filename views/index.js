@@ -152,6 +152,16 @@ class App {
   constructor(data) {
     console.log("! Site running on "+SiteBrand);
 
+    if (window.location.pathname != '/starter' && !TrackingWithGoSquared) {
+      if (GoSquaredTracker) {
+        GoSquaredTracker('track');
+        TrackingWithGoSquared = true;
+        console.log('Tracking');
+      } else {
+        console.log('Not Tracking!');
+      }
+    }
+
     var logoRoute;
     if (QuizPage==true){
       logoRoute = routes.quiz();
@@ -1767,6 +1777,16 @@ class QuizStarter {
         attemptEnlarge();
         $(".body").removeClass("quizStarter");
         console.log($(".quizStarter").removeClass("quizStarter"))
+
+        if (!TrackingWithGoSquared) {
+          if (GoSquaredTracker) {
+            GoSquaredTracker('track');
+            TrackingWithGoSquared == true;
+            console.log('Tracking!');
+          } else {
+            console.log('Not Tracking!');
+          }
+        }
         routes.quizNew().push();
       },
       // Quiz collapses
