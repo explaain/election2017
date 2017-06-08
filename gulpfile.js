@@ -50,6 +50,7 @@ const JSFiles = [
   'public/js/jquery.min.js',
   'public/js/slick.min.js',
   'public/js/iframeResizer.contentWindow.min.js',
+  'public/js/html2canvas.js',
   'tmp/explaain.js',
   'tmp/index.js',
 ];
