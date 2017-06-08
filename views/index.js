@@ -2831,10 +2831,18 @@ class Quiz {
                     $('.summarySentence').addClass('animated-tactical-result');
                     self.slickRefresh(); // Force slick to update height
 
-                    // Update share links
+                    /* ----
+                      Update share links
+                    */
+                    var partyReconciliation = allData.getAllData().partyReconciliation;
+                    var candidateObj = qp.localCandidateData.find(x=> p.dClubNames.find(y=>y == x.party_name));
+                    var candidateAnchor = candidateObj ? candidateObj.twitter_username : null;
+                    // console.log("FIND LOCAL CANDIDATE",p,qp.localCandidateData,partyReconciliation);
+                    var partyAnchor = partyTags[p.key] || p.name;
+                    var partyCandidate = candidateAnchor ? `@${candidateAnchor} (${partyAnchor})` : partyAnchor;
                     var subdomain = config[SiteBrand].subdomain ? config[SiteBrand].subdomain+"." : '';
                     var sharePath = `http://${subdomain}ge2017.com/tactical/${encodeURIComponent(p.name)}/${encodeURIComponent(model.user.constituency.name)}`;
-                    var tweet = `I'm voting tactically for ${partyTags[p.key] || p.name} in ${model.user.constituency.name}. Who should you vote for? #GE2017 ${sharePath} via @GE2017dotcom`;
+                    var tweet = `I'm voting tactically for ${partyCandidate} in ${model.user.constituency.name}. Who should you vote for? #GE2017 ${sharePath} via @GE2017dotcom`;
                     $('.tacticalSharing .facebookShareLink').attr('href',`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`);
                     $('.tacticalSharing .twitterShareLink').attr('href',"https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet));
 
