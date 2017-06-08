@@ -1461,7 +1461,7 @@ p.waiting-text {
   max-width: 40px;
   max-height: 40px;
 
-  border-radius: 100%;
+  /*border-radius: 100%;*/
   z-index:2;
   background-size:cover;
   background-position: center;
@@ -1474,14 +1474,14 @@ a:hover .quizPercentagesPartyFace {
 
 .quizPercentagesPartyFace.absolute {
   position: absolute;
-  background-size: 80%;
-  background-position: bottom;
+  /*background-size: 80%;
+  background-position: bottom;*/
 }
 
 .quizPercentagesPartyFace.inline {
   display: inline-block;
   margin: 10px 5px 0px 5px;
-  background-size: 80%;
+  /*background-size: 80%;*/
   background-position: bottom;
 }
 .quizPercentagesPartyPercent.absolute {

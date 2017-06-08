@@ -2683,9 +2683,9 @@ module.exports = function(CardTemplates){
                             "background-image": {
                               "var": "photo"
                             },
-                            "background-color": {
-                              "var": "color"
-                            },
+                            // "background-color": {
+                            //   "var": "color"
+                            // },
                           }
                         }
                       },
@@ -3128,9 +3128,9 @@ module.exports = function(CardTemplates){
               "background-image": {
                 "var": "photo"
               },
-              "background-color": {
-                "var": "color"
-              },
+              // "background-color": {
+              //   "var": "color"
+              // },
             }
           }
         },
@@ -3222,9 +3222,9 @@ module.exports = function(CardTemplates){
                         "background-image": {
                           "var": "photo"
                         },
-                        "background-color": {
-                          "var": "color"
-                        },
+                        // "background-color": {
+                        //   "var": "color"
+                        // },
                       }
                     }
                   }

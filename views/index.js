@@ -2200,6 +2200,9 @@ class Quiz {
         qp.country.parties.forEach(function(p){
           p.quizResults = true;
         });
+
+        // Share graph
+        //html2canvas($(".quizPercentages"),{onrendered:function(x) { $(".quizPercentageContainer").html(x) }})
       }
 
       answerData.answer = self.getQuestionProp(answerData.questionNumber,'binary');
