@@ -25,6 +25,7 @@ const quiz = {
      "eu-3",
      "tax-2",
      "defence-1",
+     "survey-1"
    ]
  };
 
@@ -43,13 +44,14 @@ quiz.questions["38degrees"] = {
      "38-environment-3",
      "38-immigration-2",
      "38-eu-2",
+     "survey-1"
   ],
   scotland: [
      "38-tax-1",
      "38-welfare-1",
      "38-welfare-2",
      "38-tax-2",
-     "38-independence-1", //REPLACE WITH INDEPENDENCE Q
+     "38-independence-1",
      "38-living-costs-2",
      "38-environment-2",
      "38-economy-2",
@@ -57,5 +59,6 @@ quiz.questions["38degrees"] = {
      "38-environment-3",
      "38-immigration-2",
      "38-eu-2",
+     "survey-1"
   ],
 };

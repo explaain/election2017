@@ -957,7 +957,7 @@ var partyStances = {
         }
       },
       "independence": {
-        description: "independence",
+        description: "Independence",
         debates: {
           "38-independence-1": {
             question: "Do you think there should be another referendum on Scottish independence?",
@@ -977,6 +977,16 @@ var partyStances = {
               "snp": {
                 opinion: 1
               }
+            }
+          }
+        }
+      },
+      "survey": {
+        description: "Survey",
+        debates: {
+          "survey-1": {
+            question: "Do you trust these types of quizzes to help you make up your mind?",
+            parties: {
             }
           }
         }

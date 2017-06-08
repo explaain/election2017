@@ -719,5 +719,34 @@ var quizQuestions = [
         },
       ]
     }
+  },
+  {
+    question: "Do you trust these types of quizzes to help you make up your mind?",
+    randomiseGroup: "last",
+    issue: "survey",
+    debate: "survey-1",
+    // helperCard:"http://api.explaain.com/Detail/593461d7d238f700115da9f4",
+    answers: {
+      yes: [
+        {
+          label: "I'm happy to base my vote mainly on this quiz.",
+          opinion: 1,
+        },
+        {
+          label: "but I'd worry if it were my main source of information.",
+          opinion: 0.6,
+        },
+      ],
+      no: [
+        {
+          label: "but at least I get an overview of the issues/policies.",
+          opinion: 0.4
+        },
+        {
+          label: "they're just a bit of fun and nothing more.",
+          opinion: 0
+        },
+      ]
+    }
   }
 ];
