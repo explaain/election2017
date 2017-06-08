@@ -134,8 +134,8 @@ const routes = {
   dashboard: router.route('/dashboards/:name'),
   step: router.route('/steps/:name'),
   students: router.route('/students'), //'student' too?
-  quizLanding: router.route('/shared'),
-  quizLandingTactical: router.route('/tactical'),
+  quizLanding: router.route('/shared/:x/:y'),
+  quizLandingTactical: router.route('/tactical/:x/:y'),
   quizNew: router.route('/quiz'),
   quiz: router.route('/quiz/questions'),
   quizResults: router.route('/results'),
@@ -331,9 +331,9 @@ class App {
               return h('div',step);
             }),
 
-            routes.quizLanding.under(landingPage), // from fb,
+            routes.quizLanding(landingPage), // from fb,
 
-            routes.quizLandingTactical.under(landingPage), // from fb - tactical
+            routes.quizLandingTactical(landingPage), // from fb - tactical
 
             routes.quizNew(landingPage), // organic
 
@@ -1686,7 +1686,7 @@ class QuizLanding {
       // }
     }
 
-    self.clickStartQuiz = function(){
+    self.clickStartQuiz = function() {
       clearTimeout(randomyGraphyThing);
       $('.body.quiz').addClass('moving');
       routes.quiz({begin: true}).push()
