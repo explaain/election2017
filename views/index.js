@@ -2062,7 +2062,7 @@ class Quiz {
         quiz.quizTopics.add(self.getDebateIssue(key));
       })
       quiz.quizTopics = Array.from(quiz.quizTopics);
-      quiz.quizTopics.splice(quiz.quizTopics.indexOf('survey'),1);
+      if(quiz.quizTopics.indexOf('survey') > -1) quiz.quizTopics.splice(quiz.quizTopics.indexOf('survey'),1);
       quiz.quizTopics.forEach(function(topic,i) {
         quiz.quizTopics[i] = {
           issue: topic,
