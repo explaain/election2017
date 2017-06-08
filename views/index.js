@@ -2140,9 +2140,12 @@ class Quiz {
     }
 
     self.submitOpinion = function(opinion, commitToAnswer = false, thisQuestion = self.currentQuestion) {
-      trackEvent("Question Answered",{type: "Quiz", questionNumber: self.getBegunQuestions().length, questionId: self.getCurrentDebate(), answer: self.getUserOpinion(self.getCurrentDebate()), opinion: self.getUserOpinion(self.getCurrentDebate())});
-
       var endOfQuestions = false;
+      var answerData = {
+        type: "Quiz",
+        questionNumber: self.getBegunQuestions().length,
+        questionId: self.getCurrentDebate()
+      };
 
       qp.startingQuiz = false;
 
@@ -2178,6 +2181,11 @@ class Quiz {
           p.quizResults = true;
         });
       }
+
+      answerData.answer = self.getQuestionProp(answerData.questionNumber,'binary');
+      answerData.opinion = self.getUserOpinion(answerData.questionId);
+      console.log(answerData)
+      trackEvent("Question Answered",answerData);
     }
 
     self.recalculateOpinions = function() {
