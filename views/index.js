@@ -153,10 +153,10 @@ class App {
     console.log("! Site running on "+SiteBrand);
 
     if (window.location.pathname != '/starter' && !TrackingWithGoSquared) {
-      if (GoSquaredTracker && GoSquaredTracker.isFunction) {
+      if (GoSquaredTracker) {
         GoSquaredTracker('track');
         TrackingWithGoSquared = true;
-        console.log('Now Tracking');
+        console.log('Tracking');
       } else {
         console.log('Not Tracking!');
       }
@@ -1779,10 +1779,10 @@ class QuizStarter {
         console.log($(".quizStarter").removeClass("quizStarter"))
 
         if (!TrackingWithGoSquared) {
-          if (GoSquaredTracker && GoSquaredTracker.isFunction) {
+          if (GoSquaredTracker) {
             GoSquaredTracker('track');
             TrackingWithGoSquared == true;
-            console.log('Now Tracking');
+            console.log('Tracking!');
           } else {
             console.log('Not Tracking!');
           }
