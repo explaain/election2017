@@ -59,13 +59,26 @@ var cfg = {
     subdomain: 'unilad',
     logoImg: "/img/unilad.png",
     logoClass: "_unilad-logo",
-    footerLink: "//www.turnup.org.uk/",
+    footerLink: "http://www.turnup.org.uk/",
     randomise: true,
     carousel: true,
     sharing: {
       basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - http://bit.ly/unilad-ge2017 via @UNILAD",
     },
-  }
+  },
+  'thetab': {
+    subdomain: 'thetab',
+    logoImg: "/img/thetab.png",
+    logoClass: "_thetab-logo",
+    footerImg: "/img/ge2017logofooter.png",
+    footerClass: "ge2017Footer",
+    footerLink: '//ge2017.com',
+    randomise: true,
+    carousel: true,
+    sharing: {
+      basicTwitter: "Use GE2017.com To Decide Who To Vote For In The General Election #GE2017 - ge2017.com/quiz",
+    },
+  },
 }
 var partyTags = {
   'labour': '@UKLabour',
