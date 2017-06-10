@@ -1736,7 +1736,20 @@ module.exports = function(CardTemplates){
                 },
                 {
                   "dom": "p",
-                  "content": "Over 2.1 million people got a result on ge2017.com, almost double the previous record for a voting advice tool."
+                  "content": [
+                    {
+                      "dom": "span",
+                      "content": "Over "
+                    },
+                    {
+                      "dom": "span.bold",
+                      "content": "2 million"
+                    },
+                    {
+                      "dom": "span",
+                      "content": " people used ge2017.com - double the previous record for a voting advice tool."
+                    },
+                  ]
                 },
                 // {
                 //   "dom": "a.btn.btn-primary",
