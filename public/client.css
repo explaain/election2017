@@ -2757,3 +2757,11 @@ body > div.body.quizStarter ~ #ifBrowser {
     opacity: 1;
     transition: opacity 0.3s ease;
 }
+
+.card.thank-you-box {
+  margin-top: 40px;
+}
+.card.thank-you-box .card-visible {
+  border: #ff2569 2px solid;
+  padding: 30px 20px;
+}

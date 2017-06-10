@@ -1725,6 +1725,35 @@ module.exports = function(CardTemplates){
       "condition": "!countrySelected",
       "content": [
         {
+          "dom": ".card.thank-you-box",
+          "content": [
+            {
+              "dom": ".card-visible.text-center",
+              "content": [
+                {
+                  "dom": "h2",
+                  "content": "Thank you for making history 🎉"
+                },
+                {
+                  "dom": "p",
+                  "content": "Over 2.1 million people got a result on ge2017.com, almost double the previous record for a voting advice tool."
+                },
+                // {
+                //   "dom": "a.btn.btn-primary",
+                //   "content": "Find out >",
+                //   "condition": "!quizStarted",
+                //   "attr": {
+                //     // "onclick": {
+                //     //   "var": "startStudentCompare"
+                //     // }
+                //     "href": "/students"
+                //   }
+                // }
+              ]
+            }
+          ]
+        },
+        {
           "dom":"div",
           "content": [
             {
