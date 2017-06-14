@@ -2765,3 +2765,41 @@ body > div.body.quizStarter ~ #ifBrowser {
   border: #ff2569 2px solid;
   padding: 30px 20px;
 }
+
+
+
+form.email input, form.email button {
+  box-shadow: none;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin: 5px;
+  margin-top: 40px;
+  border: 1px solid grey;
+  box-sizing: border-box;
+  width: 90%;
+  font-size: 16px;
+  max-width: 260px;
+}
+@media (max-width: 320px) {
+  form.email input, form.email button {
+    font-size: 14px;
+  }
+}
+form.email button {
+  margin-top: 5px;
+  border: 2px solid #ff2569;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  background: white;
+  color: #ff2569;
+}
+form.email button:hover {
+  background: #ff2569;
+  color: white;
+}
+form.email p {
+  font-size: 16px;
+}
+form.email p a {
+  color: #ff2569;
+}

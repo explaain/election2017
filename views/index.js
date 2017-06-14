@@ -3184,3 +3184,27 @@ require("../development/model.js")(model);
 hyperdom.append(document.body, new App());
 
 designers.onWindowResize();
+
+
+
+$('form.email').submit(function() {
+  event.preventDefault();
+  console.log($("form.email input[name=email]").val());
+  $.ajax({
+    url: $("form.email").attr("action"),
+    data: { email: $("form.email input[name=email]").val() },
+    success: function(result) {
+      console.log(result);
+      // $("p#message").html("Hello there " + result.username + "! Number of checkins: " + result.checkIns);
+      $("form.email").hide(500);
+      setTimeout(function() {
+        $('form.email').html('<p>Thanks for subscribing! Want to say hi? Email <a href="mailto:hi@explaain.com" target="_blank">hi@explaain.com</a></p>')
+        $("form.email").show(500);
+      },500);
+    },
+    error: function(result) {
+      console.log('hi');
+      $("form.email").prepend('<p style="color:red">Sorry, we couldn\'t process that. Try again?</p>');
+    }
+  });
+})

@@ -1749,6 +1749,32 @@ module.exports = function(CardTemplates){
                       "dom": "span",
                       "content": " people used ge2017.com - double the previous record for a voting advice tool."
                     },
+                    {
+                      "dom": "form.email",
+                      "attr": {
+                        "action": "http://explaain.com/submit",
+                        "method": "post",
+                        "enctype": "application/x-www-form-urlencoded",
+                      },
+                      "content": [
+                        {
+                          "dom": "input",
+                          "attr": {
+                            "type": "email",
+                            "name": "email",
+                            "placeholder": "Here's my email",
+                          },
+                        },
+                        {
+                          "dom": "button",
+                          "attr": {
+                            "type": "submit",
+                            "name": "submit",
+                          },
+                          "content": "Let me know what's next"
+                        },
+                      ]
+                    },
                   ]
                 },
                 // {
