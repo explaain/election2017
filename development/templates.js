@@ -1724,74 +1724,74 @@ module.exports = function(CardTemplates){
       "dom": "div",
       "condition": "!countrySelected",
       "content": [
-        {
-          "dom": ".card.thank-you-box",
-          "content": [
-            {
-              "dom": ".card-visible.text-center",
-              "content": [
-                {
-                  "dom": "h2",
-                  "content": "Thank you for making history 🎉"
-                },
-                {
-                  "dom": "p",
-                  "content": [
-                    {
-                      "dom": "span",
-                      "content": "Over "
-                    },
-                    {
-                      "dom": "span.bold",
-                      "content": "2 million"
-                    },
-                    {
-                      "dom": "span",
-                      "content": " people used ge2017.com - double the previous record for a voting advice tool."
-                    },
-                    {
-                      "dom": "form.email",
-                      "attr": {
-                        "action": "http://explaain.com/submit",
-                        "method": "post",
-                        "enctype": "application/x-www-form-urlencoded",
-                      },
-                      "content": [
-                        {
-                          "dom": "input",
-                          "attr": {
-                            "type": "email",
-                            "name": "email",
-                            "placeholder": "Here's my email",
-                          },
-                        },
-                        {
-                          "dom": "button",
-                          "attr": {
-                            "type": "submit",
-                            "name": "submit",
-                          },
-                          "content": "Let me know what's next"
-                        },
-                      ]
-                    },
-                  ]
-                },
-                // {
-                //   "dom": "a.btn.btn-primary",
-                //   "content": "Find out >",
-                //   "condition": "!quizStarted",
-                //   "attr": {
-                //     // "onclick": {
-                //     //   "var": "startStudentCompare"
-                //     // }
-                //     "href": "/students"
-                //   }
-                // }
-              ]
-            }
-          ]
-        },
+        // {
+        //   "dom": ".card.thank-you-box",
+        //   "content": [
+        //     {
+        //       "dom": ".card-visible.text-center",
+        //       "content": [
+        //         {
+        //           "dom": "h2",
+        //           "content": "Thank you for making history 🎉"
+        //         },
+        //         {
+        //           "dom": "p",
+        //           "content": [
+        //             {
+        //               "dom": "span",
+        //               "content": "Over "
+        //             },
+        //             {
+        //               "dom": "span.bold",
+        //               "content": "2 million"
+        //             },
+        //             {
+        //               "dom": "span",
+        //               "content": " people used ge2017.com - double the previous record for a voting advice tool."
+        //             },
+        //             {
+        //               "dom": "form.email",
+        //               "attr": {
+        //                 "action": "http://explaain.com/submit",
+        //                 "method": "post",
+        //                 "enctype": "application/x-www-form-urlencoded",
+        //               },
+        //               "content": [
+        //                 {
+        //                   "dom": "input",
+        //                   "attr": {
+        //                     "type": "email",
+        //                     "name": "email",
+        //                     "placeholder": "Here's my email",
+        //                   },
+        //                 },
+        //                 {
+        //                   "dom": "button",
+        //                   "attr": {
+        //                     "type": "submit",
+        //                     "name": "submit",
+        //                   },
+        //                   "content": "Let me know what's next"
+        //                 },
+        //               ]
+        //             },
+        //           ]
+        //         },
+        //         // {
+        //         //   "dom": "a.btn.btn-primary",
+        //         //   "content": "Find out >",
+        //         //   "condition": "!quizStarted",
+        //         //   "attr": {
+        //         //     // "onclick": {
+        //         //     //   "var": "startStudentCompare"
+        //         //     // }
+        //         //     "href": "/students"
+        //         //   }
+        //         // }
+        //       ]
+        //     }
+        //   ]
+        // },
         {
           "dom":"div",
           "content": [
@@ -1843,57 +1843,57 @@ module.exports = function(CardTemplates){
                 }
               ]
             },
-            {
-              "dom": "p.or",
-              "content": "or"
-            },
-            {
-              "dom": ".card.quiz-extra",
-              "content": [
-                {
-                  "dom": ".card-visible.text-center",
-                  "content": [
-                    {
-                      "dom": "h2",
-                      "content": "Student? Find out where you should vote."
-                    },
-                    {
-                      "dom": "p",
-                      "content": "Compare your postcodes to see where your vote has most impact."
-                    },
-                    {
-                      "dom": "a.btn.btn-primary",
-                      "content": "Find out >",
-                      "condition": "!quizStarted",
-                      "attr": {
-                        // "onclick": {
-                        //   "var": "startStudentCompare"
-                        // }
-                        "href": "/students"
-                      }
-                    }
-                    // {
-                    //   "dom": "h2",
-                    //   "content": "I know what I want my vote to do"
-                    // },
-                    // {
-                    //   "dom": "p",
-                    //   "content": "Just tell me what’s possible"
-                    // },
-                    // {
-                    //   "dom": "button.btn.btn-primary",
-                    //   "content": "Find out >",
-                    //   "condition": "!quizStarted",
-                    //   "attr": {
-                    //     "onclick": {
-                    //       "var": "startSingleSentence"
-                    //     }
-                    //   }
-                    // }
-                  ]
-                }
-              ]
-            },
+            // {
+            //   "dom": "p.or",
+            //   "content": "or"
+            // },
+            // {
+            //   "dom": ".card.quiz-extra",
+            //   "content": [
+            //     {
+            //       "dom": ".card-visible.text-center",
+            //       "content": [
+            //         {
+            //           "dom": "h2",
+            //           "content": "Student? Find out where you should vote."
+            //         },
+            //         {
+            //           "dom": "p",
+            //           "content": "Compare your postcodes to see where your vote has most impact."
+            //         },
+            //         {
+            //           "dom": "a.btn.btn-primary",
+            //           "content": "Find out >",
+            //           "condition": "!quizStarted",
+            //           "attr": {
+            //             // "onclick": {
+            //             //   "var": "startStudentCompare"
+            //             // }
+            //             "href": "/students"
+            //           }
+            //         }
+            //         // {
+            //         //   "dom": "h2",
+            //         //   "content": "I know what I want my vote to do"
+            //         // },
+            //         // {
+            //         //   "dom": "p",
+            //         //   "content": "Just tell me what’s possible"
+            //         // },
+            //         // {
+            //         //   "dom": "button.btn.btn-primary",
+            //         //   "content": "Find out >",
+            //         //   "condition": "!quizStarted",
+            //         //   "attr": {
+            //         //     "onclick": {
+            //         //       "var": "startSingleSentence"
+            //         //     }
+            //         //   }
+            //         // }
+            //       ]
+            //     }
+            //   ]
+            // },
             // {
             //   "dom": ".card.quiz-extra",
             //   "content": [
@@ -2166,57 +2166,57 @@ module.exports = function(CardTemplates){
             "dom": ".card.finalResult",
             "content": [{"template": "yourTacticalMatch"}]
           },
-          {
-            "dom": ".card-carousel-nav.cardAnim",
-            "condition": "showCarouselResults",
-            "content": [
-              {
-                "dom": "div.carousel-nav-container",
-                "content": [
-                  {
-                    "dom": "a.carousel-nav-item",
-                    "content": [
-                      {"dom":"div.carousel-emoji","content":"😇"},
-                      {"dom":"div","content":"Basic"}
-                    ],
-                    "attr": {
-                      "data-carousel-link": "0"
-                    }
-                  },
-                  {
-                    "dom": "a.carousel-nav-item",
-                    "content": [
-                      {"dom":"div.carousel-emoji","content":"😎"},
-                      {"dom":"div","content":"Tactical"}
-                    ],
-                    "attr": {
-                      "data-carousel-link": "1"
-                    }
-                  },
-                  {
-                    "dom": "a.carousel-nav-item",
-                    "content": [
-                      {"dom":"div.carousel-emoji","content":"🍻"},
-                      {"dom":"div","content":"Swap"}
-                    ],
-                    "attr": {
-                      "data-carousel-link": "2"
-                    }
-                  },
-                  {
-                    "dom": "a.carousel-nav-item",
-                    "content": [
-                      {"dom":"div.carousel-emoji","content":"💩"},
-                      {"dom":"div","content":"Spoil"}
-                    ],
-                    "attr": {
-                      "data-carousel-link": "3"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
+          // {
+          //   "dom": ".card-carousel-nav.cardAnim",
+          //   "condition": "showCarouselResults",
+          //   "content": [
+          //     {
+          //       "dom": "div.carousel-nav-container",
+          //       "content": [
+          //         {
+          //           "dom": "a.carousel-nav-item",
+          //           "content": [
+          //             {"dom":"div.carousel-emoji","content":"😇"},
+          //             {"dom":"div","content":"Basic"}
+          //           ],
+          //           "attr": {
+          //             "data-carousel-link": "0"
+          //           }
+          //         },
+          //         {
+          //           "dom": "a.carousel-nav-item",
+          //           "content": [
+          //             {"dom":"div.carousel-emoji","content":"😎"},
+          //             {"dom":"div","content":"Tactical"}
+          //           ],
+          //           "attr": {
+          //             "data-carousel-link": "1"
+          //           }
+          //         },
+          //         {
+          //           "dom": "a.carousel-nav-item",
+          //           "content": [
+          //             {"dom":"div.carousel-emoji","content":"🍻"},
+          //             {"dom":"div","content":"Swap"}
+          //           ],
+          //           "attr": {
+          //             "data-carousel-link": "2"
+          //           }
+          //         },
+          //         {
+          //           "dom": "a.carousel-nav-item",
+          //           "content": [
+          //             {"dom":"div.carousel-emoji","content":"💩"},
+          //             {"dom":"div","content":"Spoil"}
+          //           ],
+          //           "attr": {
+          //             "data-carousel-link": "3"
+          //           }
+          //         }
+          //       ]
+          //     }
+          //   ]
+          // },
           {
             "dom": ".card-carousel.cardAnim",
             "condition": "showCarouselResults",
@@ -2232,10 +2232,10 @@ module.exports = function(CardTemplates){
                   {
                     "dom": ".card-visible.text-center",
                     "content": [
-                      // {
-                      //   "dom": "div.step-number",
-                      //   "content": "1"
-                      // },
+                      {
+                        "dom": "div.step-number",
+                        "content": "1"
+                      },
                       {
                         "dom": "h2.bestMatchSoFar"
                       },
@@ -2255,59 +2255,59 @@ module.exports = function(CardTemplates){
                       // {
                       //   "dom": "p.small" // For standardised margin bottom
                       // },
-                      {
-                        "dom": "h2.postcode-instructions",
-                        "content": "But see if they stand a chance of winning where you live"
-                      },
-                      {
-                        "dom": "h3.postcode-instructions.slideHint",
-                        "content": [
-                          {"dom":"span", "content": "Slide right to see your tactical options"},
-                          {"dom":"span.bigEmoji", "content": "👉"}
-                        ]
-                      },
-                      {
-                        "dom":"form.postcode-form",
-                        "condition": "!isWaiting",
-                        "attr":{
-                          "onsubmit":{
-                            "var":"postcodeSubmit"
-                          }
-                        },
-                        "content":[
-                          {
-                            "dom":"input.form-control",
-                            "attr": {
-                              "autofocus":"true",
-                              "type":"text",
-                              "required": "true",
-                              "pattern": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
-                              "name":"postcode",
-                              "placeholder":"Postcode",
-                              "binding":{
-                                "var":"postcodeBinding"
-                              }
-                            }
-                          },
-                          {
-                            "dom":"button.btn.btn-success",
-                            "attr":{
-                              "type":"submit"
-                            },
-                            "content":"Go >"
-                          }
-                        ]
-                      },
-                      {
-                        "condition": "isWaiting",
-                        "template": "loading"
-                      },
-                      {
-                        "template":"error",
-                        "mapping": [
-                          ["error", "postcodeError"]
-                        ]
-                      },
+                      // {
+                      //   "dom": "h2.postcode-instructions",
+                      //   "content": "But see if they stand a chance of winning where you live"
+                      // },
+                      // {
+                      //   "dom": "h3.postcode-instructions.slideHint",
+                      //   "content": [
+                      //     {"dom":"span", "content": "Slide right to see your tactical options"},
+                      //     {"dom":"span.bigEmoji", "content": "👉"}
+                      //   ]
+                      // },
+                      // {
+                      //   "dom":"form.postcode-form",
+                      //   "condition": "!isWaiting",
+                      //   "attr":{
+                      //     "onsubmit":{
+                      //       "var":"postcodeSubmit"
+                      //     }
+                      //   },
+                      //   "content":[
+                      //     {
+                      //       "dom":"input.form-control",
+                      //       "attr": {
+                      //         "autofocus":"true",
+                      //         "type":"text",
+                      //         "required": "true",
+                      //         "pattern": "^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
+                      //         "name":"postcode",
+                      //         "placeholder":"Postcode",
+                      //         "binding":{
+                      //           "var":"postcodeBinding"
+                      //         }
+                      //       }
+                      //     },
+                      //     {
+                      //       "dom":"button.btn.btn-success",
+                      //       "attr":{
+                      //         "type":"submit"
+                      //       },
+                      //       "content":"Go >"
+                      //     }
+                      //   ]
+                      // },
+                      // {
+                      //   "condition": "isWaiting",
+                      //   "template": "loading"
+                      // },
+                      // {
+                      //   "template":"error",
+                      //   "mapping": [
+                      //     ["error", "postcodeError"]
+                      //   ]
+                      // },
                       {
                         "dom": ".action-buttons",
                         "content": [
@@ -2327,140 +2327,140 @@ module.exports = function(CardTemplates){
                     ]
                   }
                 ]
-              },
-              // #2: Vote for your best chance
-              {
-                "dom": ".card.noAnim.tactical.large-postcode",
-                "content": [
-                  {
-                    "template": "yourTacticalMatch"
-                  },
-                  {
-                    "dom": "p.small-link.calculate.onFinalResults",
-                    "condition": "finalResults",
-                    "content":{
-                       "var": "calculateText",
-                       "markdown": "true"
-                     }
-                  },
-                  {
-                    "dom": "p.small.scrollDown",
-                    "condition": "finalResults",
-                    "content": "Scroll down to see how we reached this match"
-                  }
-                ]
-              },
-              // #3: Swap your vote
-              {
-                "dom": ".card.noAnim",
-                "content": [
-                  {
-                    "dom": ".card-visible.text-center",
-                    "content": [
-                      // {
-                      //   "dom": "div.step-number",
-                      //   "content": "4"
-                      // },
-                      {
-                        "dom": "h3",
-                        // "condition": "finalResults",
-                        "content": "Swap my vote"
-                      },
-                      {
-                        "dom": "p",
-                        "content": [
-                          {
-                            "dom": "span",
-                            "content": "In a safe seat but willing to vote for another party other than your top match? Consider "
-                          },
-                          {
-                            "dom": "a.explaain-link",
-                            "content": "vote swapping",
-                            "attr": {
-                              "href": "http://api.explaain.com/Detail/59348485d238f700115da9f6"
-                            },
-                          },
-                        ]
-                      },
-                      {
-                        "dom": "a.swapvote.btn.btn-primary.btn-large",
-                        "attr": {
-                          "href": "http://bit.ly/swapmyvote",
-                          "target": "_blank"
-                        },
-                        "content": "Swap My Vote >"
-                      },
-                      // {
-                      //   "dom": "a.swapvote",
-                      //   "attr": {
-                      //     "href": "https://www.swapmyvote.uk",
-                      //     "target": "_blank"
-                      //   },
-                      //   "content": [{
-                      //     "dom": "img.swapvote",
-                      //     "attr": {
-                      //       "src": "/img/swapmyvote.png",
-                      //     }
-                      //   }]
-                      // },
-                      {
-                        "dom": "p.small" // For standardised margin bottom
-                      }
-                    ]
-                  }
-                ]
-              },
-              // #4: Spoil your ballot
-              {
-                "dom": ".card.noAnim",
-                "content": [
-                  {
-                    "dom": ".card-visible.text-center",
-                    "content": [
-                      // {
-                      //   "dom": "div.step-number",
-                      //   "content": "3"
-                      // },
-                      {
-                        "dom": "h3",
-                        // "condition": "finalResults",
-                        "content": "Spoil my ballot!"
-                      },
-                      {
-                        "dom": "p",
-                        "content": [
-                          {
-                            "dom": "span",
-                            "content": "Not voting changes nothing. Spoiling your ballot does, "
-                          },
-                          {
-                            "dom": "a.explaain-link",
-                            "content": "here’s why",
-                            "attr": {
-                              "href": "http://api.explaain.com/Detail/593484e7d238f700115da9f8"
-                            },
-                          },
-                        ]
-                      },
-                      {
-                        "dom": "p",
-                        "content": "Below is the correct way to spoil your ballot."
-                      },
-                      // {
-                      //   "dom": "h4",
-                      //   // "condition": "finalResults",
-                      //   "content": ""
-                      // },
-                      {
-                        "dom": "img.spoil",
-                        "attr": {
-                          "src": "/img/spoil.png"
-                        }
-                      }
-                    ]
-                  }
-                ]
               }
+              // // #2: Vote for your best chance
+              // {
+              //   "dom": ".card.noAnim.tactical.large-postcode",
+              //   "content": [
+              //     {
+              //       "template": "yourTacticalMatch"
+              //     },
+              //     {
+              //       "dom": "p.small-link.calculate.onFinalResults",
+              //       "condition": "finalResults",
+              //       "content":{
+              //          "var": "calculateText",
+              //          "markdown": "true"
+              //        }
+              //     },
+              //     {
+              //       "dom": "p.small.scrollDown",
+              //       "condition": "finalResults",
+              //       "content": "Scroll down to see how we reached this match"
+              //     }
+              //   ]
+              // },
+              // // #3: Swap your vote
+              // {
+              //   "dom": ".card.noAnim",
+              //   "content": [
+              //     {
+              //       "dom": ".card-visible.text-center",
+              //       "content": [
+              //         // {
+              //         //   "dom": "div.step-number",
+              //         //   "content": "4"
+              //         // },
+              //         {
+              //           "dom": "h3",
+              //           // "condition": "finalResults",
+              //           "content": "Swap my vote"
+              //         },
+              //         {
+              //           "dom": "p",
+              //           "content": [
+              //             {
+              //               "dom": "span",
+              //               "content": "In a safe seat but willing to vote for another party other than your top match? Consider "
+              //             },
+              //             {
+              //               "dom": "a.explaain-link",
+              //               "content": "vote swapping",
+              //               "attr": {
+              //                 "href": "http://api.explaain.com/Detail/59348485d238f700115da9f6"
+              //               },
+              //             },
+              //           ]
+              //         },
+              //         {
+              //           "dom": "a.swapvote.btn.btn-primary.btn-large",
+              //           "attr": {
+              //             "href": "http://bit.ly/swapmyvote",
+              //             "target": "_blank"
+              //           },
+              //           "content": "Swap My Vote >"
+              //         },
+              //         // {
+              //         //   "dom": "a.swapvote",
+              //         //   "attr": {
+              //         //     "href": "https://www.swapmyvote.uk",
+              //         //     "target": "_blank"
+              //         //   },
+              //         //   "content": [{
+              //         //     "dom": "img.swapvote",
+              //         //     "attr": {
+              //         //       "src": "/img/swapmyvote.png",
+              //         //     }
+              //         //   }]
+              //         // },
+              //         {
+              //           "dom": "p.small" // For standardised margin bottom
+              //         }
+              //       ]
+              //     }
+              //   ]
+              // },
+              // // #4: Spoil your ballot
+              // {
+              //   "dom": ".card.noAnim",
+              //   "content": [
+              //     {
+              //       "dom": ".card-visible.text-center",
+              //       "content": [
+              //         // {
+              //         //   "dom": "div.step-number",
+              //         //   "content": "3"
+              //         // },
+              //         {
+              //           "dom": "h3",
+              //           // "condition": "finalResults",
+              //           "content": "Spoil my ballot!"
+              //         },
+              //         {
+              //           "dom": "p",
+              //           "content": [
+              //             {
+              //               "dom": "span",
+              //               "content": "Not voting changes nothing. Spoiling your ballot does, "
+              //             },
+              //             {
+              //               "dom": "a.explaain-link",
+              //               "content": "here’s why",
+              //               "attr": {
+              //                 "href": "http://api.explaain.com/Detail/593484e7d238f700115da9f8"
+              //               },
+              //             },
+              //           ]
+              //         },
+              //         {
+              //           "dom": "p",
+              //           "content": "Below is the correct way to spoil your ballot."
+              //         },
+              //         // {
+              //         //   "dom": "h4",
+              //         //   // "condition": "finalResults",
+              //         //   "content": ""
+              //         // },
+              //         {
+              //           "dom": "img.spoil",
+              //           "attr": {
+              //             "src": "/img/spoil.png"
+              //           }
+              //         }
+              //       ]
+              //     }
+              //   ]
+              // }
               /* ///// Carousel ends ///// */
             ]
           },
@@ -2566,6 +2566,11 @@ module.exports = function(CardTemplates){
               {
                 "dom": ".card-visible.text-center",
                 "content": [
+                  {
+                    "dom": "div.step-number.step-3",
+                    "condition": "quizResults",
+                    "content": "3"
+                  },
                   {
                     "dom": "h2",
                     "content": "Be an expert"
@@ -3316,7 +3321,7 @@ module.exports = function(CardTemplates){
               {
                 "dom": "div.step-number.step-3",
                 "condition": "quizResults",
-                "content": "3"
+                "content": "4"
               },
               {
                 "dom": "div.step-number.step-4",
