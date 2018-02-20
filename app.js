@@ -66,25 +66,25 @@ function start() {
 
   app.get('/', function(req, res, next) {
     res.redirect(301,"/quiz");
-    // res.render('index', { standalone: false, embed: false, embedSwitch: null,  brand: process.env.SITE_BRAND || 'ge2017', step: '', phrase: '', quiz: false });
+    // res.render('index', { standalone: false, embed: false, embedSwitch: null,  brand: process.env.SITE_BRAND || 'it2018', step: '', phrase: '', quiz: false });
   });
 
   app.get('/students/', function(req, res, next) {
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'postcode-compare', phrase: '', quiz: false });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: 'postcode-compare', phrase: '', quiz: false });
   });
 
   //This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
   app.get('/student/', function(req, res, next) {
     res.redirect(301,"/students");
-    //res.render('/index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: req.params.step, phrase: '', quiz: false });
+    //res.render('/index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: req.params.step, phrase: '', quiz: false });
   });
 
   app.get('/embed/:step', function(req, res, next) {
-    res.render('index', { standalone: false, embed: true, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: req.params.step, phrase: '', quiz: false });
+    res.render('index', { standalone: false, embed: true, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: req.params.step, phrase: '', quiz: false });
   });
 
   app.get('/policy', function(req, res, next) {
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'policy', phrase: '', quiz: false });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: 'policy', phrase: '', quiz: false });
   });
 
   app.get('/shared/:party?/:percentage?', function(req, res, next) {
@@ -101,14 +101,14 @@ function start() {
     req.params.share = {
       fb: {
         title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
-        subtitle: `Who best represents your views? #GE2017`
+        subtitle: `Who best represents your views? #it2018`
       },
       tw: {
         title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
         subtitle: `Who best represents your views? #GE2017`
       }
     }
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: 'quiz', phrase: '', quiz: true, params: req.params });
   })
 
   app.get('/tactical/:party?/:constituency?', function(req, res, next) {
@@ -126,18 +126,18 @@ function start() {
         subtitle: `Who best represents your views? #GE2017`
       }
     }
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: 'quiz', phrase: '', quiz: true, params: req.params });
   })
 
   app.get('/quiz', function(req, res, next) {
     req.params.resourceRoot = `https://${req.headers.host}`;
     req.params.quizHome = `https://${req.headers.host}/quiz`;
     req.params.canonical = `//${req.headers.host}/quiz`;
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: 'quiz', phrase: '', quiz: true, params: req.params });
   });
 
   app.get('/starter', function(req, res, next) {
-    res.render('index', { standalone: true, embed: false, embedSwitch: 'quizStarter', brand: process.env.SITE_BRAND || 'ge2017', step: 'quiz', phrase: '', quiz: true, params: req.params });
+    res.render('index', { standalone: true, embed: false, embedSwitch: 'quizStarter', brand: process.env.SITE_BRAND || 'it2018', step: 'quiz', phrase: '', quiz: true, params: req.params });
   });
 
   app.get('/quiz/questions', function(req, res, next) {
@@ -150,7 +150,7 @@ function start() {
   });
 
   app.get('/phrase/iWantTo/', function(req, res, next) {
-    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: '', phrase: 'iWantTo', quiz: true });
+    res.render('index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: '', phrase: 'iWantTo', quiz: true });
   });
 
   //Teporary because AddThis was sending people to the wrong place!
