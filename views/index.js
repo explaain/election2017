@@ -146,7 +146,7 @@ Object.keys(cfg).forEach((site) => {
 // Patch each brand object with default 'ge2017' data
 Object.keys(cfg).forEach((site) => {
   props.forEach((k) => {
-    cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.it2018[k];
+    cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.ge2017[k];
   })
 });
 const config = cfg;

@@ -115,7 +115,7 @@ var quizQuestions = [
           },
          {
            label: "\"ma può diventarlo",
-           opinion: " se maggiorenne e dopo aver compiuto studi in Italia\""
+           opinion: "1"
           }
         ]
       }
@@ -173,7 +173,7 @@ var quizQuestions = [
           },
          {
            label: "\"però bisogna garantire delle pensioni minime",
-           opinion: " particolarmente alle mamme e ai lavoratori precari\""
+           opinion: "1"
           }
         ]
       }
@@ -275,7 +275,7 @@ var quizQuestions = [
        yes: [
          {
            label: "\"bisogna anche eliminare imposte su donazioni",
-           opinion: " successioni"
+           opinion: "0.5"
           },
          {
            label: " prima casa e risparmi\"",
@@ -332,22 +332,22 @@ var quizQuestions = [
      answers: {
        yes: [
          {
-           label: "ambiente-1",
-           opinion: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2025"
+           label: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2025",
+           opinion: "1"
           },
          {
-           label: "1",
-           opinion: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2050"
+           label: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2050",
+           opinion: "0.8"
           }
         ],
       no: [
          {
-           label: "0.8",
-           opinion: "ma bisogna dedicare risorse all'efficientamento energetico e allo sviluppo di energie rinnovabili"
+           label: "ma bisogna dedicare risorse all'efficientamento energetico e allo sviluppo di energie rinnovabili",
+           opinion: "0"
           },
          {
-           label: "0",
-           opinion: "l'importante è l'indipendenza da altri paesi per soddisfare il fabbisogno energetico"
+           label: "l'importante è l'indipendenza da altri paesi per soddisfare il fabbisogno energetico",
+           opinion: "1"
           }
         ]
       }
