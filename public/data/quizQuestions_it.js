@@ -65,7 +65,7 @@ var quizQuestions = [
    ,
   {
      question: "E' necessario bloccare lo sbarco di migranti nel nostro paese",
-     issue: "Immigrazione",
+     issue: "immigrazione",
      randomiseGroup: 0,
      debate: "immigrazione-1",
      answers: {
@@ -94,7 +94,7 @@ var quizQuestions = [
    ,
   {
      question: "Chi nato in Italia da genitori stranieri e' cittadino Italiano",
-     issue: "Immigrazione",
+     issue: "immigrazione",
      randomiseGroup: 0,
      debate: "immigrazione-2",
      answers: {
@@ -183,7 +183,7 @@ var quizQuestions = [
      question: "La sanità pubblica necessita di più investimenti statali",
      issue: "Salute",
      randomiseGroup: 0,
-     debate: "salute-2",
+     debate: "salute-1",
      answers: {
        yes: [
          {
