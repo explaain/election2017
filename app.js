@@ -66,7 +66,7 @@ function start() {
 
   app.get('/', function(req, res, next) {
     res.redirect(301,"/quiz");
-    // res.render('index', { standalone: false, embed: false, embedSwitch: null,  brand: process.env.SITE_BRAND || 'ge2017', step: '', phrase: '', quiz: false });
+    // res.render('index', { standalone: false, embed: false, embedSwitch: null,  brand: process.env.SITE_BRAND || 'it2018', step: '', phrase: '', quiz: false });
   });
 
   app.get('/students/', function(req, res, next) {
@@ -76,7 +76,7 @@ function start() {
   //This doesn't work yet - redirect??? - Igor: this doesn't work, because there is no "req.params.step" in URL
   app.get('/student/', function(req, res, next) {
     res.redirect(301,"/students");
-    //res.render('/index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'ge2017', step: req.params.step, phrase: '', quiz: false });
+    //res.render('/index', { standalone: true, embed: false, embedSwitch: null, brand: process.env.SITE_BRAND || 'it2018', step: req.params.step, phrase: '', quiz: false });
   });
 
   app.get('/embed/:step', function(req, res, next) {
@@ -101,7 +101,7 @@ function start() {
     req.params.share = {
       fb: {
         title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
-        subtitle: `Who best represents your views? #GE2017`
+        subtitle: `Who best represents your views? #it2018`
       },
       tw: {
         title: `Turns out I ${req.params.equally}support ${req.params.percentage}% of ${req.params.party} policies.`,
