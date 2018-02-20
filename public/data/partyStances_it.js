@@ -214,7 +214,7 @@ var partyStances = {
                }
              },
              "immigrazione-2": {
-               question: "Chi nato in Italia da genitori stranieri e' cittadino Italiano",
+               question: "È cittadino italiano anche chi è nato in Italia da genitori stranieri",
                buttons: { },
                parties: {
                  "PD": {

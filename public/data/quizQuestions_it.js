@@ -93,18 +93,18 @@ var quizQuestions = [
    }
    ,
   {
-     question: "Chi nato in Italia da genitori stranieri e' cittadino Italiano",
+     question: "È cittadino italiano anche chi è nato in Italia da genitori stranieri",
      issue: "immigrazione",
      randomiseGroup: 0,
      debate: "immigrazione-2",
      answers: {
        yes: [
          {
-           label: "ma solo se ha completato almeno un ciclo di studi in Italia",
+           label: "ma solo se ha completato un ciclo di studi in Italia",
            opinion: "0.8"
           },
          {
-           label: "anche chi e' arrivato da piccolo in Italia se ha completato almeno un ciclo di studi in Italia",
+           label: "anche chi non è nato inItalia ma ci è arrivato da piccolo e ha compiuto un ciclo di studi in Italia",
            opinion: "1"
           }
         ],
@@ -201,7 +201,7 @@ var quizQuestions = [
            opinion: "0"
           },
          {
-           label: "però bisogna focalizzare i fondi all cura di cronicità e disabilità",
+           label: "però bisogna concentrare i fondi sulla cura di cronicità e disabilità",
            opinion: "0.4"
           }
         ]
@@ -274,22 +274,22 @@ var quizQuestions = [
      answers: {
        yes: [
          {
-           label: "\"bisogna anche eliminare imposte su donazioni",
-           opinion: "0.5"
+           label: "bisogna anche eliminare imposte su donazioni, successioni, prima casa e risparmi",
+           opinion: "1"
           },
          {
-           label: " prima casa e risparmi\"",
-           opinion: "1"
+           label: "vanno aumentate per rendere il sistema fiscale più equo",
+           opinion: "0.6"
           }
         ],
       no: [
          {
            label: "ma bisogna prima focalizzare gli sforzi sulla lotta all'evasione prima di ridurre le imposte",
-           opinion: "0.6"
+           opinion: "0"
           },
          {
-           label: "vanno aumentate per rendere il sistema fiscale più equo",
-           opinion: "0"
+           label: "ma bisogna sostituire le imposte uniche con valori crescenti in base all'ammontare della transazione",
+           opinion: "0.2"
           }
         ]
       }
