@@ -1811,15 +1811,15 @@ module.exports = function(CardTemplates){
                         },
                         {
                           "dom": "h2",
-                          "content": "Where do you stand on these 12 issues?"
+                          "content": "Qual è la tua posizione su questi 12 temi?"
                         },
                         {
                           "dom": "p",
-                          "content": "See who you match with in real time as you give your views on the election's hottest topics."
+                          "content": "Scopri in tempo reale quale proposta politica si avvicina di piu alle tue posizioni."
                         },
                         {
                           "dom": "p.italics",
-                          "content": "The results may surprise you…"
+                          "content": "Potresti essere sorpreso dai risultati…"
                         },
                         {
                           "template": "quizPercentages",
@@ -1831,7 +1831,7 @@ module.exports = function(CardTemplates){
                     },
                     {
                       "dom": ".startQuiz",
-                      "content": "Find your match >",
+                      "content": "Fai il test >",
                       "condition": "!quizStarted",
                       "attr": {
                         "onclick": {

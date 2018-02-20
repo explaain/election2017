@@ -10,7 +10,22 @@ const quiz = {
   questions: {}
 };
 
-
+quiz.questions["it2018"] = {
+  all: [
+      "welfare-1",
+      "tasse-1",
+      "immigrazione-1",
+      "immigrazione-2",
+      "eu-1",
+      "welfare-2",
+      "salute-1",
+      "sicurezza-1",
+      "lavoro-1",
+      "tasse-2",
+      "educazione-1",
+      "ambiente-1"
+  ]
+};
  quiz.questions["ge2017"] = {
    all: [
      "health-1",
