@@ -19,6 +19,22 @@ const
   allData = require('../public/data/allData')
 ;
 var cfg = {
+ 'it2018': {
+  subdomain: false,
+  logoImg: "/img/democracyclub.png",
+  logoClass: "ge2017-logo",
+  footerImg: "/img/turnup.png",
+  footerClass: "turnupFooter",
+  footerLink: "http://www.turnup.org.uk/",
+  carousel: true,
+  randomise: true,
+  numbering: true,
+  quizQuestions: allData.getAllData().quiz.questions["it2018"],
+  quizQuestionList: allData.getAllData().quizQuestions,
+  sharing: {
+    basicTwitter: "Utilizza elezioni18.it per decidere chi votare alle elezioni politiche 2018 - elezioni18.it",
+  },
+},
   'ge2017': {
     subdomain: false,
     logoImg: "/img/ge2017logobeta.png",
@@ -130,7 +146,7 @@ Object.keys(cfg).forEach((site) => {
 // Patch each brand object with default 'ge2017' data
 Object.keys(cfg).forEach((site) => {
   props.forEach((k) => {
-    cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.ge2017[k];
+    cfg[site][k] = typeof cfg[site][k] != 'undefined' ? cfg[site][k] : cfg.it2018[k];
   })
 });
 const config = cfg;
@@ -2159,7 +2175,7 @@ class Quiz {
             photo: fullParty.photo,
             matches: fullParty.matches,
             openMatches: fullParty.openMatches,
-            quizResults: config[SiteBrand].carousel || qp.quizResults // Show perc/name in the ge2017 carousel
+            quizResults: config[SiteBrand].carousel || qp.quizResults // Show perc/name in the elezioni18 carousel
           });
         })
         qp.partiesChartDataTopMatch = qp.resultsData;
