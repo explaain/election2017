@@ -83,10 +83,18 @@ header img.ge2017-logo {
   transition: height .4s, margin .4s;
   -webkit-transition: height .4s, margin .4s;
 }
-.body.quiz header img.ge2017-logo {
+header img.it2018-logo {
+  text-align: center;
+  height: 70px;
+  margin: 10px auto;
+  display: block;
+  transition: height .4s, margin .4s;
+  -webkit-transition: height .4s, margin .4s;
+}
+.body.quiz header img.ge2017-logo img.it2018-logo {
   margin-bottom: -20px;
 }
-.body.quiz.moving header img.ge2017-logo {
+.body.quiz.moving header img.ge2017-logo img.it2018-logo {
   height: 30px;
   margin-bottom: 10px;
 }
@@ -1486,14 +1494,14 @@ a:hover .quizPercentagesPartyFace {
 
 .quizPercentagesPartyFace.absolute {
   position: absolute;
-  background-size: 80%;
+  /*background-size: 80%;*/
   background-position: bottom;
 }
 
 .quizPercentagesPartyFace.inline {
   display: inline-block;
   margin: 10px 5px 0px 5px;
-  background-size: 80%;
+  /*background-size: 80%;*/
   background-position: bottom;
 }
 .quizPercentagesPartyPercent.absolute {
@@ -1622,7 +1630,7 @@ a:hover .quizPercentagesPartyFace {
 
 .quizBack,
 .quizSkip {
-  width:60px;
+  width:80px;
   color: #ccc;
   cursor: pointer;
   margin-top: -5px;

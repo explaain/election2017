@@ -298,7 +298,7 @@ var partyStances = {
            description: "Ambiente",
            debates: {
              "ambiente-1": {
-               question: "Bisogna accellerare la transizione energetica riducendo l'uso dei combustibili fossili",
+               question: "Bisogna accellerare la transizione energetica, riducendo l'uso dei combustibili fossili",
                buttons: { },
                parties: {
                  "PD": {

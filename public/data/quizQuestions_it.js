@@ -7,7 +7,7 @@ module.exports = {
 var quizQuestions = [
   {
      question: "Tutti i cittadini hanno diritto ad un reddito di cittadinanza",
-     issue: "welfare",
+     issue: "Welfare",
      randomiseGroup: 0,
      debate: "welfare-1",
      answers: {
@@ -36,7 +36,7 @@ var quizQuestions = [
    ,
   {
      question: "Bisogna ridurre le tasse per tutti i livelli di reddito",
-     issue: "tasse",
+     issue: "Tasse",
      randomiseGroup: 0,
      debate: "tasse-1",
      answers: {
@@ -65,7 +65,7 @@ var quizQuestions = [
    ,
   {
      question: "E' necessario bloccare lo sbarco di migranti nel nostro paese",
-     issue: "immigrazione",
+     issue: "Immigrazione",
      randomiseGroup: 0,
      debate: "immigrazione-1",
      answers: {
@@ -94,7 +94,7 @@ var quizQuestions = [
    ,
   {
      question: "È cittadino italiano anche chi è nato in Italia da genitori stranieri",
-     issue: "immigrazione",
+     issue: "Immigrazione",
      randomiseGroup: 0,
      debate: "immigrazione-2",
      answers: {
@@ -104,7 +104,7 @@ var quizQuestions = [
            opinion: "0.8"
           },
          {
-           label: "anche chi non è nato inItalia ma ci è arrivato da piccolo e ha compiuto un ciclo di studi in Italia",
+           label: "anche chi non è nato in Italia ma ci è arrivato da piccolo e ha compiuto un ciclo di studi in Italia",
            opinion: "1"
           }
         ],
@@ -114,8 +114,8 @@ var quizQuestions = [
            opinion: "0"
           },
          {
-           label: "\"ma può diventarlo",
-           opinion: "1"
+           label: "ma può diventarlo, se maggiorenne e dopo aver compiuto studi in Italia",
+           opinion: "0.2"
           }
         ]
       }
@@ -143,7 +143,7 @@ var quizQuestions = [
            opinion: "0"
           },
          {
-           label: "peroò dobbiamo collaborare in più ambiti con l'Unione Europea",
+           label: "ma l'Italia deve contare di più in Europa, svolgendo un ruolo più incisivo in quello che si decide nelle istituzioni europee",
            opinion: "0.4"
           }
         ]
@@ -172,8 +172,8 @@ var quizQuestions = [
            opinion: "0"
           },
          {
-           label: "\"però bisogna garantire delle pensioni minime",
-           opinion: "1"
+           label: "però bisogna garantire delle pensioni minime, particolarmente alle mamme e ai lavoratori precari",
+           opinion: "0.2"
           }
         ]
       }
@@ -278,13 +278,13 @@ var quizQuestions = [
            opinion: "1"
           },
          {
-           label: "vanno aumentate per rendere il sistema fiscale più equo",
+           label: "ma bisogna prima focalizzare gli sforzi sulla lotta all'evasione prima di ridurre le imposte",
            opinion: "0.6"
           }
         ],
       no: [
          {
-           label: "ma bisogna prima focalizzare gli sforzi sulla lotta all'evasione prima di ridurre le imposte",
+           label: "vanno aumentate per rendere il sistema fiscale più equo",
            opinion: "0"
           },
          {
@@ -325,8 +325,8 @@ var quizQuestions = [
    }
    ,
   {
-     question: "\"Bisogna accellerare la transizione energetica",
-     issue: " riducendo l'uso dei combustibili fossili.\"",
+     question: "Bisogna accellerare la transizione energetica, riducendo l'uso dei combustibili fossili",
+     issue: "Ambiente",
      randomiseGroup: 0,
      debate: "ambiente-1",
      answers: {
@@ -347,7 +347,7 @@ var quizQuestions = [
           },
          {
            label: "l'importante è l'indipendenza da altri paesi per soddisfare il fabbisogno energetico",
-           opinion: "1"
+           opinion: "0"
           }
         ]
       }

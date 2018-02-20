@@ -42,7 +42,7 @@ module.exports = {
       quizChanceResults: [],
       quizSafeSeat: false,
       startingQuiz: false,
-      nextButtonText: "Next Question >",
+      nextButtonText: "Prossima Domanda >",
       country: null,
       resultsData: {},
       localCandidateData: [],

@@ -21,8 +21,8 @@ const
 var cfg = {
  'it2018': {
   subdomain: false,
-  logoImg: "/img/democracyclub.png",
-  logoClass: "ge2017-logo",
+  logoImg: "/img/logo_elezioni18.png",
+  logoClass: "it2018-logo ",
   footerImg: "/img/turnup.png",
   footerClass: "turnupFooter",
   footerLink: "http://www.turnup.org.uk/",
@@ -1183,7 +1183,7 @@ class CardContent {
             return newScore;
           });
           const qp = model.user.quizProgress;
-          qp.country = allData.getAllData().ukData;
+          qp.country = allData.getAllData().nationData;
           var updatePartyPercentages = function(map){
             if(qp.country){
               var topParty = {percentage: 0}
@@ -1732,38 +1732,38 @@ class QuizLanding {
       partiesRandomChartData: [
         {
           color: "red",
-          photo: "/img/leader-faces/corbyn.png",
+          photo: "/img/italian-parties/leu.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "Labour",
-          name: "Lab"
+          fullName: "Liberi e Uguali",
+          name: "LeU"
         },
         {
           color: "green",
-          photo: "/img/leader-faces/lucas.png",
+          photo: "/img/italian-parties/pd.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "Green",
-          name: "Green"
+          fullName: "Partito Democratico",
+          name: "PD"
         },
         {
           color: "blue",
-          photo: "/img/leader-faces/may.png",
+          photo: "/img/italian-parties/peu.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "Conservative",
-          name: "Con"
+          fullName: "+Europa",
+          name: "+Europa"
         },
         {
-          color: "purple",
-          photo: "/img/leader-faces/nuttall.png",
+          color: "#e0bf49",
+          photo: "/img/italian-parties/m5s.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "Ukip",
-          name: "Ukip"
+          fullName: "MoVimento 5 Stelle",
+          name: "M5S"
         },
         {
-          color: "orange",
-          photo: "/img/leader-faces/farron.png",
+          color: "lightblue",
+          photo: "/img/italian-parties/cdx.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "Liberal Democrats",
-          name: "Lib"
+          fullName: "Coalizione di Centro Destra",
+          name: "CdX"
         }
       ],
       goToDashboard: function(){routes.dashboard({ name: "start" }).push()}
@@ -2992,7 +2992,7 @@ class Quiz {
             var ltempCard = {
               '@id': ltempKey,
               '@type': 'QuizMatch',
-               name: "Here's how you rate "+ issue.description + " compared to "+party.fullName,
+               name: "Ecco come valuti "+ issue.description + " rispetto a "+party.fullName,
                matches: opinionsPerIssue
             }
 
@@ -3052,7 +3052,7 @@ class Quiz {
               var tempCard = {
                 '@id': tempKey,
                 '@type': 'IssueMatch',
-                name: matches.length ? 'How you and ' + party.fullName + ' match on issues' : "Answer a question to see how you match",
+                name: matches.length ? 'Ecco l\'affinità tra te e ' + party.fullName + ' rispetto ai vari temi' : "Answer a question to see how you match",
                 //  description: matches.length ? 'Click on an issue to see a question-by-question breakdown' : '',
                 issues: scoresPerIssue,
                 links: allCardKeys

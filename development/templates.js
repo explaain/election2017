@@ -1568,11 +1568,11 @@ module.exports = function(CardTemplates){
         "content":[
           {
             "dom": "h2.q-priority",
-            "content": "Finally, do you care more about certain issues than others?"
+            "content": "Infine, ritieni che alcune tematiche siano più importanti di altre?"
           },
           {
             "dom": "p.helper-text.helper-desc",
-            "content": "Click on as many topics as you like and we’ll weight your answer on those topics more highly."
+            "content": "Seleziona tutti gli argomenti che ritieni maggiormente importanti. Peseremo le tue risposte maggiormente in base alla tua scelta."
           },
           {
             "dom": "div.priority",
@@ -1619,7 +1619,7 @@ module.exports = function(CardTemplates){
           },
           {
             "dom": "a.submitPriorities.btn.btn-success.bigActionButton",
-            "content": "Calculate my results",
+            "content": "Calcola il risultato",
             "attr": {
               "onclick": {
                 "var": "setPriorities"
@@ -1940,7 +1940,7 @@ module.exports = function(CardTemplates){
             "content": [
               {
                 "dom": ".quizSkip",
-                "content": "Skip >",
+                "content": "Salta >",
                 "attr": {
                   "onclick": {
                     "var": "skipQuestion"
@@ -1950,7 +1950,7 @@ module.exports = function(CardTemplates){
               },
               {
                 "dom": ".quizBack",
-                "content": "< Back",
+                "content": "< Indietro",
                 "attr": {
                   "onclick": {
                     "var": "back"
@@ -2121,7 +2121,7 @@ module.exports = function(CardTemplates){
         "content": [
           {
             "dom": "h2",
-            "content": "Where are you voting?"
+            "content": "Dove voti?"
           },
           {
             "dom": "div.countries",
@@ -2648,7 +2648,7 @@ module.exports = function(CardTemplates){
               "href": "/quiz"
             },
             "condition": "quizResults",
-            "content": "⟲ Retake Quiz"
+            "content": "⟲ Ricomincia il Quiz"
           },
           {
             "condition": "prioritiesSet",
@@ -2925,7 +2925,7 @@ module.exports = function(CardTemplates){
     "content": [
       {
         "dom": ".quizSubquestionOr",
-        "content": "Any other details:"
+        "content": "Ulteriori informazioni:"
       },
       {
         "loop": "subanswers",
@@ -2933,7 +2933,7 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": ".quizSubquestionOr",
-        "content": "or"
+        "content": "altrimenti"
       },
       {
         "dom": ".quizSubquestionSkip.quizPop.quick",
@@ -2970,7 +2970,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "h2.seeHowAlt",
         "condition": "quizResultsPage",
-        "content": "Here is how you matched the major parties' manifestos overall:"
+        "content": "Ecco come ti sei posizionato rispetto ai programmi politici dei maggiori partiti:"
       },
       {
         "dom": "h2.seeHow",

@@ -6,12 +6,12 @@ module.exports = {
 
 const countriesData = [
     {
-      label: "Italy",
+      label: "Italia",
       code: "italy",
       parties: [
         {
           color: "blue",
-          photo: "/img/leader-faces/may.png",
+          photo: "/img/italian-parties/peu.png",
           fullName: "+Europa",
           name: "+Europa",
           key: "+Europa",
@@ -23,7 +23,7 @@ const countriesData = [
         },
         {
           color: "red",
-          photo: "/img/leader-faces/corbyn.png",
+          photo: "/img/italian-parties/leu.png",
           fullName: "Liberi e Uguali",
           name: "LeU",
           key: "LeU",
@@ -35,8 +35,8 @@ const countriesData = [
           ]
         },
         {
-          color: "orange",
-          photo: "/img/leader-faces/farron.png",
+          color: "#e0bf49",
+          photo: "/img/italian-parties/m5s.png",
           fullName: "MoVimento 5 Stelle",
           name: "M5S",
           key: "M5S",
@@ -47,8 +47,8 @@ const countriesData = [
           ]
         },
         {
-          color: "green",
-          photo: "/img/leader-faces/lucas.png",
+          color: "lightblue",
+          photo: "/img/italian-parties/cdx.png",
           fullName: "Coalizione di Centro Destra",
           name: "CdX",
           key: "CdX",
@@ -59,6 +59,19 @@ const countriesData = [
             "Scottish Green Party"
           ]
         },
+        {
+          color: "green",
+          photo: "/img/italian-parties/pd.png",
+          fullName: "Partito Democratico",
+          name: "PD",
+          key: "PD",
+          matches: [],
+          quizResults: false,
+          dClubNames: [
+            "Green Party",
+            "Scottish Green Party"
+          ]
+        }
       ]
   }
 ]

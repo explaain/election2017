@@ -12,7 +12,7 @@ var quizQuestions = require('./quizQuestions_it');
 var quizQuestions38Degrees = require('./quizQuestions38Degrees');
 var swingSeatsToForce = require('./swingSeatsToForce');
 var countriesData = require('./countriesData_it');
-var ukData = require('./ukData');
+var nationData = require('./itData');
 
 
 module.exports = {
@@ -31,7 +31,7 @@ module.exports = {
       // quizQuestions38Degrees: quizQuestions38Degrees.getData(),
       swingSeatsToForce: swingSeatsToForce.getData(),
       countriesData: countriesData.getData(),
-      ukData: ukData.getData(),
+      nationData: nationData.getData(),
     }
   }
 };
