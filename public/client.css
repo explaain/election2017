@@ -135,12 +135,12 @@ header img._38degrees-logo {
   margin-bottom: 10px;
 }
 @media (max-width: 400px) {
-  header img.ge2017-logo {
+  header img.ge2017-logo img.it2018-logo {
     height: 30px;
   }
 }
 @media (max-width: 300px) {
-  header img.ge2017-logo {
+  header img.ge2017-logo img.it2018-logo {
     height: 25px;
   }
 }
@@ -152,10 +152,10 @@ header img._38degrees-logo {
 .body.standalone header a:hover img {
   opacity: 1;
 }
-header a:hover img.ge2017-logo {
+header a:hover img.ge2017-logo img.it2018-logo {
   opacity: 0.7;
 }
-div.body.backColor header img.ge2017-logo {
+div.body.backColor header img.ge2017-logo img.it2018-logo {
   -webkit-filter: brightness(100) !important;
   filter: brightness(100) !important;
 }
