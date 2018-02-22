@@ -2117,7 +2117,7 @@ module.exports = function(CardTemplates){
       },
       { // Country selector
         "dom": "div",
-        "condition": "false",
+        "condition": "!countrySelected",
         "content": [
           {
             "dom": "h2",

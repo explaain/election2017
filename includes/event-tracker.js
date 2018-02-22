@@ -9,6 +9,7 @@ module.exports = function(eventName,props){
       mixpanel.track(eventName,props);
       console.log('Event "'+eventName+'" has been sent');
     } else {
+      mixpanel.track(eventName,props);
       console.log('Event "'+eventName+'" occured, but will NOT be sent in dev mode');
     }
   } catch(e){

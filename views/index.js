@@ -3074,12 +3074,12 @@ class Quiz {
         }
 
         country.select = function(c){
-          if (c != undefined) {
+          /*if (c != undefined) {
           trackEvent("Country Selected",{type: "Quiz", code: c.code, country: c.label});
           }
-          else {
+          else {*/
           trackEvent("Country Selected",{type: "Quiz", code: country.code, country: country.label});
-        }
+        //}
           qp.country = country; // we set the whole country object here
           self.countrySelected = true;
           /*qp.*/
@@ -3090,9 +3090,9 @@ class Quiz {
           qp.startingQuiz = true;
           console.log(1);
         }
-        country.select ({
+        /*country.select ({
           code: "italy", label: "Italia"
-        });
+      });*/
       })
     })
     var facebookShareHref;
