@@ -190,7 +190,7 @@ div.body.backColor header a.home {
 header a.home:hover {
   /*opacity: 0.7;*/
   text-decoration: none;
-  color: #dd2569;
+  color: #0B0B61;
 }
 header a.home:active, header a.home:focus {
   text-decoration: none;
@@ -510,7 +510,7 @@ section.questions a.task:hover {
   font-size: 1.5em;
   color: #bbb;
   z-index: 1000;
-  background-color: #dd2569;
+  background-color: #0B0B61;
   width: 40px;
   height: 40px;
   color: white;
@@ -605,12 +605,12 @@ section:not(.wide) .card section.card-media {
   padding: 6px 16px;
   font-size: 1.02em;
   margin-top: -3px;
-  background-color: #dd2569;
+  background-color: #0B0B61;
   color: white;
-  border: 4px #dd2569 solid;
+  border: 4px #0B0B61 solid;
 }
 .card.postcode-compare .content:not(.resultsLoaded) form.postcode-form button:hover {
-  color: #dd2569;
+  color: #0B0B61;
   background-color: white;
 }
 
@@ -648,8 +648,8 @@ section:not(.wide) .card section.card-media {
   border-color: #398439;
 }
 .card.postcode-compare .goToQuiz button {
-  background-color: #dd2569;
-  border-color: #dd2569;
+  background-color: #0B0B61;
+  border-color: #0B0B61;
 }
 .card.postcode-compare .goToQuiz button:hover {
   opacity: 0.7;
@@ -764,7 +764,7 @@ section:not(.wide) .card section.card-media {
   width: 100%;
   height: 15px;
   /*background-image: url(/img/strip.jpg);*/
-  background-color: #dd2569;
+  background-color: #0B0B61;
   background-size: auto 100%;
   z-index:3;
   background-position: center;
@@ -1229,7 +1229,7 @@ div.body-content.hoverClick:hover {
   color: #555;
 }
 .phrase.phraseHighlight {
-  color: #dd2569;
+  color: #0B0B61;
   background: rgba(221, 37, 105, 0.1);
 }
 
@@ -1239,13 +1239,13 @@ div.body-content.hoverClick:hover {
   border: none;
   border-radius: 0;
   font-weight: 500;
-  color: #dd2569;
+  color: #0B0B61;
   font-size: 0.6em;
   color: #555;
 }
 .card button.btn.highlightButton:hover {
   background: rgba(221, 37, 105, 0.1);
-  color: #dd2569;
+  color: #0B0B61;
 }
 
 
@@ -1256,7 +1256,7 @@ div.card div.content.single-sentence > div.body-content {
 
 .card .content .help {
   font-size: 1.1em;
-  color: #dd2569;
+  color: #0B0B61;
   font-weight: 600;
   font-family: Lato, Helvetica, sans-serif;
 }
@@ -1417,10 +1417,10 @@ p.waiting-text {
   /*font-size:20px;*/
   font-weight: bold;
   padding: 10px 20px;
-  /*background-color: #dd2569;*/
-  border: solid 3px #dd2569;
+  /*background-color: #0B0B61;*/
+  border: solid 3px #0B0B61;
   /*color: white;*/
-  color: #dd2569;
+  color: #0B0B61;
   border-radius:6px;
   border-radius: 10px;
   margin: 5px 0;
@@ -1429,7 +1429,7 @@ p.waiting-text {
 }
 
 .quizSubquestionSkip:hover {
-  background-color: #dd2569;
+  background-color: #0B0B61;
   color: white;
 }
 
@@ -1489,7 +1489,7 @@ p.waiting-text {
 }
 
 a:hover .quizPercentagesPartyFace {
-  border: 3px #dd2569 solid;
+  border: 3px #0B0B61 solid;
 }
 
 .quizPercentagesPartyFace.absolute {
@@ -1566,12 +1566,12 @@ a:hover .quizPercentagesPartyFace {
   font-size:20px;
   font-weight: bold;
   padding: 10px 20px;
-  background-color: #dd2569;
+  background-color: #0B0B61;
   color: white;
   border-radius:6px;
   margin: 10px 0 30px;
   cursor: pointer;
-  border: solid 2px #dd2569;
+  border: solid 2px #0B0B61;
 }
 
 .startQuiz {
@@ -1579,16 +1579,16 @@ a:hover .quizPercentagesPartyFace {
   font-size:20px;
   font-weight: bold;
   padding: 10px 20px;
-  background-color: #dd2569;
+  background-color: #0B0B61;
   color: white;
   border-radius:6px;
   margin: 10px 0 30px;
   cursor: pointer;
-  border: solid 2px #dd2569;
+  border: solid 2px #0B0B61;
 }
 .startQuiz:hover {
   background-color: white;
-  color: #dd2569;
+  color: #0B0B61;
   /*border-color: #ddd;*/
 }
 
@@ -1700,7 +1700,7 @@ a:hover .quizPercentagesPartyFace {
   margin: 0 auto;
 }
 .quizTopLine .progress-inner {
-  background: #dd2569;
+  background: #0B0B61;
 }
 .quizResults {
   padding: 20px;
@@ -1711,7 +1711,7 @@ a:hover .quizPercentagesPartyFace {
   color: #777;
 }
 .quizResults h2 {
-  color: #dd2569;
+  color: #0B0B61;
 }
 .quizResults img {
   float: left;
@@ -1857,7 +1857,7 @@ section.single-sentence {
 }
 
 .pink {
-  color: #dd2569;
+  color: #0B0B61;
 }
 
 .explaained a {
@@ -2003,7 +2003,7 @@ span.t-featured {
   bottom: 45px;
 }
 .quizPercentagesPartyMatch {
-  color: #dd2569;
+  color: #0B0B61;
   font-weight: bold;
   margin-top: 0;
   position: absolute;
@@ -2576,7 +2576,7 @@ a.democracyclub-logo:hover {
 /*#tactical-mode.unappealing:before, #tactical-mode.safe:before {
   content: "You're out of luck";
   font-size: "22px";
-  color: '#dd2569';
+  color: '#0B0B61';
   font-weight: bold;
 }*/
 #tactical-mode.unappealing .tacticalUI .chanceMatches, #tactical-mode.safe .tacticalUI .chanceMatches {

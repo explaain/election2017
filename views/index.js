@@ -23,12 +23,13 @@ var cfg = {
   subdomain: false,
   logoImg: "/img/logo_elezioni18.png",
   logoClass: "it2018-logo ",
-  footerImg: "/img/turnup.png",
-  footerClass: "turnupFooter",
-  footerLink: "http://www.turnup.org.uk/",
+  footerImg: "/img/savvy.png",
+  footerClass: "heysavvyFooter",
+  footerLink: "http://heysavvy/elections",
   carousel: true,
   randomise: true,
   numbering: true,
+  prependYesNo: true,
   quizQuestions: allData.getAllData().quiz.questions["it2018"],
   quizQuestionList: allData.getAllData().quizQuestions,
   sharing: {
@@ -1749,13 +1750,13 @@ class QuizLanding {
           photo: "/img/italian-parties/peu.png",
           percentage: parseInt((Math.random()*100))+"%",
           fullName: "+Europa",
-          name: "+Europa"
+          name: "+EU"
         },
         {
           color: "#e0bf49",
           photo: "/img/italian-parties/m5s.png",
           percentage: parseInt((Math.random()*100))+"%",
-          fullName: "MoVimento 5 Stelle",
+          fullName: "Movimento 5 Stelle",
           name: "M5S"
         },
         {
@@ -1763,7 +1764,7 @@ class QuizLanding {
           photo: "/img/italian-parties/cdx.png",
           percentage: parseInt((Math.random()*100))+"%",
           fullName: "Coalizione di Centro Destra",
-          name: "CdX"
+          name: "Cdx"
         }
       ],
       goToDashboard: function(){routes.dashboard({ name: "start" }).push()}
@@ -2035,7 +2036,7 @@ class Quiz {
       if(config[SiteBrand].prependYesNo) {
         qp.questionSeries.forEach((k,i) => {
           quiz.questionDB[k].answers.yes.forEach((a,j) => {
-            a.label = "Yes, " + a.label
+            a.label = "Si, " + a.label
           })
           quiz.questionDB[k].answers.no.forEach((a,j) => {
             a.label = "No, " + a.label
@@ -2927,8 +2928,8 @@ class Quiz {
 
         //JE: I would have thought this whole section shouldn't happen yet but for now I'm stopping console errors with this extra test:
         if (qp.resultsData.length) {
-          console.log("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
-          $('h2.bestMatchSoFar').html("You matched with " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+          console.log("Il tuo risultato è " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' and '));
+          $('h2.bestMatchSoFar').html("Il tuo risultato è " + qp.resultsData.map(function(p){return '<span style="color: ' + p.color + '">' + p.name + '</span>'}).join(' e '));
           setTimeout(function(){
             $('.card-carousel').slick('setPosition');
           },500);
@@ -3072,8 +3073,13 @@ class Quiz {
           }
         }
 
-        country.select = function(){
+        country.select = function(c){
+          if (c != undefined) {
+          trackEvent("Country Selected",{type: "Quiz", code: c.code, country: c.label});
+          }
+          else {
           trackEvent("Country Selected",{type: "Quiz", code: country.code, country: country.label});
+        }
           qp.country = country; // we set the whole country object here
           self.countrySelected = true;
           /*qp.*/
@@ -3084,6 +3090,9 @@ class Quiz {
           qp.startingQuiz = true;
           console.log(1);
         }
+        country.select ({
+          code: "italy", label: "Italia"
+        });
       })
     })
     var facebookShareHref;

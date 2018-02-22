@@ -1568,11 +1568,11 @@ module.exports = function(CardTemplates){
         "content":[
           {
             "dom": "h2.q-priority",
-            "content": "Infine, ritieni che alcune tematiche siano più importanti di altre?"
+            "content": "Infine, quali sono i temi più importanti per te?"
           },
           {
             "dom": "p.helper-text.helper-desc",
-            "content": "Seleziona tutti gli argomenti che ritieni maggiormente importanti. Peseremo le tue risposte maggiormente in base alla tua scelta."
+            "content": "Seleziona tutti i temi più importanti per te. La tua scelta peserà sul risultato finale."
           },
           {
             "dom": "div.priority",
@@ -2027,7 +2027,7 @@ module.exports = function(CardTemplates){
                         "content": [
                           {
                             "dom": "p.shareText",
-                            "content": "Share your results:"
+                            "content": "Condividi il tuo risultato:"
                           },
                           {
                             "template": "shareButtons",
@@ -2117,7 +2117,7 @@ module.exports = function(CardTemplates){
       },
       { // Country selector
         "dom": "div",
-        "condition": "!countrySelected",
+        "condition": "false",
         "content": [
           {
             "dom": "h2",
@@ -2313,7 +2313,7 @@ module.exports = function(CardTemplates){
                         "content": [
                           {
                             "dom": "p.shareText.basic",
-                            "content": "Share your results:"
+                            "content": "Condividi il tuo risultato:"
                           },
                           {
                             "template": "shareButtons",
@@ -2573,64 +2573,64 @@ module.exports = function(CardTemplates){
                   },
                   {
                     "dom": "h2",
-                    "content": "Be an expert"
+                    "content": "Diventa un esperto"
                   },
                   {
                     "dom": "p",
-                    "content": "Check out Vote For Policies to expand your knowledge and compare policies side by side:"
+                    "content": "Visita Termometro Politico per scoprire i programmi elettorali dei partiti:"
                   },
                   {
                     "dom": "a.btn.btn-default.btn-large",
                     "attr": {
-                      "href": "http://bit.ly/ge2017-voteforpolicies",
+                      "href": "http://termometropolitico.it/elezioni-politiche-2018",
                       "target": "_blank"
                     },
                     "content": [
                       {
                         "dom": "img",
                         "attr": {
-                          "src": "/img/voteforpolicies.jpg"
+                          "src": "/img/termometro_politico_logo.png"
                         }
                       }
                     ]
                   },
                   {
                     "dom": "p",
-                    "content": "Other sites to check out:"
+                    "content": "Altre risorse per informarti:"
                   },
                   {
                     "dom": "div",
                     "content": [
                       {
-                        "dom": "a.btn.btn-default",
+                        "dom": "a.btn.btn-default.btn-large",
                         "attr": {
-                          "href": "http://bit.ly/ge2017-represent",
+                          "href": "https://parlamento17.openpolis.it/",
                           "target": "_blank"
                         },
                         "content": [
                           {
                             "dom": "img",
                             "attr": {
-                              "src": "/img/represent.jpg"
+                              "src": "/img/openpolis.png"
                             }
                           }
                         ]
-                      },
-                      {
-                        "dom": "a.btn.btn-default",
-                        "attr": {
-                          "href": "http://bit.ly/ge2017-positiondial",
-                          "target": "_blank"
-                        },
-                        "content": [
-                          {
-                            "dom": "img",
-                            "attr": {
-                              "src": "/img/positiondial.png"
-                            }
-                          }
-                        ]
-                      }
+                      }//,
+                      //{
+                      //  "dom": "a.btn.btn-default",
+                      //  "attr": {
+                      //    "href": "http://bit.ly/ge2017-positiondial",
+                      //    "target": "_blank"
+                      //  },
+                      //  "content": [
+                      //    {
+                      //      "dom": "img",
+                      //      "attr": {
+                      //        "src": "/img/positiondial.png"
+                      //      }
+                      //    }
+                      //  ]
+                      //}
                     ]
                   }
                 ]
@@ -2640,7 +2640,7 @@ module.exports = function(CardTemplates){
           {
             "dom": "span.pickAVotingOption",
             "condition": "showCarouselResults",
-            "content": "or"
+            "content": "oppure"
           },
           {
             "dom": "a.btn.btn-default.retake",
@@ -2911,7 +2911,7 @@ module.exports = function(CardTemplates){
       },
       {
         "dom": ".quizAnswerYesNo.yes.initial.quizPop",
-        "content": "Yes",
+        "content": "Si",
         "attr": {
           "onclick": {
             "var": "answerYes"
@@ -2970,7 +2970,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "h2.seeHowAlt",
         "condition": "quizResultsPage",
-        "content": "Ecco come ti sei posizionato rispetto ai programmi politici dei maggiori partiti:"
+        "content": "La tua posizione rispetto ai maggiori partiti politici:"
       },
       {
         "dom": "h2.seeHow",
@@ -3062,7 +3062,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "p.waiting-text",
         "condition": "startingQuiz",
-        "content": "Submit an answer to see how you match."
+        "content": "Rispondi alla prima domanda per scoprire la tua posizione."
       },
       {
         "dom": ".quizPercentages.middleLayer",
@@ -3138,7 +3138,7 @@ module.exports = function(CardTemplates){
       {
         "dom": "p.info-text",
         "condition": "nowProgressingThroughQuiz",
-        "content": "This is how you've matched with the parties so far."
+        "content": "La tua posizione in tempo reale."
       },
       // {
       //   "dom": ".partyNameSpacer",
@@ -3337,7 +3337,7 @@ module.exports = function(CardTemplates){
               // },
               {
                 "dom": "h3",
-                "content": "Challenge friends to see where they stand"
+                "content": "Sfida i tuoi amici per scoprire la loro posizione"
               },
               {
                 "template": "shareButtons",
@@ -3354,7 +3354,7 @@ module.exports = function(CardTemplates){
                     "attr": {
                       "src": "/img/politicalanimal.png"
                     },
-                    "content": "Challenge friends to see where they stand"
+                    "content": "Sfida i tuoi amici per scoprire la loro posizione"
                   }
                 ]
               },

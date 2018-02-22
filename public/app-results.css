@@ -40,12 +40,12 @@
   padding: 6px 16px;
   font-size: 1.02em;
   margin-top: -3px;
-  background-color: #dd2569;
+  background-color: #0B0B61;
   color: white;
-  border: 4px #dd2569 solid;
+  border: 4px #0B0B61 solid;
 }
 .content.results:not(.resultsLoaded) form.postcode-form button:hover {
-  color: #dd2569;
+  color: #0B0B61;
   background-color: white;
 }
 
