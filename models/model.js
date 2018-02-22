@@ -1,4 +1,5 @@
 /* Master model */
+const allData = require('../public/data/allData');
 
 module.exports = {
   step: -1,

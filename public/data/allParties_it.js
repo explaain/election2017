@@ -32,7 +32,7 @@ var allParties = [
   },
   {
     key: "M5S",
-    name: "MoVimento 5 Stelle",
+    name: "Movimento 5 Stelle",
     color: "#cfba04",
     colorLight: "#ffd45d",
     description: "TODO ----Have promised to ‘accept the will of the people’ with both UK and EU citizens having [guaranteed rights](//api.explaain.com/Detail/5901bfd2fcb4070011e4de52), retaining access to the [single market](//api.explaain.com/Organization/58987dc975ce1100114b63ed) AND a [second public vote](//api.explaain.com/Detail/5901c186fcb4070011e4de55) on the terms of the Brexit deal.",
@@ -43,7 +43,7 @@ var allParties = [
     ]
   },
   {
-    key: "CdX",
+    key: "Cdx",
     name: "Centro Destra",
     color: "lightblue",
     colorLight: "#1999eb",
@@ -55,7 +55,7 @@ var allParties = [
     ]
   },
   {
-    key: "+Europa",
+    key: "+EU",
     name: "+Europa",
     color: "#2E388D",
     colorLight: "#3848cc",

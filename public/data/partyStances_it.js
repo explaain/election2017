@@ -24,10 +24,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0.2,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0.4,
                  }
                }
@@ -45,10 +45,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0.2,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0,
                  }
                }
@@ -73,10 +73,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 0.6,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 1,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0,
                  }
                }
@@ -94,10 +94,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 1,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0.2,
                  }
                }
@@ -121,10 +121,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 0.4,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0.6,
                  }
                }
@@ -149,10 +149,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0.4,
                  }
                }
@@ -177,10 +177,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 0.2,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0,
                  }
                }
@@ -205,10 +205,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 0.4,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 1,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0.2,
                  }
                }
@@ -226,10 +226,10 @@ var partyStances = {
                  "M5S": {
                  opinion: -1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 1,
                  }
                }
@@ -254,10 +254,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 1,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 0,
                  }
                }
@@ -270,7 +270,7 @@ var partyStances = {
            description: "EU",
            debates: {
              "eu-1": {
-               question: "L'Europa deve evolvere verso un'Unione fiscale e sociale",
+               question: "L'EU deve evolvere verso un'Unione fiscale e sociale",
                buttons: { },
                parties: {
                  "PD": {
@@ -282,10 +282,10 @@ var partyStances = {
                  "M5S": {
                  opinion: -1,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 1,
                  }
                }
@@ -310,10 +310,10 @@ var partyStances = {
                  "M5S": {
                  opinion: 0.8,
                  },
-                 "CdX": {
+                 "Cdx": {
                  opinion: 0,
                  },
-                 "+Europa": {
+                 "+EU": {
                  opinion: 1,
                }
              }

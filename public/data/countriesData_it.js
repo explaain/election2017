@@ -13,8 +13,8 @@ const countriesData = [
           color: "blue",
           photo: "/img/italian-parties/peu.png",
           fullName: "+Europa",
-          name: "+Europa",
-          key: "+Europa",
+          name: "+EU",
+          key: "+EU",
           matches: [],
           quizResults: false,
           dClubNames: [
@@ -37,7 +37,7 @@ const countriesData = [
         {
           color: "#e0bf49",
           photo: "/img/italian-parties/m5s.png",
-          fullName: "MoVimento 5 Stelle",
+          fullName: "Movimento 5 Stelle",
           name: "M5S",
           key: "M5S",
           matches: [],
@@ -50,8 +50,8 @@ const countriesData = [
           color: "lightblue",
           photo: "/img/italian-parties/cdx.png",
           fullName: "Coalizione di Centro Destra",
-          name: "CdX",
-          key: "CdX",
+          name: "Cdx",
+          key: "Cdx",
           matches: [],
           quizResults: false,
           dClubNames: [
