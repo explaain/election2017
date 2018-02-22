@@ -2115,32 +2115,32 @@ module.exports = function(CardTemplates){
           }
         ]
       },
-      { // Country selector
-        "dom": "div",
-        "condition": "!countrySelected",
-        "content": [
-          {
-            "dom": "h2",
-            "content": "Dove voti?"
-          },
-          {
-            "dom": "div.countries",
-            "loop": "countriesData",
-            "content": [
-              {
-                "template": "quizCountrySelector"
-              }
-            ]
-          },
-          {
-            "dom": "a.explaain-link.dark.standalone-link",
-            "content": "Voting in Northern Ireland?",
-            "attr": {
-              "href": "//api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
-            }
-          }
-        ]
-      },
+      // { // Country selector
+      //   "dom": "div",
+      //   "condition": "!countrySelected",
+      //   "content": [
+      //     {
+      //       "dom": "h2",
+      //       "content": "Dove voti?"
+      //     },
+      //     {
+      //       "dom": "div.countries",
+      //       "loop": "countriesData",
+      //       "content": [
+      //         {
+      //           "template": "quizCountrySelector"
+      //         }
+      //       ]
+      //     },
+      //     // {
+      //     //   "dom": "a.explaain-link.dark.standalone-link",
+      //     //   "content": "Voting in Northern Ireland?",
+      //     //   "attr": {
+      //     //     "href": "//api.explaain.com/Detail/591e31c8bf3ba60011c9fa24"
+      //     //   }
+      //     // }
+      //   ]
+      // },
       { // Questions
         "dom": "div.questions",
         "condition": "countrySelected",

@@ -17,8 +17,8 @@ var quizQuestions = [
            opinion: "1"
           },
          {
-           label: "con obbligo di servizio civile per i recipienti",
-           opinion: "0.8"
+           label: "ma solo se in una situazione di disoccupazione temporale",
+           opinion: "0.6"
           }
         ],
       no: [
@@ -35,28 +35,28 @@ var quizQuestions = [
    }
    ,
   {
-     question: "Bisogna ridurre le tasse per tutti i livelli di reddito",
+     question: "Bisogna introdurre un'aliquota IRPEF unica (23%) per tutti i livelli di reddito",
      issue: "Tasse",
      randomiseGroup: 0,
      debate: "tasse-1",
      answers: {
        yes: [
          {
-           label: "anche per le aziende",
+           label: "anche per IRES e IRAP (imposte su aziende)",
            opinion: "1"
           },
          {
-           label: "con l'introduzione di un'aliquota unica e esenzione dalle tasse per redditi bassi",
+           label: "e esenzione dalle tasse per redditi bassi",
            opinion: "1"
           }
         ],
       no: [
          {
-           label: "solo per i redditi piu bassi e aumentare le tasse per i redditi piu alti",
-           opinion: "0"
+           label: "però bisogna ridurre tutte le aliquote e introdurre esenzione dalle tasse per redditi bassi",
+           opinion: "0.4"
           },
          {
-           label: "solo per i redditi piu bassi e anche per le imprese",
+           label: "però bisogna ridurre le aliquote principalmente per redditi bassi",
            opinion: "0"
           }
         ]
@@ -151,28 +151,28 @@ var quizQuestions = [
    }
    ,
   {
-     question: "L'età pensionabile deve essere ridotta",
+     question: "Bisogna prevedere la possibilità di andare in pensione prima dei 67 anni",
      issue: "Welfare",
      randomiseGroup: 0,
      debate: "welfare-2",
      answers: {
        yes: [
          {
-           label: "tramite le pensioni anticipate per chi ha lavorato per tanti anni",
-           opinion: "1"
+           label: "in base al carico di gravosità del lavoro svolto",
+           opinion: "0.8"
           },
          {
-           label: "per tutti i cittadini",
-           opinion: "0.6"
+           label: "in base al numero di anni di contributi versati",
+           opinion: "1"
           }
         ],
       no: [
          {
-           label: "bisogna invece ridurre il peso delle vecchie pensioni retributive su quelle contributive",
+           label: "la priorità è ridurre il sussidio fiscale implicito nelle pensioni retributive più alte",
            opinion: "0"
           },
          {
-           label: "però bisogna garantire delle pensioni minime, particolarmente alle mamme e ai lavoratori precari",
+           label: "ma bisogna introdurre pensioni contributive di garanzia per i giovani precari",
            opinion: "0.2"
           }
         ]
@@ -238,28 +238,28 @@ var quizQuestions = [
    }
    ,
   {
-     question: "L'Articolo 18 va ripristinato per la tutela del lavoro e per incentivare le assunzioni a tempo indeterminato",
+     question: "Le aziende devono essere flessibili nell'assumere e licenziare i dipendenti",
      issue: "Lavoro",
      randomiseGroup: 0,
      debate: "lavoro-1",
      answers: {
        yes: [
          {
-           label: "perchè l'Italia è una Repubblica fondata sul lavoro",
+           label: "e bisogna anche il ridurre il costo del lavoro per stimolare le assunzioni",
            opinion: "1"
           },
          {
-           label: "ma deve essere affiancato da un contratto a tutele crescenti",
+           label: "ma bisogna realizzare un mercato del lavoro Europeo, inclusivo di sussidi comunitari",
            opinion: "0.8"
           }
         ],
       no: [
          {
-           label: "l'obiettivo del governo deve essere la piena occupazione senza distinzione sulla forma dell'impiego",
+           label: "la priorità è la protezione del lavoro a tempo indeterminato a piene tutele, con il ripristino dell'Articolo 18",
            opinion: "0"
           },
          {
-           label: "ma servono più incentivi ad assumere a tempo indeterminato per diminuire il numero di precari",
+           label: "ma bisogna prevedere incentivi per le aziende ad assumere a tempo indeterminato ",
            opinion: "0.2"
           }
         ]
@@ -267,14 +267,14 @@ var quizQuestions = [
    }
    ,
   {
-     question: "Le imposte indirette (IVA) e su patrimoni vanno diminuite",
+     question: "Le imposte indirette e sui patrimoni vanno diminuite per tutti",
      issue: "Tasse",
      randomiseGroup: 0,
      debate: "tasse-2",
      answers: {
        yes: [
          {
-           label: "bisogna anche eliminare imposte su donazioni, successioni, prima casa e risparmi",
+           label: "bisogna eliminare imposte su donazioni, successioni, prima casa e risparmi",
            opinion: "1"
           },
          {
@@ -296,7 +296,7 @@ var quizQuestions = [
    }
    ,
   {
-     question: "La riforma della buona scuola va abolita",
+     question: "La riforma della Buona Scuola va abolita",
      issue: "Educazione",
      randomiseGroup: 0,
      debate: "educazione-1",
@@ -325,25 +325,25 @@ var quizQuestions = [
    }
    ,
   {
-     question: "Bisogna accellerare la transizione energetica, riducendo l'uso dei combustibili fossili",
+     question: "La lotta contro i rischi del cambiamento climatico è una priorità",
      issue: "Ambiente",
      randomiseGroup: 0,
      debate: "ambiente-1",
      answers: {
        yes: [
          {
-           label: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2025",
+           label: "anche tramite l'introduzione di una carbon tax e di politiche di riciclo rifiuti",
            opinion: "1"
           },
          {
-           label: "e ottenendo il 100% dell'energia da fonti rinnovabili entro il 2050",
+           label: "mantenendo gli impegni presi negli Accordi di Parigi",
            opinion: "0.8"
           }
         ],
       no: [
          {
            label: "ma bisogna dedicare risorse all'efficientamento energetico e allo sviluppo di energie rinnovabili",
-           opinion: "0"
+           opinion: "0.2"
           },
          {
            label: "l'importante è l'indipendenza da altri paesi per soddisfare il fabbisogno energetico",

@@ -25,7 +25,7 @@ var partyStances = {
                  opinion: 1,
                  },
                  "Cdx": {
-                 opinion: 0.2,
+                 opinion: 0,
                  },
                  "+EU": {
                  opinion: 0.4,
@@ -33,7 +33,7 @@ var partyStances = {
                }
              },
              "welfare-2": {
-               question: "L'eta pensionabile deve essere ridotta",
+               question: "Bisogna prevedere la possibilità di andare in pensione prima dei 67 anni",
                buttons: { },
                parties: {
                  "PD": {
@@ -46,7 +46,7 @@ var partyStances = {
                  opinion: 1,
                  },
                  "Cdx": {
-                 opinion: 0.2,
+                 opinion: 1,
                  },
                  "+EU": {
                  opinion: 0,
@@ -61,7 +61,7 @@ var partyStances = {
            description: "Tasse",
            debates: {
              "tasse-2": {
-               question: "Le imposte indirette (IVA) e su patrimoni vanno diminuite",
+               question: "Le imposte indirette e sui patrimoni vanno diminuite per tutti",
                buttons: { },
                parties: {
                  "PD": {
@@ -82,7 +82,7 @@ var partyStances = {
                }
              },
              "tasse-1": {
-               question: "Bisogna ridurre le tasse per tutti i livelli di reddito",
+               question: "Bisogna introdurre un'aliquota IRPEF unica (23%) per tutti i livelli di reddito",
                buttons: { },
                parties: {
                  "PD": {
@@ -92,13 +92,13 @@ var partyStances = {
                  opinion: 0,
                  },
                  "M5S": {
-                 opinion: 1,
+                 opinion: 0.4,
                  },
                  "Cdx": {
                  opinion: 1,
                  },
                  "+EU": {
-                 opinion: 0.2,
+                 opinion: 0,
                  }
                }
              }
@@ -165,23 +165,23 @@ var partyStances = {
            description: "Lavoro",
            debates: {
              "lavoro-1": {
-               question: "L'Articolo 18 va ripristinato per la tutela del lavoro e per incentivare le assunzioni a tempo indeterminato",
+               question: "Le aziende devono essere flessibili nell'assumere e licenziare i dipendenti",
                buttons: { },
                parties: {
                  "PD": {
-                 opinion: 0.2,
-                 },
-                 "LeU": {
                  opinion: 1,
                  },
+                 "LeU": {
+                 opinion: 0,
+                 },
                  "M5S": {
-                 opinion: 0.2,
+                 opinion: 1,
                  },
                  "Cdx": {
-                 opinion: 0,
+                 opinion: -1,
                  },
                  "+EU": {
-                 opinion: 0,
+                 opinion: 0.8,
                  }
                }
              }
@@ -242,7 +242,7 @@ var partyStances = {
            description: "Educazione",
            debates: {
              "educazione-1": {
-               question: "La riforma della buona scuola va abolita",
+               question: "La riforma della Buona Scuola va abolita",
                buttons: { },
                parties: {
                  "PD": {
@@ -252,7 +252,7 @@ var partyStances = {
                  opinion: 0.8,
                  },
                  "M5S": {
-                 opinion: 1,
+                 opinion: 0.8,
                  },
                  "Cdx": {
                  opinion: 1,
@@ -298,20 +298,20 @@ var partyStances = {
            description: "Ambiente",
            debates: {
              "ambiente-1": {
-               question: "Bisogna accellerare la transizione energetica, riducendo l'uso dei combustibili fossili",
+               question: "La lotta contro i rischi del cambiamento climatico è una priorità",
                buttons: { },
                parties: {
                  "PD": {
                  opinion: 0.8,
                  },
                  "LeU": {
-                 opinion: 0.8,
+                 opinion: 1,
                  },
                  "M5S": {
-                 opinion: 0.8,
+                 opinion: 1,
                  },
                  "Cdx": {
-                 opinion: 0,
+                 opinion: 0.2,
                  },
                  "+EU": {
                  opinion: 1,

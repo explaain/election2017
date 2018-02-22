@@ -1720,8 +1720,24 @@ class QuizLanding {
       clearTimeout(randomyGraphyThing);
       $('.body.quiz').addClass('moving');
       routes.quiz({begin: true}).push()
+
+      // qp.country = country; // we set the whole country object here
+      qp.country = allData.getAllData().countriesData[0];
+      self.countrySelected = true;
+      /*qp.*/
+      qp.country.parties.forEach(function(party){
+        party.percentage = "0%";
+        party.percentageText = "0%";
+      })
+      qp.startingQuiz = true;
+      console.log(1);
     }
-  }
+      // country.select = function(c){
+      //
+      //   }
+      //   else {*/
+
+    }
 
   render() {
     const qp = model.user.quizProgress;
@@ -2251,7 +2267,7 @@ class Quiz {
 
     self.reprioritiseTopic = function(topic,i) {
       quiz.quizTopics[i].highPriority = !quiz.quizTopics[i].highPriority;
-      var newWeight = quiz.quizTopics[i].highPriority ? 5 : 1;
+      var newWeight = quiz.quizTopics[i].highPriority ? 2 : 1;
       Object.keys(model.user.opinions.issues[topic].debates).forEach((k,i) => {
         model.user.opinions.issues[topic].debates[k].weight = newWeight
       })
@@ -2292,8 +2308,8 @@ class Quiz {
       console.log("Results data for sharing",shareData);
       if(shareData && shareData.length === 1) {
         var perc = shareData[0].percentage.slice(0,-1);
-        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
-        var tweet = `I matched ${shareData[0].percentage} of ${partyTags[shareData[0].key] || shareData[0].name} policies on @GE2017dotcom. Who should you vote for? #GE2017 ${sharePath}`;
+        var sharePath = `http://${subdomain}elezioni18.it/shared/${encodeURIComponent(shareData[0].name)}/${perc}`;
+        var tweet = `Il mio risultato è ${shareData[0].percentage} ${partyTags[shareData[0].key] || shareData[0].name} su elezioni18.it. Indeciso su chi votare? #Elezioni2018 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
       } else if(shareData && shareData.length && shareData.length > 1) {
@@ -2306,8 +2322,8 @@ class Quiz {
           partyTwitters.push(partyTags[p.key] || p.name);
         });
         // console.log("Twitter tweet",shareData,partyTwitters);
-        var sharePath = `http://${subdomain}ge2017.com/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
-        var tweet = `I equally matched ${shareData[0].percentage} of ${partyTwitters.join(' and ')} policies. Who should you vote for? #GE2017 ${sharePath}`;
+        var sharePath = `http://${subdomain}elezioni18.it/shared/${encodeURIComponent(partyNames.join('-and-'))}/${perc}`;
+        var tweet = `Il mio risultato è ${shareData[0].percentage} ${partyTwitters.join(' e ')}. Indeciso su chi votare? #Elezioni2018 ${sharePath}`;
         qp.facebookShareAlignmentHref = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePath)}`;
         qp.twitterShareAlignmentHref = "https://twitter.com/intent/tweet?text="+encodeURIComponent(tweet);
         // var partyCandidateStrings = "";
@@ -3073,23 +3089,7 @@ class Quiz {
           }
         }
 
-        country.select = function(c){
-          /*if (c != undefined) {
-          trackEvent("Country Selected",{type: "Quiz", code: c.code, country: c.label});
-          }
-          else {*/
-          trackEvent("Country Selected",{type: "Quiz", code: country.code, country: country.label});
-        //}
-          qp.country = country; // we set the whole country object here
-          self.countrySelected = true;
-          /*qp.*/
-          qp.country.parties.forEach(function(party){
-            party.percentage = "0%";
-            party.percentageText = "0%";
-          })
-          qp.startingQuiz = true;
-          console.log(1);
-        }
+
         /*country.select ({
           code: "italy", label: "Italia"
       });*/
