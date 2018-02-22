@@ -17,7 +17,7 @@ var quizQuestions = [
            opinion: "1"
           },
          {
-           label: "ma solo se in una situazione di disoccupazione temporale",
+           label: "ma solo se in una situazione di disoccupazione temporanea",
            opinion: "0.6"
           }
         ],

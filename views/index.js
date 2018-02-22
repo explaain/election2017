@@ -25,7 +25,7 @@ var cfg = {
   logoClass: "it2018-logo ",
   footerImg: "/img/savvy.png",
   footerClass: "heysavvyFooter",
-  footerLink: "http://heysavvy/elections",
+  footerLink: "http://heysavvy.com/elections",
   carousel: true,
   randomise: true,
   numbering: true,
